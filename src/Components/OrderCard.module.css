@@ -1,0 +1,12 @@
+.orderCardContainer{
+    background-color: white;
+    border-radius: 5px;
+}
+.cardHeader{
+    background-color: yellow;
+}
+
+ul{
+    list-style-type: none;
+    padding-inline-start: 0;
+}

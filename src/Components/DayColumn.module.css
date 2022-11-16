@@ -1,0 +1,15 @@
+section {
+    background-color: tomato;
+    padding:10px;
+    height: 100vh;
+    display: inline-block;
+    margin-left: 10px;
+
+}
+
+.orderList{
+    display:flex;
+    flex-direction: column;
+    gap: 10px;
+}
+

@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const OrderCard = ({ order }) => {
-  const pickupTime = "10:30";
+  const pickupTime = order.pickupTime;
   return (
     <Accordion>
       <AccordionSummary
@@ -17,7 +17,7 @@ const OrderCard = ({ order }) => {
       >
         <span>{pickupTime}</span> <span>{order.clientName}</span>
       </AccordionSummary>
-      
+
       <AccordionDetails>
         <ul>
           {order.orderItems.map((item, index) => (

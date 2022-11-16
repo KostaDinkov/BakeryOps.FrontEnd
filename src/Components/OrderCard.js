@@ -15,10 +15,15 @@ const OrderCard = ({ order }) => {
         aria-controls="panel1a-content"
         id="panel1a-header"
       >
-        <span>{pickupTime}</span> <span>{order.clientName}</span>
+        <div className={styles.cardHeader}><span className={styles.pickupTime}>{pickupTime}</span> <span>{order.clientName}</span></div>
       </AccordionSummary>
 
       <AccordionDetails>
+        <div>
+            <span>тел:{order.clientPhone}</span>
+            {/* kaparo
+            platena */}
+        </div>
         <ul>
           {order.orderItems.map((item, index) => (
             <dl key={index}>

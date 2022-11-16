@@ -3,6 +3,13 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import moment from 'moment/moment';
+
+moment.updateLocale("bg",{
+  months:["Януари", "Февруари","Март","Април","Май","Юни", "Юли", "Август","Септември","Октомври", "Ноември","Декември"]
+})
+
+moment.locale('bg');
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

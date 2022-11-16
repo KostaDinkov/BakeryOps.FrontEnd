@@ -13,3 +13,10 @@ section {
     gap: 10px;
 }
 
+.date{
+    font-size: 2rem;
+    font-weight: bold;
+}
+header{
+    font-size:1.5rem;
+}

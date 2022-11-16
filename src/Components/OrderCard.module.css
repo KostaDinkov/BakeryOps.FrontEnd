@@ -3,10 +3,19 @@
     border-radius: 5px;
 }
 .cardHeader{
-    background-color: yellow;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
 }
 
 ul{
     list-style-type: none;
     padding-inline-start: 0;
+}
+
+.pickupTime{
+    margin-right:30px;
+    font-size: 1.2rem;
+    font-weight: bold;
 }

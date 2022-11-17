@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import DayColumn from "./Components/DayColumn";
 import "./App.css";
+import NavBar from "./Components/NavBar";
+
 
 function App() {
   let [data, setData] = useState([]);
@@ -17,6 +19,7 @@ function App() {
   
   return (
     <div className="App">
+      <NavBar/>
       <div className="daysContainer">
         {data.map((group,index)=>
           <DayColumn key ={index} data = {group}>
@@ -24,6 +27,7 @@ function App() {
           </DayColumn>
           )}
       </div>
+      
     </div>
   );
 }

@@ -1,50 +1,36 @@
 import React from "react";
 import styles from "./OrderCard.module.css";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import Typography from "@mui/material/Typography";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import OrderItem from "./OrderItem";
 
 const OrderCard = ({ order }) => {
   const pickupTime = order.pickupTime;
   return (
-    <Accordion>
-      <AccordionSummary
-        expandIcon={<ExpandMoreIcon />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
-      >
-        <div className={styles.cardHeader}><span className={styles.pickupTime}>{pickupTime}</span> <span>{order.clientName}</span></div>
-      </AccordionSummary>
-
-      <AccordionDetails>
-        <div>
-            <span>тел:{order.clientPhone}</span>
-            {/* kaparo
-            platena */}
-        </div>
-        <ul>
-          {order.orderItems.map((item, index) => (
-            <dl key={index}>
-              <dt>
-                <span>{item.product.name} </span>
-                <span>{item.productAmount} </span>
-                <span>{item.isInProgress ? "true" : "false"} </span>
-                <span>{item.isComplete ? "true" : "false"}</span>
-              </dt>
-              <dd>
-                {item.description !== "" && (
-                  <div>Забележка: {item.description}</div>
-                )}
-                {item.cakeFoto !== "" && <div>Фото: {item.cakeFoto}</div>}
-                {item.cakeTitle !== "" && <div>Надпис: {item.cakeTitle}</div>}
-              </dd>
-            </dl>
-          ))}
-        </ul>
-      </AccordionDetails>
-    </Accordion>
+    <div className={styles.orderCardContainer}>
+      <div className={styles.cardHeader}>
+        <span className={styles.pickupTime}>{pickupTime}</span>{" "}
+        <span>{order.clientName}</span>
+      </div>
+      <div className={styles.headerDetails}>
+        <span>тел: {order.clientPhone}</span>
+        {order.advancePaiment !== 0 && (
+          <span
+            className={[styles.textBadge, styles.textBadgeYellow].join(" ")}
+          >
+            Капаро: {order.advancePaiment} лв.
+          </span>
+        )}
+        {order.isPaid === true && (
+          <span className={[styles.textBadge, styles.textBadgeRed].join(" ")}>
+            ПЛАТЕНА
+          </span>
+        )}
+      </div>
+      <ul>
+        {order.orderItems.map((item, index) => (
+          <OrderItem key={index} item={item} />
+        ))}
+      </ul>
+    </div>
   );
 };
 

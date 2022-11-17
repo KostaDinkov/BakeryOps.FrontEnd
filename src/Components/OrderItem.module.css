@@ -1,0 +1,18 @@
+.itemHeader{
+    display: flex;
+    align-items: center;
+}
+
+dl:nth-of-type(odd){
+    background-color: rgb(212, 212, 212);
+}
+
+dl{
+    padding:10px;
+}
+
+.itemName{
+    font-size: 1.1rem;
+    flex-grow:2;
+    
+}

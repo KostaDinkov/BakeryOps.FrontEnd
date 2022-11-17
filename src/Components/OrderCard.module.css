@@ -7,6 +7,16 @@
     flex-direction: row;
     width: 100%;
     align-items: center;
+    padding:10px 10px 0px 10px;
+    
+}
+
+.headerDetails{
+    display:flex;
+    align-items: center;
+    gap:10px;
+    padding:0 10px 0 10px;
+    
 }
 
 ul{
@@ -19,3 +29,21 @@ ul{
     font-size: 1.2rem;
     font-weight: bold;
 }
+
+.textBadge{
+    
+    border-radius: 5px;
+    
+    padding:5px;
+    font-weight: bold;
+}
+.textBadgeRed{
+    background-color: red;
+    color:white;
+}
+
+.textBadgeYellow{
+    background-color: rgb(255, 200, 0);
+    color:black;
+}
+

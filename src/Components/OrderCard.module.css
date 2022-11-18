@@ -5,10 +5,15 @@
 .cardHeader{
     display: flex;
     flex-direction: row;
-    width: 100%;
+    
     align-items: center;
     padding:10px 10px 0px 10px;
     
+}
+.editIcon{
+    display: flex;
+    justify-content: flex-end;
+    flex-grow: 1;
 }
 
 .headerDetails{

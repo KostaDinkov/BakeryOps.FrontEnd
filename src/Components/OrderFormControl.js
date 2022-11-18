@@ -1,52 +1,42 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Button.module.css";
-import Select,{createFilter} from "react-select";
+import ProductSelector from "./ProductSelector";
+import moment from 'moment'
+
 
 export default function OrderFromControl({ text }) {
   let defaultOrder = {
     operatorId: 0,
     pickupDate: "",
+    pickupTime:"",
     clientName: "",
     clientPhone: "",
     isPaid: false,
     advancePaiment: 0,
-    orderItems: [
-      {
-        productId: 127,
-        productAmount: 1,
-        description: "",
-        cakeFoto: "",
-        cakeTitle: "",
-      },
-    ],
+    orderItems: [],
   };
-
   let [order, setOrder] = useState(defaultOrder);
   let [products, setProducts] = useState([]);
+  let [productsList, setProductsList] = useState([]);
   let [productOptions, setProductOptions] = useState([]);
-  let [productList, setProductList] = useState([]);
+  let [productSelectorList, setProductSelectorList] = useState([]);
 
-  const filterConfig={
-    ignoreCase:true,
-    ignoreAccents:true,
-    trim:false,
-    stringify: option => `${option.label} ${option.data.code}`,
-    matchFrom: 'any',
-  }
   useEffect(() => {
     fetchProducts();
   }, []);
 
-  useEffect(()=>{
-    if(products.length>=1){
+  useEffect(() => {
+    if (products.length >= 1) {
       setProductOptions(() => {
-        let options = products.map((p) => ({ value: p.id, label: p.name,  code:p.code}));
-        console.log(options)
+        let options = products.map((p) => ({
+          value: p.id,
+          label: p.name,
+          code: p.code,
+        }));
         return options;
       });
     }
-
-  },[products])
+  }, [products]);
 
   function fetchProducts() {
     fetch("http://localhost:5257/products")
@@ -55,34 +45,85 @@ export default function OrderFromControl({ text }) {
   }
 
   let showOrderForm = () => {
-    
-    setProductList((list) => [
-      ...list,
-      <ProductSelector options={productOptions} filterConfig={filterConfig}/>,
-    ]);
+    addNewProductSelector();
     dialogRef.current.showModal();
   };
 
   let dialogRef = React.useRef(null);
 
   const handleOnSubmit = (event) => {
-    console.log(event);
+    event.preventDefault();
+    let newOrder = { ...order, orderItems: productsList, pickupDate: moment(order.pickupDate,"DD-MM-YYYY").format() };
+    
+    setOrder(newOrder);
+
+    //validate order
+
+    let validationResult = validateOrder(newOrder);
+    if (!validationResult.isValid) {
+      console.log(validationResult.errors);
+    } else {
+      console.log(newOrder);
+      let data = JSON.stringify(newOrder);
+      console.log(data);
+      fetch("http://localhost:5257/api/orders", {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: data,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+      resetForm();
+    }
   };
 
   const handleDialogClose = (event) => {
-    setProductList([]);
+    resetForm();
+    dialogRef.current.close();
   };
 
-  const addNewProductSelector = (event) => {
-    setProductList((list) => {
-      console.log(list);
-      return [...list, <ProductSelector options={productOptions} filterConfig={filterConfig} />];
+  const onProductSelectorChange = (selectorValues) => {
+    setProductsList((list) => {
+      let result = [...list];
+      result[selectorValues.index] = {
+        productId: selectorValues.productId,
+        productAmount: selectorValues.productAmount,
+        description: selectorValues.description || "",
+        cakeTitle: selectorValues.cakeTitle || "",
+        cakeFoto: selectorValues.cakeFoto || "",
+      };
+      return result;
     });
   };
 
-  
-  
-  
+  const addNewProductSelector = () => {
+    setProductSelectorList((list) => {
+      console.log(list);
+      return [
+        ...list,
+        <ProductSelector
+          options={productOptions}
+          onChange={onProductSelectorChange}
+          index={list.length}
+        />,
+      ];
+    });
+  };
+
+  const resetForm = () => {
+    setOrder(defaultOrder);
+    setProductsList([]);
+    setProductSelectorList([]);
+    dialogRef.current.close();
+  };
+
   return (
     <>
       <div className={styles.buttonContainer} onClick={showOrderForm}>
@@ -93,38 +134,100 @@ export default function OrderFromControl({ text }) {
         <h1>Нова Поръчка</h1>
         <form method="dialog" onSubmit={handleOnSubmit}>
           <div>
-            <label>
-              Клиент: <input type="text" name="clientName" id="clientName" />{" "}
-            </label>
+            <input
+              value={order.clientName}
+              type="text"
+              placeholder="Клиент ..."
+              name="clientName"
+              id="clientName"
+              onChange={(evt) => {
+                setOrder((order) => ({
+                  ...order,
+                  clientName: evt.target.value,
+                }));
+              }}
+            />{" "}
+            <input
+              value={order.pickupDate}
+              type="datetime"
+              placeholder="За дата ..."
+              name="pickupDate"
+              id="pickupDate"
+              onChange={(evt) => {
+                setOrder((order) => ({
+                  ...order,
+                  pickupDate: evt.target.value,
+                }));
+              }}
+            />{" "}
+             <input
+              value={order.pickupTime}
+              type="text"
+              placeholder="Час ..."
+              name="pickupTime"
+              id="pickupTime"
+              onChange={(evt) => {
+                setOrder((order) => ({
+                  ...order,
+                  pickupTime: evt.target.value,
+                }));
+              }}
+            />{" "}
+          </div>
+
+          <div>
+            <input
+              type="tel"
+              value={order.clientPhone}
+              placeholder="Телефон ..."
+              name="clientPhone"
+              id="clientPhone"
+              onChange={(evt) => {
+                setOrder((order) => ({
+                  ...order,
+                  clientPhone: evt.target.value,
+                }));
+              }}
+            />
+
+            <input
+              type="number"
+              value={order.advancePaiment}
+              name="advance"
+              id="advance"
+              onChange={(evt) => {
+                setOrder((order) => ({
+                  ...order,
+                  advancePaiment: evt.target.value,
+                }));
+              }}
+            />
 
             <label>
-              За дата:{" "}
-              <input type="datetime" name="pickupDate" id="pickupDate" />{" "}
+              Платена?
+              <input
+                type="checkbox"
+                name="isPaid"
+                id="isPaid"
+                checked={order.isPaid}
+                onChange={(evt) => {
+                  setOrder((order) => ({
+                    ...order,
+                    isPaid: evt.target.checked,
+                  }));
+                }}
+              />
             </label>
           </div>
 
           <div>
-            <label>
-              Телефон: <input type="text" name="clientPhone" id="clientPhone" />
-            </label>
-            <label>
-              Капаро
-              <input type="number" name="advance" id="advance" />
-            </label>
-            <label>
-              Платена
-              <input type="checkbox" name="isPaid" id="isPaid" />
-            </label>
-          </div>
-
-          <div>
-            {productList.map((el, index) => (
+            {productSelectorList.map((el, index) => (
               <div key={index}>{el}</div>
             ))}
           </div>
           <input type="button" value="Добави" onClick={addNewProductSelector} />
           <div>
-            <button value="cancel">Cancel</button>
+            <input type="button" value="Отказ" onClick={handleDialogClose} />
 
             <input type="submit" value="Submit" />
           </div>
@@ -134,19 +237,36 @@ export default function OrderFromControl({ text }) {
   );
 }
 
-function ProductSelector({ options, filterConfig }) {
-  return (
-    <>
-      <span>
-        <label>
-          Продукт
-          <Select options={options} filterOption={createFilter(filterConfig)} />
-        </label>
-      </span>
-      <label>
-        Колич: <input type="number" name="prodAmount" />{" "}
-      </label>
-      <input type="button" value="X" />
-    </>
-  );
+function validateOrder(order) {
+  let validationResult = { isValid: false, errors: [] };
+
+  if (order.clientName === "" || order.clientName.length < 3) {
+    validationResult.errors.push("Невалидно име на клиент.");
+  }
+  if (order.pickupDate === "") {
+    validationResult.errors.push("Невалидна дата за получаване");
+  }
+  const regex = new RegExp('^([01]?[0-9]|2[0-3]):[0-5][0-9]$')
+  if(!regex.test(order.pickupTime)){
+    validationResult.errors.push("Невалиден час за получаване");
+  }
+  order.orderItems.forEach((element, index) => {
+    if (element.productId === undefined) {
+      validationResult.errors.push(
+        `Невалидна стойност за продукт номер ${index + 1}`
+      );
+    }
+    if (element.productAmount <= 0) {
+      validationResult.errors.push(
+        `Невалидна стойност за количество за продукт номер ${index + 1} - ${
+          element.productAmount
+        }`
+      );
+    }
+  });
+
+  if (validationResult.errors.length === 0) {
+    validationResult.isValid = true;
+  }
+  return validationResult;
 }

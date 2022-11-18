@@ -1,13 +1,16 @@
-import React from "react";
+import React,{useContext} from "react";
 import styles from "./OrderCard.module.css";
 import OrderItem from "./OrderItem";
 import EditIcon from "@mui/icons-material/Edit";
+import AppContext from "../appContext";
 
 const OrderCard = ({ order }) => {
   
-
+  const {isOrderFormOpen, setIsOrderFormOpen, orderFormData, setOrderFormData}  = useContext(AppContext);
   const handleOnEditClick = ()=>{
-    //open the new order dialog
+    
+    setOrderFormData(order);
+    setIsOrderFormOpen(true);
   }
   return (
     <div className={styles.orderCardContainer}>

@@ -1,21 +1,18 @@
-import React, { useState, useEffect } from "react";
-import styles from "./Button.module.css";
+import React, { useState, useEffect,useContext } from "react";
 import ProductSelector from "./ProductSelector";
-import moment from 'moment'
+import moment from 'moment';
+import AppContext, {defaultOrderFormData}from "../appContext";
 
 
-export default function OrderFromControl({ text }) {
-  let defaultOrder = {
-    operatorId: 0,
-    pickupDate: "",
-    pickupTime:"",
-    clientName: "",
-    clientPhone: "",
-    isPaid: false,
-    advancePaiment: 0,
-    orderItems: [],
-  };
-  let [order, setOrder] = useState(defaultOrder);
+
+export default function OrderForm() {
+
+  //TODO check if orderForm is in "Edit" mode or in Create New mode 
+  const {isOrderFormOpen, setIsOrderFormOpen, orderFormData, setOrderFormData} = useContext(AppContext);
+  
+  
+  const dialogRef = React.createRef(null);
+  
   let [products, setProducts] = useState([]);
   let [productsList, setProductsList] = useState([]);
   let [productOptions, setProductOptions] = useState([]);
@@ -23,7 +20,15 @@ export default function OrderFromControl({ text }) {
 
   useEffect(() => {
     fetchProducts();
+   
+   
   }, []);
+
+  useEffect(()=>{
+    if(dialogRef && !dialogRef.current.open && isOrderFormOpen){
+      showOrderForm(orderFormData);
+    }
+  })
 
   useEffect(() => {
     if (products.length >= 1) {
@@ -41,21 +46,26 @@ export default function OrderFromControl({ text }) {
   function fetchProducts() {
     fetch("http://localhost:5257/products")
       .then((response) => response.json())
-      .then((data) => setProducts(data));
+      .then((data) => setProducts);
   }
 
-  let showOrderForm = () => {
-    addNewProductSelector();
+  const  showOrderForm = (order)=> {
+    
+    if(order.orderItems.length === 0){
+      addNewProductSelector();
+    }
+    
+    
     dialogRef.current.showModal();
   };
 
-  let dialogRef = React.useRef(null);
+  
 
   const handleOnSubmit = (event) => {
     event.preventDefault();
-    let newOrder = { ...order, orderItems: productsList, pickupDate: moment(order.pickupDate,"DD-MM-YYYY").format() };
+    let newOrder = { ...orderFormData, orderItems: productsList, pickupDate: moment(orderFormData.pickupDate,"DD-MM-YYYY").format() };
     
-    setOrder(newOrder);
+    setOrderFormData(newOrder);
 
     //validate order
 
@@ -87,6 +97,7 @@ export default function OrderFromControl({ text }) {
   const handleDialogClose = (event) => {
     resetForm();
     dialogRef.current.close();
+    setIsOrderFormOpen(false);
   };
 
   const onProductSelectorChange = (selectorValues) => {
@@ -118,56 +129,52 @@ export default function OrderFromControl({ text }) {
   };
 
   const resetForm = () => {
-    setOrder(defaultOrder);
+    setOrderFormData(defaultOrderFormData);
     setProductsList([]);
     setProductSelectorList([]);
     dialogRef.current.close();
   };
 
   return (
-    <>
-      <div className={styles.buttonContainer} onClick={showOrderForm}>
-        {text}
-      </div>
-
+    
       <dialog ref={dialogRef} onClose={handleDialogClose}>
         <h1>Нова Поръчка</h1>
         <form method="dialog" onSubmit={handleOnSubmit}>
           <div>
             <input
-              value={order.clientName}
+              value={orderFormData.clientName}
               type="text"
               placeholder="Клиент ..."
               name="clientName"
               id="clientName"
               onChange={(evt) => {
-                setOrder((order) => ({
+                setOrderFormData((order) => ({
                   ...order,
                   clientName: evt.target.value,
                 }));
               }}
             />{" "}
             <input
-              value={order.pickupDate}
+              value={orderFormData.pickupDate}
               type="datetime"
               placeholder="За дата ..."
               name="pickupDate"
               id="pickupDate"
               onChange={(evt) => {
-                setOrder((order) => ({
+                setOrderFormData((order) => ({
                   ...order,
                   pickupDate: evt.target.value,
                 }));
               }}
             />{" "}
              <input
-              value={order.pickupTime}
+              value={orderFormData.pickupTime}
               type="text"
               placeholder="Час ..."
               name="pickupTime"
               id="pickupTime"
               onChange={(evt) => {
-                setOrder((order) => ({
+                setOrderFormData((order) => ({
                   ...order,
                   pickupTime: evt.target.value,
                 }));
@@ -178,12 +185,12 @@ export default function OrderFromControl({ text }) {
           <div>
             <input
               type="tel"
-              value={order.clientPhone}
+              value={orderFormData.clientPhone}
               placeholder="Телефон ..."
               name="clientPhone"
               id="clientPhone"
               onChange={(evt) => {
-                setOrder((order) => ({
+                setOrderFormData((order) => ({
                   ...order,
                   clientPhone: evt.target.value,
                 }));
@@ -192,11 +199,11 @@ export default function OrderFromControl({ text }) {
 
             <input
               type="number"
-              value={order.advancePaiment}
+              value={orderFormData.advancePaiment}
               name="advance"
               id="advance"
               onChange={(evt) => {
-                setOrder((order) => ({
+                setOrderFormData((order) => ({
                   ...order,
                   advancePaiment: evt.target.value,
                 }));
@@ -209,9 +216,9 @@ export default function OrderFromControl({ text }) {
                 type="checkbox"
                 name="isPaid"
                 id="isPaid"
-                checked={order.isPaid}
+                checked={orderFormData.isPaid}
                 onChange={(evt) => {
-                  setOrder((order) => ({
+                  setOrderFormData((order) => ({
                     ...order,
                     isPaid: evt.target.checked,
                   }));
@@ -233,7 +240,7 @@ export default function OrderFromControl({ text }) {
           </div>
         </form>
       </dialog>
-    </>
+    
   );
 }
 

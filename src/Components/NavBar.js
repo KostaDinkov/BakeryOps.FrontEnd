@@ -1,12 +1,19 @@
-import React from "react";
+import React,{useContext} from "react";
 import styles from "./NavBar.module.css";
-import OrderFormControl from "./OrderFormControl";
+import AppContext from "../appContext";
+
 
 const NavBar = () =>{
 
+    const {isOrderFormOpen, setIsOrderFormOpen} = useContext(AppContext);
+    const openDialog = ()=>{
+        if(!isOrderFormOpen){
+            setIsOrderFormOpen(true);
+        }
+    }
     return(
         <div className={styles.navBarContainer}>
-            <OrderFormControl text="Нова Поръчка"/>
+           <button onClick={openDialog}>Open Dialog</button>
         </div>
     )
 }

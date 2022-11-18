@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Button.module.css";
+import Select,{createFilter} from "react-select";
 
 export default function OrderFromControl({ text }) {
   let defaultOrder = {
@@ -22,11 +23,30 @@ export default function OrderFromControl({ text }) {
 
   let [order, setOrder] = useState(defaultOrder);
   let [products, setProducts] = useState([]);
+  let [productOptions, setProductOptions] = useState([]);
   let [productList, setProductList] = useState([]);
 
+  const filterConfig={
+    ignoreCase:true,
+    ignoreAccents:true,
+    trim:false,
+    stringify: option => `${option.label} ${option.data.code}`,
+    matchFrom: 'any',
+  }
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  useEffect(()=>{
+    if(products.length>=1){
+      setProductOptions(() => {
+        let options = products.map((p) => ({ value: p.id, label: p.name,  code:p.code}));
+        console.log(options)
+        return options;
+      });
+    }
+
+  },[products])
 
   function fetchProducts() {
     fetch("http://localhost:5257/products")
@@ -34,12 +54,12 @@ export default function OrderFromControl({ text }) {
       .then((data) => setProducts(data));
   }
 
- 
-
-
-
   let showOrderForm = () => {
-    setProductList((list)=>[...list,<ProductSelector products={products}/>])
+    
+    setProductList((list) => [
+      ...list,
+      <ProductSelector options={productOptions} filterConfig={filterConfig}/>,
+    ]);
     dialogRef.current.showModal();
   };
 
@@ -49,17 +69,20 @@ export default function OrderFromControl({ text }) {
     console.log(event);
   };
 
-  const handleDialogClose = (event)=>{
+  const handleDialogClose = (event) => {
     setProductList([]);
-  }
+  };
 
   const addNewProductSelector = (event) => {
     setProductList((list) => {
       console.log(list);
-      return [...list,<ProductSelector products={products}/>];
+      return [...list, <ProductSelector options={productOptions} filterConfig={filterConfig} />];
     });
   };
 
+  
+  
+  
   return (
     <>
       <div className={styles.buttonContainer} onClick={showOrderForm}>
@@ -107,29 +130,23 @@ export default function OrderFromControl({ text }) {
           </div>
         </form>
       </dialog>
-      
     </>
   );
 }
 
-function ProductSelector({ products }) {
+function ProductSelector({ options, filterConfig }) {
   return (
     <>
-      <label>
-        Продукт
-        <select>
-          <option value="default">Choose…</option>
-          {products.map((p) => (
-            <option key={p.id} value={p.id}>
-              {p.name}
-            </option>
-          ))}
-        </select>
-      </label>
+      <span>
+        <label>
+          Продукт
+          <Select options={options} filterOption={createFilter(filterConfig)} />
+        </label>
+      </span>
       <label>
         Колич: <input type="number" name="prodAmount" />{" "}
       </label>
-      <input type="button" value="X"/>
+      <input type="button" value="X" />
     </>
   );
 }

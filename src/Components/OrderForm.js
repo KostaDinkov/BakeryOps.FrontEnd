@@ -8,7 +8,7 @@ import AppContext, {defaultOrderFormData}from "../appContext";
 export default function OrderForm() {
 
   //TODO check if orderForm is in "Edit" mode or in Create New mode 
-  const {isOrderFormOpen, setIsOrderFormOpen, orderFormData, setOrderFormData} = useContext(AppContext);
+  const {isOrderFormOpen, setIsOrderFormOpen, orderFormData, setOrderFormData, isEdit} = useContext(AppContext);
   
   
   const dialogRef = React.createRef(null);
@@ -20,8 +20,7 @@ export default function OrderForm() {
 
   useEffect(() => {
     fetchProducts();
-   
-   
+ 
   }, []);
 
   useEffect(()=>{
@@ -46,16 +45,20 @@ export default function OrderForm() {
   function fetchProducts() {
     fetch("http://localhost:5257/products")
       .then((response) => response.json())
-      .then((data) => setProducts);
+      .then((data) => setProducts(data));
   }
 
   const  showOrderForm = (order)=> {
-    
+    setOrderFormData(orderForm=> ({...orderForm, pickupDate:moment(orderForm.pickupDate).format("DD-MM-YYYY")}));
     if(order.orderItems.length === 0){
-      addNewProductSelector();
+      addNewProductSelector(undefined);
     }
-    
-    
+    else{
+
+      orderFormData.orderItems.forEach(orderItem=>{
+        addNewProductSelector(orderItem)
+      })
+    }
     dialogRef.current.showModal();
   };
 
@@ -75,9 +78,16 @@ export default function OrderForm() {
     } else {
       console.log(newOrder);
       let data = JSON.stringify(newOrder);
-      console.log(data);
-      fetch("http://localhost:5257/api/orders", {
-        method: "POST", // or 'PUT'
+      
+      let endPoint = "http://localhost:5257/api/orders";
+      let method = "POST"
+      if(isEdit){
+        endPoint = `http://localhost:5257/api/orders/${newOrder.id}`;
+        method = "PUT"
+      }
+
+      fetch(endPoint, {
+        method: method, 
         headers: {
           "Content-Type": "application/json",
         },
@@ -86,6 +96,7 @@ export default function OrderForm() {
         .then((response) => response.json())
         .then((data) => {
           console.log("Success:", data);
+          
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -109,12 +120,13 @@ export default function OrderForm() {
         description: selectorValues.description || "",
         cakeTitle: selectorValues.cakeTitle || "",
         cakeFoto: selectorValues.cakeFoto || "",
+        id:selectorValues.id || null
       };
       return result;
     });
   };
 
-  const addNewProductSelector = () => {
+  const addNewProductSelector = (existing) => {
     setProductSelectorList((list) => {
       console.log(list);
       return [
@@ -123,6 +135,7 @@ export default function OrderForm() {
           options={productOptions}
           onChange={onProductSelectorChange}
           index={list.length}
+          existing={existing}
         />,
       ];
     });
@@ -232,7 +245,7 @@ export default function OrderForm() {
               <div key={index}>{el}</div>
             ))}
           </div>
-          <input type="button" value="Добави" onClick={addNewProductSelector} />
+          <input type="button" value="Добави" onClick={()=>{addNewProductSelector(undefined)}} />
           <div>
             <input type="button" value="Отказ" onClick={handleDialogClose} />
 
@@ -250,9 +263,13 @@ function validateOrder(order) {
   if (order.clientName === "" || order.clientName.length < 3) {
     validationResult.errors.push("Невалидно име на клиент.");
   }
-  if (order.pickupDate === "") {
-    validationResult.errors.push("Невалидна дата за получаване");
+  if (order.pickupDate === "" || !moment(order.pickupDate).isValid()) {
+    validationResult.errors.push(`Невалидна дата за получаване: ${order.pickupDate} `);
   }
+  else{
+    order.pickupDate = moment(order.pickupDate).format("YYYY-MM-DDT00:00:00.000");
+  }
+  
   const regex = new RegExp('^([01]?[0-9]|2[0-3]):[0-5][0-9]$')
   if(!regex.test(order.pickupTime)){
     validationResult.errors.push("Невалиден час за получаване");

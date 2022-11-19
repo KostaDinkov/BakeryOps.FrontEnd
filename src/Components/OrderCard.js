@@ -6,11 +6,13 @@ import AppContext from "../appContext";
 
 const OrderCard = ({ order }) => {
   
-  const {isOrderFormOpen, setIsOrderFormOpen, orderFormData, setOrderFormData}  = useContext(AppContext);
+  const { setIsOrderFormOpen, setOrderFormData, setIsEdit}  = useContext(AppContext);
   const handleOnEditClick = ()=>{
     
     setOrderFormData(order);
     setIsOrderFormOpen(true);
+    setIsEdit(true);
+    
   }
   return (
     <div className={styles.orderCardContainer}>

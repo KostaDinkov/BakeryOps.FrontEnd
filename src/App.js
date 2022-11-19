@@ -9,6 +9,7 @@ function App() {
   let [data, setData] = useState([]);
   let [isOrderFormOpen, setIsOrderFormOpen] = useState(false);
   let [orderFormData, setOrderFormData] = useState(defaultOrderFormData);
+  let [isEdit, setIsEdit] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -22,7 +23,7 @@ function App() {
 
   return (
     <div className="App">
-      <AppContext.Provider value={{ isOrderFormOpen, setIsOrderFormOpen, orderFormData, setOrderFormData }}>
+      <AppContext.Provider value={{ isOrderFormOpen, setIsOrderFormOpen, orderFormData, setOrderFormData, isEdit, setIsEdit }}>
         <OrderForm />
         <NavBar />
         <div className="daysContainer">

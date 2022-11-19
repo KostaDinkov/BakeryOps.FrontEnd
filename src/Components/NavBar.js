@@ -5,10 +5,11 @@ import AppContext from "../appContext";
 
 const NavBar = () =>{
 
-    const {isOrderFormOpen, setIsOrderFormOpen} = useContext(AppContext);
+    const {isOrderFormOpen, setIsOrderFormOpen, setIsEdit} = useContext(AppContext);
     const openDialog = ()=>{
         if(!isOrderFormOpen){
             setIsOrderFormOpen(true);
+            setIsEdit(false);
         }
     }
     return(

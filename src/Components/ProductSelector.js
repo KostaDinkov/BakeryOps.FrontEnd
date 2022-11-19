@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Select, { createFilter } from "react-select";
 
-export default function ProductSelector({ options, onChange, index, existing }) {
+export default function ProductSelector({ options, onChange, index, existing ,removeProduct}) {
   let [productId, setProductId] = useState(-1);
   let [productAmount, setProductAmount] = useState(0);
   let [cakeTitle, setCakeTitle] = useState("");
@@ -80,7 +80,7 @@ export default function ProductSelector({ options, onChange, index, existing }) 
           onChange={(evt)=>{setDescription(evt.target.value)}}
         />{" "}
       </div>
-      <input type="button" value="X" />
+      <input type="button" value="X" onClick={()=>{removeProduct(index)}}/>
     </>
   );
 }

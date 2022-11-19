@@ -4,6 +4,9 @@ import "./App.css";
 import NavBar from "./Components/NavBar";
 import AppContext,{defaultOrderFormData} from "./appContext";
 import OrderForm from "./Components/OrderForm";
+import PubSub from 'pubsub-js';
+
+
 
 function App() {
   let [data, setData] = useState([]);
@@ -11,8 +14,18 @@ function App() {
   let [orderFormData, setOrderFormData] = useState(defaultOrderFormData);
   let [isEdit, setIsEdit] = useState(false);
 
+  const onOrderChange = function (msg, data){
+    console.log(`${msg}`)
+    console.log(data)
+    fetchData();
+  }
+  
+  
+  
   useEffect(() => {
     fetchData();
+    //PubSub.clearAllSubscriptions();
+    let token = PubSub.subscribe('ORDER CHANGE', onOrderChange);
   }, []);
 
   function fetchData() {

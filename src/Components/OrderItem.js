@@ -1,19 +1,35 @@
 import React, { useState } from "react";
 import styles from "./OrderItem.module.css";
+import APIendpoints from "../APIendpoints";
+import PubSub from 'pubsub-js';
 
-const OrderItem = ({ item }) => {
-  let [isComplete, setIsComplete] = useState(item.isComplete);
-  let [isInProgress, setIsInProgress] = useState(item.isInProgress);
+const OrderItem = ({ item, order }) => {
+  let handleProgressChange = () => {
+    item.isInProgress = !item.isInProgress;
+    updateOrder();
+  };
 
-  let handleProgressChange = ()=>{
-    setIsInProgress(!isInProgress);
+  let handleCompleteChange = () => {
+    item.isComplete = !item.isComplete;
+    updateOrder();
+  };
+
+  function updateOrder() {
+    fetch(APIendpoints.put.orders(order.id), {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(order),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        PubSub.publish("ORDER CHANGE", data);
+      })
+      .catch(error=>console.log("Error",error));
   }
 
-  let handleCompleteChange = ()=>{
-    setIsComplete(!isComplete);
-  }
-
-  
   return (
     <dl>
       <dt className={styles.itemHeader}>
@@ -24,8 +40,8 @@ const OrderItem = ({ item }) => {
             type="checkbox"
             name="isInProgress"
             id="isInProgress"
-            checked={isInProgress}
-            onChange = {handleProgressChange}
+            defaultChecked={item.isInProgress}
+            onChange={handleProgressChange}
           />
         </span>
         <span>
@@ -33,11 +49,12 @@ const OrderItem = ({ item }) => {
             type="checkbox"
             name="isComplete"
             id="isComplete"
-            checked={isComplete}
+            defaultChecked={item.isComplete}
             onChange={handleCompleteChange}
           />
         </span>
       </dt>
+
       <dd>
         {item.description !== "" && <div>Забележка: {item.description}</div>}
         {item.cakeFoto !== "" && <div>Фото: {item.cakeFoto}</div>}

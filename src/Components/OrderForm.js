@@ -11,12 +11,9 @@ export default function OrderForm({
   isEdit,
 }) {
   const dialogRef = React.createRef(null);
-
   let { products } = useContext(AppContext); // the products from the DB
-  let [productsList, setProductsList] = useState([]); // a list of selected products for the order
-  let [productOptions, setProductOptions] = useState(
-    productsToOptions(products)
-  ); //options for the ProductSelector component, based on products
+  let productOptions = productsToOptions(products); //options for the ProductSelector component, based on products
+
   let [productSelectorList, setProductSelectorList] = useState([]); // list of ProductSelector components added to the OrderForm
   let [orderFormData, setOrderFormData] = useState(initialFormData);
 
@@ -25,18 +22,6 @@ export default function OrderForm({
       showOrderForm(orderFormData);
     }
   });
-
-  function productsToOptions(products) {
-    if (products.length >= 1) {
-      let options = products.map((p) => ({
-        value: p.id,
-        label: p.name,
-        code: p.code,
-      }));
-      return options;
-    }
-    return [];
-  }
 
   function showOrderForm(order) {
     setOrderFormData((orderForm) => ({
@@ -51,6 +36,20 @@ export default function OrderForm({
       });
     }
     dialogRef.current.showModal();
+  }
+
+  function addNewProductSelector(existing) {
+    setProductSelectorList((list) => {
+      return [
+        ...list,
+        <ProductSelector options={productOptions} selectorValues={existing} />,
+      ];
+    });
+  }
+
+  function removeProduct(index) {
+    productSelectorList.splice(index, 1);
+    setProductSelectorList([...productSelectorList]);
   }
 
   function handleOnSubmit(event) {
@@ -103,31 +102,32 @@ export default function OrderForm({
 
   function closeForm(event) {
     setOrderFormData(defaultOrderFormData);
-    setProductsList([]);
     setProductSelectorList([]);
     dialogRef.current.close();
     setFormState((state) => ({ ...state, isFormOpen: false }));
   }
 
-  
+  function deleteOrder() {
+    fetch(`http://localhost:5257/api/orders/${initialFormData.id}`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        PubSub.publish('ORDER CHANGE', "order deleted")
+        closeForm();
+        return console.log("Success:", response);
 
-  function addNewProductSelector(existing) {
-    setProductSelectorList((list) => {
-      return [...list, <ProductSelector options={productOptions} selectorValues={existing} />];
-    });
-  }
-
-  function removeProduct(index) {
-    productSelectorList.splice(index, 1);
-    setProductSelectorList([...productSelectorList]);
-
-    productsList.splice(index, 1);
-    setProductsList([...productsList]);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   }
 
   return (
     <dialog ref={dialogRef} onClose={closeForm}>
-      <h1>Нова Поръчка</h1>
+      <h1>
+        {isEdit ? "Редакция на Поръчка" : "Нова Поръчка"}{" "}
+        {isEdit && <input type="button" value="Изтрий" onClick={deleteOrder} />}
+      </h1>
       <form method="dialog" onSubmit={handleOnSubmit}>
         <div>
           <input
@@ -295,4 +295,16 @@ function DefaultSelectorValues() {
   this.cakeFoto = "";
   this.cakeTitle = "";
   this.description = "";
+}
+
+function productsToOptions(products) {
+  if (products.length >= 1) {
+    let options = products.map((p) => ({
+      value: p.id,
+      label: p.name,
+      code: p.code,
+    }));
+    return options;
+  }
+  return [];
 }

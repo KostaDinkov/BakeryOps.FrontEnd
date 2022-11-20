@@ -2,88 +2,78 @@ import React, { useState, useEffect, useContext } from "react";
 import ProductSelector from "./ProductSelector";
 import moment from "moment";
 import AppContext, { defaultOrderFormData } from "../appContext";
-import PubSub from 'pubsub-js';
+import PubSub from "pubsub-js";
 
-export default function OrderForm() {
-  
-  const {
-    isOrderFormOpen,
-    setIsOrderFormOpen,
-    orderFormData,
-    setOrderFormData,
-    isEdit,
-  } = useContext(AppContext);
-
+export default function OrderForm({
+  formState,
+  setFormState,
+  initialFormData,
+  isEdit,
+}) {
   const dialogRef = React.createRef(null);
 
-  let [products, setProducts] = useState([]);
-  let [productsList, setProductsList] = useState([]);
-  let [productOptions, setProductOptions] = useState([]);
-  let [productSelectorList, setProductSelectorList] = useState([]);
+  let { products } = useContext(AppContext); // the products from the DB
+  let [productsList, setProductsList] = useState([]); // a list of selected products for the order
+  let [productOptions, setProductOptions] = useState(
+    productsToOptions(products)
+  ); //options for the ProductSelector component, based on products
+  let [productSelectorList, setProductSelectorList] = useState([]); // list of ProductSelector components added to the OrderForm
+  let [orderFormData, setOrderFormData] = useState(initialFormData);
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  useEffect(() => {
-    if (dialogRef && !dialogRef.current.open && isOrderFormOpen) {
+    if (dialogRef && !dialogRef.current.open && formState.isFormOpen) {
       showOrderForm(orderFormData);
     }
   });
 
-  useEffect(() => {
+  function productsToOptions(products) {
     if (products.length >= 1) {
-      setProductOptions(() => {
-        let options = products.map((p) => ({
-          value: p.id,
-          label: p.name,
-          code: p.code,
-        }));
-        return options;
-      });
+      let options = products.map((p) => ({
+        value: p.id,
+        label: p.name,
+        code: p.code,
+      }));
+      return options;
     }
-  }, [products]);
-
-  function fetchProducts() {
-    fetch("http://localhost:5257/products")
-      .then((response) => response.json())
-      .then((data) => setProducts(data));
+    return [];
   }
 
-  const showOrderForm = (order) => {
+  function showOrderForm(order) {
     setOrderFormData((orderForm) => ({
       ...orderForm,
       pickupDate: moment(orderForm.pickupDate).format("DD-MM-YYYY"),
     }));
     if (order.orderItems.length === 0) {
-      addNewProductSelector(undefined);
+      addNewProductSelector(new DefaultSelectorValues());
     } else {
       orderFormData.orderItems.forEach((orderItem) => {
         addNewProductSelector(orderItem);
       });
     }
     dialogRef.current.showModal();
-  };
+  }
 
-  const handleOnSubmit = (event) => {
+  function handleOnSubmit(event) {
     event.preventDefault();
+    let orderItems = productSelectorList.map((selector) => {
+      const item = selector.props.selectorValues;
+      console.log(item);
+      return item;
+    });
+
     let newOrder = {
       ...orderFormData,
-      orderItems: productsList,
+      orderItems: orderItems,
       pickupDate: moment(orderFormData.pickupDate, "DD-MM-YYYY").format(),
     };
 
     setOrderFormData(newOrder);
 
-    //validate order
-
     let validationResult = validateOrder(newOrder);
     if (!validationResult.isValid) {
       console.log(validationResult.errors);
     } else {
-      
       let data = JSON.stringify(newOrder);
-      
 
       let endPoint = "http://localhost:5257/api/orders";
       let method = "POST";
@@ -102,74 +92,41 @@ export default function OrderForm() {
         .then((response) => response.json())
         .then((data) => {
           console.log("Success:", data);
-          PubSub.publish('ORDER CHANGE', newOrder);
+          PubSub.publish("ORDER CHANGE", newOrder);
         })
         .catch((error) => {
           console.error("Error:", error);
         });
-      resetForm();
-      
+      closeForm();
     }
-  };
+  }
 
-  const handleDialogClose = (event) => {
-    resetForm();
-    dialogRef.current.close();
-    setIsOrderFormOpen(false);
-  };
-
-  const onProductSelectorChange = (selectorValues) => {
-    setProductsList((list) => {
-      let result = [...list];
-      result[selectorValues.index] = {
-        productId: selectorValues.productId,
-        productAmount: selectorValues.productAmount,
-        description: selectorValues.description || "",
-        cakeTitle: selectorValues.cakeTitle || "",
-        cakeFoto: selectorValues.cakeFoto || "",
-        id: selectorValues.id || null,
-      };
-      return result;
-    });
-  };
-
-  const addNewProductSelector = (existing) => {
-    setProductSelectorList((list) => {
-      
-      return [
-        ...list,
-        <ProductSelector
-          options={productOptions}
-          onChange={onProductSelectorChange}
-          index={list.length}
-          existing={existing}
-          removeProduct={removeProduct}
-        />,
-      ];
-    });
-  };
-
-  const removeProduct = (index) => {
-    setProductSelectorList((list) => {
-      list.splice(index, 1);
-      return [...list];
-    });
-
-    setProductsList((list) => {
-      list.splice(index, 1);
-      return [...list];
-    });
-  };
-
-  const resetForm = () => {
+  function closeForm(event) {
     setOrderFormData(defaultOrderFormData);
     setProductsList([]);
     setProductSelectorList([]);
     dialogRef.current.close();
-  };
+    setFormState((state) => ({ ...state, isFormOpen: false }));
+  }
+
+  
+
+  function addNewProductSelector(existing) {
+    setProductSelectorList((list) => {
+      return [...list, <ProductSelector options={productOptions} selectorValues={existing} />];
+    });
+  }
+
+  function removeProduct(index) {
+    productSelectorList.splice(index, 1);
+    setProductSelectorList([...productSelectorList]);
+
+    productsList.splice(index, 1);
+    setProductsList([...productsList]);
+  }
 
   return (
-    <dialog ref={dialogRef} onClose={handleDialogClose}>
+    <dialog ref={dialogRef} onClose={closeForm}>
       <h1>Нова Поръчка</h1>
       <form method="dialog" onSubmit={handleOnSubmit}>
         <div>
@@ -259,20 +216,29 @@ export default function OrderForm() {
           </label>
         </div>
 
-        <div>
+        <ul>
           {productSelectorList.map((el, index) => (
-            <div key={index}>{el}</div>
+            <li key={index}>
+              <div>{el}</div>
+              <input
+                type="button"
+                value="X"
+                onClick={() => {
+                  removeProduct(index);
+                }}
+              />
+            </li>
           ))}
-        </div>
+        </ul>
         <input
           type="button"
           value="Добави"
           onClick={() => {
-            addNewProductSelector(undefined);
+            addNewProductSelector(new DefaultSelectorValues());
           }}
         />
         <div>
-          <input type="button" value="Отказ" onClick={handleDialogClose} />
+          <input type="button" value="Отказ" onClick={closeForm} />
 
           <input type="submit" value="Submit" />
         </div>
@@ -296,6 +262,7 @@ function validateOrder(order) {
       "YYYY-MM-DDT00:00:00.000"
     );
   }
+  if (order.advancePaiment === "") order.advancePaiment = 0;
 
   const regex = new RegExp("^([01]?[0-9]|2[0-3]):[0-5][0-9]$");
   if (!regex.test(order.pickupTime)) {
@@ -320,4 +287,12 @@ function validateOrder(order) {
     validationResult.isValid = true;
   }
   return validationResult;
+}
+
+function DefaultSelectorValues() {
+  this.productId = 1;
+  this.productAmount = 0;
+  this.cakeFoto = "";
+  this.cakeTitle = "";
+  this.description = "";
 }

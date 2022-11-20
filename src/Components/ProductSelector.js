@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from "react";
 import Select, { createFilter } from "react-select";
 
-export default function ProductSelector({ options, onChange, index, existing ,removeProduct}) {
+export default function ProductSelector({ options, selectorValues }) {
   let [productId, setProductId] = useState(-1);
   let [productAmount, setProductAmount] = useState(0);
   let [cakeTitle, setCakeTitle] = useState("");
   let [cakeFoto, setCakeFoto] = useState("");
   let [description, setDescription] = useState("");
-  let [id, setId]= useState(-1)
+  //let [id, setId]= useState(-1); //orderItem id in DB
 
-  useEffect(()=>{
-    if(existing !== undefined){
-      setProductId(existing.productId);
-      setProductAmount(existing.productAmount);
-      setCakeTitle(existing.cakeTitle);
-      setCakeFoto(existing.cakeFoto);
-      setDescription(existing.description)
-      setId(existing.id)
-    }
-  },[])
- 
+  useEffect(() => {
+    if (selectorValues !== undefined) {
+      setProductId(selectorValues.productId);
+      setProductAmount(selectorValues.productAmount);
+      setCakeTitle(selectorValues.cakeTitle);
+      setCakeFoto(selectorValues.cakeFoto);
+      setDescription(selectorValues.description);
+      //setId(existing.id)
+    } 
+  }, []);
 
   const filterConfig = {
     ignoreCase: true,
@@ -29,58 +28,62 @@ export default function ProductSelector({ options, onChange, index, existing ,re
     matchFrom: "any",
   };
 
-  useEffect(() => {
-    if (typeof onChange === "function") {
-      onChange({index, productId, productAmount, description, cakeTitle, cakeFoto, id});
-    }
-  }, [productId, productAmount, description, cakeTitle, cakeFoto]);
-
   return (
     <>
       <Select
-        value = {options.filter(option=>option.value === productId)}
+        value={options.filter((option) => option.value === productId)}
         placeholder="Продукт ..."
         options={options}
         filterOption={createFilter(filterConfig)}
-        onChange={(option) => {setProductId(option.value)}}
+        onChange={(option) => {
+          setProductId(option.value);
+          selectorValues.productId = option.value;
+        }}
         required
       />
-
       <input
-        value = {productAmount}
+        value={productAmount}
         type="number"
         placeholder="Количество"
         required
         name="prodAmount"
-        onChange={(evt)=>{setProductAmount(evt.target.value)}}
+        onChange={(evt) => {
+          setProductAmount(evt.target.value);
+          selectorValues.productAmount = evt.target.value;
+        }}
       />{" "}
-      
       <input
         value={cakeTitle}
         type="text"
         placeholder="Надпис за торта ..."
         name="cakeTitle"
-        onChange={(evt)=>{setCakeTitle(evt.target.value)}}
+        onChange={(evt) => {
+          setCakeTitle(evt.target.value);
+          selectorValues.cakeTitle = evt.target.value;
+        }}
       />{" "}
-      
       <input
         value={cakeFoto}
         type="text"
         placeholder="Фото ..."
         name="cakeFoto"
-        onChange={(evt)=>{setCakeFoto(evt.target.value)}}
+        onChange={(evt) => {
+          setCakeFoto(evt.target.value);
+          selectorValues.cakeFoto = evt.target.value;
+        }}
       />{" "}
-      
       <div>
         <input
           value={description}
           type="text"
           placeholder="Забележка ..."
           name="description"
-          onChange={(evt)=>{setDescription(evt.target.value)}}
+          onChange={(evt) => {
+            setDescription(evt.target.value);
+            selectorValues.description = evt.target.value;
+          }}
         />{" "}
       </div>
-      <input type="button" value="X" onClick={()=>{removeProduct(index)}}/>
     </>
   );
 }

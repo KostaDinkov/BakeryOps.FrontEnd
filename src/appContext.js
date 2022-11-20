@@ -1,10 +1,8 @@
 import React from "react";
 
 const AppContext = React.createContext({
-  isOrderFormOpen: false,
-  setIsOrderFormOpen:()=>{},
-  orderFormData: {},
-  setOrderFormData:()=>{}
+  orders:[],
+  products:[],
 });
 
 export const defaultOrderFormData = {

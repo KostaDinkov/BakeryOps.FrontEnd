@@ -3,42 +3,48 @@ import DayColumn from "./Components/DayColumn";
 import "./App.css";
 import NavBar from "./Components/NavBar";
 import AppContext,{defaultOrderFormData} from "./appContext";
-import OrderForm from "./Components/OrderForm";
+
 import PubSub from 'pubsub-js';
 
 
 
 function App() {
-  let [data, setData] = useState([]);
-  let [isOrderFormOpen, setIsOrderFormOpen] = useState(false);
-  let [orderFormData, setOrderFormData] = useState(defaultOrderFormData);
-  let [isEdit, setIsEdit] = useState(false);
+  let [orders, setOrders] = useState([]);
+  let [products, setProducts]= useState([]);
+ 
 
   const onOrderChange = function (msg, data){
     console.log(`${msg}`)
-    console.log(data)
-    fetchData();
+    fetchOrders();
   }
   
   useEffect(() => {
-    fetchData();
-    //PubSub.clearAllSubscriptions();
-    let token = PubSub.subscribe('ORDER CHANGE', onOrderChange);
+    fetchOrders();
+    fetchProducts();
+    PubSub.subscribe('ORDER CHANGE', onOrderChange);
   }, []);
 
-  function fetchData() {
+  
+
+  function fetchOrders(){
     fetch("http://localhost:5257/api/orders")
       .then((response) => response.json())
-      .then((data) => setData(data));
+      .then((data) => setOrders(data));
+  }
+
+  function fetchProducts(){
+    fetch("http://localhost:5257/products")
+      .then((response) => response.json())
+      .then((data) => setProducts(data));
   }
 
   return (
     <div className="App">
-      <AppContext.Provider value={{ isOrderFormOpen, setIsOrderFormOpen, orderFormData, setOrderFormData, isEdit, setIsEdit }}>
-        <OrderForm />
+      <AppContext.Provider value={{ orders, products }}>
+        
         <NavBar />
         <div className="daysContainer">
-          {data.map((group, index) => (
+          {orders.map((group, index) => (
             <DayColumn key={index} data={group}></DayColumn>
           ))}
         </div>

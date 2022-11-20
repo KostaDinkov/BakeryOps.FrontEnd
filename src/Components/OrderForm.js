@@ -4,10 +4,8 @@ import moment from "moment";
 import AppContext, { defaultOrderFormData } from "../appContext";
 import PubSub from 'pubsub-js';
 
-
-
 export default function OrderForm() {
-  //TODO check if orderForm is in "Edit" mode or in Create New mode
+  
   const {
     isOrderFormOpen,
     setIsOrderFormOpen,

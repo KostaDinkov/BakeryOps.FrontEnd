@@ -20,8 +20,6 @@ function App() {
     fetchData();
   }
   
-  
-  
   useEffect(() => {
     fetchData();
     //PubSub.clearAllSubscriptions();

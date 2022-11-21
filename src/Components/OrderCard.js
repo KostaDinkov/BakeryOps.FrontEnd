@@ -1,15 +1,17 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import styles from "./OrderCard.module.css";
 import OrderItem from "./OrderItem";
 import EditIcon from "@mui/icons-material/Edit";
-import AppContext from "../appContext";
+
 import OrderForm from "./OrderForm";
 
 const OrderCard = ({ order }) => {
-  //const { setIsOrderFormOpen, setOrderFormData, setIsEdit}  = useContext(AppContext);
+  
   const [formState, setFormState] = useState({ isFormOpen: false });
+  
   const handleOnEditClick = () => {
     setFormState((state) => ({ ...state, isFormOpen: true }));
+    order.pickupDate = new Date(order.pickupDate);
   };
   
   return (
@@ -46,15 +48,13 @@ const OrderCard = ({ order }) => {
           
         ))}
       </ul>
-      {formState.isFormOpen ? (
+      {formState.isFormOpen && (
         <OrderForm
           formState={formState}
           setFormState={setFormState}
           isEdit={true}
           initialFormData={order}
         />
-      ) : (
-        <></>
       )}
     </div>
   );

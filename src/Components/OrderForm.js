@@ -3,6 +3,10 @@ import ProductSelector from "./ProductSelector";
 import moment from "moment";
 import AppContext, { defaultOrderFormData } from "../appContext";
 import PubSub from "pubsub-js";
+import DatePicker, { registerLocale } from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { bg } from "date-fns/locale";
+import Select from "react-select";
 
 export default function OrderForm({
   formState,
@@ -10,6 +14,7 @@ export default function OrderForm({
   initialFormData,
   isEdit,
 }) {
+  registerLocale("bg", bg);
   const dialogRef = React.createRef(null);
   let { products } = useContext(AppContext); // the products from the DB
   let productOptions = productsToOptions(products); //options for the ProductSelector component, based on products
@@ -23,11 +28,22 @@ export default function OrderForm({
     }
   });
 
+  //-- SHOW ORDER FORM
   function showOrderForm(order) {
-    setOrderFormData((orderForm) => ({
-      ...orderForm,
-      pickupDate: moment(orderForm.pickupDate).format("DD-MM-YYYY"),
-    }));
+    let date = new Date();
+
+    if (isEdit) {
+      date = new Date(orderFormData.pickupDate);
+    }
+
+    setOrderFormData((orderForm) => {
+      let updated = {
+        ...orderForm,
+        pickupDate: date,
+      };
+
+      return updated;
+    });
     if (order.orderItems.length === 0) {
       addNewProductSelector(new DefaultSelectorValues());
     } else {
@@ -35,6 +51,7 @@ export default function OrderForm({
         addNewProductSelector(orderItem);
       });
     }
+
     dialogRef.current.showModal();
   }
 
@@ -52,21 +69,18 @@ export default function OrderForm({
     setProductSelectorList([...productSelectorList]);
   }
 
+  //-- SUBMIT ORDER --
   function handleOnSubmit(event) {
     event.preventDefault();
     let orderItems = productSelectorList.map((selector) => {
       const item = selector.props.selectorValues;
-      console.log(item);
       return item;
     });
 
     let newOrder = {
       ...orderFormData,
       orderItems: orderItems,
-      pickupDate: moment(orderFormData.pickupDate, "DD-MM-YYYY").format(),
     };
-
-    setOrderFormData(newOrder);
 
     let validationResult = validateOrder(newOrder);
     if (!validationResult.isValid) {
@@ -100,6 +114,7 @@ export default function OrderForm({
     }
   }
 
+  //-- CLOSE FORM --
   function closeForm(event) {
     setOrderFormData(defaultOrderFormData);
     setProductSelectorList([]);
@@ -107,21 +122,22 @@ export default function OrderForm({
     setFormState((state) => ({ ...state, isFormOpen: false }));
   }
 
+  //-- DELETE ORDER --
   function deleteOrder() {
     fetch(`http://localhost:5257/api/orders/${initialFormData.id}`, {
       method: "DELETE",
     })
       .then((response) => {
-        PubSub.publish('ORDER CHANGE', "order deleted")
+        PubSub.publish("ORDER CHANGE", "order deleted");
         closeForm();
         return console.log("Success:", response);
-
       })
       .catch((error) => {
         console.error("Error:", error);
       });
   }
 
+  //-- RETURN HTML --
   return (
     <dialog ref={dialogRef} onClose={closeForm}>
       <h1>
@@ -143,29 +159,26 @@ export default function OrderForm({
               }));
             }}
           />{" "}
-          <input
-            value={orderFormData.pickupDate}
-            type="datetime"
-            placeholder="За дата ..."
-            name="pickupDate"
-            id="pickupDate"
-            onChange={(evt) => {
-              setOrderFormData((order) => ({
-                ...order,
-                pickupDate: evt.target.value,
-              }));
-            }}
-          />{" "}
-          <input
-            value={orderFormData.pickupTime}
-            type="text"
+          <div style={{ display: "inline-block", width: "fit-content" }}>
+            <DatePicker
+              selected={orderFormData.pickupDate}
+              locale="bg"
+              dateFormat="P"
+              onChange={(date) =>
+                setOrderFormData((order) => ({ ...order, pickupDate: date }))
+              }
+            />
+          </div>
+          <Select
+            value={getHoursOptions().filter(
+              (option) => option.label === orderFormData.pickupTime
+            )}
+            options={getHoursOptions()}
             placeholder="Час ..."
-            name="pickupTime"
-            id="pickupTime"
-            onChange={(evt) => {
+            onChange={(option) => {
               setOrderFormData((order) => ({
                 ...order,
-                pickupTime: evt.target.value,
+                pickupTime: option.value,
               }));
             }}
           />{" "}
@@ -198,7 +211,7 @@ export default function OrderForm({
               }));
             }}
           />
-
+          
           <label>
             Платена?
             <input
@@ -247,6 +260,7 @@ export default function OrderForm({
   );
 }
 
+//-- HELPER FUNCTIONS --
 function validateOrder(order) {
   let validationResult = { isValid: false, errors: [] };
 
@@ -269,7 +283,7 @@ function validateOrder(order) {
     validationResult.errors.push("Невалиден час за получаване");
   }
   order.orderItems.forEach((element, index) => {
-    if (element.productId === undefined || element.productId===-1) {
+    if (element.productId === undefined || element.productId === -1) {
       validationResult.errors.push(
         `Невалидна стойност за продукт номер ${index + 1}`
       );
@@ -307,4 +321,13 @@ function productsToOptions(products) {
     return options;
   }
   return [];
+}
+
+function getHoursOptions() {
+  let availableHours = ["09:00", "09:30", "10:00", "10:30"];
+  let hoursOptions = availableHours.map((hour) => ({
+    value: hour,
+    label: hour,
+  }));
+  return hoursOptions;
 }

@@ -16,7 +16,7 @@ const NavBar = () =>{
     }
     return(
         <div className={styles.navBarContainer}>
-           <button onClick={openOrderForm}>Open Dialog</button>
+           <button onClick={openOrderForm}>Нова Поръчка</button>
            {formState.isFormOpen?<OrderForm formState={formState} initialFormData={defaultOrderFormData} isEdit={false} setFormState={setFormState}/>:<></>}
         </div>
     )

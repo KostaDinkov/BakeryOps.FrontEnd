@@ -269,7 +269,7 @@ function validateOrder(order) {
     validationResult.errors.push("Невалиден час за получаване");
   }
   order.orderItems.forEach((element, index) => {
-    if (element.productId === undefined) {
+    if (element.productId === undefined || element.productId===-1) {
       validationResult.errors.push(
         `Невалидна стойност за продукт номер ${index + 1}`
       );
@@ -290,7 +290,7 @@ function validateOrder(order) {
 }
 
 function DefaultSelectorValues() {
-  this.productId = 1;
+  this.productId = -1;
   this.productAmount = 0;
   this.cakeFoto = "";
   this.cakeTitle = "";

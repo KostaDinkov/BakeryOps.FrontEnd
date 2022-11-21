@@ -18,7 +18,7 @@ export default function ProductSelector({ options, selectorValues }) {
       setDescription(selectorValues.description);
       //setId(existing.id)
     } 
-  }, []);
+  },[selectorValues]);
 
   const filterConfig = {
     ignoreCase: true,

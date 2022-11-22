@@ -11,6 +11,7 @@ const OrderItem = ({ item, order }) => {
 
   let handleCompleteChange = () => {
     item.isComplete = !item.isComplete;
+    
     updateOrder();
   };
 
@@ -31,7 +32,7 @@ const OrderItem = ({ item, order }) => {
   }
 
   return (
-    <dl>
+    <dl className={item.isComplete?styles.completed:(item.isInProgress?styles.inProgress:null)}>
       <dt className={styles.itemHeader}>
         <span className={styles.itemName}>{item.product.name} </span>
         <span>{item.productAmount} бр.</span>

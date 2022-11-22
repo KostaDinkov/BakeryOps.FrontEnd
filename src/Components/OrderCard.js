@@ -13,9 +13,23 @@ const OrderCard = ({ order }) => {
     setFormState((state) => ({ ...state, isFormOpen: true }));
     order.pickupDate = new Date(order.pickupDate);
   };
+
+  const containerStyles = ()=>{
+    
+    for( const item of order.orderItems){
+      if(!item.isComplete){
+        return [styles.orderCardContainer, styles.orderCardContainerNotComplete].join(" ");
+      }
+    }
+
+    
+    return [styles.orderCardContainer, styles.orderCardContainerComplete].join(' ');
+  }
+
+  
   
   return (
-    <div className={styles.orderCardContainer}>
+    <div className={containerStyles()}>
       <div className={styles.cardHeader}>
         <span className={styles.pickupTime}>{order.pickupTime}</span>{" "}
         <span>{order.clientName}</span>

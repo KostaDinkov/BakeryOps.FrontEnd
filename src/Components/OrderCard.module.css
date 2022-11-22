@@ -1,6 +1,13 @@
 .orderCardContainer{
-    background-color: white;
+    
     border-radius: 5px;
+}
+
+.orderCardContainerNotComplete{
+    background-color: white;
+}
+.orderCardContainerComplete{
+    background-color: rgb(99, 240, 99);
 }
 .cardHeader{
     display: flex;

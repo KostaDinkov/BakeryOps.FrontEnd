@@ -7,12 +7,30 @@ dl:nth-of-type(odd){
     background-color: rgb(212, 212, 212);
 }
 
-dl{
-    padding:10px;
+dl {
+    margin:0px;
+    padding: 10px ;
+    box-sizing: border-box;
 }
+
 
 .itemName{
     font-size: 1.1rem;
     flex-grow:2;
+    
+}
+
+dl.completed{
+    background-color: rgb(99, 240, 99);
+    
+}
+
+dl.inProgress{
+    background-color: rgb(255, 208, 0);
+}
+
+dl.completed, dl.inProgress{
+    
+    border-top: 1px solid rgb(255, 255, 255);
     
 }

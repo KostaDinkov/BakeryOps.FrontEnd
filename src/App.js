@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import DayColumn from "./Components/DayColumn";
 import "./App.css";
 import NavBar from "./Components/NavBar";
-import AppContext, { defaultOrderFormData } from "./appContext";
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import AppContext from "./appContext";
+
 
 
 
@@ -23,6 +22,7 @@ function App() {
     fetchOrders();
     fetchProducts();
     PubSub.subscribe("ORDER CHANGE", onOrderChange);
+    // eslint-disable-next-line
   }, []);
 
   function fetchOrders() {
@@ -39,7 +39,7 @@ function App() {
 
   return (
     <div className="App">
-      <LocalizationProvider dateAdapter={AdapterMoment}>
+      
         <AppContext.Provider value={{ orders, products }}>
           <NavBar />
           <div className="daysContainer">
@@ -48,7 +48,7 @@ function App() {
             ))}
           </div>
         </AppContext.Provider>
-        </LocalizationProvider>
+       
     </div>
   );
 }

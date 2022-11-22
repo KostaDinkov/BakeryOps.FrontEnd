@@ -1,6 +1,6 @@
-import React, { useContext, useState } from "react";
+import React, {  useState } from "react";
 import styles from "./NavBar.module.css";
-import AppContext, { defaultOrderFormData } from "../appContext";
+import { defaultOrderFormData } from "../appContext";
 import OrderForm from "./OrderForm";
 
 const NavBar = () => {

@@ -1,7 +1,7 @@
 
 const host = "http://localhost:5257"
 
-export default {
+const ApiEndpoints =  {
     get:{
         orders:()=>`${host}/api/orders`
     },
@@ -9,3 +9,5 @@ export default {
         orders:(id)=>`${host}/api/orders/${id}`
     }
 }
+
+export default ApiEndpoints;

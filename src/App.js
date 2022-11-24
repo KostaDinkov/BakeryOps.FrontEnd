@@ -1,35 +1,24 @@
 import { useEffect, useState } from "react";
-import DayColumn from "./Components/DayColumn";
+import { Outlet } from "react-router-dom";
+
 import "./App.css";
 import NavBar from "./Components/NavBar";
 import AppContext from "./appContext";
-
-
-
-
 import PubSub from "pubsub-js";
 
 function App() {
-  let [orders, setOrders] = useState([]);
   let [products, setProducts] = useState([]);
 
   const onOrderChange = function (msg, data) {
     console.log(`${msg}`);
-    fetchOrders();
+    //fetchOrders();
   };
 
   useEffect(() => {
-    fetchOrders();
     fetchProducts();
-    PubSub.subscribe("ORDER CHANGE", onOrderChange);
+    //PubSub.subscribe("ORDER CHANGE", onOrderChange);
     // eslint-disable-next-line
   }, []);
-
-  function fetchOrders() {
-    fetch("http://localhost:5257/api/orders")
-      .then((response) => response.json())
-      .then((data) => setOrders(data));
-  }
 
   function fetchProducts() {
     fetch("http://localhost:5257/products")
@@ -39,16 +28,10 @@ function App() {
 
   return (
     <div className="App">
-      
-        <AppContext.Provider value={{ orders, products }}>
-          <NavBar />
-          <div className="daysContainer">
-            {orders.map((group, index) => (
-              <DayColumn key={index} data={group}></DayColumn>
-            ))}
-          </div>
-        </AppContext.Provider>
-       
+      <AppContext.Provider value={{ products }}>
+        <NavBar />
+        <Outlet />
+      </AppContext.Provider>
     </div>
   );
 }

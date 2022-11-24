@@ -39,14 +39,16 @@ export default function ProductSelector({ options, selectorValues }) {
           setProductId(option.value);
           selectorValues.productId = option.value;
         }}
+        name={`pid${productId}`}
         required
       />
       <input
         value={productAmount}
+        
         type="number"
         placeholder="Количество"
         required
-        name="prodAmount"
+        name={`${productId}-amount`}
         onChange={(evt) => {
           setProductAmount(evt.target.value);
           selectorValues.productAmount = evt.target.value;
@@ -56,7 +58,7 @@ export default function ProductSelector({ options, selectorValues }) {
         value={cakeTitle}
         type="text"
         placeholder="Надпис за торта ..."
-        name="cakeTitle"
+        name={`${productId}-cakeTitle`}
         onChange={(evt) => {
           setCakeTitle(evt.target.value);
           selectorValues.cakeTitle = evt.target.value;
@@ -66,7 +68,7 @@ export default function ProductSelector({ options, selectorValues }) {
         value={cakeFoto}
         type="text"
         placeholder="Фото ..."
-        name="cakeFoto"
+        name={`${productId}-cakeFoto`}
         onChange={(evt) => {
           setCakeFoto(evt.target.value);
           selectorValues.cakeFoto = evt.target.value;
@@ -77,7 +79,7 @@ export default function ProductSelector({ options, selectorValues }) {
           value={description}
           type="text"
           placeholder="Забележка ..."
-          name="description"
+          name={`${productId}-description`}
           onChange={(evt) => {
             setDescription(evt.target.value);
             selectorValues.description = evt.target.value;

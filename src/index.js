@@ -1,20 +1,66 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import moment from 'moment/moment';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import moment from "moment/moment";
+import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
+import OrderForm2,{orderFormLoader,orderFormAction as editAction} from "./Components/OrderForm2";
+import ColumnView, {
+  loader as ordersLoader,
+  action as ordersAction,
+} from "./Components/ColumnView";
 
-moment.updateLocale("bg",{
-  months:["Януари", "Февруари","Март","Април","Май","Юни", "Юли", "Август","Септември","Октомври", "Ноември","Декември"]
-})
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        path: "/",
+        element: <ColumnView />,
+        loader: ordersLoader,
+        action: ordersAction,
+      },
+      {
+        path:"/orders/:method/:id",
+        element:<OrderForm2/>,
+        loader: orderFormLoader,
+        action: editAction
+      },
+      {
+        path:"/orders/:method/",
+        element:<OrderForm2/>,
+        loader: orderFormLoader,
+        action: editAction
+      },
+    ],
+  },
+]);
 
-moment.locale('bg');
+moment.updateLocale("bg", {
+  months: [
+    "Януари",
+    "Февруари",
+    "Март",
+    "Април",
+    "Май",
+    "Юни",
+    "Юли",
+    "Август",
+    "Септември",
+    "Октомври",
+    "Ноември",
+    "Декември",
+  ],
+});
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+moment.locale("bg");
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 

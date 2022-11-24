@@ -1,9 +1,10 @@
 import React from "react";
 import styles from "./OrderItem.module.css";
 import APIendpoints from "../APIendpoints";
-import PubSub from 'pubsub-js';
+import { Navigate, useNavigate } from "react-router-dom";
 
 const OrderItem = ({ item, order }) => {
+  let navigate = useNavigate();
   let handleProgressChange = () => {
     item.isInProgress = !item.isInProgress;
     updateOrder();
@@ -26,7 +27,8 @@ const OrderItem = ({ item, order }) => {
       .then((response) => response.json())
       .then((data) => {
         console.log("Success:", data);
-        PubSub.publish("ORDER CHANGE", data);
+        navigate(0);
+        
       })
       .catch(error=>console.log("Error",error));
   }

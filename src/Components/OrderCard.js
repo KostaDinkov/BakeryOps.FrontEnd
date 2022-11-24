@@ -2,43 +2,35 @@ import React, { useState } from "react";
 import styles from "./OrderCard.module.css";
 import OrderItem from "./OrderItem";
 import EditIcon from "@mui/icons-material/Edit";
+import {Link} from "react-router-dom";
 
-import OrderForm from "./OrderForm";
 
 const OrderCard = ({ order }) => {
-  
-  const [formState, setFormState] = useState({ isFormOpen: false });
-  
-  const handleOnEditClick = () => {
-    setFormState((state) => ({ ...state, isFormOpen: true }));
-    order.pickupDate = new Date(order.pickupDate);
-  };
 
-  const containerStyles = ()=>{
-    
-    for( const item of order.orderItems){
-      if(!item.isComplete){
-        return [styles.orderCardContainer, styles.orderCardContainerNotComplete].join(" ");
+  const containerStyles = () => {
+    for (const item of order.orderItems) {
+      if (!item.isComplete) {
+        return [
+          styles.orderCardContainer,
+          styles.orderCardContainerNotComplete,
+        ].join(" ");
       }
     }
 
-    
-    return [styles.orderCardContainer, styles.orderCardContainerComplete].join(' ');
-  }
+    return [styles.orderCardContainer, styles.orderCardContainerComplete].join(
+      " "
+    );
+  };
 
-  
-  
   return (
     <div className={containerStyles()}>
       <div className={styles.cardHeader}>
         <span className={styles.pickupTime}>{order.pickupTime}</span>{" "}
         <span>{order.clientName}</span>
         <div className={styles.editIcon}>
-          <EditIcon
-            fontSize="small"
-            cursor="pointer"
-            onClick={handleOnEditClick}
-          />
+          <Link to={`/orders/put/${order.id}`}>
+            <EditIcon fontSize="small" cursor="pointer" />
+          </Link>
         </div>
       </div>
       <div className={styles.headerDetails}>
@@ -58,18 +50,9 @@ const OrderCard = ({ order }) => {
       </div>
       <ul>
         {order.orderItems.map((item, index) => (
-          <OrderItem key={index} item={item} order={order}/>           
-          
+          <OrderItem key={index} item={item} order={order} />
         ))}
       </ul>
-      {formState.isFormOpen && (
-        <OrderForm
-          formState={formState}
-          setFormState={setFormState}
-          isEdit={true}
-          initialFormData={order}
-        />
-      )}
     </div>
   );
 };

@@ -1,60 +1,45 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import ProductSelector from "./ProductSelector";
 import moment from "moment";
-import AppContext, { defaultOrderFormData } from "../appContext";
-import PubSub from "pubsub-js";
+import AppContext from "../appContext";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { bg } from "date-fns/locale";
 import Select from "react-select";
+import { getOrder } from "../API/ordersApi";
+import { useLoaderData, useNavigate } from "react-router-dom";
+import DeleteOrderDialog from "./DeleteOrderDialog";
+
+export async function orderFormLoader({ params }) {
+  let isEdit = params.method === "put";
+  let date = new Date();
+  let order = {};
+  if (isEdit) {
+    order = await getOrder(params.id);
+    date = new Date(order.pickupDate);
+  } else {
+    order = getDefaultOrderFormData();
+  }
+  return {
+    order: { ...order, pickupDate: date },
+    isEdit,
+  };
+}
 
 
-export default function OrderForm({
-  formState,
-  setFormState,
-  initialFormData,
-  isEdit,
-}) {
+export default function OrderForm() {
   registerLocale("bg", bg);
-  const dialogRef = React.createRef(null);
+  const navigate = useNavigate();
+  let { isEdit, order } = useLoaderData();
   let { products } = useContext(AppContext); // the products from the DB
   let productOptions = productsToOptions(products); //options for the ProductSelector component, based on products
-
-  let [productSelectorList, setProductSelectorList] = useState([]); // list of ProductSelector components added to the OrderForm
-  let [orderFormData, setOrderFormData] = useState(initialFormData);
-
-  useEffect(() => {
-    if (dialogRef && !dialogRef.current.open && formState.isFormOpen) {
-      showOrderForm(orderFormData);
-    }
-  });
-
-  //-- SHOW ORDER FORM
-  function showOrderForm(order) {
-    let date = new Date();
-
-    if (isEdit) {
-      date = new Date(orderFormData.pickupDate);
-    }
-
-    setOrderFormData((orderForm) => {
-      let updated = {
-        ...orderForm,
-        pickupDate: date,
-      };
-
-      return updated;
-    });
-    if (order.orderItems.length === 0) {
-      addNewProductSelector(new DefaultSelectorValues());
-    } else {
-      orderFormData.orderItems.forEach((orderItem) => {
-        addNewProductSelector(orderItem);
-      });
-    }
-
-    dialogRef.current.showModal();
-  }
+  let [productSelectorList, setProductSelectorList] = useState(
+    order.orderItems.map((item) => (
+      <ProductSelector options={productOptions} selectorValues={item} />
+    ))
+  ); // list of ProductSelector components added to the OrderForm
+  let [orderFormData, setOrderFormData] = useState(order);
+  let [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   function addNewProductSelector(existing) {
     setProductSelectorList((list) => {
@@ -106,34 +91,28 @@ export default function OrderForm({
         .then((response) => response.json())
         .then((data) => {
           console.log("Success:", data);
-          
-          closeForm();
-          
+          navigate("/");
         })
         .catch((error) => {
           console.error("Error:", error);
         });
-      
     }
   }
 
   //-- CLOSE FORM --
   function closeForm(event) {
-    setOrderFormData(defaultOrderFormData);
-    setProductSelectorList([]);
-    dialogRef.current.close();
-    setFormState((state) => ({ ...state, isFormOpen: false }));
+    navigate("/");
   }
 
   //-- DELETE ORDER --
   function deleteOrder() {
-    fetch(`http://localhost:5257/api/orders/${initialFormData.id}`, {
+    fetch(`http://localhost:5257/api/orders/${order.id}`, {
       method: "DELETE",
     })
       .then((response) => {
-        PubSub.publish("ORDER CHANGE", "order deleted");
-        closeForm();
+        
         return console.log("Success:", response);
+        closeForm();
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -142,124 +121,133 @@ export default function OrderForm({
 
   //-- RETURN HTML --
   return (
-    <dialog ref={dialogRef} onClose={closeForm}>
+    <form method="post" onSubmit={handleOnSubmit}>
       <h1>
         {isEdit ? "Редакция на Поръчка" : "Нова Поръчка"}{" "}
-        {isEdit && <input type="button" value="Изтрий" onClick={deleteOrder} />}
+        {isEdit && (
+          <input
+            type="button"
+            value="Изтрий"
+            onClick={()=>setShowDeleteDialog(true)}
+          />
+        )}
       </h1>
-      <form method="dialog" onSubmit={handleOnSubmit}>
-        <div>
-          <input
-            value={orderFormData.clientName}
-            type="text"
-            placeholder="Клиент ..."
-            name="clientName"
-            id="clientName"
-            onChange={(evt) => {
-              setOrderFormData((order) => ({
-                ...order,
-                clientName: evt.target.value,
-              }));
-            }}
-          />{" "}
-          <div style={{ display: "inline-block", width: "fit-content" }}>
-            <DatePicker
-              selected={orderFormData.pickupDate}
-              locale="bg"
-              dateFormat="P"
-              onChange={(date) =>
-                setOrderFormData((order) => ({ ...order, pickupDate: date }))
-              }
-            />
-          </div>
-          <Select
-            value={getHoursOptions().filter(
-              (option) => option.label === orderFormData.pickupTime
-            )}
-            options={getHoursOptions()}
-            placeholder="Час ..."
-            onChange={(option) => {
-              setOrderFormData((order) => ({
-                ...order,
-                pickupTime: option.value,
-              }));
-            }}
-          />{" "}
-        </div>
-
-        <div>
-          <input
-            type="tel"
-            value={orderFormData.clientPhone}
-            placeholder="Телефон ..."
-            name="clientPhone"
-            id="clientPhone"
-            onChange={(evt) => {
-              setOrderFormData((order) => ({
-                ...order,
-                clientPhone: evt.target.value,
-              }));
-            }}
-          />
-
-          <input
-            type="number"
-            value={orderFormData.advancePaiment}
-            name="advance"
-            id="advance"
-            onChange={(evt) => {
-              setOrderFormData((order) => ({
-                ...order,
-                advancePaiment: evt.target.value,
-              }));
-            }}
-          />
-          
-          <label>
-            Платена?
-            <input
-              type="checkbox"
-              name="isPaid"
-              id="isPaid"
-              checked={orderFormData.isPaid}
-              onChange={(evt) => {
-                setOrderFormData((order) => ({
-                  ...order,
-                  isPaid: evt.target.checked,
-                }));
-              }}
-            />
-          </label>
-        </div>
-
-        <ul>
-          {productSelectorList.map((el, index) => (
-            <li key={index}>
-              <div>{el}</div>
-              <input
-                type="button"
-                value="X"
-                onClick={() => {
-                  removeProduct(index);
-                }}
-              />
-            </li>
-          ))}
-        </ul>
+      <div>
         <input
-          type="button"
-          value="Добави"
-          onClick={() => {
-            addNewProductSelector(new DefaultSelectorValues());
+          value={orderFormData.clientName}
+          type="text"
+          placeholder="Клиент ..."
+          name="clientName"
+          id="clientName"
+          onChange={(evt) => {
+            setOrderFormData((order) => ({
+              ...order,
+              clientName: evt.target.value,
+            }));
+          }}
+        />{" "}
+        <div style={{ display: "inline-block", width: "fit-content" }}>
+          <DatePicker
+            selected={orderFormData.pickupDate}
+            locale="bg"
+            dateFormat="P"
+            onChange={(date) =>
+              setOrderFormData((order) => ({ ...order, pickupDate: date }))
+            }
+          />
+        </div>
+        <Select
+          value={getHoursOptions().filter(
+            (option) => option.label === orderFormData.pickupTime
+          )}
+          options={getHoursOptions()}
+          placeholder="Час ..."
+          onChange={(option) => {
+            setOrderFormData((order) => ({
+              ...order,
+              pickupTime: option.value,
+            }));
+          }}
+        />{" "}
+      </div>
+
+      <div>
+        <input
+          type="tel"
+          value={orderFormData.clientPhone}
+          placeholder="Телефон ..."
+          name="clientPhone"
+          id="clientPhone"
+          onChange={(evt) => {
+            setOrderFormData((order) => ({
+              ...order,
+              clientPhone: evt.target.value,
+            }));
           }}
         />
-        <div>
-          <input type="button" value="Отказ" onClick={closeForm} />
 
-          <input type="submit" value="Submit" />
-        </div>
-      </form>
-    </dialog>
+        <input
+          type="number"
+          value={orderFormData.advancePaiment}
+          name="advance"
+          id="advance"
+          onChange={(evt) => {
+            setOrderFormData((order) => ({
+              ...order,
+              advancePaiment: evt.target.value,
+            }));
+          }}
+        />
+
+        <label>
+          Платена?
+          <input
+            type="checkbox"
+            name="isPaid"
+            id="isPaid"
+            checked={orderFormData.isPaid}
+            onChange={(evt) => {
+              setOrderFormData((order) => ({
+                ...order,
+                isPaid: evt.target.checked,
+              }));
+            }}
+          />
+        </label>
+      </div>
+
+      <ul>
+        {productSelectorList.map((el, index) => (
+          <li key={index}>
+            <div>{el}</div>
+            <input
+              type="button"
+              value="X"
+              onClick={() => {
+                removeProduct(index);
+              }}
+            />
+          </li>
+        ))}
+      </ul>
+      <input
+        type="button"
+        value="Добави"
+        onClick={() => {
+          addNewProductSelector(new DefaultSelectorValues());
+        }}
+      />
+      <div>
+        <input type="button" value="Отказ" onClick={closeForm} />
+
+        <input type="submit" value="Submit" />
+      </div>
+      <DeleteOrderDialog
+        open={showDeleteDialog}
+        setOpen={setShowDeleteDialog}
+        onDelete={deleteOrder}
+      />
+    </form>
   );
 }
 
@@ -333,4 +321,17 @@ function getHoursOptions() {
     label: hour,
   }));
   return hoursOptions;
+}
+
+function getDefaultOrderFormData() {
+  return {
+    operatorId: 0,
+    pickupDate: "",
+    pickupTime: "",
+    clientName: "",
+    clientPhone: "",
+    isPaid: false,
+    advancePaiment: 0,
+    orderItems: [],
+  };
 }

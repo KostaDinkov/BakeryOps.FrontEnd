@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./OrderItem.module.css";
 import APIendpoints from "../APIendpoints";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const OrderItem = ({ item, order }) => {
   let navigate = useNavigate();

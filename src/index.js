@@ -4,8 +4,8 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import moment from "moment/moment";
-import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
-import OrderForm2,{orderFormLoader,orderFormAction as editAction} from "./Components/OrderForm2";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import OrderForm, { orderFormLoader } from "./Components/OrderForm";
 import ColumnView, {
   loader as ordersLoader,
   action as ordersAction,
@@ -23,16 +23,14 @@ const router = createBrowserRouter([
         action: ordersAction,
       },
       {
-        path:"/orders/:method/:id",
-        element:<OrderForm2/>,
+        path: "/orders/:method/:id",
+        element: <OrderForm />,
         loader: orderFormLoader,
-        action: editAction
       },
       {
-        path:"/orders/:method/",
-        element:<OrderForm2/>,
+        path: "/orders/:method/",
+        element: <OrderForm />,
         loader: orderFormLoader,
-        action: editAction
       },
     ],
   },

@@ -1,4 +1,10 @@
 .navBarContainer{
     background-color: cadetblue;
-    padding:10px;
+    height: 5vh;
+    display:flex;
+    flex-direction: row;
+    gap:10px;
+    align-items: center;
+    padding-left:10px;
+    
 }

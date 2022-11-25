@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 
-import "./App.css";
+import styles from "./App.module.css";
 import NavBar from "./Components/NavBar";
 import AppContext from "./appContext";
 import PubSub from "pubsub-js";
@@ -27,7 +27,7 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <div className={styles.app}>
       <AppContext.Provider value={{ products }}>
         <NavBar />
         <Outlet />

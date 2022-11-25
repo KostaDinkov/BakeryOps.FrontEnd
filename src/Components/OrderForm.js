@@ -6,7 +6,7 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { bg } from "date-fns/locale";
 import Select from "react-select";
-import { getOrder } from "../API/ordersApi";
+import { ordersApi } from "../API/ordersApi";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import DeleteOrderDialog from "./DeleteOrderDialog";
 
@@ -15,7 +15,7 @@ export async function orderFormLoader({ params }) {
   let date = new Date();
   let order = {};
   if (isEdit) {
-    order = await getOrder(params.id);
+    order = await ordersApi.getOrder(params.id);
     date = new Date(order.pickupDate);
   } else {
     order = getDefaultOrderFormData();
@@ -26,30 +26,46 @@ export async function orderFormLoader({ params }) {
   };
 }
 
-
 export default function OrderForm() {
   registerLocale("bg", bg);
   const navigate = useNavigate();
   let { isEdit, order } = useLoaderData();
   let { products } = useContext(AppContext); // the products from the DB
   let productOptions = productsToOptions(products); //options for the ProductSelector component, based on products
+  let [orderFormData, setOrderFormData] = useState(order); //setting and getting the values for the form inputs
+  let [showDeleteDialog, setShowDeleteDialog] = useState(false); // show/hide confirmation dialog on order delete
+  let [validationResult, setValidationResult] = useState({
+    isValid: true,
+    errors: [],
+  });
   let [productSelectorList, setProductSelectorList] = useState(
     order.orderItems.map((item) => (
       <ProductSelector options={productOptions} selectorValues={item} />
     ))
   ); // list of ProductSelector components added to the OrderForm
-  let [orderFormData, setOrderFormData] = useState(order);
-  let [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
-  function addNewProductSelector(existing) {
+  //-- ADD NEW PRODUCT TO ORDER
+  /**
+   * Dynamically add an input to the order form for an a new order Item with default values
+   *
+   */
+  function addNewProductSelector() {
     setProductSelectorList((list) => {
       return [
         ...list,
-        <ProductSelector options={productOptions} selectorValues={existing} />,
+        <ProductSelector
+          options={productOptions}
+          selectorValues={new defaultSelectorValues()}
+        />,
       ];
     });
   }
 
+  //-- REMOVE PRODUCT FROM ORDER --
+  /**
+   * Remove an orderItem (productSelector) from the order
+   * @param {int} index
+   */
   function removeProduct(index) {
     productSelectorList.splice(index, 1);
     setProductSelectorList([...productSelectorList]);
@@ -58,19 +74,19 @@ export default function OrderForm() {
   //-- SUBMIT ORDER --
   function handleOnSubmit(event) {
     event.preventDefault();
-    let orderItems = productSelectorList.map((selector) => {
-      const item = selector.props.selectorValues;
-      return item;
-    });
+    let orderItems = productSelectorList.map(
+      (selector) => selector.props.selectorValues
+    );
 
     let newOrder = {
       ...orderFormData,
       orderItems: orderItems,
     };
 
-    let validationResult = validateOrder(newOrder);
-    if (!validationResult.isValid) {
-      console.log(validationResult.errors);
+    const newValidationResult = validateOrder(newOrder);
+    setValidationResult(newValidationResult);
+    if (!newValidationResult.isValid) {
+      console.log(newValidationResult.errors);
     } else {
       let data = JSON.stringify(newOrder);
 
@@ -100,7 +116,7 @@ export default function OrderForm() {
   }
 
   //-- CLOSE FORM --
-  function closeForm(event) {
+  function closeForm() {
     navigate("/");
   }
 
@@ -110,8 +126,7 @@ export default function OrderForm() {
       method: "DELETE",
     })
       .then((response) => {
-        
-        return console.log("Success:", response);
+        console.log("Success:", response);
         closeForm();
       })
       .catch((error) => {
@@ -128,7 +143,7 @@ export default function OrderForm() {
           <input
             type="button"
             value="Изтрий"
-            onClick={()=>setShowDeleteDialog(true)}
+            onClick={() => setShowDeleteDialog(true)}
           />
         )}
       </h1>
@@ -185,19 +200,21 @@ export default function OrderForm() {
             }));
           }}
         />
-
-        <input
-          type="number"
-          value={orderFormData.advancePaiment}
-          name="advance"
-          id="advance"
-          onChange={(evt) => {
-            setOrderFormData((order) => ({
-              ...order,
-              advancePaiment: evt.target.value,
-            }));
-          }}
-        />
+        <label>
+          Капаро:
+          <input
+            type="number"
+            value={orderFormData.advancePaiment}
+            name="advance"
+            id="advance"
+            onChange={(evt) => {
+              setOrderFormData((order) => ({
+                ...order,
+                advancePaiment: evt.target.value,
+              }));
+            }}
+          />
+        </label>
 
         <label>
           Платена?
@@ -234,7 +251,7 @@ export default function OrderForm() {
         type="button"
         value="Добави"
         onClick={() => {
-          addNewProductSelector(new DefaultSelectorValues());
+          addNewProductSelector(new defaultSelectorValues());
         }}
       />
       <div>
@@ -242,6 +259,16 @@ export default function OrderForm() {
 
         <input type="submit" value="Submit" />
       </div>
+      {!validationResult.isValid && (
+        <div>
+          <h3>Невалидни стойности на поръчката:</h3>
+          <ul>
+            {validationResult.errors.map((error) => (
+              <li key={error}>{error}</li>
+            ))}
+          </ul>
+        </div>
+      )}
       <DeleteOrderDialog
         open={showDeleteDialog}
         setOpen={setShowDeleteDialog}
@@ -273,6 +300,13 @@ function validateOrder(order) {
   if (!regex.test(order.pickupTime)) {
     validationResult.errors.push("Невалиден час за получаване");
   }
+
+  if (order.orderItems.length === 0) {
+    validationResult.errors.push(
+      "Поръчката трябва да съдържа минимум 1 продукт"
+    );
+  }
+
   order.orderItems.forEach((element, index) => {
     if (element.productId === undefined || element.productId === -1) {
       validationResult.errors.push(
@@ -294,7 +328,7 @@ function validateOrder(order) {
   return validationResult;
 }
 
-function DefaultSelectorValues() {
+function defaultSelectorValues() {
   this.productId = -1;
   this.productAmount = 0;
   this.cakeFoto = "";

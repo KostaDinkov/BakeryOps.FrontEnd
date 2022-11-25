@@ -1,6 +1,10 @@
 .daysContainer{
-  display:flex;
   justify-content: center;
+}
+
+.app{
+  height: 100vh;
+  
 }
 
 

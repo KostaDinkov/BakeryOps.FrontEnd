@@ -11,6 +11,8 @@ import ColumnView, {
   action as ordersAction,
 } from "./Components/ColumnView";
 
+import DayView,{DayViewLoader} from "./Components/DayView";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -32,6 +34,11 @@ const router = createBrowserRouter([
         element: <OrderForm />,
         loader: orderFormLoader,
       },
+      {
+        path:"/today",
+        element:<DayView/>,
+        loader:DayViewLoader
+      }
     ],
   },
 ]);

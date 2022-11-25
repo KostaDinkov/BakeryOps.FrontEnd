@@ -35,7 +35,7 @@ const router = createBrowserRouter([
         loader: orderFormLoader,
       },
       {
-        path:"/today",
+        path:"/orders/forDay/:date",
         element:<DayView/>,
         loader:DayViewLoader
       }

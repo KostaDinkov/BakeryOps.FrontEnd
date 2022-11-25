@@ -1,0 +1,7 @@
+@import "../styles/vars.css";
+
+.daysContainer{
+    justify-content: center;
+    background-color: var(--color-blueGrey);
+
+  }

@@ -1,36 +1,30 @@
-.itemHeader{
-    display: flex;
-    align-items: center;
-}
+@import "../styles/vars.css";
 
-dl:nth-of-type(odd){
-    background-color: rgb(212, 212, 212);
+.itemHeader {
+  display: flex;
+  align-items: center;
 }
 
 dl {
-    margin:0px;
-    padding: 10px ;
-    box-sizing: border-box;
+  margin: 0px;
+  padding: 0 10px 10px 10px;
+  box-sizing: border-box;
 }
 
-
-.itemName{
-    font-size: 1.1rem;
-    flex-grow:2;
-    
+.itemName {
+  font-size: 1.1rem;
+  flex-grow: 2;
 }
 
-dl.completed{
-    background-color: rgb(99, 240, 99);
-    
+dl.completed {
+  background-color: var(--color-green);
 }
 
-dl.inProgress{
-    background-color: rgb(255, 208, 0);
+dl.inProgress {
+  background-color: var(--color-yellow);
 }
 
-dl.completed, dl.inProgress{
-    
-    border-top: 1px solid rgb(255, 255, 255);
-    
+dl.completed,
+dl.inProgress {
+  border-bottom: 1px solid var(--color-blueGrey)
 }

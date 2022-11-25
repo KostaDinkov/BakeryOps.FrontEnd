@@ -1,6 +1,7 @@
 import React from "react";
 import DayColumn from "./DayColumn";
 import { useLoaderData } from "react-router-dom";
+import styles from "./ColumnView.module.css"
 
 
 export async function loader({ params }) {
@@ -16,7 +17,7 @@ export async function action(){
 function ColumnView() {
   const orders = useLoaderData();
   return (
-    <div className="daysContainer">
+    <div className={styles.daysContainer}>
       {orders.map((group, index) => (
         <DayColumn key={index} data={group} />
       ))}

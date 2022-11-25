@@ -1,3 +1,5 @@
+@import "../styles/vars.css";
+
 .orderCardContainer{
     max-width: 300px;
     border-radius: 5px;
@@ -8,15 +10,13 @@
     background-color: white;
 }
 .orderCardContainerComplete{
-    background-color: rgb(99, 240, 99);
+    background-color: var(--color-green);
 }
 .cardHeader{
     display: flex;
     flex-direction: row;
-    
     align-items: center;
     padding:10px 10px 0px 10px;
-    
 }
 .editIcon{
     display: flex;
@@ -28,7 +28,8 @@
     display:flex;
     align-items: center;
     gap:10px;
-    padding:0 10px 0 10px;
+    padding:0 10px 5px 10px;
+    border-bottom: 1px solid grey
     
 }
 
@@ -44,12 +45,11 @@ ul{
 }
 
 .textBadge{
-    
     border-radius: 5px;
-    
     padding:5px;
     font-weight: bold;
 }
+
 .textBadgeRed{
     background-color: red;
     color:white;

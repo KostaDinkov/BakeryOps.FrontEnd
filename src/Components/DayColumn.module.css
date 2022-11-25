@@ -1,5 +1,5 @@
 section {
-    background-color: tomato;
+    
     padding:10px;
     height: 100vh;
     display: inline-block;
@@ -19,4 +19,5 @@ section {
 }
 header{
     font-size:1.5rem;
+    color:white;
 }

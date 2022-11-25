@@ -7,8 +7,9 @@ import OrderCard from "./OrderCard";
 import styles from "./DayView.module.css";
 
 export async function DayViewLoader({ params }) {
-  let today = format(new Date(), "dd-MM-yyyy", { locale: bg });
-  const orders = await ordersApi.getOrdersForDate(today);
+  let dateParam = new Date(params.date);
+  let orderDate = format(dateParam, "dd-MM-yyyy", { locale: bg });
+  const orders = await ordersApi.getOrdersForDate(orderDate);
   return orders;
 }
 

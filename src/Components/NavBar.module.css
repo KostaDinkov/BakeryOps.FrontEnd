@@ -1,10 +1,23 @@
+@import "../styles/vars.css";
+
 .navBarContainer{
-    background-color: cadetblue;
+    background-color: var(--color-blueGrey);
     height: 5vh;
     display:flex;
     flex-direction: row;
-    gap:10px;
+    gap:20px;
     align-items: center;
     padding-left:10px;
+    padding-top:10px;
+    box-sizing: border-box;
     
+}
+
+.navBarContainer .button{
+    background-color:#ff6347;
+    font-weight: bold;
+    font-size:1rem;
+}
+.navBarContainer .button:hover{
+    background-color: #fd826c;
 }

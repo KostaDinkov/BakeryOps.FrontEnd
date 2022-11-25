@@ -1,23 +1,16 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-
 import styles from "./App.module.css";
 import NavBar from "./Components/NavBar";
 import AppContext from "./appContext";
-import PubSub from "pubsub-js";
+
 
 function App() {
   let [products, setProducts] = useState([]);
 
-  const onOrderChange = function (msg, data) {
-    console.log(`${msg}`);
-    //fetchOrders();
-  };
 
   useEffect(() => {
     fetchProducts();
-    //PubSub.subscribe("ORDER CHANGE", onOrderChange);
-    // eslint-disable-next-line
   }, []);
 
   function fetchProducts() {

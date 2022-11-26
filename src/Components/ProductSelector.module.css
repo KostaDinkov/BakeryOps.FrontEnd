@@ -1,0 +1,17 @@
+.selectorContainer{
+    display: flex;
+    flex-flow:column;
+    gap: 10px;
+    max-width:1000px;
+    
+}
+
+.productRow{
+    display:flex;
+    flex-flow: row wrap ;
+    gap: 10px;
+}
+.selectWrapper{
+    flex-grow:1;
+    min-width:400px;
+}

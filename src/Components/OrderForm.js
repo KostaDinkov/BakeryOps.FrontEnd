@@ -9,6 +9,11 @@ import Select from "react-select";
 import { ordersApi } from "../API/ordersApi";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import DeleteOrderDialog from "./DeleteOrderDialog";
+import styles from "./OrderForm.module.css";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import Checkbox from "@mui/material/Checkbox";
+import Button from "@mui/material/Button";
 
 export async function orderFormLoader({ params }) {
   let isEdit = params.method === "put";
@@ -136,77 +141,72 @@ export default function OrderForm() {
 
   //-- RETURN HTML --
   return (
-    <form method="post" onSubmit={handleOnSubmit}>
-      <h1>
-        {isEdit ? "Редакция на Поръчка" : "Нова Поръчка"}{" "}
-        {isEdit && (
-          <input
-            type="button"
-            value="Изтрий"
-            onClick={() => setShowDeleteDialog(true)}
-          />
-        )}
-      </h1>
-      <div>
-        <input
-          value={orderFormData.clientName}
-          type="text"
-          placeholder="Клиент ..."
-          name="clientName"
-          id="clientName"
-          onChange={(evt) => {
-            setOrderFormData((order) => ({
-              ...order,
-              clientName: evt.target.value,
-            }));
-          }}
-        />{" "}
-        <div style={{ display: "inline-block", width: "fit-content" }}>
-          <DatePicker
-            selected={orderFormData.pickupDate}
-            locale="bg"
-            dateFormat="P"
-            onChange={(date) =>
-              setOrderFormData((order) => ({ ...order, pickupDate: date }))
-            }
-          />
-        </div>
-        <Select
-          value={getHoursOptions().filter(
-            (option) => option.label === orderFormData.pickupTime
+    <div className={styles.formContainer}>
+      <form method="post" onSubmit={handleOnSubmit}>
+        <Typography variant="h3">
+          {isEdit ? "Редакция на Поръчка" : "Нова Поръчка"}{" "}
+          {isEdit && (
+            <input
+              type="button"
+              value="Изтрий"
+              onClick={() => setShowDeleteDialog(true)}
+            />
           )}
-          options={getHoursOptions()}
-          placeholder="Час ..."
-          onChange={(option) => {
-            setOrderFormData((order) => ({
-              ...order,
-              pickupTime: option.value,
-            }));
-          }}
-        />{" "}
-      </div>
-
-      <div>
-        <input
-          type="tel"
-          value={orderFormData.clientPhone}
-          placeholder="Телефон ..."
-          name="clientPhone"
-          id="clientPhone"
-          onChange={(evt) => {
-            setOrderFormData((order) => ({
-              ...order,
-              clientPhone: evt.target.value,
-            }));
-          }}
-        />
-        <label>
-          Капаро:
-          <input
-            type="number"
+        </Typography>
+        <div className={styles.mainInfo}>
+          <TextField
+            value={orderFormData.clientName}
+            size="small"
+            label="Клиент ..."
+            onChange={(evt) => {
+              setOrderFormData((order) => ({
+                ...order,
+                clientName: evt.target.value,
+              }));
+            }}
+          />{" "}
+          <div style={{ display: "inline-block", width: "fit-content" }}>
+            <DatePicker
+              selected={orderFormData.pickupDate}
+              locale="bg"
+              dateFormat="P"
+              onChange={(date) =>
+                setOrderFormData((order) => ({ ...order, pickupDate: date }))
+              }
+              customInput={<TextField size="small" />}
+            />
+          </div>
+          <Select
+            value={getHoursOptions().filter(
+              (option) => option.label === orderFormData.pickupTime
+            )}
+            options={getHoursOptions()}
+            placeholder="Час ..."
+            onChange={(option) => {
+              setOrderFormData((order) => ({
+                ...order,
+                pickupTime: option.value,
+              }));
+            }}
+          />
+          <TextField
+            size="small"
+            type="tel"
+            value={orderFormData.clientPhone}
+            label="Телефон"
+            name="clientPhone"
+            id="clientPhone"
+            onChange={(evt) => {
+              setOrderFormData((order) => ({
+                ...order,
+                clientPhone: evt.target.value,
+              }));
+            }}
+          />
+          <TextField
+            size="small"
             value={orderFormData.advancePaiment}
-            name="advance"
-            id="advance"
+            label="Капаро"
             onChange={(evt) => {
               setOrderFormData((order) => ({
                 ...order,
@@ -214,67 +214,68 @@ export default function OrderForm() {
               }));
             }}
           />
-        </label>
-
-        <label>
-          Платена?
-          <input
-            type="checkbox"
-            name="isPaid"
-            id="isPaid"
-            checked={orderFormData.isPaid}
-            onChange={(evt) => {
-              setOrderFormData((order) => ({
-                ...order,
-                isPaid: evt.target.checked,
-              }));
-            }}
-          />
-        </label>
-      </div>
-
-      <ul>
-        {productSelectorList.map((el, index) => (
-          <li key={index}>
-            <div>{el}</div>
-            <input
-              type="button"
-              value="X"
-              onClick={() => {
-                removeProduct(index);
+          <label>
+            Платена?
+            <Checkbox
+              size="large"
+              color="error"
+              checked={orderFormData.isPaid}
+              onChange={(evt) => {
+                setOrderFormData((order) => ({
+                  ...order,
+                  isPaid: evt.target.checked,
+                }));
               }}
             />
-          </li>
-        ))}
-      </ul>
-      <input
-        type="button"
-        value="Добави"
-        onClick={() => {
-          addNewProductSelector(new defaultSelectorValues());
-        }}
-      />
-      <div>
-        <input type="button" value="Отказ" onClick={closeForm} />
-
-        <input type="submit" value="Submit" />
-      </div>
-      {!validationResult.isValid && (
-        <div>
-          <h3>Невалидни стойности на поръчката:</h3>
-          <ul>
-            {validationResult.errors.map((error) => (
-              <li key={error}>{error}</li>
-            ))}
-          </ul>
+          </label>
         </div>
-      )}
-      <DeleteOrderDialog
-        open={showDeleteDialog}
-        setOpen={setShowDeleteDialog}
-        onDelete={deleteOrder}
-      />
-    </form>
+        <div></div>
+        <ul>
+          {productSelectorList.map((el, index) => (
+            <li key={index}>
+              <div>{el}</div>
+              <Button
+                size="small"
+                color="error"
+                variant="outlined"
+                onClick={() => {
+                  removeProduct(index);
+                }}
+              >
+                {" "}
+                X{" "}
+              </Button>
+            </li>
+          ))}
+        </ul>
+        <input
+          type="button"
+          value="Добави"
+          onClick={() => {
+            addNewProductSelector(new defaultSelectorValues());
+          }}
+        />
+        <div>
+          <input type="button" value="Отказ" onClick={closeForm} />
+          <input type="submit" value="Submit" />
+        </div>
+        {!validationResult.isValid && (
+          <div>
+            <h3>Невалидни стойности на поръчката:</h3>
+            <ul>
+              {validationResult.errors.map((error) => (
+                <li key={error}>{error}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <DeleteOrderDialog
+          open={showDeleteDialog}
+          setOpen={setShowDeleteDialog}
+          onDelete={deleteOrder}
+        />
+      </form>
+    </div>
   );
 }
 

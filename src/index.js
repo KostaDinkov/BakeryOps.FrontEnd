@@ -10,8 +10,9 @@ import ColumnView, {
   loader as ordersLoader,
   action as ordersAction,
 } from "./Components/ColumnView";
+import DayView, { DayViewLoader } from "./Components/DayView";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 
-import DayView,{DayViewLoader} from "./Components/DayView";
 
 const router = createBrowserRouter([
   {
@@ -35,10 +36,10 @@ const router = createBrowserRouter([
         loader: orderFormLoader,
       },
       {
-        path:"/orders/forDay/:date",
-        element:<DayView/>,
-        loader:DayViewLoader
-      }
+        path: "/orders/forDay/:date",
+        element: <DayView />,
+        loader: DayViewLoader,
+      },
     ],
   },
 ]);
@@ -62,10 +63,27 @@ moment.updateLocale("bg", {
 
 moment.locale("bg");
 
+const muiTheme = createTheme({
+  palette: {
+    type: 'light',
+    primary: {
+      main: '#1f5464',
+    },
+    secondary: {
+      main: '#ffb300',
+    },
+    background: {
+      default: '#e1e2e1',
+      paper: '#f5f5f6',
+    },
+  },
+});
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ThemeProvider theme={muiTheme}>
+      <RouterProvider router={router} />
+    </ThemeProvider>
   </React.StrictMode>
 );
 

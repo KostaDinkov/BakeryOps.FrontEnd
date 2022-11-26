@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import Select, { createFilter } from "react-select";
 import styles from "./ProductSelector.module.css";
 import TextField from "@mui/material/TextField";
+import { textFieldStyle } from "./OrderForm";
 
 export const selectorStyles = {
   control: (styles) => ({
     ...styles,
-    backgroundColor: "transparent",
+   
     borderColor: "rgba(0, 0, 0, 0.23);",
     minHeight:"40px",
     flexGrow:"1"
@@ -60,7 +61,7 @@ export default function ProductSelector({ options, selectorValues }) {
           <TextField
             value={productAmount}
             label="Количество"
-            sx={{width:"100px"}}
+            sx={{...textFieldStyle, width:"100px"}}
             size="small"
             type="number"
             required
@@ -74,6 +75,7 @@ export default function ProductSelector({ options, selectorValues }) {
           <TextField
             value={cakeTitle}
             type="text" 
+            sx={textFieldStyle}
             label="Надпис за торта"
             size="small"
             onChange={(evt) => {
@@ -85,7 +87,7 @@ export default function ProductSelector({ options, selectorValues }) {
         
           <TextField
             value={cakeFoto}
-            sx={{width:"70px"}}
+            sx={{...textFieldStyle, width:"70px"}}
             type="text"
             placeholder="Фото"
             size="small"
@@ -99,6 +101,7 @@ export default function ProductSelector({ options, selectorValues }) {
 
       <TextField
         size="small"
+        sx={textFieldStyle}
         value={description}
         type="text"
         placeholder="Забележка..."
@@ -108,6 +111,7 @@ export default function ProductSelector({ options, selectorValues }) {
           selectorValues.description = evt.target.value;
         }}
       />
+      
     </div>
   );
 }

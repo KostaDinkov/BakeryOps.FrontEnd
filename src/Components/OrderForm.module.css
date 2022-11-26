@@ -11,3 +11,18 @@
     align-items: center;
     max-width: 1200px;
 }
+
+.productListItem{
+    display:flex;
+    gap:10px;
+    
+}
+.productListItem + hr{
+    margin-bottom:20px;
+}
+
+.submitGroup{
+    display: flex;
+    justify-content: flex-end;
+    gap:20px;
+}

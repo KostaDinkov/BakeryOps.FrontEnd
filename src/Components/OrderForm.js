@@ -31,6 +31,8 @@ export async function orderFormLoader({ params }) {
   };
 }
 
+export const textFieldStyle = { backgroundColor: "white", borderRadius: "4px" };
+
 export default function OrderForm() {
   registerLocale("bg", bg);
   const navigate = useNavigate();
@@ -77,7 +79,7 @@ export default function OrderForm() {
   }
 
   //-- SUBMIT ORDER --
-  function handleOnSubmit(event) {
+  function handleSubmit(event) {
     event.preventDefault();
     let orderItems = productSelectorList.map(
       (selector) => selector.props.selectorValues
@@ -142,7 +144,7 @@ export default function OrderForm() {
   //-- RETURN HTML --
   return (
     <div className={styles.formContainer}>
-      <form method="post" onSubmit={handleOnSubmit}>
+      <form >
         <Typography variant="h3">
           {isEdit ? "Редакция на Поръчка" : "Нова Поръчка"}{" "}
           {isEdit && (
@@ -156,6 +158,7 @@ export default function OrderForm() {
         <div className={styles.mainInfo}>
           <TextField
             value={orderFormData.clientName}
+            sx={textFieldStyle}
             size="small"
             label="Клиент ..."
             onChange={(evt) => {
@@ -173,7 +176,7 @@ export default function OrderForm() {
               onChange={(date) =>
                 setOrderFormData((order) => ({ ...order, pickupDate: date }))
               }
-              customInput={<TextField size="small" />}
+              customInput={<TextField sx={textFieldStyle} size="small" />}
             />
           </div>
           <Select
@@ -192,10 +195,9 @@ export default function OrderForm() {
           <TextField
             size="small"
             type="tel"
+            sx={textFieldStyle}
             value={orderFormData.clientPhone}
             label="Телефон"
-            name="clientPhone"
-            id="clientPhone"
             onChange={(evt) => {
               setOrderFormData((order) => ({
                 ...order,
@@ -206,6 +208,7 @@ export default function OrderForm() {
           <TextField
             size="small"
             value={orderFormData.advancePaiment}
+            sx={textFieldStyle}
             label="Капаро"
             onChange={(evt) => {
               setOrderFormData((order) => ({
@@ -229,35 +232,37 @@ export default function OrderForm() {
             />
           </label>
         </div>
-        <div></div>
+        <hr />
         <ul>
           {productSelectorList.map((el, index) => (
-            <li key={index}>
-              <div>{el}</div>
-              <Button
-                size="small"
-                color="error"
-                variant="outlined"
-                onClick={() => {
-                  removeProduct(index);
-                }}
-              >
-                {" "}
-                X{" "}
-              </Button>
-            </li>
+            <>
+              <li className={styles.productListItem} key={index}>
+                <div style={{ flexGrow: "1", maxWidth: "1025px" }}>{el}</div>
+                <Button
+                  tabIndex="-1"
+                  size="small"
+                  color="error"
+                  variant="outlined"
+                  onClick={() => {
+                    removeProduct(index);
+                  }}
+                >
+                  X{" "}
+                </Button>
+              </li>
+              <hr />
+            </>
           ))}
         </ul>
-        <input
-          type="button"
-          value="Добави"
+        <Button
+          variant="outlined"
           onClick={() => {
             addNewProductSelector(new defaultSelectorValues());
           }}
-        />
-        <div>
-          <input type="button" value="Отказ" onClick={closeForm} />
-          <input type="submit" value="Submit" />
+        >Добави продукт</Button>
+        <div className={styles.submitGroup}>
+          <Button variant="contained"  onClick={closeForm} >Откажи</Button>
+          <Button variant="contained" onClick={handleSubmit} color="secondary">Запази</Button>
         </div>
         {!validationResult.isValid && (
           <div>

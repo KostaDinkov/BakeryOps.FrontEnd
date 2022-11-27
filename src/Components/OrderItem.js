@@ -47,7 +47,7 @@ const OrderItem = ({ item, order }) => {
     >
       <dt className={styles.itemHeader}>
         <span className={styles.itemName}>{item.product.name} </span>
-        <span>{item.productAmount} бр.</span>
+        <span style={{flexShrink:"0"}}>{item.productAmount} бр.</span>
         <span>
           <input
             type="checkbox"

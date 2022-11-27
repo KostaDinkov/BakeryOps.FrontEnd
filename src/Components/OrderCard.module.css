@@ -1,7 +1,7 @@
 @import "../styles/vars.css";
 
 .orderCardContainer{
-    max-width: 300px;
+    max-width: 350px;
     border-radius: 5px;
     display:inline-block;
      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;;
@@ -38,7 +38,7 @@
 }
 
 .cardHeader, .headerDetails{
-    background-color: var(--color-primary-main-light);
+    background-color: var(--color-primary-light);
     color:white;
 }
 

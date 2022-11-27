@@ -1,23 +1,24 @@
 @import "../styles/vars.css";
 
-.navBarContainer{
-    background-color: var(--color-blueGrey);
-    height: 5vh;
-    display:flex;
-    flex-direction: row;
-    gap:20px;
-    align-items: center;
-    padding-left:20px;
-    padding-top:20px;
-    box-sizing: border-box;
-    
+.navBarContainer {
+  background-color: var(--color-blueGrey);
+  height: 5vh;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: center;
+  padding-left: 20px;
+  padding-top: 20px;
+  box-sizing: border-box;
+  justify-content: center;
 }
 
-.navBarContainer .button{
-    background-color:#ff6347;
-    font-weight: bold;
-    font-size:1rem;
+.navBarContainer .button:hover {
+  background-color: #fd826c;
 }
-.navBarContainer .button:hover{
-    background-color: #fd826c;
+
+.navBarContainer.buttonNew,
+.navBarContainer.buttonMain {
+  font-weight: bold;
+  font-size: 1rem;
 }

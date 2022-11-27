@@ -88,6 +88,7 @@ const OrderItem = ({ item, order }) => {
           </div>
         )}
       </dd>
+      
     </dl>
   );
 };

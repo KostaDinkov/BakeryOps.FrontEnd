@@ -49,10 +49,10 @@ const OrderCard = ({ order }) => {
       </div>
       <ul>
         {order.orderItems.map((item, index) => (
-          <>
+          
           <OrderItem key={index} item={item} order={order} />
-          <hr />
-          </>
+          
+          
         ))}
       </ul>
     </div>

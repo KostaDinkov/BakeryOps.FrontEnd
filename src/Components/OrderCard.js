@@ -4,7 +4,6 @@ import OrderItem from "./OrderItem";
 import EditIcon from "@mui/icons-material/Edit";
 import {Link} from "react-router-dom";
 
-
 const OrderCard = ({ order }) => {
 
   const containerStyles = () => {
@@ -29,7 +28,7 @@ const OrderCard = ({ order }) => {
         <span>{order.clientName}</span>
         <div className={styles.editIcon}>
           <Link to={`/orders/put/${order.id}`}>
-            <EditIcon fontSize="small" cursor="pointer" />
+            <EditIcon fontSize="small" cursor="pointer" sx={{color:"white"}} />
           </Link>
         </div>
       </div>
@@ -50,7 +49,10 @@ const OrderCard = ({ order }) => {
       </div>
       <ul>
         {order.orderItems.map((item, index) => (
+          <>
           <OrderItem key={index} item={item} order={order} />
+          <hr />
+          </>
         ))}
       </ul>
     </div>

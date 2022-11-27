@@ -3,7 +3,9 @@
 .orderCardContainer{
     max-width: 300px;
     border-radius: 5px;
-    display:inline-block
+    display:inline-block;
+     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;;
+    
 }
 
 .orderCardContainerNotComplete{
@@ -17,6 +19,8 @@
     flex-direction: row;
     align-items: center;
     padding:10px 10px 0px 10px;
+    
+    border-radius: 5px 5px 0 0;
 }
 .editIcon{
     display: flex;
@@ -31,6 +35,11 @@
     padding:0 10px 5px 10px;
     border-bottom: 1px solid grey
     
+}
+
+.cardHeader, .headerDetails{
+    background-color: var(--color-primary-main-light);
+    color:white;
 }
 
 ul{
@@ -51,7 +60,7 @@ ul{
 }
 
 .textBadgeRed{
-    background-color: red;
+    background-color:var(--color-error-main);
     color:white;
 }
 

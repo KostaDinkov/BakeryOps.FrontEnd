@@ -2,6 +2,8 @@ import React from "react";
 import styles from "./OrderItem.module.css";
 import APIendpoints from "../APIendpoints";
 import { useNavigate } from "react-router-dom";
+import Typography from "@mui/material/Typography";
+import { useTheme } from "@mui/material/styles";
 
 const OrderItem = ({ item, order }) => {
   let navigate = useNavigate();
@@ -9,10 +11,11 @@ const OrderItem = ({ item, order }) => {
     item.isInProgress = !item.isInProgress;
     updateOrder();
   };
+  const theme = useTheme();
 
   let handleCompleteChange = () => {
     item.isComplete = !item.isComplete;
-    
+
     updateOrder();
   };
 
@@ -28,13 +31,20 @@ const OrderItem = ({ item, order }) => {
       .then((data) => {
         console.log("Success:", data);
         navigate(0);
-        
       })
-      .catch(error=>console.log("Error",error));
+      .catch((error) => console.log("Error", error));
   }
 
   return (
-    <dl className={item.isComplete?styles.completed:(item.isInProgress?styles.inProgress:null)}>
+    <dl
+      className={
+        item.isComplete
+          ? styles.completed
+          : item.isInProgress
+          ? styles.inProgress
+          : null
+      }
+    >
       <dt className={styles.itemHeader}>
         <span className={styles.itemName}>{item.product.name} </span>
         <span>{item.productAmount} бр.</span>
@@ -59,9 +69,24 @@ const OrderItem = ({ item, order }) => {
       </dt>
 
       <dd>
-        {item.description !== "" && <div>Забележка: {item.description}</div>}
-        {item.cakeFoto !== "" && <div>Фото: {item.cakeFoto}</div>}
-        {item.cakeTitle !== "" && <div>Надпис: {item.cakeTitle}</div>}
+        {item.description !== "" && (
+          <div className={styles.itemDetails}>
+            <span className={styles.itemDetailsBadge} > Забележка:</span>
+            {item.description}
+          </div>
+        )}
+        {item.cakeFoto !== "" && (
+          <div className={styles.itemDetails}>
+            <span className={styles.itemDetailsBadge}>Фото:</span>
+            {item.cakeFoto}
+          </div>
+        )}
+        {item.cakeTitle !== "" && (
+          <div className={styles.itemDetails}>
+            <span className={styles.itemDetailsBadge}>Надпис:</span>
+            {item.cakeTitle}
+          </div>
+        )}
       </dd>
     </dl>
   );

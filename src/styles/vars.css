@@ -2,4 +2,12 @@
     --color-blueGrey:#e1e2e1;
     --color-green:rgb(152, 219, 143);
     --color-yellow:rgb(255, 208, 0);
+    --color-primary-main:#1f5464;
+    --color-primary-main-light:#4b7683;
+    --color-primary-main-lighter:#80bbce;
+    --color-primary-main-dark:#153a46;
+    
+
+    --color-error-main:#ff6347;
+    --color-error-main-light:#e57373;
 }

@@ -1,5 +1,6 @@
 
-const hostName = "http://localhost:5257"
+export const hostName = "http://localhost:5257";
+export const eventHubUrl = `${hostName}/eventHub`;
 
 export const ordersApi =  {
     getOrders: async ()=>{

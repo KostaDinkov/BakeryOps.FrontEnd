@@ -12,6 +12,8 @@ import ColumnView, {
 } from "./Components/ColumnView";
 import DayView, { DayViewLoader } from "./Components/DayView";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import EventHub from "./EventHub";
+import PubSub from "pubsub-js";
 
 
 const router = createBrowserRouter([
@@ -43,6 +45,11 @@ const router = createBrowserRouter([
     ],
   },
 ]);
+
+const eventHub = new EventHub();
+let token = PubSub.subscribe("SendUpdateOrders", eventHub.sendUpdateOrders);
+
+
 
 moment.updateLocale("bg", {
   months: [

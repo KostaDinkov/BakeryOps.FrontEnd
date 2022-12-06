@@ -2,7 +2,7 @@ import React from "react";
 import { ordersApi } from "../API/ordersApi";
 import { format } from "date-fns";
 import { bg } from "date-fns/locale";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData,useParams } from "react-router-dom";
 import OrderCard from "./OrderCard";
 import styles from "./DayView.module.css";
 
@@ -15,16 +15,22 @@ export async function DayViewLoader({ params }) {
 
 export default function DayView() {
   const orders = useLoaderData();
+  const isOrders = orders.length > 0;
+  let params = useParams();
 
-  return (
+  return isOrders ? (
     <div className={styles.layoutContainer}>
-      <div className={styles.title}><h1>{formatDate(orders[0].pickupDate)}</h1></div>
+      <div className={styles.title}>
+        <h1>{formatDate(orders[0].pickupDate)}</h1>
+      </div>
       <div className={styles.ordersContainer}>
         {orders.map((order) => (
           <OrderCard key={order.id} order={order} />
         ))}
       </div>
     </div>
+  ) : (
+    <div className={styles.noOrders}>Няма поръчки за {format(new Date(params.date),"do MMMM, yyyy г.", { locale: bg })}</div>
   );
 }
 

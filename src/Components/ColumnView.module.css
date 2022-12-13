@@ -2,8 +2,9 @@
 
 .daysContainer{
     display:flex;
-    flex-flow: row wrap;
+    flex-flow: row no-wrap;
     justify-content: flex-start;
     background-color: var(--color-blueGrey);
+    overflow: auto;
 
   }

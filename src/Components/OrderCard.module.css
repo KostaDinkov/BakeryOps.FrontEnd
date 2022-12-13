@@ -2,6 +2,7 @@
 
 .orderCardContainer{
     max-width: 350px;
+    min-width: 330px;
     border-radius: 5px;
     display:inline-block;
      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;;

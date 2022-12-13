@@ -109,7 +109,6 @@ export default function OrderForm() {
     closeForm();
   }
 
-
   function closeForm() {
     navigate("/");
   }

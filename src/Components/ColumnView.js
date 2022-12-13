@@ -5,23 +5,13 @@ import styles from "./ColumnView.module.css"
 import { ordersApi } from "../API/ordersApi";
 import { UnauthorizedError } from "../system/errors";
 
-
-
 export async function loader() {
-  
-
-    let response = await ordersApi.getOrders();
-      
+    let response = await ordersApi.getOrders(); 
     if(response.status === 401){
-      
       throw new UnauthorizedError
     }
-
-    return await response.json();
-    
-  
+    return await response.json();  
 }
-
 
 function ColumnView() {
   const orders = useLoaderData();

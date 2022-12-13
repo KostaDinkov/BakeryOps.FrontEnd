@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import styles from "./App.module.css";
 import NavBar from "./Components/NavBar";
 import AppContext from "./appContext";
+import { productsApi } from "./API/ordersApi";
 
 
 function App() {
@@ -14,10 +15,9 @@ function App() {
     fetchProducts();
   }, []);
 
-  function fetchProducts() {
-    fetch("http://localhost:5257/products")
-      .then((response) => response.json())
-      .then((data) => setProducts(data));
+  async function fetchProducts() {
+    const products = await productsApi.getProducts()
+    setProducts(products);
   }
 
   return (

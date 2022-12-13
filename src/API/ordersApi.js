@@ -1,4 +1,4 @@
-export const hostName = "http://localhost:5257";
+export const hostName = "http://localhost:5000";
 export const eventHubUrl = `${hostName}/eventHub`;
 
 export const ordersApi = {
@@ -90,6 +90,14 @@ export const ordersApi = {
     })
   }
 };
+
+export const productsApi = {
+  getProducts: async ()=>{
+    const response = await  fetch(`${hostName}/products`);
+    return await response.json();
+
+  }
+}
 
 export const auth = {
   login: async (userData) => {

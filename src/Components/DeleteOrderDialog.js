@@ -12,10 +12,9 @@ export default function DeleteOrderDialog({open, setOpen, onDelete}) {
     setOpen(false);
   };
 
-  const handleDelete=()=>{
-    onDelete();
+  const handleDelete= async ()=>{
     setOpen(false);
-
+    onDelete();
   }
 
   return (

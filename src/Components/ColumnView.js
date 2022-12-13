@@ -2,17 +2,26 @@ import React from "react";
 import DayColumn from "./DayColumn";
 import { useLoaderData } from "react-router-dom";
 import styles from "./ColumnView.module.css"
+import { ordersApi } from "../API/ordersApi";
+import { UnauthorizedError } from "../system/errors";
 
 
-export async function loader({ params }) {
-  let response = await fetch("http://localhost:5257/api/orders");
+
+export async function loader() {
   
-  return response.json();
+
+    let response = await ordersApi.getOrders();
+      
+    if(response.status === 401){
+      
+      throw new UnauthorizedError
+    }
+
+    return await response.json();
+    
+  
 }
 
-export async function action(){
-
-}
 
 function ColumnView() {
   const orders = useLoaderData();

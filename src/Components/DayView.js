@@ -5,12 +5,18 @@ import { bg } from "date-fns/locale";
 import { useLoaderData,useParams } from "react-router-dom";
 import OrderCard from "./OrderCard";
 import styles from "./DayView.module.css";
+import {UnauthorizedError} from "../system/errors";
 
 export async function DayViewLoader({ params }) {
   let dateParam = new Date(params.date);
   let orderDate = format(dateParam, "dd-MM-yyyy", { locale: bg });
-  const orders = await ordersApi.getOrdersForDate(orderDate);
-  return orders;
+  const response = await ordersApi.getOrdersForDate(orderDate);
+
+  if(response.status === 401){
+    throw new UnauthorizedError();
+  }
+
+  return await response.json();
 }
 
 export default function DayView() {

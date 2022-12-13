@@ -1,17 +1,15 @@
 import React from "react";
 import styles from "./OrderItem.module.css";
-import APIendpoints from "../APIendpoints";
 import { useNavigate } from "react-router-dom";
-import Typography from "@mui/material/Typography";
-import { useTheme } from "@mui/material/styles";
+import { ordersApi } from "../API/ordersApi";
 
 const OrderItem = ({ item, order }) => {
   let navigate = useNavigate();
+
   let handleProgressChange = () => {
     item.isInProgress = !item.isInProgress;
     updateOrder();
   };
-  const theme = useTheme();
 
   let handleCompleteChange = () => {
     item.isComplete = !item.isComplete;
@@ -19,20 +17,9 @@ const OrderItem = ({ item, order }) => {
     updateOrder();
   };
 
-  function updateOrder() {
-    fetch(APIendpoints.put.orders(order.id), {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(order),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Success:", data);
-        navigate(0);
-      })
-      .catch((error) => console.log("Error", error));
+  async function updateOrder() {
+    await ordersApi.putOrder(order.id, order);
+    navigate(0);
   }
 
   return (
@@ -47,7 +34,7 @@ const OrderItem = ({ item, order }) => {
     >
       <dt className={styles.itemHeader}>
         <span className={styles.itemName}>{item.product.name} </span>
-        <span style={{flexShrink:"0"}}>{item.productAmount} бр.</span>
+        <span style={{ flexShrink: "0" }}>{item.productAmount} бр.</span>
         <span>
           <input
             type="checkbox"
@@ -71,7 +58,7 @@ const OrderItem = ({ item, order }) => {
       <dd>
         {item.description !== "" && (
           <div className={styles.itemDetails}>
-            <span className={styles.itemDetailsBadge} > Забележка:</span>
+            <span className={styles.itemDetailsBadge}> Забележка:</span>
             {item.description}
           </div>
         )}
@@ -88,7 +75,6 @@ const OrderItem = ({ item, order }) => {
           </div>
         )}
       </dd>
-      
     </dl>
   );
 };

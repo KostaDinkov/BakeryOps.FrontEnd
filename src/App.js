@@ -7,6 +7,7 @@ import AppContext from "./appContext";
 
 function App() {
   let [products, setProducts] = useState([]);
+  let [isLogged, setIsLogged] = useState(JSON.parse(localStorage.getItem("isLogged")));
 
 
   useEffect(() => {
@@ -21,7 +22,7 @@ function App() {
 
   return (
     <div className={styles.app}>
-      <AppContext.Provider value={{ products }}>
+      <AppContext.Provider value={{ products, isLogged, setIsLogged }}>
         <NavBar />
         <Outlet />
       </AppContext.Provider>

@@ -1,0 +1,19 @@
+@import "../styles/vars.css";
+
+.layout{
+    display: flex;
+    justify-content: center;
+}
+.formContainer{
+    display: flex;
+    flex-direction: column;
+    padding:20px;
+    gap:20px;
+}
+.loginError{
+   
+    text-align: center;
+    padding:20px;
+    
+
+}

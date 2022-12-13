@@ -14,8 +14,12 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
+import { UnauthorizedError } from "../system/errors";
 
 export async function orderFormLoader({ params }) {
+  if (!JSON.parse(localStorage.getItem("isLogged"))) {
+    throw new UnauthorizedError();
+  }
   let isEdit = params.method === "put";
   let date = new Date();
   let order = {};
@@ -79,7 +83,7 @@ export default function OrderForm() {
   }
 
   //-- SUBMIT ORDER --
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     let orderItems = productSelectorList.map(
       (selector) => selector.props.selectorValues
@@ -92,59 +96,33 @@ export default function OrderForm() {
 
     const newValidationResult = validateOrder(newOrder);
     setValidationResult(newValidationResult);
+    
     if (!newValidationResult.isValid) {
       console.log(newValidationResult.errors);
     } else {
-      let data = JSON.stringify(newOrder);
-
-      let endPoint = "http://localhost:5257/api/orders";
-      let method = "POST";
       if (isEdit) {
-        endPoint = `http://localhost:5257/api/orders/${newOrder.id}`;
-        method = "PUT";
+        await ordersApi.putOrder(newOrder.id, newOrder);
+      } else {
+        await ordersApi.postOrder(newOrder);
       }
-
-      fetch(endPoint, {
-        method: method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: data,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Success:", data);
-          navigate("/");
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
     }
+    closeForm();
   }
 
-  //-- CLOSE FORM --
+
   function closeForm() {
     navigate("/");
   }
 
-  //-- DELETE ORDER --
-  function deleteOrder() {
-    fetch(`http://localhost:5257/api/orders/${order.id}`, {
-      method: "DELETE",
-    })
-      .then((response) => {
-        console.log("Success:", response);
-        closeForm();
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+  async function deleteOrder() {
+    await ordersApi.deleteOrder(order.id);
+    closeForm();
   }
 
   //-- RETURN HTML --
   return (
     <div className={styles.formContainer}>
-      <form >
+      <form>
         <Typography variant="h3">
           {isEdit ? "Редакция на Поръчка" : "Нова Поръчка"}{" "}
           {isEdit && (
@@ -235,8 +213,8 @@ export default function OrderForm() {
         <hr />
         <ul>
           {productSelectorList.map((el, index) => (
-            <>
-              <li className={styles.productListItem} key={index}>
+            <div key={index}>
+              <li className={styles.productListItem}>
                 <div style={{ flexGrow: "1", maxWidth: "1025px" }}>{el}</div>
                 <Button
                   tabIndex="-1"
@@ -251,7 +229,7 @@ export default function OrderForm() {
                 </Button>
               </li>
               <hr />
-            </>
+            </div>
           ))}
         </ul>
         <Button
@@ -259,10 +237,16 @@ export default function OrderForm() {
           onClick={() => {
             addNewProductSelector(new defaultSelectorValues());
           }}
-        >Добави продукт</Button>
+        >
+          Добави продукт
+        </Button>
         <div className={styles.submitGroup}>
-          <Button variant="contained"  onClick={closeForm} >Откажи</Button>
-          <Button variant="contained" onClick={handleSubmit} color="secondary">Запази</Button>
+          <Button variant="contained" onClick={closeForm}>
+            Откажи
+          </Button>
+          <Button variant="contained" onClick={handleSubmit} color="secondary">
+            Запази
+          </Button>
         </div>
         {!validationResult.isValid && (
           <div>

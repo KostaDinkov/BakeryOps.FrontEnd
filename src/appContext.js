@@ -3,6 +3,8 @@ import React from "react";
 const AppContext = React.createContext({
   orders:[],
   products:[],
+  user:"",
+  isLogged:false,
 });
 
 export const defaultOrderFormData = {

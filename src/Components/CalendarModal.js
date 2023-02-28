@@ -25,7 +25,7 @@ export default function CalendarModal({open, setOpen}) {
   const navigate = useNavigate();
 
   const handleOnCalendarChange = (date)=>{
-    const dateStr = formatISO(date);
+    const dateStr = formatISO(date, {representation:"date"});
     setOpen(false);
     navigate(`/orders/forDay/${dateStr}`)
   }

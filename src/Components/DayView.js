@@ -1,6 +1,6 @@
 import React from "react";
 import { ordersApi } from "../API/ordersApi";
-import { format } from "date-fns";
+import { format,formatISO } from "date-fns";
 import { bg } from "date-fns/locale";
 import { useLoaderData,useParams } from "react-router-dom";
 import OrderCard from "./OrderCard";
@@ -8,9 +8,9 @@ import styles from "./DayView.module.css";
 import {UnauthorizedError} from "../system/errors";
 
 export async function DayViewLoader({ params }) {
-  let dateParam = new Date(params.date);
-  let orderDate = format(dateParam, "dd-MM-yyyy", { locale: bg });
-  const response = await ordersApi.getOrdersForDate(orderDate);
+  let dateParam = formatISO(new Date(params.date),{representation:"date"});
+  
+  const response = await ordersApi.getOrders(dateParam);
 
   if(response.status === 401){
     throw new UnauthorizedError();
@@ -20,8 +20,10 @@ export async function DayViewLoader({ params }) {
 }
 
 export default function DayView() {
-  const orders = useLoaderData();
-  const isOrders = orders.length > 0;
+  const ordersByDate = useLoaderData();
+  const isOrders = ordersByDate.length > 0;
+  const orders = ordersByDate[0];
+  
   let params = useParams();
 
   return isOrders ? (

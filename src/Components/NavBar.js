@@ -11,7 +11,7 @@ import AppContext from "../appContext";
 const NavBar = () => {
   const {isLogged,setIsLogged} = useContext(AppContext);
   const [calendarOpen, setCalendarOpen] = React.useState(false);
-  const todayStr = formatISO(new Date());
+  const todayStr = formatISO(new Date(), {representation:"date"});
   
   const navigate = useNavigate();
   

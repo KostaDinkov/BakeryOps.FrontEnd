@@ -1,10 +1,21 @@
+import {add, formatISO, formatIso} from 'date-fns';
 export const hostName = "http://localhost:5000";
 export const eventHubUrl = `${hostName}/eventHub`;
 
+
+
 export const ordersApi = {
-  getOrders: async () => {
-    try {
-      let response = await fetch(`${hostName}/api/orders`, {
+  getOrders: async function (startDate , endDate) {
+    try {     
+      if(arguments.length === 0 ){
+        startDate = formatISO(new Date(), {representation:"date"});
+        endDate = formatISO(add(new Date(),{days:3}), {representation:"date"});
+      }
+      else if(arguments.length === 1){
+        endDate = startDate;
+      }
+      
+      let response = await fetch(`${hostName}/api/orders?startDate=${startDate}&endDate=${endDate}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -33,20 +44,6 @@ export const ordersApi = {
       return await response.json();
     } catch (error) {
       throw ("API error: getOrders", error);
-    }
-  },
-  getOrdersForDate: async (date) => {
-    try {
-      let response = await fetch(`${hostName}/api/orders/forDate/${date}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      return response;
-    } catch (error) {
-      throw "API error: getOrdersForDate";
     }
   },
   postOrder: async (data) => {
@@ -93,15 +90,14 @@ export const ordersApi = {
 
 export const productsApi = {
   getProducts: async ()=>{
-    const response = await  fetch(`${hostName}/products`);
+    const response = await  fetch(`${hostName}/api/products`);
     return await response.json();
-
   }
 }
 
 export const auth = {
   login: async (userData) => {
-    let response = await await fetch(`${hostName}/api/security/getToken`, {
+    let response =  await fetch(`${hostName}/api/security/getToken`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -111,7 +107,6 @@ export const auth = {
     if (response.status === 401) {
       return 401;
     }
-
     return await response.json();
   },
 };

@@ -6,7 +6,7 @@ import { ordersApi } from "../API/ordersApi";
 import { UnauthorizedError } from "../system/errors";
 
 export async function loader() {
-    let response = await ordersApi.getOrders(); 
+    let response = await ordersApi.getOrders("2023-03-01", "2023-03-02"); 
     if(response.status === 401){
       throw new UnauthorizedError
     }
@@ -15,6 +15,9 @@ export async function loader() {
 
 function ColumnView() {
   const orders = useLoaderData();
+  
+  //check if orders is an array or single object
+
   return (
     <div className={styles.daysContainer}>
       {orders.map((group, index) => (

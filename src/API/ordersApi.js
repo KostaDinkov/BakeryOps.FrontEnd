@@ -2,8 +2,6 @@ import {add, formatISO, formatIso} from 'date-fns';
 export const hostName = "http://localhost:5000";
 export const eventHubUrl = `${hostName}/eventHub`;
 
-
-
 export const ordersApi = {
   getOrders: async function (startDate , endDate) {
     try {     
@@ -97,7 +95,7 @@ export const productsApi = {
 
 export const auth = {
   login: async (userData) => {
-    let response =  await fetch(`${hostName}/api/security/getToken`, {
+    let response =  await fetch(`${hostName}/api/security`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -107,6 +105,6 @@ export const auth = {
     if (response.status === 401) {
       return 401;
     }
-    return await response.json();
+    return response.text();
   },
 };

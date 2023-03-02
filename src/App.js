@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import styles from "./App.module.css";
 import NavBar from "./Components/NavBar";
 import AppContext from "./appContext";
-import { productsApi } from "./API/ordersApi";
+import { productsApi } from "./API/ordersApi.ts";
 
 
 function App() {

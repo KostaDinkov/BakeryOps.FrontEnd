@@ -7,7 +7,7 @@ import moment from "moment/moment";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import OrderForm, { orderFormLoader } from "./Components/OrderForm";
 import Error from "./Components/Error";
-import ColumnView, { loader as ordersLoader } from "./Components/ColumnView";
+import ColumnView, { loader as ordersLoader } from "./Components/ColumnView.tsx";
 import DayView, { DayViewLoader } from "./Components/DayView";
 import LoginForm from "./Components/LoginForm";
 import { ThemeProvider, createTheme } from "@mui/material/styles";

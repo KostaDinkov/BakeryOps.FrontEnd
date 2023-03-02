@@ -1,5 +1,5 @@
 import { HubConnectionBuilder } from "@microsoft/signalr";
-import { eventHubUrl } from "./API/ordersApi";
+import { eventHubUrl } from "./API/ordersApi.ts";
 import PubSub from "pubsub-js";
 
 export default class EventHub {

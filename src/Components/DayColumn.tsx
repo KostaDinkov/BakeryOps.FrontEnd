@@ -3,18 +3,11 @@ import styles from "./DayColumn.module.css";
 import OrderCard from "./OrderCard";
 import moment from "moment/moment";
 import { Link } from "react-router-dom";
+import OrderDTO from "../Types/OrderDTO";
 
-const DayColumn = ({ data }) => {
+
+const DayColumn = ({ data }:{data:OrderDTO[]}) => {
   const date = moment(data[0].pickupDate);
-
-  data = data.sort((a, b) => {
-    if (a.pickupTime > b.pickupTime) {
-      return 1;
-    } else if (a.pickupTime === b.pickupTime) {
-      return 0;
-    }
-    return -1;
-  });
   return (
     <section>
       <header>

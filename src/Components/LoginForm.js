@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import styles from "./LoginForm.module.css";
-import { auth } from "../API/ordersApi";
+import { auth } from "../API/ordersApi.ts";
 import AppContext from "../appContext";
 
 
@@ -19,7 +19,7 @@ export default function LoginForm() {
   const handleSubmit = async (evt) => {
     evt.preventDefault();
     
-    let result = await auth.login({userName,password});
+    let result = await auth.login({userName, password});
     if(result === 401){
         console.log('Unauthorized')
         setIsLogError(true);
@@ -29,8 +29,6 @@ export default function LoginForm() {
     localStorage.setItem("token",result);
     localStorage.setItem("isLogged", "true");
     navigate("/");
-    
-    
 
   };
 

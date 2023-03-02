@@ -3,8 +3,10 @@ import styles from "./OrderCard.module.css";
 import OrderItem from "./OrderItem";
 import EditIcon from "@mui/icons-material/Edit";
 import {Link} from "react-router-dom";
+import OrderDTO from "../Types/OrderDTO";
+import {format} from "date-fns";
 
-const OrderCard = ({ order }) => {
+const OrderCard = ({ order }:{order:OrderDTO}) => {
 
   const containerStyles = () => {
     for (const item of order.orderItems) {
@@ -24,7 +26,7 @@ const OrderCard = ({ order }) => {
   return (
     <div className={containerStyles()}>
       <div className={styles.cardHeader}>
-        <span className={styles.pickupTime}>{order.pickupTime}</span>{" "}
+        <span className={styles.pickupTime}>{format(new Date(order.pickupDate),"HH:mm")}</span>{" "}
         <span>{order.clientName}</span>
         <div className={styles.editIcon}>
           <Link to={`/orders/put/${order.id}`}>
@@ -49,10 +51,7 @@ const OrderCard = ({ order }) => {
       </div>
       <ul>
         {order.orderItems.map((item, index) => (
-          
           <OrderItem key={index} item={item} order={order} />
-          
-          
         ))}
       </ul>
     </div>

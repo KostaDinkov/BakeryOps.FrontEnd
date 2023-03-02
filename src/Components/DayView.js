@@ -1,29 +1,24 @@
 import React from "react";
-import { ordersApi } from "../API/ordersApi";
-import { format,formatISO } from "date-fns";
+import { ordersApi } from "../API/ordersApi.ts";
+import { format, formatISO } from "date-fns";
 import { bg } from "date-fns/locale";
-import { useLoaderData,useParams } from "react-router-dom";
-import OrderCard from "./OrderCard";
+import { useLoaderData, useParams } from "react-router-dom";
+import OrderCard from "./OrderCard.tsx";
 import styles from "./DayView.module.css";
-import {UnauthorizedError} from "../system/errors";
+
+
 
 export async function DayViewLoader({ params }) {
-  let dateParam = formatISO(new Date(params.date),{representation:"date"});
+  let dateParam = formatISO(new Date(params.date), { representation: "date" });
+  return await ordersApi.getOrdersAsync(dateParam);
   
-  const response = await ordersApi.getOrders(dateParam);
-
-  if(response.status === 401){
-    throw new UnauthorizedError();
-  }
-
-  return await response.json();
 }
 
 export default function DayView() {
   const ordersByDate = useLoaderData();
   const isOrders = ordersByDate.length > 0;
   const orders = ordersByDate[0];
-  
+
   let params = useParams();
 
   return isOrders ? (
@@ -38,7 +33,10 @@ export default function DayView() {
       </div>
     </div>
   ) : (
-    <div className={styles.noOrders}>Няма поръчки за {format(new Date(params.date),"do MMMM, yyyy г.", { locale: bg })}</div>
+    <div className={styles.noOrders}>
+      Няма поръчки за{" "}
+      {format(new Date(params.date), "do MMMM, yyyy г.", { locale: bg })}
+    </div>
   );
 }
 

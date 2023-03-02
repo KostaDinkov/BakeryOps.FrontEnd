@@ -2,22 +2,16 @@ import React from "react";
 import DayColumn from "./DayColumn";
 import { useLoaderData } from "react-router-dom";
 import styles from "./ColumnView.module.css"
-import { ordersApi } from "../API/ordersApi";
-import { UnauthorizedError } from "../system/errors";
+import {  OrdersService } from "../API/ordersApi";
+import OrderDTO from "../Types/OrderDTO";
 
 export async function loader() {
-    let response = await ordersApi.getOrders("2023-03-01", "2023-03-02"); 
-    if(response.status === 401){
-      throw new UnauthorizedError
-    }
-    return await response.json();  
+    let data = await OrdersService.GetOrdersAsync("2023-03-01", "2023-03-03");   
+    return data;  
 }
 
 function ColumnView() {
-  const orders = useLoaderData();
-  
-  //check if orders is an array or single object
-
+  const orders = useLoaderData() as OrderDTO[][];
   return (
     <div className={styles.daysContainer}>
       {orders.map((group, index) => (

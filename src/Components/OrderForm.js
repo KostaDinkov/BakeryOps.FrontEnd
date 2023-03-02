@@ -1,12 +1,12 @@
 import React, { useState, useContext } from "react";
 import ProductSelector from "./ProductSelector";
-import moment from "moment";
 import AppContext from "../appContext";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { bg } from "date-fns/locale";
+import { format } from "date-fns";
 import Select from "react-select";
-import { ordersApi } from "../API/ordersApi";
+import { ordersApi } from "../API/ordersApi.ts";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import DeleteOrderDialog from "./DeleteOrderDialog";
 import styles from "./OrderForm.module.css";
@@ -15,6 +15,15 @@ import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
 import { UnauthorizedError } from "../system/errors";
+import {
+  getNewDateWithHours,
+  validateOrder,
+  getDefaultOrderFormData,
+  DefaultSelectorValues,
+  productsToOptions,
+  getHoursOptions
+} from "./OrderFormHelperFunctions.ts";
+import { OrdersService } from "../API/ordersApi";
 
 export async function orderFormLoader({ params }) {
   if (!JSON.parse(localStorage.getItem("isLogged"))) {
@@ -24,7 +33,7 @@ export async function orderFormLoader({ params }) {
   let date = new Date();
   let order = {};
   if (isEdit) {
-    order = await ordersApi.getOrder(params.id);
+    order = await OrdersService.GetOrderAsync(params.id);
     date = new Date(order.pickupDate);
   } else {
     order = getDefaultOrderFormData();
@@ -40,6 +49,7 @@ export const textFieldStyle = { backgroundColor: "white", borderRadius: "4px" };
 export default function OrderForm() {
   registerLocale("bg", bg);
   const navigate = useNavigate();
+
   let { isEdit, order } = useLoaderData();
   let { products } = useContext(AppContext); // the products from the DB
   let productOptions = productsToOptions(products); //options for the ProductSelector component, based on products
@@ -66,7 +76,7 @@ export default function OrderForm() {
         ...list,
         <ProductSelector
           options={productOptions}
-          selectorValues={new defaultSelectorValues()}
+          selectorValues={new DefaultSelectorValues()}
         />,
       ];
     });
@@ -158,14 +168,16 @@ export default function OrderForm() {
           </div>
           <Select
             value={getHoursOptions().filter(
-              (option) => option.label === orderFormData.pickupTime
+              (option) =>
+                option.label ===
+                format(new Date(orderFormData.pickupDate), "HH:mm")
             )}
             options={getHoursOptions()}
             placeholder="Час ..."
             onChange={(option) => {
               setOrderFormData((order) => ({
                 ...order,
-                pickupTime: option.value,
+                pickupDate: getNewDateWithHours(order.pickupDate, option.value),
               }));
             }}
           />
@@ -216,7 +228,7 @@ export default function OrderForm() {
               <li className={styles.productListItem}>
                 <div style={{ flexGrow: "1", maxWidth: "1025px" }}>{el}</div>
                 <Button
-                  tabIndex="-1"
+                  tabIndex={-1}
                   size="small"
                   color="error"
                   variant="outlined"
@@ -234,7 +246,7 @@ export default function OrderForm() {
         <Button
           variant="outlined"
           onClick={() => {
-            addNewProductSelector(new defaultSelectorValues());
+            addNewProductSelector();
           }}
         >
           Добави продукт
@@ -267,114 +279,4 @@ export default function OrderForm() {
   );
 }
 
-//-- HELPER FUNCTIONS --
-function validateOrder(order) {
-  let validationResult = { isValid: false, errors: [] };
 
-  if (order.clientName === "" || order.clientName.length < 3) {
-    validationResult.errors.push("Невалидно име на клиент.");
-  }
-  if (order.pickupDate === "" || !moment(order.pickupDate).isValid()) {
-    validationResult.errors.push(
-      `Невалидна дата за получаване: ${order.pickupDate} `
-    );
-  } else {
-    order.pickupDate = moment(order.pickupDate).format(
-      "YYYY-MM-DDT00:00:00.000"
-    );
-  }
-  if (order.advancePaiment === "") order.advancePaiment = 0;
-
-  const regex = new RegExp("^([01]?[0-9]|2[0-3]):[0-5][0-9]$");
-  if (!regex.test(order.pickupTime)) {
-    validationResult.errors.push("Невалиден час за получаване");
-  }
-
-  if (order.orderItems.length === 0) {
-    validationResult.errors.push(
-      "Поръчката трябва да съдържа минимум 1 продукт"
-    );
-  }
-
-  order.orderItems.forEach((element, index) => {
-    if (element.productId === undefined || element.productId === -1) {
-      validationResult.errors.push(
-        `Невалидна стойност за продукт номер ${index + 1}`
-      );
-    }
-    if (element.productAmount <= 0) {
-      validationResult.errors.push(
-        `Невалидна стойност за количество за продукт номер ${index + 1} - ${
-          element.productAmount
-        }`
-      );
-    }
-  });
-
-  if (validationResult.errors.length === 0) {
-    validationResult.isValid = true;
-  }
-  return validationResult;
-}
-
-function defaultSelectorValues() {
-  this.productId = -1;
-  this.productAmount = 0;
-  this.cakeFoto = "";
-  this.cakeTitle = "";
-  this.description = "";
-}
-
-function productsToOptions(products) {
-  if (products.length >= 1) {
-    let options = products.map((p) => ({
-      value: p.id,
-      label: p.name,
-      code: p.code,
-    }));
-    return options;
-  }
-  return [];
-}
-
-function getHoursOptions() {
-  let availableHours = [
-    "09:00",
-    "09:30",
-    "10:00",
-    "10:30",
-    "11:00",
-    "11:30",
-    "12:00",
-    "12:30",
-    "13:30",
-    "14:00",
-    "14:30",
-    "15:00",
-    "15:30",
-    "16:00",
-    "16:30",
-    "17:00",
-    "17:30",
-    "18:00",
-    "18:30"
-  ];
-  let hoursOptions = availableHours.map((hour) => ({
-    value: hour,
-    label: hour,
-  }));
-  return hoursOptions;
-}
-
-function getDefaultOrderFormData() {
-  return {
-    operatorId: 0,
-    pickupDate: "",
-    pickupTime: "",
-    clientName: "",
-    clientPhone: "",
-    isPaid: false,
-    advancePaiment: 0,
-    orderItems: [],
-  };
-}

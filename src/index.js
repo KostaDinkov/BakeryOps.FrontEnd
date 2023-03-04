@@ -13,6 +13,7 @@ import LoginForm from "./Components/LoginForm";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import EventHub from "./EventHub";
 import PubSub from "pubsub-js";
+import ProductsAccordion, { loader } from "./Components/AccordionProductSelector/ProductsAccordion";
 
 const router = createBrowserRouter([
   {
@@ -47,10 +48,20 @@ const router = createBrowserRouter([
         path: "/login/",
         element: <LoginForm />,
       },
+      {
+        path:"/accordion",
+        element:<ProductsAccordion/>,
+        loader: loader
+      }
       
     ],
   },
 ]);
+
+window.addEventListener("keydown",function(e){
+  if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
+    e.preventDefault();
+}},false);
 
 const eventHub = new EventHub();
 let token = PubSub.subscribe("SendUpdateOrders", eventHub.sendUpdateOrders);

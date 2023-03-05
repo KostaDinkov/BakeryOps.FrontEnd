@@ -1,7 +1,7 @@
 import {formatISO, isValid } from "date-fns";
-import ValidationResult from "../Types/ValidationResult";
-import OrderDTO from "../Types/OrderDTO";
-import ProductDTO from "../Types/ProductDTO";
+import ValidationResult from "../../Types/ValidationResult";
+import OrderDTO from "../../Types/OrderDTO";
+import ProductDTO from "../../Types/ProductDTO";
 
 export function getNewDateWithHours(date: Date, hoursStr: string): Date {
   console.log(hoursStr);

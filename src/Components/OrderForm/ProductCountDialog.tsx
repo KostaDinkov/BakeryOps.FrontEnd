@@ -5,7 +5,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import ProductDTO from "../../Types/ProductDTO";
-import { DefaultSelectorValues } from "../OrderFormHelperFunctions";
+import { DefaultSelectorValues } from "./OrderFormHelperFunctions";
 
 export default function ProductCountDialog({
   product,

@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import Typography from "@mui/material/Typography";
 import ProductDTO from "../../Types/ProductDTO";
 import ProductCountDialog from "./ProductCountDialog";
-import { DefaultSelectorValues } from "../OrderFormHelperFunctions";
+import { DefaultSelectorValues } from "./OrderFormHelperFunctions";
 
 interface ProductsByCategory {
   [category: string]: ProductDTO[];

@@ -5,7 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import moment from "moment/moment";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import OrderForm, { orderFormLoader } from "./Components/OrderForm";
+import OrderForm, { orderFormLoader } from "./Components/OrderForm/OrderForm";
 import Error from "./Components/Error";
 import ColumnView, { loader as ordersLoader } from "./Components/ColumnView.tsx";
 import DayView, { DayViewLoader } from "./Components/DayView";
@@ -13,7 +13,7 @@ import LoginForm from "./Components/LoginForm";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import EventHub from "./EventHub";
 import PubSub from "pubsub-js";
-import ProductsAccordion, { loader } from "./Components/AccordionProductSelector/ProductsAccordion";
+import ProductsAccordion, { loader } from "./Components/OrderForm/ProductsAccordion";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +48,9 @@ const router = createBrowserRouter([
         path: "/login/",
         element: <LoginForm />,
       },
+      {
+        path:"/print",
+      }
       
       
     ],

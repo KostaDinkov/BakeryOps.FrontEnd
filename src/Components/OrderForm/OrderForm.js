@@ -1,25 +1,23 @@
 import React, { useState, useContext } from "react";
 import ProductSelector from "./ProductSelector";
-import AppContext from "../appContext";
+import AppContext from "../../appContext";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { bg } from "date-fns/locale";
 import { format } from "date-fns";
 import Select from "react-select";
-import { ordersApi } from "../API/ordersApi.ts";
+import { ordersApi, OrdersService } from "../../API/ordersApi.ts";
 import { useLoaderData, useNavigate } from "react-router-dom";
-import DeleteOrderDialog from "./DeleteOrderDialog";
+import DeleteOrderDialog from "../DeleteOrderDialog";
 import styles from "./OrderForm.module.css";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
-import { UnauthorizedError } from "../system/errors";
+import { UnauthorizedError } from "../../system/errors";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import ProductsAccordion from "./AccordionProductSelector/ProductsAccordion";
+
+import ProductsAccordion from "./ProductsAccordion";
 import {
   getNewDateWithHours,
   validateOrder,
@@ -28,7 +26,7 @@ import {
   productsToOptions,
   getHoursOptions,
 } from "./OrderFormHelperFunctions.ts";
-import { OrdersService } from "../API/ordersApi";
+
 
 export async function orderFormLoader({ params }) {
   if (!JSON.parse(localStorage.getItem("isLogged"))) {

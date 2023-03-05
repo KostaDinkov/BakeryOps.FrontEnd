@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -12,12 +11,14 @@ export default function ProductCountDialog({
   product,
   open,
   handleClose,
-  caller
+  caller,
+  addNewProductSelector
 }: {
   product: ProductDTO;
   open: boolean;
   caller:HTMLElement;
   handleClose: (caller:HTMLElement) => void;
+  addNewProductSelector:(selectorValues:DefaultSelectorValues)=>void
 }) {
   const [count, setCount] = useState(0);
   const [inputElement, setInputElement] = useState<HTMLInputElement | null>(
@@ -36,6 +37,8 @@ export default function ProductCountDialog({
     selectorValues.productAmount = count;
     selectorValues.productId = product.id;
     console.log(selectorValues);
+    addNewProductSelector(selectorValues);
+    setCount(0);
     handleClose(caller);
   }
 
@@ -44,9 +47,8 @@ export default function ProductCountDialog({
       handleSubmit();
     }
   }
-
   return (
-    <Dialog open={open} onClose={()=>handleClose(caller)}>
+    <Dialog open={open} onClose={()=>{handleClose(caller)}}>
       <DialogTitle>{product.name}</DialogTitle>
       <DialogContent>
         <input
@@ -55,17 +57,18 @@ export default function ProductCountDialog({
           id="count"
           type="number"
           onChange={(e) => {
-            setCount(parseInt(e.target.value));
+            setCount(parseFloat(e.target.value));
           }}
           onKeyDown={handleKeyDown}
           /* @ts-ignore */
           ref={setInputElement}
           placeholder="количество"
+          required
+          min={0.001}
         />
       </DialogContent>
 
-      <DialogActions>
-        
+      <DialogActions>      
         <Button onClick={()=>{handleClose(caller)}}>Cancel </Button>
         <Button>Subscribe</Button>
       </DialogActions>

@@ -15,13 +15,18 @@ import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
 import { UnauthorizedError } from "../system/errors";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import ProductsAccordion from "./AccordionProductSelector/ProductsAccordion";
 import {
   getNewDateWithHours,
   validateOrder,
   getDefaultOrderFormData,
   DefaultSelectorValues,
   productsToOptions,
-  getHoursOptions
+  getHoursOptions,
 } from "./OrderFormHelperFunctions.ts";
 import { OrdersService } from "../API/ordersApi";
 
@@ -51,6 +56,7 @@ export default function OrderForm() {
   const navigate = useNavigate();
 
   let { isEdit, order } = useLoaderData();
+  const [productAccordionOpen, setProductAccordionOpen] = useState(false);
   let { products } = useContext(AppContext); // the products from the DB
   let productOptions = productsToOptions(products); //options for the ProductSelector component, based on products
   let [orderFormData, setOrderFormData] = useState(order); //setting and getting the values for the form inputs
@@ -70,13 +76,16 @@ export default function OrderForm() {
    * Dynamically add an input to the order form for an a new order Item with default values
    *
    */
-  function addNewProductSelector() {
+  function addNewProductSelector(selectorValues) {
+    if(!selectorValues){
+      selectorValues = new DefaultSelectorValues();
+    }
     setProductSelectorList((list) => {
       return [
         ...list,
         <ProductSelector
           options={productOptions}
-          selectorValues={new DefaultSelectorValues()}
+          selectorValues={selectorValues}
         />,
       ];
     });
@@ -127,6 +136,10 @@ export default function OrderForm() {
     await ordersApi.deleteOrder(order.id);
     closeForm();
   }
+
+  const handleProductAccordionClose = () => {
+    setProductAccordionOpen(false);
+  };
 
   //-- RETURN HTML --
   return (
@@ -251,6 +264,14 @@ export default function OrderForm() {
         >
           Добави продукт
         </Button>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            setProductAccordionOpen(true);
+          }}
+        >
+          Избери продукти
+        </Button>
         <div className={styles.submitGroup}>
           <Button variant="contained" onClick={closeForm}>
             Откажи
@@ -275,8 +296,15 @@ export default function OrderForm() {
           onDelete={deleteOrder}
         />
       </form>
+      <Dialog
+        maxWidth="sm"
+        fullWidth
+        open={productAccordionOpen}
+        onClose={handleProductAccordionClose}
+        
+      >
+        <ProductsAccordion products={products} addNewProductSelector={addNewProductSelector}/>
+      </Dialog>
     </div>
   );
 }
-
-

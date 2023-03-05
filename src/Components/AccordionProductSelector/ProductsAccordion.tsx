@@ -1,35 +1,34 @@
 import React, { useRef, useEffect } from "react";
-import { productsApi } from "../../API/ordersApi";
 import Typography from "@mui/material/Typography";
-import { useLoaderData } from "react-router-dom";
 import ProductDTO from "../../Types/ProductDTO";
 import ProductCountDialog from "./ProductCountDialog";
-
-export async function loader() {
-  let data = await productsApi.getProducts();
-  return data;
-}
+import { DefaultSelectorValues } from "../OrderFormHelperFunctions";
 
 interface ProductsByCategory {
   [category: string]: ProductDTO[];
 }
 
-export default function ProductsAccordion() {
-  
-  let products = useLoaderData() as ProductDTO[];
-  
+export default function ProductsAccordion({
+  products,
+  addNewProductSelector,
+}: {
+  products: ProductDTO[];
+  addNewProductSelector: (selectorValues: DefaultSelectorValues) => void;
+}) {
   let productsByCat = products.reduce(function (result, product) {
     (result[product.category] = result[product.category] || []).push(product);
     return result;
   }, {} as ProductsByCategory);
-  
+
   const [dialogOpen, setDialogOpen] = React.useState(false);
-  
-  const [product, setProduct] = React.useState<ProductDTO|null>(null);
+
+  const [product, setProduct] = React.useState<ProductDTO | null>(null);
 
   const [expanded, setExpanded] = React.useState<string | false>(false);
 
-  const [callerElement, setCallerElement] = React.useState<HTMLElement|null>(null);
+  const [callerElement, setCallerElement] = React.useState<HTMLElement | null>(
+    null
+  );
 
   useEffect(() => {
     let firstCategory = document.querySelector(
@@ -38,22 +37,22 @@ export default function ProductsAccordion() {
     console.log(firstCategory);
     firstCategory.focus();
   }, []);
-  
-  const handleDialogOpen = (product:ProductDTO, element:HTMLElement) => {
+
+  const handleDialogOpen = (product: ProductDTO, element: HTMLElement) => {
     setProduct(product);
     setCallerElement(element);
     //TODO set caller element, so that we can return focus to it
     setDialogOpen(true);
-
   };
 
-  const handleDialogClose = (caller:HTMLElement) => {
+  const handleDialogClose = (caller: HTMLElement) => {
     setDialogOpen(false);
     caller.focus();
   };
 
   const handleKeyDown =
-    (category: string, product:ProductDTO|null) => (event: React.KeyboardEvent<HTMLElement>) => {
+    (category: string, product: ProductDTO | null) =>
+    (event: React.KeyboardEvent<HTMLElement>) => {
       let target = event.target as HTMLElement;
 
       if (event.key === "ArrowLeft") {
@@ -71,7 +70,7 @@ export default function ProductsAccordion() {
         target.previousElementSibling &&
           (target.previousElementSibling as HTMLElement).focus();
       }
-      if(event.key ==="Enter"){
+      if (event.key === "Enter") {
         product && handleDialogOpen(product, event.target as HTMLElement);
       }
     };
@@ -88,7 +87,11 @@ export default function ProductsAccordion() {
           <div className={"products"}>
             <ul>
               {group[1].map((p) => (
-                <li key={p.id} tabIndex={0} onKeyDown={handleKeyDown(group[0], p)}>
+                <li
+                  key={p.id}
+                  tabIndex={0}
+                  onKeyDown={handleKeyDown(group[0], p)}
+                >
                   <Typography>{p.name}</Typography>
                 </li>
               ))}
@@ -96,7 +99,15 @@ export default function ProductsAccordion() {
           </div>
         </Category>
       ))}
-      {product && callerElement && <ProductCountDialog open = {dialogOpen} handleClose = {handleDialogClose} product={product} caller={callerElement}/>}
+      {product && callerElement && (
+        <ProductCountDialog
+          open={dialogOpen}
+          handleClose={handleDialogClose}
+          addNewProductSelector={addNewProductSelector}
+          product={product}
+          caller={callerElement}
+        />
+      )}
     </div>
   );
 }
@@ -109,7 +120,7 @@ function Category(props: any) {
     if (isExpanded) {
       (prodContainer.current?.querySelector("li") as HTMLLIElement).focus();
     }
-  },[isExpanded]);
+  }, [isExpanded]);
 
   return (
     <div tabIndex={0} onKeyDown={onKeyDown} className="category">

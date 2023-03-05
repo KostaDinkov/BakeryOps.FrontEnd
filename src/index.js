@@ -48,11 +48,7 @@ const router = createBrowserRouter([
         path: "/login/",
         element: <LoginForm />,
       },
-      {
-        path:"/accordion",
-        element:<ProductsAccordion/>,
-        loader: loader
-      }
+      
       
     ],
   },

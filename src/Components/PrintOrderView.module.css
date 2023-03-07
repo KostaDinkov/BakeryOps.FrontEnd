@@ -6,7 +6,6 @@
   
 }
 
-
 @media print{
   body{
     background-color: white;
@@ -16,6 +15,7 @@
     justify-content: space-between !important;
     height: 100vh;
     gap:0;
+    padding-top:0px !important;
   }
   .orderDivider{
     display:block !important;
@@ -25,6 +25,7 @@
 }
 
 .pageView{
+  padding-top:30px;
   display:flex;
   flex-direction: row;
   justify-content: center;  

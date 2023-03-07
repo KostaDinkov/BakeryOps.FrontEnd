@@ -3,49 +3,19 @@ import styles from "./PrintOrderView.module.css";
 import OrderDTO from "../Types/OrderDTO";
 import { format } from "date-fns";
 import { bg } from "date-fns/locale";
+import { OrdersService } from "../API/ordersApi";
+import { useLoaderData} from "react-router-dom";
+
+export async function loader ({params}:{params:{id:number}}){
+    let id = params.id;
+    let order = await OrdersService.GetOrderAsync(id);
+    console.log(order);
+    return order;
+}
 
 export default function PrintOrderView() {
-  let order: OrderDTO = {
-    id: 3033,
-    advancePaiment: 0,
-    operatorId: 0,
-    pickupDate: "2023-03-07T12:30",
-    createdDate: "2023-02-12T10:00",
-    clientName: "Kostadin Dinkov",
-    clientPhone: "0889778601",
-    isPaid: false,
-    status: 0,
-
-    orderItems: [
-      {
-        productId: 10,
-        productName: "Карамелен Десерт",
-        productAmount: 10,
-        description:
-          "С жълта сметана. Орехи и дели карамел.Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur, laborum.",
-        isInProgress: false,
-        isComplete: false,
-        price: 14.0,
-        unit: "бр.",
-      },
-      {
-        productName: "10п. Шоколадова торта",
-        productId: 15,
-        productAmount: 2,
-        description:
-          "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Earum repudiandae nostrum dignissimos doloremque voluptatem maxime?",
-        cakeFoto: "103",
-        cakeTitle: "Честит юбилей любима бабо 80г",
-        isInProgress: false,
-        isComplete: false,
-        price: 13.0,
-        unit: "бр.",
-      },
-      
-      
-      
-    ],
-  };
+  
+    let order = useLoaderData() as OrderDTO;
 
   return (
     <div className={styles.pageView}>
@@ -99,7 +69,7 @@ function OrderForPrint({ order }: { order: OrderDTO }) {
           <div className={styles.productRow} key={index + "" + i.productId}>
             <div className={styles.productName}>
               <div className={styles.bigText}>
-                {index + 1}. {i.productName}
+                {index + 1}. {i.product?.name}
               </div>
               <div className={styles.productDescription}>{i.description}</div>
               <div className={styles.productDescription}>
@@ -125,11 +95,11 @@ function OrderForPrint({ order }: { order: OrderDTO }) {
             </div>
             <div className={styles.productCount}>
               <span>
-                {i.productAmount} {i.unit}
+                {i.productAmount} {i.product?.unit}
               </span>
             </div>
             <div className={styles.productPrice}>
-              <span>{toBGN(i.productAmount * i.price)}</span>
+              <span>{toBGN(i.productAmount * i.product.priceDrebno)}</span>
             </div>
           </div>
         ))}
@@ -175,8 +145,9 @@ function Footer({ order }: { order: OrderDTO }) {
 
 function getOrderPrice(order: OrderDTO): number {
   let price = 0;
+  
   for (let item of order.orderItems) {
-    price += item.price * item.productAmount;
+    price += item.product.priceDrebno * item.productAmount;
   }
   if (order.advancePaiment > 0) {
     price = price - order.advancePaiment;

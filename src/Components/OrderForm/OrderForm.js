@@ -122,7 +122,7 @@ export default function OrderForm() {
       } else {
         await ordersApi.postOrder(newOrder);
       }
-      closeForm();
+      navigate(`/orders/print/${newOrder.id}`);
     }
   }
 

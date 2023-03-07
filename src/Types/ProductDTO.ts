@@ -8,4 +8,5 @@ export default interface Product{
         priceEdro: number;
         code: string;
         dateCreated: string;
+        unit:string;
 }

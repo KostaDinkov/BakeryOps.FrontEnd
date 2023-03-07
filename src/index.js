@@ -14,6 +14,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import EventHub from "./EventHub";
 import PubSub from "pubsub-js";
 import ProductsAccordion, { loader } from "./Components/OrderForm/ProductsAccordion";
+import PrintOrderView from "./Components/PrintOrderView";
 
 const router = createBrowserRouter([
   {
@@ -50,9 +51,9 @@ const router = createBrowserRouter([
       },
       {
         path:"/print",
+        element:<PrintOrderView/>
       }
-      
-      
+ 
     ],
   },
 ]);

@@ -22,7 +22,7 @@ const NavBar = () => {
     navigate("/");
   }
   return (
-    <div className={styles.navBarContainer}>
+    <div className={styles.navBarContainer} >
       <Link to="/">
         <Button className={styles.buttonMain} variant="contained">
           Начало

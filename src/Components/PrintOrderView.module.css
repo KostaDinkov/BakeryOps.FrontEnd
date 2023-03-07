@@ -15,6 +15,7 @@
   .pageView{
     justify-content: space-between !important;
     height: 100vh;
+    gap:0;
   }
   .orderDivider{
     display:block !important;
@@ -26,7 +27,8 @@
 .pageView{
   display:flex;
   flex-direction: row;
-  justify-content: space-around;  
+  justify-content: center;  
+  gap:20px;
 }
 
 .orderDivider{

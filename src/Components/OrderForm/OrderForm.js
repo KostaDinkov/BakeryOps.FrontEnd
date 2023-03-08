@@ -113,16 +113,17 @@ export default function OrderForm() {
 
     const newValidationResult = validateOrder(newOrder);
     setValidationResult(newValidationResult);
-
+    let orderResult = null;
     if (!newValidationResult.isValid) {
       console.log(newValidationResult.errors);
-    } else {
+    } 
+    else {
       if (isEdit) {
-        await ordersApi.putOrder(newOrder.id, newOrder);
+        order = await OrdersService.PutOrderAsync(newOrder.id, newOrder);
       } else {
-        await ordersApi.postOrder(newOrder);
+        order = await OrdersService.PostOrderAsync(newOrder);
       }
-      navigate(`/orders/print/${newOrder.id}`);
+      navigate(`/orders/print/${order.id}`);
     }
   }
 

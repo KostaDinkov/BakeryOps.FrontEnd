@@ -4,9 +4,12 @@ import { useLoaderData } from "react-router-dom";
 import styles from "./ColumnView.module.css"
 import {  OrdersService } from "../API/ordersApi";
 import OrderDTO from "../Types/OrderDTO";
+import {formatISO, addDays} from 'date-fns';
 
 export async function loader() {
-    let data = await OrdersService.GetOrdersAsync("2023-03-01", "2023-03-03");   
+    let today = formatISO(new Date(),{representation:"date"});
+    let endDate = formatISO(addDays(new Date(), 3), {representation:"date"});
+    let data = await OrdersService.GetOrdersAsync(today, endDate);  
     return data;  
 }
 

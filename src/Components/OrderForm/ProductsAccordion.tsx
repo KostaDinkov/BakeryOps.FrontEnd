@@ -41,7 +41,6 @@ export default function ProductsAccordion({
   const handleDialogOpen = (product: ProductDTO, element: HTMLElement) => {
     setProduct(product);
     setCallerElement(element);
-    //TODO set caller element, so that we can return focus to it
     setDialogOpen(true);
   };
 

@@ -4,9 +4,9 @@ import AppContext from "../../appContext";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { bg } from "date-fns/locale";
-import { format } from "date-fns";
+import { format, formatISO } from "date-fns";
 import Select from "react-select";
-import { ordersApi, OrdersService } from "../../API/ordersApi.ts";
+import { ordersApi, OrdersService } from "../../API/ordersApi";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import DeleteOrderDialog from "../DeleteOrderDialog";
 import styles from "./OrderForm.module.css";
@@ -14,7 +14,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
-import { UnauthorizedError } from "../../system/errors";
+import { NotFoundError, UnauthorizedError } from "../../system/errors";
 import Dialog from "@mui/material/Dialog";
 
 import ProductsAccordion from "./ProductsAccordion";
@@ -25,16 +25,24 @@ import {
   DefaultSelectorValues,
   productsToOptions,
   getHoursOptions,
-} from "./OrderFormHelperFunctions.ts";
+} from "./OrderFormHelperFunctions";
+import OrderDTO from "../../Types/OrderDTO";
+import ProductDTO from "../../Types/ProductDTO";
+import ValidationResult from "../../Types/ValidationResult";
 
-
-export async function orderFormLoader({ params }) {
-  if (!JSON.parse(localStorage.getItem("isLogged"))) {
+export async function orderFormLoader({
+  params,
+}: {
+  params: { method: string; id: number };
+}) {
+  if (localStorage.getItem("isLogged") === null) {
+    //&& !JSON.parse(localStorage.getItem("isLogged"))
     throw new UnauthorizedError();
   }
   let isEdit = params.method === "put";
   let date = new Date();
-  let order = {};
+  let order: OrderDTO;
+
   if (isEdit) {
     order = await OrdersService.GetOrderAsync(params.id);
     date = new Date(order.pickupDate);
@@ -53,16 +61,19 @@ export default function OrderForm() {
   registerLocale("bg", bg);
   const navigate = useNavigate();
 
-  let { isEdit, order } = useLoaderData();
+  let { isEdit, order } = useLoaderData() as {
+    isEdit: boolean;
+    order: OrderDTO;
+  };
   const [productAccordionOpen, setProductAccordionOpen] = useState(false);
-  let { products } = useContext(AppContext); // the products from the DB
+  let { products }: { products: ProductDTO[] } = useContext(AppContext); // the products from the DB
   let productOptions = productsToOptions(products); //options for the ProductSelector component, based on products
   let [orderFormData, setOrderFormData] = useState(order); //setting and getting the values for the form inputs
   let [showDeleteDialog, setShowDeleteDialog] = useState(false); // show/hide confirmation dialog on order delete
   let [validationResult, setValidationResult] = useState({
     isValid: true,
     errors: [],
-  });
+  } as ValidationResult);
   let [productSelectorList, setProductSelectorList] = useState(
     order.orderItems.map((item) => (
       <ProductSelector options={productOptions} selectorValues={item} />
@@ -74,8 +85,8 @@ export default function OrderForm() {
    * Dynamically add an input to the order form for an a new order Item with default values
    *
    */
-  function addNewProductSelector(selectorValues) {
-    if(!selectorValues){
+  function addNewProductSelector(selectorValues: DefaultSelectorValues) {
+    if (!selectorValues) {
       selectorValues = new DefaultSelectorValues();
     }
     setProductSelectorList((list) => {
@@ -94,13 +105,13 @@ export default function OrderForm() {
    * Remove an orderItem (productSelector) from the order
    * @param {int} index
    */
-  function removeProduct(index) {
+  function removeProduct(index: number) {
     productSelectorList.splice(index, 1);
     setProductSelectorList([...productSelectorList]);
   }
 
   //-- SUBMIT ORDER --
-  async function handleSubmit(event) {
+  async function handleSubmit(event: any) {
     event.preventDefault();
     let orderItems = productSelectorList.map(
       (selector) => selector.props.selectorValues
@@ -113,17 +124,17 @@ export default function OrderForm() {
 
     const newValidationResult = validateOrder(newOrder);
     setValidationResult(newValidationResult);
-    let orderResult = null;
+
+    let orderResult: OrderDTO;
     if (!newValidationResult.isValid) {
       console.log(newValidationResult.errors);
-    } 
-    else {
-      if (isEdit) {
-        order = await OrdersService.PutOrderAsync(newOrder.id, newOrder);
+    } else {
+      if (isEdit && newOrder.id) {
+        orderResult = await OrdersService.PutOrderAsync(newOrder.id, newOrder);
       } else {
-        order = await OrdersService.PostOrderAsync(newOrder);
+        orderResult = await OrdersService.PostOrderAsync(newOrder);
       }
-      navigate(`/orders/print/${order.id}`);
+      navigate(`/orders/print/${orderResult.id}`);
     }
   }
 
@@ -132,8 +143,10 @@ export default function OrderForm() {
   }
 
   async function deleteOrder() {
-    await ordersApi.deleteOrder(order.id);
-    closeForm();
+    if (order.id) {
+      await ordersApi.deleteOrder(order.id);
+      closeForm();
+    }
   }
 
   const handleProductAccordionClose = () => {
@@ -169,12 +182,15 @@ export default function OrderForm() {
           />{" "}
           <div style={{ display: "inline-block", width: "fit-content" }}>
             <DatePicker
-              selected={orderFormData.pickupDate}
+              selected={new Date(orderFormData.pickupDate)}
               locale="bg"
               dateFormat="P"
-              onChange={(date) =>
-                setOrderFormData((order) => ({ ...order, pickupDate: date }))
-              }
+              onChange={(date) => {
+                if(date){
+                  setOrderFormData((order) => ({ ...order, pickupDate: formatISO(date) }));
+                }
+                
+              }}
               customInput={<TextField sx={textFieldStyle} size="small" />}
             />
           </div>
@@ -187,10 +203,16 @@ export default function OrderForm() {
             options={getHoursOptions()}
             placeholder="Час ..."
             onChange={(option) => {
-              setOrderFormData((order) => ({
-                ...order,
-                pickupDate: getNewDateWithHours(order.pickupDate, option.value),
-              }));
+              if (option) {
+                let result = {
+                  ...order,
+                  pickupDate: getNewDateWithHours(
+                    new Date(order.pickupDate),
+                    option.value
+                  ),
+                };
+                setOrderFormData(result);
+              }
             }}
           />
           <TextField
@@ -212,16 +234,17 @@ export default function OrderForm() {
             sx={textFieldStyle}
             label="Капаро"
             onChange={(evt) => {
-              setOrderFormData((order) => ({
+              let result = {
                 ...order,
-                advancePaiment: evt.target.value,
-              }));
+                advancePaiment: parseFloat(evt.target.value),
+              } as OrderDTO;
+              setOrderFormData(result);
             }}
           />
           <label>
             Платена?
             <Checkbox
-              size="large"
+              size="medium"
               color="error"
               checked={orderFormData.isPaid}
               onChange={(evt) => {
@@ -258,7 +281,7 @@ export default function OrderForm() {
         <Button
           variant="outlined"
           onClick={() => {
-            addNewProductSelector();
+            addNewProductSelector(new DefaultSelectorValues());
           }}
         >
           Добави продукт
@@ -300,9 +323,11 @@ export default function OrderForm() {
         fullWidth
         open={productAccordionOpen}
         onClose={handleProductAccordionClose}
-        
       >
-        <ProductsAccordion products={products} addNewProductSelector={addNewProductSelector}/>
+        <ProductsAccordion
+          products={products}
+          addNewProductSelector={addNewProductSelector}
+        />
       </Dialog>
     </div>
   );

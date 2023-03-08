@@ -1,5 +1,5 @@
 import { add, formatISO } from "date-fns";
-import { UnauthorizedError } from "../system/errors";
+import { NotFoundError, UnauthorizedError } from "../system/errors";
 import OrderDTO from "../Types/OrderDTO";
 export const hostName = "http://localhost:5000";
 export const eventHubUrl = `${hostName}/eventHub`;
@@ -36,7 +36,7 @@ export class OrdersService {
     return response.json();
   }
 
-  static async GetOrderAsync(id: number): Promise<OrderDTO | null> {
+  static async GetOrderAsync(id: number): Promise<OrderDTO> {
     try {
       let response = await fetch(`${hostName}/api/orders/${id}`, {
         method: "GET",
@@ -47,16 +47,16 @@ export class OrdersService {
       });
 
       if (response.status === 404) {
-        return null;
+        throw new NotFoundError();
       }
       return await response.json();
     } catch (error) {
       console.log("API error: getOrders", error);
-      return null;
+      throw error;
     }
   }
 
-  static async PostOrderAsync(data: OrderDTO): Promise<OrderDTO | null> {
+  static async PostOrderAsync(data: OrderDTO): Promise<OrderDTO> {
     try {
       const response = await fetch(`${hostName}/api/orders`, {
         method: "POST",
@@ -69,14 +69,14 @@ export class OrdersService {
       return response.json();
     } catch (error: any) {
       console.log("API error " + error.message);
-      return null;
+      throw error;
     }
   }
 
   static async PutOrderAsync(
     orderId: number,
     data: OrderDTO
-  ): Promise<OrderDTO | null> {
+  ): Promise<OrderDTO> {
     try {
       const response = await fetch(`${hostName}/api/orders/${orderId}`, {
         method: "PUT",
@@ -90,7 +90,7 @@ export class OrdersService {
       return response.json();
     } catch (error: any) {
       console.log("API error " + error.message);
-      return null;
+      throw error;
     }
   }
 

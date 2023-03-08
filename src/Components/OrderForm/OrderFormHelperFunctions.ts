@@ -3,13 +3,13 @@ import ValidationResult from "../../Types/ValidationResult";
 import OrderDTO from "../../Types/OrderDTO";
 import ProductDTO from "../../Types/ProductDTO";
 
-export function getNewDateWithHours(date: Date, hoursStr: string): Date {
-  console.log(hoursStr);
+export function getNewDateWithHours(date: Date, hoursStr: string): string {
+  
   let parts = hoursStr.split(":");
   date.setHours(parseInt(parts[0]));
   date.setMinutes(parseInt(parts[1]));
-  console.log(date);
-  return date;
+  
+  return formatISO(date);
 }
 
 export function validateOrder(order: OrderDTO): ValidationResult {

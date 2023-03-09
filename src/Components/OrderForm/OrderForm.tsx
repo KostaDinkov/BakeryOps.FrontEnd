@@ -25,6 +25,7 @@ import {
   DefaultSelectorValues,
   productsToOptions,
   getHoursOptions,
+  clientsToOptions,
 } from "./OrderFormHelperFunctions";
 import OrderDTO from "../../Types/OrderDTO";
 import ProductDTO from "../../Types/ProductDTO";
@@ -66,7 +67,8 @@ export default function OrderForm() {
     order: OrderDTO;
   };
   const [productAccordionOpen, setProductAccordionOpen] = useState(false);
-  let { products }: { products: ProductDTO[] } = useContext(AppContext); // the products from the DB
+  let { products } = useContext(AppContext); // the products from the DB
+  let { clients } = useContext(AppContext); // the clients from the DB
   let productOptions = productsToOptions(products); //options for the ProductSelector component, based on products
   let [orderFormData, setOrderFormData] = useState(order); //setting and getting the values for the form inputs
   let [showDeleteDialog, setShowDeleteDialog] = useState(false); // show/hide confirmation dialog on order delete
@@ -143,8 +145,8 @@ export default function OrderForm() {
   }
 
   async function deleteOrder() {
-    if (order.id) {
-      await ordersApi.deleteOrder(order.id);
+    if (isEdit && orderFormData.id) {
+      await ordersApi.deleteOrder(orderFormData.id);
       closeForm();
     }
   }
@@ -167,6 +169,7 @@ export default function OrderForm() {
             />
           )}
         </Typography>
+        
         <div className={styles.mainInfo}>
           <TextField
             value={orderFormData.clientName}
@@ -174,12 +177,27 @@ export default function OrderForm() {
             size="small"
             label="Клиент ..."
             onChange={(evt) => {
-              setOrderFormData((order) => ({
-                ...order,
+              setOrderFormData((orderFormData) => ({
+                ...orderFormData,
                 clientName: evt.target.value,
               }));
             }}
           />{" "}
+                    <Select           
+            options={clientsToOptions(clients)}
+            placeholder="Клиент"
+            onChange={(option) => {
+              if (option) {
+                let result = {
+                  ...orderFormData,
+                  clientId:parseInt(option.value),
+                  clientName:option.label
+                };
+                setOrderFormData(result);
+              }
+            }}
+          />
+          
           <div style={{ display: "inline-block", width: "fit-content" }}>
             <DatePicker
               selected={new Date(orderFormData.pickupDate)}
@@ -187,13 +205,14 @@ export default function OrderForm() {
               dateFormat="P"
               onChange={(date) => {
                 if(date){
-                  setOrderFormData((order) => ({ ...order, pickupDate: formatISO(date) }));
+                  setOrderFormData((orderFormData) => ({ ...orderFormData, pickupDate: formatISO(date) }));
                 }
                 
               }}
               customInput={<TextField sx={textFieldStyle} size="small" />}
             />
           </div>
+          
           <Select
             value={getHoursOptions().filter(
               (option) =>
@@ -205,9 +224,9 @@ export default function OrderForm() {
             onChange={(option) => {
               if (option) {
                 let result = {
-                  ...order,
+                  ...orderFormData,
                   pickupDate: getNewDateWithHours(
-                    new Date(order.pickupDate),
+                    new Date(orderFormData.pickupDate),
                     option.value
                   ),
                 };
@@ -215,6 +234,7 @@ export default function OrderForm() {
               }
             }}
           />
+          
           <TextField
             size="small"
             type="tel"
@@ -222,12 +242,13 @@ export default function OrderForm() {
             value={orderFormData.clientPhone}
             label="Телефон"
             onChange={(evt) => {
-              setOrderFormData((order) => ({
-                ...order,
+              setOrderFormData((orderFormData) => ({
+                ...orderFormData,
                 clientPhone: evt.target.value,
               }));
             }}
           />
+          
           <TextField
             size="small"
             value={orderFormData.advancePaiment}
@@ -235,12 +256,13 @@ export default function OrderForm() {
             label="Капаро"
             onChange={(evt) => {
               let result = {
-                ...order,
+                ...orderFormData,
                 advancePaiment: parseFloat(evt.target.value),
               } as OrderDTO;
               setOrderFormData(result);
             }}
           />
+          
           <label>
             Платена?
             <Checkbox
@@ -248,8 +270,8 @@ export default function OrderForm() {
               color="error"
               checked={orderFormData.isPaid}
               onChange={(evt) => {
-                setOrderFormData((order) => ({
-                  ...order,
+                setOrderFormData((orderFormData) => ({
+                  ...orderFormData,
                   isPaid: evt.target.checked,
                 }));
               }}
@@ -257,6 +279,7 @@ export default function OrderForm() {
           </label>
         </div>
         <hr />
+        
         <ul>
           {productSelectorList.map((el, index) => (
             <div key={index}>

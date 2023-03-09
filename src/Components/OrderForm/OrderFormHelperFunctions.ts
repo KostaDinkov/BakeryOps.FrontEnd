@@ -1,14 +1,14 @@
-import {formatISO, isValid } from "date-fns";
+import { formatISO, isValid } from "date-fns";
 import ValidationResult from "../../Types/ValidationResult";
 import OrderDTO from "../../Types/OrderDTO";
 import ProductDTO from "../../Types/ProductDTO";
+import ClientDTO from "../../Types/ClientDTO";
+import { Label } from "@mui/icons-material";
 
 export function getNewDateWithHours(date: Date, hoursStr: string): string {
-  
   let parts = hoursStr.split(":");
   date.setHours(parseInt(parts[0]));
   date.setMinutes(parseInt(parts[1]));
-  
   return formatISO(date);
 }
 
@@ -26,10 +26,7 @@ export function validateOrder(order: OrderDTO): ValidationResult {
       `Невалидна дата за получаване: ${order.pickupDate} `
     );
   } else {
-    order.pickupDate = formatISO(
-      new Date(order.pickupDate)
-      
-    );
+    order.pickupDate = formatISO(new Date(order.pickupDate));
   }
 
   if (order.orderItems.length === 0) {
@@ -124,10 +121,24 @@ export function getHoursOptions(): { value: string; label: string }[] {
     "18:00",
     "18:30",
   ];
-  
+
   let hoursOptions = availableHours.map((hour) => ({
     value: hour,
     label: hour,
   }));
   return hoursOptions;
+}
+
+export function clientsToOptions(clients: ClientDTO[]): {
+  value: string;
+  label: string;
+}[] {
+  if (clients.length > 0) {
+    let options = clients.map((c) => ({
+      value: c.id.toString(),
+      label: c.name,
+    }));
+    return options;
+  }
+  return [];
 }

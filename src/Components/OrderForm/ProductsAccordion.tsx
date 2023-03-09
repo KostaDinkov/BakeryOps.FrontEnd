@@ -82,6 +82,7 @@ export default function ProductsAccordion({
           isExpanded={expanded === group[0]}
           onKeyDown={handleKeyDown(group[0], null)}
           name={group[0]}
+          setExpanded={setExpanded}
         >
           <div className={"products"}>
             <ul>
@@ -90,6 +91,10 @@ export default function ProductsAccordion({
                   key={p.id}
                   tabIndex={0}
                   onKeyDown={handleKeyDown(group[0], p)}
+                  onClick = {(evt)=>{
+                    evt.stopPropagation();
+                    handleDialogOpen(p,evt.target as HTMLElement);
+                  }}
                 >
                   <Typography>{p.name}</Typography>
                 </li>
@@ -112,7 +117,7 @@ export default function ProductsAccordion({
 }
 
 function Category(props: any) {
-  let { isExpanded, onChange, onKeyDown, name } = props;
+  let { isExpanded, setExpanded, onKeyDown, name } = props;
 
   let prodContainer = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -122,7 +127,16 @@ function Category(props: any) {
   }, [isExpanded]);
 
   return (
-    <div tabIndex={0} onKeyDown={onKeyDown} className="category">
+    <div
+      tabIndex={0}
+      onKeyDown={onKeyDown}
+      className="category"
+      onClick={() => {
+        if (isExpanded) {
+          setExpanded(false);
+        } else setExpanded(name);
+      }}
+    >
       <Typography variant="h6">{name}</Typography>
       <div hidden={!isExpanded} ref={prodContainer}>
         {props.children}

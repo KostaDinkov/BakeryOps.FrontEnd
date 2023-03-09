@@ -54,6 +54,7 @@ export default function ProductCountDialog({
         <input
           style={{ width: "50%" }}
           autoFocus
+          step={1}
           id="count"
           type="number"
           onChange={(e) => {
@@ -69,8 +70,8 @@ export default function ProductCountDialog({
       </DialogContent>
 
       <DialogActions>      
-        <Button onClick={()=>{handleClose(caller)}}>Cancel </Button>
-        <Button>Subscribe</Button>
+        <Button onClick={()=>{handleClose(caller)}}>Откажи</Button>
+        <Button onClick = {handleSubmit}>Добави</Button>
       </DialogActions>
     </Dialog>
   );

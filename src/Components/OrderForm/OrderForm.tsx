@@ -87,9 +87,9 @@ export default function OrderForm() {
     ))
   ); // list of ProductSelector components added to the OrderForm
 
-  useEffect(()=>{
+  useEffect(() => {
     focusNewSelector();
-  },[productSelectorList])
+  }, [productSelectorList]);
 
   //-- ADD NEW PRODUCT TO ORDER
   /**
@@ -109,18 +109,20 @@ export default function OrderForm() {
         />,
       ];
     });
-    
   }
 
-  function focusNewSelector(){
-    let allProductNameFields = [...document.querySelectorAll('[data-field="productNameField"]')];
-    
-    if(allProductNameFields.length>0){
-      let input = allProductNameFields.pop()?.querySelector('input') as HTMLInputElement;
-      console.log(input)
+  function focusNewSelector() {
+    let allProductNameFields = [
+      ...document.querySelectorAll('[data-field="productNameField"]'),
+    ];
+
+    if (allProductNameFields.length > 0) {
+      let input = allProductNameFields
+        .pop()
+        ?.querySelector("input") as HTMLInputElement;
+      console.log(input);
       input.focus();
     }
-    
   }
 
   //-- REMOVE PRODUCT FROM ORDER --
@@ -271,15 +273,22 @@ export default function OrderForm() {
           {/*//-- KAPARO Text Field */}
           <TextField
             size="small"
-            value={orderFormData.advancePaiment}
+            value={orderFormData.advancePaiment || ""}
             sx={textFieldStyle}
             label="Капаро"
             onChange={(evt) => {
-              let result = {
-                ...orderFormData,
-                advancePaiment: parseFloat(evt.target.value),
-              } as OrderDTO;
-              setOrderFormData(result);
+              let kaparo = parseFloat(evt.target.value);
+              if (!Object.is(kaparo, NaN)) {
+                setOrderFormData({
+                  ...orderFormData,
+                  advancePaiment: kaparo,
+                });
+              } else {
+                setOrderFormData({
+                  ...orderFormData,
+                  advancePaiment: 0,
+                });
+              }
             }}
           />
           {/*//-- PAID Checkbox */}

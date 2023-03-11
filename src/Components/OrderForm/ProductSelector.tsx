@@ -85,15 +85,23 @@ export default function ProductSelector({
         </div>
         <div>
           <TextField
-            value={productAmount}
+            value={productAmount || ""}
             label="Количество"
             sx={{ ...textFieldStyle, width: "100px" }}
             size="small"
             type="number"
             required
             onChange={(evt) => {
-              setProductAmount(parseFloat(evt.target.value));
-              selectorValues.productAmount = parseFloat(evt.target.value);
+              let quantity = parseFloat(evt.target.value);
+              if(!Object.is(quantity, NaN)){
+                setProductAmount(quantity);
+                selectorValues.productAmount = quantity;
+              }
+              else{
+                setProductAmount(0)
+                selectorValues.productAmount = 0;
+              }
+              
             }}
           />
         </div>

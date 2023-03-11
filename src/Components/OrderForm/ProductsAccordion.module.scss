@@ -1,0 +1,19 @@
+.container{
+    padding:16px;
+}
+
+.category{
+    cursor: pointer;
+    ul{
+        padding-left:16px;
+    }
+    li{
+        
+        :hover{
+            background-color: tomato;
+            color:white;
+        }
+        p{padding-left:8px;}
+    }
+}
+

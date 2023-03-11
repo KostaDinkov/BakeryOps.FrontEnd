@@ -22,7 +22,7 @@ import {
   getNewDateWithHours,
   validateOrder,
   getDefaultOrderFormData,
-  DefaultSelectorValues,
+  ProductSelectorValues,
   productsToOptions,
   getHoursOptions,
   clientsToOptions,
@@ -76,9 +76,10 @@ export default function OrderForm() {
     isValid: true,
     errors: [],
   } as ValidationResult);
+  
   let [productSelectorList, setProductSelectorList] = useState(
     order.orderItems.map((item) => (
-      <ProductSelector options={productOptions} selectorValues={item} />
+      <ProductSelector options={productOptions} selectorValues={new ProductSelectorValues(item)} />
     ))
   ); // list of ProductSelector components added to the OrderForm
 
@@ -87,9 +88,9 @@ export default function OrderForm() {
    * Dynamically add an input to the order form for an a new order Item with default values
    *
    */
-  function addNewProductSelector(selectorValues: DefaultSelectorValues) {
+  function addNewProductSelector(selectorValues: ProductSelectorValues) {
     if (!selectorValues) {
-      selectorValues = new DefaultSelectorValues();
+      selectorValues = new ProductSelectorValues();
     }
     setProductSelectorList((list) => {
       return [
@@ -169,7 +170,7 @@ export default function OrderForm() {
             />
           )}
         </Typography>
-        
+        {/*//-- Client Text Field */}
         <div className={styles.mainInfo}>
           <TextField
             value={orderFormData.clientName}
@@ -183,36 +184,39 @@ export default function OrderForm() {
               }));
             }}
           />{" "}
-                    <Select           
+          {/*//-- Client Selector */}
+          <Select
             options={clientsToOptions(clients)}
             placeholder="Клиент"
             onChange={(option) => {
               if (option) {
                 let result = {
                   ...orderFormData,
-                  clientId:parseInt(option.value),
-                  clientName:option.label
+                  clientId: parseInt(option.value),
+                  clientName: option.label,
                 };
                 setOrderFormData(result);
               }
             }}
           />
-          
+          {/*//-- DATE PICKER */}
           <div style={{ display: "inline-block", width: "fit-content" }}>
             <DatePicker
               selected={new Date(orderFormData.pickupDate)}
               locale="bg"
               dateFormat="P"
               onChange={(date) => {
-                if(date){
-                  setOrderFormData((orderFormData) => ({ ...orderFormData, pickupDate: formatISO(date) }));
+                if (date) {
+                  setOrderFormData((orderFormData) => ({
+                    ...orderFormData,
+                    pickupDate: formatISO(date),
+                  }));
                 }
-                
               }}
               customInput={<TextField sx={textFieldStyle} size="small" />}
             />
           </div>
-          
+          {/*//-- TIME Selector */}
           <Select
             value={getHoursOptions().filter(
               (option) =>
@@ -234,7 +238,7 @@ export default function OrderForm() {
               }
             }}
           />
-          
+          {/*//-- PHONE Text Field */}
           <TextField
             size="small"
             type="tel"
@@ -248,7 +252,7 @@ export default function OrderForm() {
               }));
             }}
           />
-          
+          {/*//-- KAPARO Text Field */}
           <TextField
             size="small"
             value={orderFormData.advancePaiment}
@@ -262,7 +266,7 @@ export default function OrderForm() {
               setOrderFormData(result);
             }}
           />
-          
+          {/*//-- PAID Checkbox */}
           <label>
             Платена?
             <Checkbox
@@ -279,7 +283,7 @@ export default function OrderForm() {
           </label>
         </div>
         <hr />
-        
+        {/*//-- PRODUCT Selectors */}
         <ul>
           {productSelectorList.map((el, index) => (
             <div key={index}>
@@ -304,17 +308,19 @@ export default function OrderForm() {
         <Button
           variant="outlined"
           onClick={() => {
-            addNewProductSelector(new DefaultSelectorValues());
+            addNewProductSelector(new ProductSelectorValues());
           }}
         >
           Добави продукт
         </Button>
         <Button
+          sx={{ marginLeft: "5px" }}
           variant="outlined"
           onClick={() => {
             setProductAccordionOpen(true);
           }}
         >
+          {" "}
           Избери продукти
         </Button>
         <div className={styles.submitGroup}>

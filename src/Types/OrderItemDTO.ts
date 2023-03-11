@@ -12,5 +12,6 @@ export default interface OrderItemDTO{
       priceDrebno:number;
       priceEdro:number;
       unit:string;
+      category:string;
     }
   }

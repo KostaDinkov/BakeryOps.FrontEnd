@@ -1,10 +1,13 @@
-import React from "react";
+import React, {useContext} from "react";
 import styles from "./PrintOrderView.module.css";
 import OrderDTO from "../Types/OrderDTO";
 import { format } from "date-fns";
-import { bg } from "date-fns/locale";
+import { bg, is } from "date-fns/locale";
 import { OrdersService } from "../API/ordersApi";
 import { useLoaderData} from "react-router-dom";
+import AppContext from "../appContext";
+import ProductDTO from "../Types/ProductDTO";
+import OrderItemDTO from "../Types/OrderItemDTO";
 
 export async function loader ({params}:{params:{id:number}}){
     let id = params.id;
@@ -14,9 +17,9 @@ export async function loader ({params}:{params:{id:number}}){
 }
 
 export default function PrintOrderView() {
-  
-    let order = useLoaderData() as OrderDTO;
 
+    const order = useLoaderData() as OrderDTO;
+   
   return (
     <div className={styles.pageView}>
       <OrderForPrint order={order} />
@@ -27,6 +30,13 @@ export default function PrintOrderView() {
 }
 
 function OrderForPrint({ order }: { order: OrderDTO }) {
+
+    let isSpecialPrice = false;
+    const {clients} = useContext(AppContext);
+    const client = clients.find(c=>c.id === order.clientId);
+    if(client){
+        isSpecialPrice = client.isSpecialPrice;
+    }
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -99,25 +109,25 @@ function OrderForPrint({ order }: { order: OrderDTO }) {
               </span>
             </div>
             <div className={styles.productPrice}>
-              <span>{toBGN(i.productAmount * i.product.priceDrebno)}</span>
+              <span>{toBGN(i.productAmount * getProductPrice(i,isSpecialPrice))}</span>
             </div>
           </div>
         ))}
       </div>
 
       <div className={styles.footer}>
-        <Footer order={order} />
+        <Footer order={order} isSpecialPrice={isSpecialPrice}/>
       </div>
     </div>
   );
 }
 
-function Footer({ order }: { order: OrderDTO }) {
+function Footer({ order, isSpecialPrice }: { order: OrderDTO, isSpecialPrice:boolean }) {
   if (order.isPaid) {
     return (
       <div className={styles.footerRow}>
         <span className={styles.footerInfo}>ПЛАТЕНА</span>
-        <span className={styles.footerTotal}>Сума: {getOrderPrice(order)}</span>
+        <span className={styles.footerTotal}>Сума: {getOrderPrice(order, isSpecialPrice)}</span>
       </div>
     );
   } else if (order.advancePaiment > 0) {
@@ -127,7 +137,7 @@ function Footer({ order }: { order: OrderDTO }) {
           Капаро: {toBGN(order.advancePaiment)}
         </span>
         <span className={styles.footerTotal}>
-          За доплащане: {toBGN(getOrderPrice(order))}
+          За доплащане: {toBGN(getOrderPrice(order, isSpecialPrice))}
         </span>
       </div>
     );
@@ -136,18 +146,19 @@ function Footer({ order }: { order: OrderDTO }) {
       <div className={styles.footerRow}>
         <span></span>
         <span className={styles.footerTotal}>
-          За плащане: {getOrderPrice(order)}
+          За плащане: {getOrderPrice(order, isSpecialPrice)}
         </span>
       </div>
     );
   }
 }
 
-function getOrderPrice(order: OrderDTO): number {
+function getOrderPrice(order: OrderDTO, isSpecialPrice:boolean): number {
   let price = 0;
   
   for (let item of order.orderItems) {
-    price += item.product.priceDrebno * item.productAmount;
+    price += getProductPrice(item, isSpecialPrice) * item.productAmount;
+    //TODO calculate foto price
   }
   if (order.advancePaiment > 0) {
     price = price - order.advancePaiment;
@@ -157,4 +168,13 @@ function getOrderPrice(order: OrderDTO): number {
 
 function toBGN(amount: number): string {
   return amount.toLocaleString("bg-BG", { style: "currency", currency: "BGN" });
+}
+
+function getProductPrice(orderItem:OrderItemDTO, isSpecialPrice: boolean ){
+    if(isSpecialPrice){
+        return Math.round((orderItem.product.priceDrebno / 1.5)*100)/100;
+    }
+    else{
+        return orderItem.product.priceDrebno;
+    }
 }

@@ -2,7 +2,8 @@ import React, { useRef, useEffect } from "react";
 import Typography from "@mui/material/Typography";
 import ProductDTO from "../../Types/ProductDTO";
 import ProductCountDialog from "./ProductCountDialog";
-import { DefaultSelectorValues } from "./OrderFormHelperFunctions";
+import { ProductSelectorValues } from "./OrderFormHelperFunctions";
+import styles from './ProductsAccordion.module.scss';
 
 interface ProductsByCategory {
   [category: string]: ProductDTO[];
@@ -13,7 +14,7 @@ export default function ProductsAccordion({
   addNewProductSelector,
 }: {
   products: ProductDTO[];
-  addNewProductSelector: (selectorValues: DefaultSelectorValues) => void;
+  addNewProductSelector: (selectorValues: ProductSelectorValues) => void;
 }) {
   let productsByCat = products.reduce(function (result, product) {
     (result[product.category] = result[product.category] || []).push(product);
@@ -21,11 +22,8 @@ export default function ProductsAccordion({
   }, {} as ProductsByCategory);
 
   const [dialogOpen, setDialogOpen] = React.useState(false);
-
   const [product, setProduct] = React.useState<ProductDTO | null>(null);
-
   const [expanded, setExpanded] = React.useState<string | false>(false);
-
   const [callerElement, setCallerElement] = React.useState<HTMLElement | null>(
     null
   );
@@ -75,9 +73,10 @@ export default function ProductsAccordion({
     };
 
   return (
-    <div>
+    <div className={styles.container}>
       {Object.entries(productsByCat).map((group) => (
-        <Category
+        <Category 
+          
           key={group[0]}
           isExpanded={expanded === group[0]}
           onKeyDown={handleKeyDown(group[0], null)}
@@ -128,9 +127,10 @@ function Category(props: any) {
 
   return (
     <div
+      
       tabIndex={0}
       onKeyDown={onKeyDown}
-      className="category"
+      className={[styles.category, "category"].join(" ")}
       onClick={() => {
         if (isExpanded) {
           setExpanded(false);

@@ -4,6 +4,8 @@ import OrderDTO from "../../Types/OrderDTO";
 import ProductDTO from "../../Types/ProductDTO";
 import ClientDTO from "../../Types/ClientDTO";
 import { Label } from "@mui/icons-material";
+import SelectorOptions from "../../Types/SelectorOptions";
+import OrderItemDTO from "../../Types/OrderItemDTO";
 
 export function getNewDateWithHours(date: Date, hoursStr: string): string {
   let parts = hoursStr.split(":");
@@ -70,36 +72,44 @@ export function getDefaultOrderFormData(): OrderDTO {
   };
 }
 
-export class DefaultSelectorValues {
+export class ProductSelectorValues {
   productId: number;
+  productCategory:string;
   productAmount: number;
   cakeFoto: string;
   cakeTitle: string;
   description: string;
-  constructor() {
-    this.productId = -1;
-    this.productAmount = 0;
-    this.cakeFoto = "";
-    this.cakeTitle = "";
-    this.description = "";
+  
+  constructor(item?: OrderItemDTO | undefined) {
+    this.productId = item?.productId || -1;
+    this.productAmount = item?.productAmount || 0;
+    this.cakeFoto = item?.cakeFoto || "";
+    this.cakeTitle = item?.cakeTitle || "";
+    this.description = item?.description || "";
+    this.productCategory = item?.product.category || "";
   }
+  
 }
+
+
 
 export function productsToOptions(
   products: ProductDTO[]
-): { value: number; label: string; code: string }[] {
+): SelectorOptions[] {
   if (products.length >= 1) {
     let options = products.map((p) => ({
-      value: p.id,
+      value: p.id.toString(),
       label: p.name,
       code: p.code,
+      category: p.category
+
     }));
     return options;
   }
   return [];
 }
 
-export function getHoursOptions(): { value: string; label: string }[] {
+export function getHoursOptions():SelectorOptions[] {
   let availableHours = [
     "09:00",
     "09:30",

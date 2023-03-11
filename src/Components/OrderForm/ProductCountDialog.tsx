@@ -5,7 +5,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import ProductDTO from "../../Types/ProductDTO";
-import { DefaultSelectorValues } from "./OrderFormHelperFunctions";
+import { ProductSelectorValues } from "./OrderFormHelperFunctions";
 
 export default function ProductCountDialog({
   product,
@@ -18,7 +18,7 @@ export default function ProductCountDialog({
   open: boolean;
   caller:HTMLElement;
   handleClose: (caller:HTMLElement) => void;
-  addNewProductSelector:(selectorValues:DefaultSelectorValues)=>void
+  addNewProductSelector:(selectorValues:ProductSelectorValues)=>void
 }) {
   const [count, setCount] = useState(0);
   const [inputElement, setInputElement] = useState<HTMLInputElement | null>(
@@ -33,7 +33,7 @@ export default function ProductCountDialog({
   }, [inputElement]);
 
   function handleSubmit() {
-    let selectorValues = new DefaultSelectorValues();
+    let selectorValues = new ProductSelectorValues();
     selectorValues.productAmount = count;
     selectorValues.productId = product.id;
     console.log(selectorValues);

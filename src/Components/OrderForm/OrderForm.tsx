@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import ProductSelector from "./ProductSelector";
 import AppContext from "../../appContext";
 import DatePicker, { registerLocale } from "react-datepicker";
@@ -87,6 +87,10 @@ export default function OrderForm() {
     ))
   ); // list of ProductSelector components added to the OrderForm
 
+  useEffect(()=>{
+    focusNewSelector();
+  },[productSelectorList])
+
   //-- ADD NEW PRODUCT TO ORDER
   /**
    * Dynamically add an input to the order form for an a new order Item with default values
@@ -105,6 +109,18 @@ export default function OrderForm() {
         />,
       ];
     });
+    
+  }
+
+  function focusNewSelector(){
+    let allProductNameFields = [...document.querySelectorAll('[data-field="productNameField"]')];
+    
+    if(allProductNameFields.length>0){
+      let input = allProductNameFields.pop()?.querySelector('input') as HTMLInputElement;
+      console.log(input)
+      input.focus();
+    }
+    
   }
 
   //-- REMOVE PRODUCT FROM ORDER --

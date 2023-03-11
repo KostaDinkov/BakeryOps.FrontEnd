@@ -61,10 +61,11 @@ export default function ProductSelector({
   };
 
   return (
-    <div className={styles.selectorContainer}>
+    <div className={styles.selectorContainer} >
       <div className={styles.productRow}>
-        <div className={styles.selectWrapper}>
+        <div className={styles.selectWrapper} data-field="productNameField">
           <Select
+            
             value={options.filter(
               (option) => option.value === productId.toString()
             )}
@@ -128,10 +129,12 @@ export default function ProductSelector({
           checked={showDescription}
           disabled={showDescriptionDisabled}
           onChange={(evt, checked) => setShowDescription(!showDescription)}
+          tabIndex={-1}
         />
       </div>
 
-      {showDescription &&<TextField
+      {showDescription &&
+      <TextField
         size="small"
         sx={textFieldStyle}
         value={description}

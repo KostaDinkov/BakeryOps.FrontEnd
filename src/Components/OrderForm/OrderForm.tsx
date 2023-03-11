@@ -26,6 +26,7 @@ import {
   productsToOptions,
   getHoursOptions,
   clientsToOptions,
+  getOrderTimeOrDefault,
 } from "./OrderFormHelperFunctions";
 import OrderDTO from "../../Types/OrderDTO";
 import ProductDTO from "../../Types/ProductDTO";
@@ -76,10 +77,13 @@ export default function OrderForm() {
     isValid: true,
     errors: [],
   } as ValidationResult);
-  
+
   let [productSelectorList, setProductSelectorList] = useState(
     order.orderItems.map((item) => (
-      <ProductSelector options={productOptions} selectorValues={new ProductSelectorValues(item)} />
+      <ProductSelector
+        options={productOptions}
+        selectorValues={new ProductSelectorValues(item)}
+      />
     ))
   ); // list of ProductSelector components added to the OrderForm
 
@@ -218,11 +222,7 @@ export default function OrderForm() {
           </div>
           {/*//-- TIME Selector */}
           <Select
-            value={getHoursOptions().filter(
-              (option) =>
-                option.label ===
-                format(new Date(orderFormData.pickupDate), "HH:mm")
-            )}
+            value={getOrderTimeOrDefault(orderFormData.pickupDate)}
             options={getHoursOptions()}
             placeholder="Час ..."
             onChange={(option) => {

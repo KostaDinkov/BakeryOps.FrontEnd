@@ -1,4 +1,4 @@
-export default interface SelectorOptions {
+export default interface SelectorOption {
   value: string;
   label: string;
   code?: string;

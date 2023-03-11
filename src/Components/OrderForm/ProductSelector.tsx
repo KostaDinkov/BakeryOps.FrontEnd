@@ -4,7 +4,7 @@ import styles from "./ProductSelector.module.css";
 import TextField from "@mui/material/TextField";
 import Checkbox from "@mui/material/Checkbox";
 import { textFieldStyle } from "./OrderForm";
-import SelectorOptions from "../../Types/SelectorOptions";
+import SelectorOption from "../../Types/SelectorOptions";
 import { ProductSelectorValues } from "./OrderFormHelperFunctions";
 
 export const selectorStyles = {
@@ -21,7 +21,7 @@ export default function ProductSelector({
   options,
   selectorValues,
 }: {
-  options: SelectorOptions[];
+  options: SelectorOption[];
   selectorValues: ProductSelectorValues;
 }) {
   let [productId, setProductId] = useState(-1);
@@ -48,7 +48,8 @@ export default function ProductSelector({
     ignoreCase: true,
     ignoreAccents: true,
     trim: false,
-    stringify: (option: SelectorOptions) => `${option.label} ${option.code}`,
+    //React select option has a specific shape. Custom properties are stored in the data object
+    stringify: (option:{label:string, value:string, data:any} ) => `${option.label} ${option.data.code}`,
     matchFrom: "any" as const,
   };
 

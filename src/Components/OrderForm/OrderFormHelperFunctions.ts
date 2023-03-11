@@ -1,10 +1,10 @@
-import { formatISO, isValid } from "date-fns";
+import { formatISO, isValid, format } from "date-fns";
 import ValidationResult from "../../Types/ValidationResult";
 import OrderDTO from "../../Types/OrderDTO";
 import ProductDTO from "../../Types/ProductDTO";
 import ClientDTO from "../../Types/ClientDTO";
 import { Label } from "@mui/icons-material";
-import SelectorOptions from "../../Types/SelectorOptions";
+import SelectorOption from "../../Types/SelectorOptions";
 import OrderItemDTO from "../../Types/OrderItemDTO";
 
 export function getNewDateWithHours(date: Date, hoursStr: string): string {
@@ -95,7 +95,7 @@ export class ProductSelectorValues {
 
 export function productsToOptions(
   products: ProductDTO[]
-): SelectorOptions[] {
+): SelectorOption[] {
   if (products.length >= 1) {
     let options = products.map((p) => ({
       value: p.id.toString(),
@@ -109,7 +109,7 @@ export function productsToOptions(
   return [];
 }
 
-export function getHoursOptions():SelectorOptions[] {
+export function getHoursOptions():SelectorOption[] {
   let availableHours = [
     "09:00",
     "09:30",
@@ -137,6 +137,15 @@ export function getHoursOptions():SelectorOptions[] {
     label: hour,
   }));
   return hoursOptions;
+}
+
+export function getOrderTimeOrDefault(pickupDate:string):SelectorOption{
+  let option = getHoursOptions().filter(option=>option.label === format(new Date(pickupDate), "HH:mm"))[0];
+  if(!option){
+    return getHoursOptions()[0];
+  }
+  return option;
+
 }
 
 export function clientsToOptions(clients: ClientDTO[]): {

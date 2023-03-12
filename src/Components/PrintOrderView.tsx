@@ -175,7 +175,7 @@ function getOrderPrice(order: OrderDTO, isSpecialPrice: boolean): number {
 
   for (let item of order.orderItems) {
     price += getProductPrice(item, isSpecialPrice) * item.productAmount;
-    //TODO calculate foto price
+    
   }
   if (order.advancePaiment > 0) {
     price = price - order.advancePaiment;

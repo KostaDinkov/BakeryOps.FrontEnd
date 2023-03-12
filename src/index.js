@@ -1,3 +1,7 @@
+//TODO implement realtime synchronization
+//TODO replace moment with date-fns everywhere
+//TODO cleanup and refactor where necessary
+
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
@@ -13,7 +17,6 @@ import LoginForm from "./Components/LoginForm";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import EventHub from "./EventHub";
 import PubSub from "pubsub-js";
-import ProductsAccordion, { loader } from "./Components/OrderForm/ProductsAccordion";
 import PrintOrderView ,{loader as PrintOrderViewLoader}from "./Components/PrintOrderView";
 
 const router = createBrowserRouter([
@@ -61,6 +64,7 @@ const router = createBrowserRouter([
   },
 ]);
 
+//Disable window vertical scrolling with the arrow keys.
 window.addEventListener("keydown",function(e){
   if(["ArrowUp","ArrowDown"].indexOf(e.code) > -1) {
     e.preventDefault();

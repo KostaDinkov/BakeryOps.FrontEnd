@@ -59,7 +59,7 @@ const NavBar = () => {
           color="primary"
           onClick={handleLogout}
         >
-          ИЗХОД
+          Вход
         </Button>
       ) : (
         <Link to="/login/">

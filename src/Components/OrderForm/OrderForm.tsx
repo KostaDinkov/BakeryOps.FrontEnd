@@ -1,4 +1,3 @@
-//TODO validate form inputs
 import React, { useState, useContext, useEffect } from "react";
 import ProductSelector from "./ProductSelector";
 import AppContext from "../../appContext";
@@ -346,7 +345,7 @@ export default function OrderForm() {
             setProductAccordionOpen(true);
           }}
         >
-          
+          {" "}
           Избери продукти
         </Button>
         <div className={styles.submitGroup}>

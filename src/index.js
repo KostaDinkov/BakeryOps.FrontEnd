@@ -1,4 +1,6 @@
 //TODO cleanup and refactor where necessary
+//TODO add print icon to OrderCard
+
 
 import React from "react";
 import ReactDOM from "react-dom/client";
@@ -69,8 +71,6 @@ window.addEventListener("keydown",function(e){
 
 const eventHub = new EventHub();
 PubSub.subscribe("SendUpdateOrders", eventHub.sendUpdateOrders);
-PubSub.subscribe("SendUpdateOrders", ()=>{console.log("SendUpdateOrders fired!")});
-
 
 const muiTheme = createTheme({
   palette: {

@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import styles from "./PrintOrderView.module.css";
 import OrderDTO from "../Types/OrderDTO";
 import { format } from "date-fns";
-import { bg, is } from "date-fns/locale";
+import { bg} from "date-fns/locale";
 import { OrdersService } from "../API/ordersApi";
 import { useLoaderData } from "react-router-dom";
 import AppContext from "../appContext";
@@ -24,7 +24,7 @@ export default function PrintOrderView() {
   if (foto) {
     PhotoPrice = foto.priceDrebno;
   } else {
-    throw new Error("Не може да бъде намерен продукт Фотокартина (id");
+    throw new Error(`Не може да бъде намерен продукт Фотокартина ${(350)}`);
   }
   const order = useLoaderData() as OrderDTO;
 

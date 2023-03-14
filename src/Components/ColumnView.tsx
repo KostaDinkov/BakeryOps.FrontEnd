@@ -1,6 +1,6 @@
-import React from "react";
+import React, {useState} from "react";
 import DayColumn from "./DayColumn";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate, useFetcher } from "react-router-dom";
 import styles from "./ColumnView.module.css"
 import {  OrdersService } from "../API/ordersApi";
 import OrderDTO from "../Types/OrderDTO";
@@ -15,12 +15,12 @@ export async function loader() {
 }
 
 function ColumnView() {
-  const navigate = useNavigate();
-  PubSub.subscribe("DBOrdersUpdated",(msg)=>{
-    console.log("Column View - Received UpdateOrders");
-    navigate(0);
+  const [orders, setOrders] = useState(useLoaderData() as OrderDTO[][]);
+
+  PubSub.subscribe("DBOrdersUpdated", async (msg)=>{
+    setOrders(await loader());
   })
-  const orders = useLoaderData() as OrderDTO[][];
+  
   return (
     <div className={styles.daysContainer}>
       {orders.map((group, index) => (

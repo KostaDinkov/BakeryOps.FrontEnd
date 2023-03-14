@@ -1,4 +1,5 @@
 import { add, formatISO } from "date-fns";
+import { STATUS_CODES } from "http";
 import { NotFoundError, UnauthorizedError } from "../system/errors";
 import OrderDTO from "../Types/OrderDTO";
 
@@ -50,7 +51,11 @@ export class OrdersService {
       if (response.status === 404) {
         throw new NotFoundError();
       }
-      return await response.json();
+      if(response.status === 200){
+        return await response.json();
+      }
+      throw Error(response.status + " "+ response.statusText)
+      
     } catch (error) {
       console.log("API error: getOrders", error);
       throw error;
@@ -87,8 +92,11 @@ export class OrdersService {
         },
         body: JSON.stringify(data),
       });
-
-      return response.json();
+      if(response.status == 200){
+        return response.json();
+      }
+      throw new Error(response.status+ " " +response.statusText)
+      
     } catch (error: any) {
       console.log("API error " + error.message);
       throw error;

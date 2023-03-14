@@ -7,7 +7,6 @@ import OrderCard from "./OrderCard.tsx";
 import styles from "./DayView.module.css";
 
 
-
 export async function DayViewLoader({ params }) {
   let dateParam = formatISO(new Date(params.date), { representation: "date" });
   return await ordersApi.getOrdersAsync(dateParam);

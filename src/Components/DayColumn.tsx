@@ -1,19 +1,20 @@
 import React from "react";
 import styles from "./DayColumn.module.css";
 import OrderCard from "./OrderCard";
-import moment from "moment/moment";
+import {format} from 'date-fns';
 import { Link } from "react-router-dom";
 import OrderDTO from "../Types/OrderDTO";
+import { bg } from "date-fns/locale";
 
 
 const DayColumn = ({ data }:{data:OrderDTO[]}) => {
-  const date = moment(data[0].pickupDate);
+  const date = new Date(data[0].pickupDate);
   return (
     <section>
       <header>
-        <Link to={`/orders/forDay/${date.format()}`}>
-          <span className={styles.date}>{date.date()}</span>{" "}
-          <span className={styles.monthYear}>{date.format("MMMM yyyy")}</span>
+        <Link to={`/orders/forDay/${format(date,"yyyy-MM-dd")}`}>
+          <span className={styles.date}>{format(date,"dd")}</span>{" "}
+          <span className={styles.monthYear}>{format(date,"MMMM yyyy",{locale:bg})}</span>
         </Link>
       </header>
       <div className={styles.orderList}>

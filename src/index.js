@@ -1,5 +1,3 @@
-//TODO implement realtime synchronization
-//TODO replace moment with date-fns everywhere
 //TODO cleanup and refactor where necessary
 
 import React from "react";
@@ -7,7 +5,6 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import moment from "moment/moment";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import OrderForm, { orderFormLoader } from "./Components/OrderForm/OrderForm";
 import Error from "./Components/Error";
@@ -74,24 +71,6 @@ const eventHub = new EventHub();
 PubSub.subscribe("SendUpdateOrders", eventHub.sendUpdateOrders);
 PubSub.subscribe("SendUpdateOrders", ()=>{console.log("SendUpdateOrders fired!")});
 
-moment.updateLocale("bg", {
-  months: [
-    "Януари",
-    "Февруари",
-    "Март",
-    "Април",
-    "Май",
-    "Юни",
-    "Юли",
-    "Август",
-    "Септември",
-    "Октомври",
-    "Ноември",
-    "Декември",
-  ],
-});
-
-moment.locale("bg");
 
 const muiTheme = createTheme({
   palette: {

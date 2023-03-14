@@ -27,7 +27,7 @@ export default function ProductCountDialog({
 
   useEffect(() => {
     if (open) {
-      console.log(inputElement);
+      
       inputElement?.focus();
     }
   }, [inputElement]);
@@ -36,7 +36,7 @@ export default function ProductCountDialog({
     let selectorValues = new ProductSelectorValues();
     selectorValues.productAmount = count;
     selectorValues.productId = product.id;
-    console.log(selectorValues);
+    
     addNewProductSelector(selectorValues);
     setCount(0);
     handleClose(caller);

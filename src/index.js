@@ -71,7 +71,8 @@ window.addEventListener("keydown",function(e){
 }},false);
 
 const eventHub = new EventHub();
-let token = PubSub.subscribe("SendUpdateOrders", eventHub.sendUpdateOrders);
+PubSub.subscribe("SendUpdateOrders", eventHub.sendUpdateOrders);
+PubSub.subscribe("SendUpdateOrders", ()=>{console.log("SendUpdateOrders fired!")});
 
 moment.updateLocale("bg", {
   months: [

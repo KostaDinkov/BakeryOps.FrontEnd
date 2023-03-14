@@ -16,6 +16,7 @@ import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
 import { NotFoundError, UnauthorizedError } from "../../system/errors";
 import Dialog from "@mui/material/Dialog";
+import PubSub from "pubsub-js";
 
 import ProductsAccordion from "./ProductsAccordion";
 import {
@@ -120,7 +121,7 @@ export default function OrderForm() {
       let input = allProductNameFields
         .pop()
         ?.querySelector("input") as HTMLInputElement;
-      console.log(input);
+      
       input.focus();
     }
   }
@@ -159,6 +160,7 @@ export default function OrderForm() {
       } else {
         orderResult = await OrdersService.PostOrderAsync(newOrder);
       }
+      PubSub.publish("SendUpdateOrders", {user:"",message:""})
       navigate(`/orders/print/${orderResult.id}`);
     }
   }
@@ -170,6 +172,7 @@ export default function OrderForm() {
   async function deleteOrder() {
     if (isEdit && orderFormData.id) {
       await ordersApi.deleteOrder(orderFormData.id);
+      PubSub.publish("SendUpdateOrders", {user:"",message:""})
       closeForm();
     }
   }

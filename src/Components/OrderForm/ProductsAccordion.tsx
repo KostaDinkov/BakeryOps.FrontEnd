@@ -32,7 +32,7 @@ export default function ProductsAccordion({
     let firstCategory = document.querySelector(
       "div.category"
     ) as HTMLDivElement;
-    console.log(firstCategory);
+    
     firstCategory.focus();
   }, []);
 

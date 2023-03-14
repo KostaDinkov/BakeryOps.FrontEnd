@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./OrderItem.module.css";
 import { useNavigate } from "react-router-dom";
-import { ordersApi } from "../API/ordersApi.ts";
+import { OrdersService } from "../API/ordersApi.ts";
 
 const OrderItem = ({ item, order }) => {
   let navigate = useNavigate();
@@ -18,7 +18,7 @@ const OrderItem = ({ item, order }) => {
   };
 
   async function updateOrder() {
-    await ordersApi.putOrder(order.id, order);
+    await OrdersService.PutOrderAsync(order.id, order);
     navigate(0);
   }
 

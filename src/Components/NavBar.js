@@ -1,6 +1,5 @@
 import React, { useState, useContext } from "react";
 import styles from "./NavBar.module.css";
-import { defaultOrderFormData } from "../appContext";
 import Button from "@mui/material/Button";
 import { Link, useNavigate } from "react-router-dom";
 import CalendarModal from "./CalendarModal";
@@ -48,6 +47,7 @@ const NavBar = () => {
           className={styles.buttonNew}
           variant="contained"
           color="secondary"
+          data-test="NavBar-NewOrderBtn"
         >
           Нова Поръчка
         </Button>
@@ -58,6 +58,7 @@ const NavBar = () => {
           variant="contained"
           color="primary"
           onClick={handleLogout}
+          data-test="NavBar-LogoutBtn"
         >
           Изход
         </Button>
@@ -67,6 +68,7 @@ const NavBar = () => {
             className={styles.buttonNew}
             variant="contained"
             color="primary"
+            data-test="NavBar-LoginBtn"
           >
             Вход
           </Button>

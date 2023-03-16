@@ -25,8 +25,6 @@ export class NotFoundError extends Error{
 }
 
 
-
-
 const errorMessage={
     unauthorized: "Нямате достъп до търсеният ресурс. Моля, влезте в системата с вашето потребителско име и парола.",
     notFound:"Ресурсът не може да бъде намерен"

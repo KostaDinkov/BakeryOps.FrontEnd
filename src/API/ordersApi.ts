@@ -219,7 +219,7 @@ export const productsApi = {
 };
 
 export const auth = {
-  login: async (userData: { username: string; password: string }) => {
+  login: async (userData: { userName: string; password: string }) :Promise<Response>  => {
     let response = await fetch(`${hostName}/api/security`, {
       method: "POST",
       headers: {
@@ -227,9 +227,7 @@ export const auth = {
       },
       body: JSON.stringify(userData),
     });
-    if (response.status === 401) {
-      return 401;
-    }
-    return response.text();
+    return response
+    
   },
 };

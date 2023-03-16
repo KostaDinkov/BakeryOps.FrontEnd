@@ -5,30 +5,35 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import styles from "./LoginForm.module.css";
-import { auth } from "../API/ordersApi.ts";
+import { auth } from "../API/ordersApi";
 import AppContext from "../appContext";
 
 
 export default function LoginForm() {
+  const tag = "Login Form";
   let [userName, setUserName] = useState("");
   let [password, setPassword] = useState("");
   let [isLogError, setIsLogError] = useState(false);
+  let [logErrorText, setLogErrorText]= useState("");
   let {isLogged, setIsLogged}= useContext(AppContext);
   const navigate = useNavigate();
 
-  const handleSubmit = async (evt) => {
+  const handleSubmit = async (evt:React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     
-    let result = await auth.login({userName, password});
-    if(result === 401){
-        console.log('Unauthorized')
-        setIsLogError(true);
-        return;
+    let response = await auth.login({userName, password});
+    
+    if(response.status === 200){
+      setIsLogged?.(true);
+      localStorage.setItem("token", await response.text());
+      localStorage.setItem("isLogged", "true");
+      navigate("/");
     }
-    setIsLogged(true);
-    localStorage.setItem("token",result);
-    localStorage.setItem("isLogged", "true");
-    navigate("/");
+    else{
+      setIsLogError(true);
+      setLogErrorText(`${response.status}: ${response.statusText}`);
+    }
+    
 
   };
 
@@ -39,6 +44,7 @@ export default function LoginForm() {
           <div className={styles.formContainer}>
             <Typography variant="h3">Вход за потребители</Typography>
             <TextField
+              data-test='LoginForm-nameInput'
               required
               id="username"
               label="Потребителско Име"
@@ -46,6 +52,7 @@ export default function LoginForm() {
               onChange={(evt) => setUserName(evt.target.value)}
             />
             <TextField
+              data-test='LoginForm-passwordInput'
               required
               id="password"
               label="Парола"
@@ -54,18 +61,18 @@ export default function LoginForm() {
               onChange={(evt) => setPassword(evt.target.value)}
             />
             <Button
+              data-test='LoginForm-loginBtn'
               className={styles.buttonMain}
               variant="contained"
               color="secondary"
-              type="submit"
-              
+              type="submit"              
             >
               Влез
             </Button>
           </div>
         </form>
         {isLogError && <div className = {styles.loginError}>
-            <Typography variant="h5" color="error">Невалидно име или парола!</Typography>
+            <Typography variant="h5" color="error">{logErrorText}</Typography>
         </div>}
       </Paper>
     </div>

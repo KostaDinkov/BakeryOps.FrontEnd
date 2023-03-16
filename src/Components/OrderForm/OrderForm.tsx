@@ -38,7 +38,7 @@ export async function orderFormLoader({
 }: {
   params: { method: string; id: number };
 }) {
-  if (localStorage.getItem("isLogged") === null) {
+  if (localStorage.getItem("isLogged") === null ||localStorage.getItem("isLogged") === "false") {
     //&& !JSON.parse(localStorage.getItem("isLogged"))
     throw new UnauthorizedError();
   }

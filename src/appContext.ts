@@ -9,23 +9,16 @@ const AppContext = React.createContext({
   user:"",
   isLogged:false,
   clients:[],
+  setIsLogged:null
 } as {
   orders:OrderDTO[];
   products: ProductDTO[];
   user:string;
   isLogged:boolean;
   clients:ClientDTO[];
+  setIsLogged: React.Dispatch<any> | null;
 });
 
-export const defaultOrderFormData = {
-  operatorId: 0,
-  pickupDate: "",
-  pickupTime: "",
-  clientName: "",
-  clientPhone: "",
-  isPaid: false,
-  advancePaiment: 0,
-  orderItems: [],
-};
+
 
 export default AppContext;

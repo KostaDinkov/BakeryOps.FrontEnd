@@ -287,6 +287,7 @@ export default function OrderForm() {
             sx={textFieldStyle}
             label="Капаро"
             data-test='OrderForm-kaparoInput'
+            type='number'
             onChange={(evt) => {
               let kaparo = parseFloat(evt.target.value);
               if (!Object.is(kaparo, NaN)) {

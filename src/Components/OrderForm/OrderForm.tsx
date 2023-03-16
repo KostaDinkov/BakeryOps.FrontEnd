@@ -202,6 +202,7 @@ export default function OrderForm() {
             sx={textFieldStyle}
             size="small"
             label="Клиент ..."
+            data-test='OrderForm-clientNameInput'
             onChange={(evt) => {
               setOrderFormData((orderFormData) => ({
                 ...orderFormData,
@@ -213,6 +214,7 @@ export default function OrderForm() {
           <Select
             options={clientsToOptions(clients)}
             placeholder="Клиент"
+            data-test='OrderForm-clientSelector'
             onChange={(option) => {
               if (option) {
                 let result = {
@@ -230,6 +232,7 @@ export default function OrderForm() {
               selected={new Date(orderFormData.pickupDate)}
               locale="bg"
               dateFormat="P"
+              data-test='OrderForm-datePicker'
               onChange={(date) => {
                 if (date) {
                   setOrderFormData((orderFormData) => ({
@@ -242,23 +245,26 @@ export default function OrderForm() {
             />
           </div>
           {/*//-- TIME Selector */}
-          <Select
-            value={getOrderTimeOrDefault(orderFormData.pickupDate)}
-            options={getHoursOptions()}
-            placeholder="Час ..."
-            onChange={(option) => {
-              if (option) {
-                let result = {
-                  ...orderFormData,
-                  pickupDate: getNewDateWithHours(
-                    new Date(orderFormData.pickupDate),
-                    option.value
-                  ),
-                };
-                setOrderFormData(result);
-              }
-            }}
-          />
+          <div data-test="OrderForm-timeSelector">
+            <Select
+              value={getOrderTimeOrDefault(orderFormData.pickupDate)}
+              options={getHoursOptions()}
+              placeholder="Час ..."
+             
+              onChange={(option) => {
+                if (option) {
+                  let result = {
+                    ...orderFormData,
+                    pickupDate: getNewDateWithHours(
+                      new Date(orderFormData.pickupDate),
+                      option.value
+                    ),
+                  };
+                  setOrderFormData(result);
+                }
+              }}
+            />
+          </div>
           {/*//-- PHONE Text Field */}
           <TextField
             size="small"
@@ -266,6 +272,7 @@ export default function OrderForm() {
             sx={textFieldStyle}
             value={orderFormData.clientPhone}
             label="Телефон"
+            data-test='OrderForm-phoneInput'
             onChange={(evt) => {
               setOrderFormData((orderFormData) => ({
                 ...orderFormData,
@@ -279,6 +286,7 @@ export default function OrderForm() {
             value={orderFormData.advancePaiment || ""}
             sx={textFieldStyle}
             label="Капаро"
+            data-test='OrderForm-kaparoInput'
             onChange={(evt) => {
               let kaparo = parseFloat(evt.target.value);
               if (!Object.is(kaparo, NaN)) {
@@ -301,6 +309,7 @@ export default function OrderForm() {
               size="medium"
               color="error"
               checked={orderFormData.isPaid}
+              data-test='OrderForm-paidCheckbox'
               onChange={(evt) => {
                 setOrderFormData((orderFormData) => ({
                   ...orderFormData,
@@ -335,6 +344,7 @@ export default function OrderForm() {
         </ul>
         <Button
           variant="outlined"
+          data-test='OrderForm-addProductBtn'
           onClick={() => {
             addNewProductSelector(new ProductSelectorValues());
           }}
@@ -355,7 +365,7 @@ export default function OrderForm() {
           <Button variant="contained" onClick={closeForm}>
             Откажи
           </Button>
-          <Button variant="contained" onClick={handleSubmit} color="secondary">
+          <Button variant="contained" onClick={handleSubmit} color="secondary" data-test='OrderForm-submitBtn'>
             Запази
           </Button>
         </div>

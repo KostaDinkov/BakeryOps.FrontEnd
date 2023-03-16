@@ -1,7 +1,7 @@
 @import "../styles/vars.css";
 
 .layoutContainer{
-    
+    margin-top:50px;
    height: 95vh;
    background-color: var(--color-blueGrey);
 }

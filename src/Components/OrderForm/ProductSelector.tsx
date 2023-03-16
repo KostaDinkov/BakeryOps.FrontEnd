@@ -63,9 +63,8 @@ export default function ProductSelector({
   return (
     <div className={styles.selectorContainer} >
       <div className={styles.productRow}>
-        <div className={styles.selectWrapper} data-field="productNameField">
-          <Select
-            
+        <div className={styles.selectWrapper} data-field="productNameField" data-test='ProductSelector-productSelector'>
+          <Select  
             value={options.filter(
               (option) => option.value === productId.toString()
             )}
@@ -85,6 +84,7 @@ export default function ProductSelector({
         </div>
         <div>
           <TextField
+            data-test='ProductSelector-amountInput'
             value={productAmount || ""}
             label="Количество"
             sx={{ ...textFieldStyle, width: "100px" }}
@@ -108,6 +108,7 @@ export default function ProductSelector({
         {isCakeCategory(selectorValues.productCategory) && (
           <>
             <TextField
+            data-test='ProductSelector-cakeTitleInput'
               value={cakeTitle}
               type="text"
               sx={textFieldStyle}
@@ -121,6 +122,7 @@ export default function ProductSelector({
 
             <TextField
               value={cakeFoto}
+              data-test='ProductSelector-cakeFotoInput'
               sx={{ ...textFieldStyle, width: "70px" }}
               type="text"
               placeholder="Фото"
@@ -134,6 +136,7 @@ export default function ProductSelector({
         )}
         Бележка?{" "}
         <Checkbox
+        data-test='ProductSelector-descriptionCheckBox'
           checked={showDescription}
           disabled={showDescriptionDisabled}
           onChange={(evt, checked) => setShowDescription(!showDescription)}
@@ -143,6 +146,7 @@ export default function ProductSelector({
 
       {showDescription &&
       <TextField
+        data-test='ProductSelector-descriptionInput'
         size="small"
         sx={textFieldStyle}
         value={description}

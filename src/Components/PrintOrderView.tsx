@@ -29,7 +29,7 @@ export default function PrintOrderView() {
   const order = useLoaderData() as OrderDTO;
 
   return (
-    <div className={styles.pageView}>
+    <div className={styles.pageView} data-test='PrintOrderView-container'>
       <OrderForPrint order={order} />
       <div className={styles.orderDivider}></div>
       <OrderForPrint order={order} />

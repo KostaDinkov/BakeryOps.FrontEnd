@@ -1,12 +1,12 @@
-import React, { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import ProductSelector from "./ProductSelector";
 import AppContext from "../../appContext";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { bg } from "date-fns/locale";
-import {  formatISO } from "date-fns";
+import { formatISO } from "date-fns";
 import Select from "react-select";
-import {  OrdersService } from "../../API/ordersApi";
+import { OrdersService } from "../../API/ordersApi";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import DeleteOrderDialog from "../DeleteOrderDialog";
 import styles from "./OrderForm.module.css";
@@ -14,7 +14,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
-import { NotFoundError, UnauthorizedError } from "../../system/errors";
+import { UnauthorizedError } from "../../system/errors";
 import Dialog from "@mui/material/Dialog";
 import PubSub from "pubsub-js";
 
@@ -30,7 +30,6 @@ import {
   getOrderTimeOrDefault,
 } from "./OrderFormHelperFunctions";
 import OrderDTO from "../../Types/OrderDTO";
-import ProductDTO from "../../Types/ProductDTO";
 import ValidationResult from "../../Types/ValidationResult";
 
 export async function orderFormLoader({
@@ -38,7 +37,10 @@ export async function orderFormLoader({
 }: {
   params: { method: string; id: number };
 }) {
-  if (localStorage.getItem("isLogged") === null ||localStorage.getItem("isLogged") === "false") {
+  if (
+    localStorage.getItem("isLogged") === null ||
+    localStorage.getItem("isLogged") === "false"
+  ) {
     //&& !JSON.parse(localStorage.getItem("isLogged"))
     throw new UnauthorizedError();
   }
@@ -121,7 +123,7 @@ export default function OrderForm() {
       let input = allProductNameFields
         .pop()
         ?.querySelector("input") as HTMLInputElement;
-      
+
       input.focus();
     }
   }
@@ -160,7 +162,7 @@ export default function OrderForm() {
       } else {
         orderResult = await OrdersService.PostOrderAsync(newOrder);
       }
-      PubSub.publish("SendUpdateOrders")
+      PubSub.publish("SendUpdateOrders");
       navigate(`/orders/print/${orderResult.id}`);
     }
   }
@@ -172,7 +174,7 @@ export default function OrderForm() {
   async function deleteOrder() {
     if (isEdit && orderFormData.id) {
       await OrdersService.DeleteOrderAsync(orderFormData.id);
-      PubSub.publish("SendUpdateOrders")
+      PubSub.publish("SendUpdateOrders");
       closeForm();
     }
   }
@@ -189,7 +191,7 @@ export default function OrderForm() {
           {isEdit ? "Редакция на Поръчка" : "Нова Поръчка"}{" "}
           {isEdit && (
             <input
-              data-test='OrderForm-deleteBtn'
+              data-test="OrderForm-deleteBtn"
               type="button"
               value="Изтрий"
               onClick={() => setShowDeleteDialog(true)}
@@ -203,7 +205,7 @@ export default function OrderForm() {
             sx={textFieldStyle}
             size="small"
             label="Клиент ..."
-            data-test='OrderForm-clientNameInput'
+            data-test="OrderForm-clientNameInput"
             onChange={(evt) => {
               setOrderFormData((orderFormData) => ({
                 ...orderFormData,
@@ -215,7 +217,7 @@ export default function OrderForm() {
           <Select
             options={clientsToOptions(clients)}
             placeholder="Клиент"
-            data-test='OrderForm-clientSelector'
+            data-test="OrderForm-clientSelector"
             onChange={(option) => {
               if (option) {
                 let result = {
@@ -233,7 +235,7 @@ export default function OrderForm() {
               selected={new Date(orderFormData.pickupDate)}
               locale="bg"
               dateFormat="P"
-              data-test='OrderForm-datePicker'
+              data-test="OrderForm-datePicker"
               onChange={(date) => {
                 if (date) {
                   setOrderFormData((orderFormData) => ({
@@ -251,7 +253,6 @@ export default function OrderForm() {
               value={getOrderTimeOrDefault(orderFormData.pickupDate)}
               options={getHoursOptions()}
               placeholder="Час ..."
-             
               onChange={(option) => {
                 if (option) {
                   let result = {
@@ -273,7 +274,7 @@ export default function OrderForm() {
             sx={textFieldStyle}
             value={orderFormData.clientPhone}
             label="Телефон"
-            data-test='OrderForm-phoneInput'
+            data-test="OrderForm-phoneInput"
             onChange={(evt) => {
               setOrderFormData((orderFormData) => ({
                 ...orderFormData,
@@ -287,8 +288,8 @@ export default function OrderForm() {
             value={orderFormData.advancePaiment || ""}
             sx={textFieldStyle}
             label="Капаро"
-            data-test='OrderForm-kaparoInput'
-            type='number'
+            data-test="OrderForm-kaparoInput"
+            type="number"
             onChange={(evt) => {
               let kaparo = parseFloat(evt.target.value);
               if (!Object.is(kaparo, NaN)) {
@@ -311,7 +312,7 @@ export default function OrderForm() {
               size="medium"
               color="error"
               checked={orderFormData.isPaid}
-              data-test='OrderForm-paidCheckbox'
+              data-test="OrderForm-paidCheckbox"
               onChange={(evt) => {
                 setOrderFormData((orderFormData) => ({
                   ...orderFormData,
@@ -346,7 +347,7 @@ export default function OrderForm() {
         </ul>
         <Button
           variant="outlined"
-          data-test='OrderForm-addProductBtn'
+          data-test="OrderForm-addProductBtn"
           onClick={() => {
             addNewProductSelector(new ProductSelectorValues());
           }}
@@ -367,7 +368,13 @@ export default function OrderForm() {
           <Button variant="contained" onClick={closeForm}>
             Откажи
           </Button>
-          <Button variant="contained" onClick={handleSubmit} color="secondary" data-test='OrderForm-submitBtn'>
+          
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            color="secondary"
+            data-test="OrderForm-submitBtn"
+          >
             Запази
           </Button>
         </div>

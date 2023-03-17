@@ -21,6 +21,9 @@
     display:block !important;
     border-left: 1px solid black ;
   }
+  .printBtnContainer{
+    display:none !important;
+  }
  
 }
 
@@ -144,4 +147,9 @@
   flex-grow: 1;
   text-align: right;
   padding-right: orderPadding;
+}
+.printBtnContainer{
+  display:flex;
+  justify-content: center;
+  margin-top: 20px;
 }

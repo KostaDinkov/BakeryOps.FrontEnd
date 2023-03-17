@@ -6,15 +6,17 @@ import { bg} from "date-fns/locale";
 import { OrdersService } from "../API/ordersApi";
 import { useLoaderData } from "react-router-dom";
 import AppContext from "../appContext";
-import ProductDTO from "../Types/ProductDTO";
+
 import OrderItemDTO from "../Types/OrderItemDTO";
+import PrintIcon from '@mui/icons-material/Print';
+import Button from "@mui/material/Button";
 
 let PhotoPrice: number;
 
 export async function loader({ params }: { params: { id: number } }) {
   let id = params.id;
   let order = await OrdersService.GetOrderAsync(id);
-  console.log(order);
+  
   return order;
 }
 
@@ -29,10 +31,17 @@ export default function PrintOrderView() {
   const order = useLoaderData() as OrderDTO;
 
   return (
-    <div className={styles.pageView} data-test='PrintOrderView-container'>
-      <OrderForPrint order={order} />
-      <div className={styles.orderDivider}></div>
-      <OrderForPrint order={order} />
+    <div>
+      <div className={styles.pageView} data-test='PrintOrderView-container'>
+        <OrderForPrint order={order} />
+        <div className={styles.orderDivider}></div>
+        <OrderForPrint order={order} />
+      </div>
+      <div className={styles.printBtnContainer}>
+        <Button variant="contained" endIcon={<PrintIcon />} onClick={()=>{window.print()}}>
+          Отпечатай
+        </Button>
+      </div>
     </div>
   );
 }

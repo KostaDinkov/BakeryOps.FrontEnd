@@ -160,7 +160,7 @@ export default function OrderForm() {
       } else {
         orderResult = await OrdersService.PostOrderAsync(newOrder);
       }
-      PubSub.publish("SendUpdateOrders", {user:"",message:""})
+      PubSub.publish("SendUpdateOrders")
       navigate(`/orders/print/${orderResult.id}`);
     }
   }
@@ -172,7 +172,7 @@ export default function OrderForm() {
   async function deleteOrder() {
     if (isEdit && orderFormData.id) {
       await ordersApi.deleteOrder(orderFormData.id);
-      PubSub.publish("SendUpdateOrders", {user:"",message:""})
+      PubSub.publish("SendUpdateOrders")
       closeForm();
     }
   }

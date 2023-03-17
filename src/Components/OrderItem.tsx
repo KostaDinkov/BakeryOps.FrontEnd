@@ -1,35 +1,47 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./OrderItem.module.css";
-import { useNavigate } from "react-router-dom";
-import { OrdersService } from "../API/ordersApi.ts";
+import { OrdersService } from "../API/ordersApi";
+import PubSub from "pubsub-js";
+import OrderItemDTO from "../Types/OrderItemDTO";
+import OrderDTO from "../Types/OrderDTO";
 
-const OrderItem = ({ item, order }) => {
-  let navigate = useNavigate();
 
+const OrderItem = ({ itemId, order }: { itemId: number; order: OrderDTO }) => {
+  const [item,setItem] = useState(
+    order.orderItems.find((i) => i.productId === itemId) as OrderItemDTO
+  );
+  const [isInProgress, setIsInProgress] = useState(item.isInProgress);
+  const [isComplete, setIsComplete] = useState(item.isComplete);
+
+  useEffect(()=>{
+    //!IMPORTANT Update state when props change
+    setItem(order.orderItems.find((i) => i.productId === itemId) as OrderItemDTO); 
+    setIsInProgress(item.isInProgress);
+    setIsComplete(item.isComplete);
+  },[order])
+  
+  
   let handleProgressChange = () => {
+    setIsInProgress(!isInProgress);
     item.isInProgress = !item.isInProgress;
     updateOrder();
   };
 
   let handleCompleteChange = () => {
     item.isComplete = !item.isComplete;
-
+    setIsComplete(!isComplete);
     updateOrder();
   };
 
   async function updateOrder() {
-    await OrdersService.PutOrderAsync(order.id, order);
-    navigate(0);
+    await OrdersService.PutOrderAsync(order.id as number, order);
+    PubSub.publish("SendUpdateOrders");
   }
 
   return (
     <dl
       className={
-        item.isComplete
-          ? styles.completed
-          : item.isInProgress
-          ? styles.inProgress
-          : null
+        isComplete ? styles.completed : isInProgress ? styles.inProgress : null
       }
     >
       <dt className={styles.itemHeader}>
@@ -40,7 +52,7 @@ const OrderItem = ({ item, order }) => {
             type="checkbox"
             name="isInProgress"
             id="isInProgress"
-            defaultChecked={item.isInProgress}
+            checked={isInProgress}           
             onChange={handleProgressChange}
           />
         </span>
@@ -49,7 +61,7 @@ const OrderItem = ({ item, order }) => {
             type="checkbox"
             name="isComplete"
             id="isComplete"
-            defaultChecked={item.isComplete}
+            checked={isComplete}            
             onChange={handleCompleteChange}
           />
         </span>

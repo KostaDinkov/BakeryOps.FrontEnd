@@ -31,7 +31,7 @@ describe("Critical App functionality", () => {
     cy.getByDataAttr("NavBar-LoginBtn").should("exist");
   });
 
-  it.only("User should be able to create an order", () => {
+  it("User should be able to create an order", () => {
     Login(Cypress.env("username"), Cypress.env("password"));
     cy.getByDataAttr("NavBar-NewOrderBtn").click();
 

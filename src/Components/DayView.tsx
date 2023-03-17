@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ordersApi } from "../API/ordersApi";
+import { OrdersService } from "../API/ordersApi";
 import { format, formatISO } from "date-fns";
 import { bg } from "date-fns/locale";
 import {
@@ -22,7 +22,7 @@ export async function DayViewLoader({
   let dateParam = formatISO(new Date(params.date as string), {
     representation: "date",
   });
-  let orders = await ordersApi.getOrdersAsync(dateParam);
+  let orders = await OrdersService.GetOrdersAsync(dateParam);
   //await sleep(3000);
   return orders;
 }

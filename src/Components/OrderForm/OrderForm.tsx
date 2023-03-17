@@ -4,9 +4,9 @@ import AppContext from "../../appContext";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { bg } from "date-fns/locale";
-import { format, formatISO } from "date-fns";
+import {  formatISO } from "date-fns";
 import Select from "react-select";
-import { ordersApi, OrdersService } from "../../API/ordersApi";
+import {  OrdersService } from "../../API/ordersApi";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import DeleteOrderDialog from "../DeleteOrderDialog";
 import styles from "./OrderForm.module.css";
@@ -171,7 +171,7 @@ export default function OrderForm() {
 
   async function deleteOrder() {
     if (isEdit && orderFormData.id) {
-      await ordersApi.deleteOrder(orderFormData.id);
+      await OrdersService.DeleteOrderAsync(orderFormData.id);
       PubSub.publish("SendUpdateOrders")
       closeForm();
     }

@@ -1,5 +1,3 @@
-//TODO fix delete order behavior
-//TODO fix update order item status behavior
 //TODO cleanup and refactor where necessary
 //TODO add print icon to OrderCard
 

@@ -29,7 +29,7 @@ const OrderCard = ({ order }:{order:OrderDTO}) => {
         <span className={styles.pickupTime}>{format(new Date(order.pickupDate),"HH:mm")}</span>{" "}
         <span>{order.clientName}</span>
         <div className={styles.editIcon}>
-          <Link to={`/orders/put/${order.id}`}>
+          <Link data-test="OrderCard-EditLink" to={`/orders/put/${order.id}`}>
             <EditIcon fontSize="small" cursor="pointer" sx={{color:"white"}} />
           </Link>
         </div>

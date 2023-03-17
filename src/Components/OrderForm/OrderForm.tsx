@@ -166,7 +166,7 @@ export default function OrderForm() {
   }
 
   function closeForm() {
-    navigate("/");
+    navigate(-1);
   }
 
   async function deleteOrder() {
@@ -189,6 +189,7 @@ export default function OrderForm() {
           {isEdit ? "Редакция на Поръчка" : "Нова Поръчка"}{" "}
           {isEdit && (
             <input
+              data-test='OrderForm-deleteBtn'
               type="button"
               value="Изтрий"
               onClick={() => setShowDeleteDialog(true)}

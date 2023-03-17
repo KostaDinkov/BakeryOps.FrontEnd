@@ -1,4 +1,5 @@
-import { closeSync, symlink } from "fs";
+import CreateOrder from "./procedures/CreateOrder";
+import Login from "./procedures/Login";
 
 describe("Critical App functionality", () => {
   it("Guest should not be able to create a new order", () => {
@@ -33,52 +34,18 @@ describe("Critical App functionality", () => {
 
   it("User should be able to create an order", () => {
     Login(Cypress.env("username"), Cypress.env("password"));
-    cy.getByDataAttr("NavBar-NewOrderBtn").click();
+    CreateOrder('01/01/2023');
+  });
+  
+  it("User should be able to delete an order", () => {
+    Login(Cypress.env("username"), Cypress.env("password"));
+    CreateOrder('02/01/2023');
+    cy.visit("/orders/forDay/2023-01-02");
+    cy.get("[data-test='OrderCard-EditLink']").should('have.length', 1).click();
+    cy.getByDataAttr("OrderForm-deleteBtn").click();
+    cy.getByDataAttr("DeleteOrderDialog-deleteBtn").click();
+    cy.location("pathname").should('include','/orders/forDay/2023-01-02');
+    cy.getByDataAttr("DayView-noOrdersDiv").invoke('text').then((text)=>{expect(text).to.eq(`Няма поръчки за 2-ри януари, 2023 г.`)});
 
-    cy.getByDataAttr("OrderForm-clientNameInput")
-      .find("input")
-      .type("CypressTest");
-
-    cy.get(".react-datepicker-wrapper")
-      .find("input")
-      .clear()
-      .type("01/01/2023");
-
-    cy.getByDataAttr("OrderForm-timeSelector")
-      .find("input")
-      .clear()
-      .type("12:30{enter}");
-    cy.getByDataAttr("OrderForm-phoneInput").find("input").type("123456789");
-    cy.getByDataAttr("OrderForm-kaparoInput").find("input").type("5.55");
-
-    cy.getByDataAttr("OrderForm-addProductBtn").click();
-
-    cy.getByDataAttr("ProductSelector-productSelector")
-      .find("input")
-      .type("Торта{enter}");
-    cy.getByDataAttr("ProductSelector-amountInput").find("input").type("2");
-    cy.getByDataAttr("ProductSelector-cakeTitleInput")
-      .find("input")
-      .type("Happy Birthday");
-    cy.getByDataAttr("ProductSelector-cakeFotoInput").find("input").type("999");
-    cy.getByDataAttr("ProductSelector-descriptionCheckBox")
-      .find("input")
-      .check();
-    cy.getByDataAttr("ProductSelector-descriptionInput")
-      .find("textarea")
-      .first()
-      .type("Happy birthday cake for cypress");
-    cy.getByDataAttr('OrderForm-submitBtn').click();
-
-    cy.location('pathname').should('include',"/orders/print/");
-    cy.getByDataAttr('PrintOrderView-container').should('exist');
   });
 });
-
-function Login(userName: string, password: string) {
-  cy.visit("/");
-  cy.getByDataAttr("NavBar-LoginBtn").click();
-  cy.getByDataAttr("LoginForm-nameInput").find("input").type(userName);
-  cy.getByDataAttr("LoginForm-passwordInput").find("input").type(password);
-  cy.getByDataAttr("LoginForm-loginBtn").click();
-}

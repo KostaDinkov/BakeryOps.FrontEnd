@@ -35,7 +35,7 @@ export default function DeleteOrderDialog({open, setOpen, onDelete}) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Откажи</Button>
-          <Button onClick={handleDelete} autoFocus>
+          <Button data-test="DeleteOrderDialog-deleteBtn" onClick={handleDelete} autoFocus>
             Изтрий
           </Button>
         </DialogActions>

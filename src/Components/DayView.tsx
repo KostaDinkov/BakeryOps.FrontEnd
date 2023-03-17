@@ -63,7 +63,7 @@ export default function DayView() {
           </div>
         </div>
       ) : (
-        <div className={styles.noOrders}>
+        <div data-test="DayView-noOrdersDiv" className={styles.noOrders}>
           Няма поръчки за{" "}
           {format(new Date(params.date as string), "do MMMM, yyyy г.", {
             locale: bg,

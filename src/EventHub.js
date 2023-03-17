@@ -17,10 +17,7 @@ export default class EventHub {
     if (this.eventConnection) {
       this.eventConnection.logging = true;
       this.eventConnection.start().then((result) => {
-        console.log("Connected to eventHub");
-
         this.eventConnection.on("UpdateOrders", (message) => {
-          console.log("EventHub: received UpdateOrders");
           PubSub.publish("DBOrdersUpdated", message);
         });
       });
@@ -29,7 +26,9 @@ export default class EventHub {
 
   sendUpdateOrders = () => {
     if (this.eventConnection.state === HubConnectionState.Connected) {
-      this.eventConnection.invoke("UpdateClients").catch(err=>console.log(err));
+      this.eventConnection
+        .invoke("UpdateClients")
+        .catch((err) => console.log(err));
     }
   };
 }

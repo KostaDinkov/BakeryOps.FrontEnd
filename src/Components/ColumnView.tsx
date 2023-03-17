@@ -22,7 +22,7 @@ function ColumnView() {
   }, []);
 
   async function reload(msg: string) {
-    console.log("Received DBOrdersUpdated");
+    
     let loaderData = await loader();
     setOrders(loaderData);
   }

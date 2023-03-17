@@ -3,13 +3,13 @@ import {
   HubConnectionState,
   LogLevel,
 } from "@microsoft/signalr";
-import { eventHubUrl } from "./API/ordersApi.ts";
 import PubSub from "pubsub-js";
+import config from './appConfig.json'
 
 export default class EventHub {
   constructor() {
     this.eventConnection = new HubConnectionBuilder()
-      .withUrl(eventHubUrl)
+      .withUrl(`${config.apiServer}/${config.eventHubPath}`)
       .withAutomaticReconnect()
       .configureLogging(LogLevel.Information)
       .build();

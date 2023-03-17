@@ -163,7 +163,7 @@ function Footer({
       <div className={styles.footerRow}>
         <span></span>
         <span className={styles.footerTotal}>
-          За плащане: {getOrderPrice(order, isSpecialPrice)}
+          За плащане: {toBGN(getOrderPrice(order, isSpecialPrice))}
         </span>
       </div>
     );

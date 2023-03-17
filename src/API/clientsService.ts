@@ -1,9 +1,9 @@
 
 import { NotFoundError, UnauthorizedError } from "../system/errors";
 import ClientDTO from "../Types/ClientDTO";
-import OrderDTO from "../Types/OrderDTO";
-export const hostName = "http://localhost:5000";
-export const eventHubUrl = `${hostName}/eventHub`;
+import config from '../appConfig.json';
+export const hostName = config.apiServer;
+export const eventHubUrl = `${hostName}/${config.eventHubPath}`;
 
 export default class ClientsService {
   static async GetClientsAsync(): Promise<ClientDTO[][]> {

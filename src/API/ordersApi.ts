@@ -1,9 +1,10 @@
 import { add, formatISO } from "date-fns";
 import { NotFoundError, UnauthorizedError } from "../system/errors";
 import OrderDTO from "../Types/OrderDTO";
+import config from '../appConfig.json';
 
-export const hostName = "http://localhost:5000";
-export const eventHubUrl = `${hostName}/eventHub`;
+const hostName = config.apiServer;
+const eventHubUrl = `${hostName}/${config.eventHubPath}`;
 
 export class OrdersService {
   static async GetOrdersAsync(

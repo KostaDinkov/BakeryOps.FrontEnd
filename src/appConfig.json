@@ -1,4 +1,0 @@
-{
-    "apiServer": "http://localhost:5000",
-    "eventHubPath":"eventHub"
-}

@@ -1,10 +1,8 @@
 import { add, formatISO } from "date-fns";
 import { NotFoundError, UnauthorizedError } from "../system/errors";
 import OrderDTO from "../Types/OrderDTO";
-import config from '../appConfig.json';
 
-const hostName = config.apiServer;
-const eventHubUrl = `${hostName}/${config.eventHubPath}`;
+const hostName =  process.env.REACT_APP_API_SERVER_URL;
 
 export class OrdersService {
   static async GetOrdersAsync(

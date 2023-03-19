@@ -1,9 +1,7 @@
 
 import { NotFoundError, UnauthorizedError } from "../system/errors";
 import ClientDTO from "../Types/ClientDTO";
-import config from '../appConfig.json';
-export const hostName = config.apiServer;
-export const eventHubUrl = `${hostName}/${config.eventHubPath}`;
+export const hostName = process.env.REACT_APP_SERVER_URL;;
 
 export default class ClientsService {
   static async GetClientsAsync(): Promise<ClientDTO[][]> {

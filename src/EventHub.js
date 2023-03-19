@@ -4,12 +4,14 @@ import {
   LogLevel,
 } from "@microsoft/signalr";
 import PubSub from "pubsub-js";
-import config from './appConfig.json'
+
+const hostName = process.env.REACT_APP_API_SERVER_URL;
+const eventHubPath = process.env.REACT_APP_API_SERVER_EVENT_HUB_PATH;
 
 export default class EventHub {
   constructor() {
     this.eventConnection = new HubConnectionBuilder()
-      .withUrl(`${config.apiServer}/${config.eventHubPath}`)
+      .withUrl(`${hostName}${eventHubPath}`)
       .withAutomaticReconnect()
       .configureLogging(LogLevel.Information)
       .build();

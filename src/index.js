@@ -1,7 +1,5 @@
-//TODO fix OrderItem states not updating on change in realtime (on other clients)
 //TODO fix nginx config to allow for react router
 //TODO cleanup and refactor where necessary
-
 
 import React from "react";
 import ReactDOM from "react-dom/client";

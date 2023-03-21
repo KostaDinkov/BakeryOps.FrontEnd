@@ -46,6 +46,7 @@ export async function orderFormLoader({
   }
   let isEdit = params.method === "put";
   let date = new Date();
+  date.setHours(9, 0, 0, 0);
   let order: OrderDTO;
 
   if (isEdit) {
@@ -53,6 +54,7 @@ export async function orderFormLoader({
     date = new Date(order.pickupDate);
   } else {
     order = getDefaultOrderFormData();
+
   }
   return {
     order: { ...order, pickupDate: date },

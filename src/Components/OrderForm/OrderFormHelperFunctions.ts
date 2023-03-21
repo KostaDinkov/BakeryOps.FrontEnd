@@ -61,7 +61,7 @@ export function validateOrder(order: OrderDTO): ValidationResult {
 export function getDefaultOrderFormData(): OrderDTO {
   return {
     operatorId: 0,
-    pickupDate: "",
+    pickupDate: formatISO((()=>{let date = new Date(); date.setHours(9,0,0,0); return date})()),
     createdDate: formatISO(new Date()),
     status: 0,
     clientName: "",

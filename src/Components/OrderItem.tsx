@@ -8,17 +8,21 @@ import OrderDTO from "../Types/OrderDTO";
 
 const OrderItem = ({ itemId, order }: { itemId: number; order: OrderDTO }) => {
   const [item,setItem] = useState(
-    order.orderItems.find((i) => i.productId === itemId) as OrderItemDTO
+    order.orderItems.find((i) => i.id === itemId) as OrderItemDTO
   );
   const [isInProgress, setIsInProgress] = useState(item.isInProgress);
   const [isComplete, setIsComplete] = useState(item.isComplete);
 
   useEffect(()=>{
     //!IMPORTANT Update state when props change
-    setItem(order.orderItems.find((i) => i.productId === itemId) as OrderItemDTO); 
+    setItem(order.orderItems.find((i) => i.id === itemId) as OrderItemDTO); 
+   
+  },[order])
+
+  useEffect(()=>{
     setIsInProgress(item.isInProgress);
     setIsComplete(item.isComplete);
-  },[order])
+  },[item])
   
   
   let handleProgressChange = () => {

@@ -55,7 +55,7 @@ const OrderCard = ({ order }:{order:OrderDTO}) => {
       </div>
       <ul>
         {order.orderItems.map((item, index) => (
-          <OrderItem key={item.productId} itemId={item.productId} order={order} />
+          <OrderItem key={item.id as number} itemId={item.id as number} order={order} />
         ))}
       </ul>
     </div>

@@ -1,4 +1,6 @@
-//TODO fix nginx config to allow for react router
+//TODO add custom price function for special price clients
+//TODO add custom order layout for day view
+//TODO fix nginx config to allow for react router refresh
 //TODO cleanup and refactor where necessary
 
 import React from "react";

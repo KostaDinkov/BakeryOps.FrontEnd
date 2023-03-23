@@ -9,7 +9,7 @@ import PubSub from "pubsub-js";
 
 export async function loader() {
   let today = formatISO(new Date(), { representation: "date" });
-  let endDate = formatISO(addDays(new Date(), 3), { representation: "date" });
+  let endDate = formatISO(addDays(new Date(), 4), { representation: "date" });
   let data = await OrdersService.GetOrdersAsync(today, endDate);
   return data;
 }

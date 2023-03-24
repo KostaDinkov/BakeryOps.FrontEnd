@@ -1,4 +1,5 @@
 @value orderPadding: 2mm;
+@value formWidth: 135mm;
 
 @page {
   size: A4 landscape;
@@ -39,7 +40,8 @@
   display: none;
 }
 .container {
-  width: 135mm;
+  font-size:0.8rem;
+  width: formWidth;
   min-height: 190mm;
   border: 1px solid black;
   display: flex;
@@ -87,35 +89,42 @@
     padding-left: orderPadding;
 }
 
-
 .productList {
+  width: formWidth;
   box-sizing: border-box;
   border-top: 1px black solid;
   flex-grow: 1;
 }
 .productRow {
-  padding-top: orderPadding;
+  
   display: flex;
+  border-bottom: 1px dashed grey;
 }
-.productName {
+.productContainer {
   display: inline-block;
-  width: 9cm;
+  width: 8cm;
   padding-left: orderPadding;
+  overflow-y: hidden;
+}
+.productUnitPrice{
+  display: inline-block;
+  vertical-align: top;
+  padding-left: orderPadding;
+  flex: 1;
 }
 .productCount {
   display: inline-block;
   vertical-align: top;
   padding-left: orderPadding;
-  width: 1cm;
-  flex-grow: 1;
+  flex:1;
 }
 .productPrice {
   display: inline-block;
   text-align: right;
+  
   padding-right: orderPadding;
   vertical-align: top;
-  width: 1.5cm;
-  flex-grow: 1;
+  flex:1;
 }
 
 .productDescription {

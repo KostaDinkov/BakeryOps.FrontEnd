@@ -7,6 +7,7 @@ export default interface OrderItemDTO{
     cakeTitle?: string;
     isInProgress: boolean;
     isComplete: boolean;
+    itemUnitPrice: number;
     product:{
       name:string;
       priceDrebno:number;

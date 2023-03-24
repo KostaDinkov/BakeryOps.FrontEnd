@@ -61,7 +61,13 @@ export function validateOrder(order: OrderDTO): ValidationResult {
 export function getDefaultOrderFormData(): OrderDTO {
   return {
     operatorId: 0,
-    pickupDate: formatISO((()=>{let date = new Date(); date.setHours(9,0,0,0); return date})()),
+    pickupDate: formatISO(
+      (() => {
+        let date = new Date();
+        date.setHours(9, 0, 0, 0);
+        return date;
+      })()
+    ),
     createdDate: formatISO(new Date()),
     status: 0,
     clientName: "",
@@ -74,12 +80,13 @@ export function getDefaultOrderFormData(): OrderDTO {
 
 export class ProductSelectorValues {
   productId: number;
-  productCategory:string;
+  productCategory: string;
   productAmount: number;
   cakeFoto: string;
   cakeTitle: string;
   description: string;
-  
+  itemUnitPrice: number;
+
   constructor(item?: OrderItemDTO | undefined) {
     this.productId = item?.productId || -1;
     this.productAmount = item?.productAmount || 0;
@@ -87,29 +94,24 @@ export class ProductSelectorValues {
     this.cakeTitle = item?.cakeTitle || "";
     this.description = item?.description || "";
     this.productCategory = item?.product.category || "";
+    this.itemUnitPrice = item?.itemUnitPrice || 0.0;
   }
-  
 }
 
-
-
-export function productsToOptions(
-  products: ProductDTO[]
-): SelectorOption[] {
+export function productsToOptions(products: ProductDTO[]): SelectorOption[] {
   if (products.length >= 1) {
     let options = products.map((p) => ({
       value: p.id.toString(),
       label: p.name,
       code: p.code,
-      category: p.category
-
+      category: p.category,
     }));
     return options;
   }
   return [];
 }
 
-export function getHoursOptions():SelectorOption[] {
+export function getHoursOptions(): SelectorOption[] {
   let availableHours = [
     "09:00",
     "09:30",
@@ -139,13 +141,14 @@ export function getHoursOptions():SelectorOption[] {
   return hoursOptions;
 }
 
-export function getOrderTimeOrDefault(pickupDate:string):SelectorOption{
-  let option = getHoursOptions().filter(option=>option.label === format(new Date(pickupDate), "HH:mm"))[0];
-  if(!option){
+export function getOrderTimeOrDefault(pickupDate: string): SelectorOption {
+  let option = getHoursOptions().filter(
+    (option) => option.label === format(new Date(pickupDate), "HH:mm")
+  )[0];
+  if (!option) {
     return getHoursOptions()[0];
   }
   return option;
-
 }
 
 export function clientsToOptions(clients: ClientDTO[]): {
@@ -160,4 +163,41 @@ export function clientsToOptions(clients: ClientDTO[]): {
     return options;
   }
   return [];
+}
+
+/** 
+ * Get the 'special' price of the product with discount applied
+// @param cenaDrebno - price of the product as used in store with included Vat
+// @param discountPercent - discount in percent, like 20 for 20%
+**/
+export function getSpecialPrice(
+  cenaDrebno: number,
+  discountPercent: number
+): number {
+  // First we take price without Vat
+  // Next we apply discount
+  // Next we add half of Vat to the result
+  // Last we round to 2 decimal places
+  let vat = 0.2;
+  let halfVat = vat / 2;
+  let discount = discountPercent / 100;
+  let final = (cenaDrebno / (1 + vat) / (1 + discount)) * (1 + halfVat);
+
+  return Math.round((final + Number.EPSILON) * 100) / 100;
+}
+
+export function getItemUnitPrice(
+  item: OrderItemDTO,
+  products: ProductDTO[],
+  client: ClientDTO | undefined | null
+): number {
+  if (item.itemUnitPrice !== 0) {
+    return item.itemUnitPrice;
+  }
+  let product = products.filter((p) => p.id === item.productId)[0];
+
+  if (client && client.isSpecialPrice) {
+    return getSpecialPrice(product.priceDrebno, client.discountPercent);
+  }
+  return product.priceDrebno;
 }

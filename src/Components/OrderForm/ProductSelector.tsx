@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
-import Select, { createFilter } from "react-select";
+import React, { useEffect, useState, useContext } from "react";
+import Select, { createFilter, SingleValue } from "react-select";
 import styles from "./ProductSelector.module.css";
 import TextField from "@mui/material/TextField";
 import Checkbox from "@mui/material/Checkbox";
 import { textFieldStyle } from "./OrderForm";
 import SelectorOption from "../../Types/SelectorOptions";
 import { ProductSelectorValues } from "./OrderFormHelperFunctions";
+
 
 export const selectorStyles = {
   control: (styles: any) => ({
@@ -29,9 +30,10 @@ export default function ProductSelector({
   let [cakeTitle, setCakeTitle] = useState("");
   let [cakeFoto, setCakeFoto] = useState("");
   let [description, setDescription] = useState("");
+
   let [showDescription, setShowDescription] = useState(selectorValues.description!=="");
   let [showDescriptionDisabled, setShowDescriptionDisabled] = useState(selectorValues.description!=="");
-
+  
   useEffect(() => {
     if (selectorValues !== undefined) {
       setProductId(selectorValues.productId);
@@ -60,6 +62,14 @@ export default function ProductSelector({
     return false;
   };
 
+  const handleProductChange=(option:SingleValue<SelectorOption>)=>{
+    if (option) {
+      setProductId(parseInt(option.value));
+      selectorValues.productId = parseInt(option.value);
+      selectorValues.productCategory = option.category || "";     
+    }
+  }
+
   return (
     <div className={styles.selectorContainer} >
       <div className={styles.productRow}>
@@ -71,13 +81,7 @@ export default function ProductSelector({
             placeholder="Продукт ..."
             options={options}
             filterOption={createFilter(filterConfig)}
-            onChange={(option) => {
-              if (option) {
-                setProductId(parseInt(option.value));
-                selectorValues.productId = parseInt(option.value);
-                selectorValues.productCategory = option.category || "";
-              }
-            }}
+            onChange={handleProductChange}
             styles={selectorStyles}
             required
           />

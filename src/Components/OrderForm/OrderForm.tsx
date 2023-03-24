@@ -28,9 +28,11 @@ import {
   getHoursOptions,
   clientsToOptions,
   getOrderTimeOrDefault,
+  getItemUnitPrice,
 } from "./OrderFormHelperFunctions";
 import OrderDTO from "../../Types/OrderDTO";
 import ValidationResult from "../../Types/ValidationResult";
+import OrderItemDTO from "../../Types/OrderItemDTO";
 
 export async function orderFormLoader({
   params,
@@ -143,14 +145,20 @@ export default function OrderForm() {
   //-- SUBMIT ORDER --
   async function handleSubmit(event: any) {
     event.preventDefault();
-    let orderItems = productSelectorList.map(
+    let orderItems:OrderItemDTO[] = productSelectorList.map(
       (selector) => selector.props.selectorValues
     );
 
-    let newOrder = {
+    let newOrder: OrderDTO = {
       ...orderFormData,
       orderItems: orderItems,
     };
+
+    //calculate and assign item unit prices
+    newOrder.orderItems.forEach((item) => {
+      let client = clients.find((c) => c.id === newOrder.clientId);
+      item.itemUnitPrice = getItemUnitPrice(item, products, client);
+    })
 
     const newValidationResult = validateOrder(newOrder);
     setValidationResult(newValidationResult);

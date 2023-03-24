@@ -7,5 +7,6 @@ export default interface ClientDTO {
   email: string;
   isCompany: boolean;
   isSpecialPrice: boolean;
+  discountPercent: number;
   orders: OrderDTO[];
 }

@@ -2,13 +2,13 @@ import React, { useContext } from "react";
 import styles from "./PrintOrderView.module.css";
 import OrderDTO from "../Types/OrderDTO";
 import { format } from "date-fns";
-import { bg} from "date-fns/locale";
+import { bg } from "date-fns/locale";
 import { OrdersService } from "../API/ordersApi";
 import { useLoaderData } from "react-router-dom";
 import AppContext from "../appContext";
 
 import OrderItemDTO from "../Types/OrderItemDTO";
-import PrintIcon from '@mui/icons-material/Print';
+import PrintIcon from "@mui/icons-material/Print";
 import Button from "@mui/material/Button";
 
 let PhotoPrice: number;
@@ -16,29 +16,37 @@ let PhotoPrice: number;
 export async function loader({ params }: { params: { id: number } }) {
   let id = params.id;
   let order = await OrdersService.GetOrderAsync(id);
-  
+
   return order;
 }
 
 export default function PrintOrderView() {
   const { products } = useContext(AppContext);
+  //TODO change to barcode query
+  //TODO remove foto dependency from PrintOrderView
   const foto = products.find((p) => p.id === 350);
   if (foto) {
     PhotoPrice = foto.priceDrebno;
   } else {
-    throw new Error(`Не може да бъде намерен продукт Фотокартина ${(350)}`);
+    throw new Error(`Не може да бъде намерен продукт Фотокартина ${350}`);
   }
   const order = useLoaderData() as OrderDTO;
 
   return (
     <div>
-      <div className={styles.pageView} data-test='PrintOrderView-container'>
+      <div className={styles.pageView} data-test="PrintOrderView-container">
         <OrderForPrint order={order} />
         <div className={styles.orderDivider}></div>
         <OrderForPrint order={order} />
       </div>
       <div className={styles.printBtnContainer}>
-        <Button variant="contained" endIcon={<PrintIcon />} onClick={()=>{window.print()}}>
+        <Button
+          variant="contained"
+          endIcon={<PrintIcon />}
+          onClick={() => {
+            window.print();
+          }}
+        >
           Отпечатай
         </Button>
       </div>
@@ -47,12 +55,6 @@ export default function PrintOrderView() {
 }
 
 function OrderForPrint({ order }: { order: OrderDTO }) {
-  let isSpecialPrice = false;
-  const { clients } = useContext(AppContext);
-  const client = clients.find((c) => c.id === order.clientId);
-  if (client) {
-    isSpecialPrice = client.isSpecialPrice;
-  }
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -66,7 +68,7 @@ function OrderForPrint({ order }: { order: OrderDTO }) {
             {format(new Date(order.createdDate), "dd-MM-yyyy")} за:
           </div>
           <div className={styles.orderDate}>
-            {format(new Date(order.pickupDate), "EEEE do MMMM yyyy HH:mm", {
+            {format(new Date(order.pickupDate), "EEEE dd-MM-yyyy HH:mm", {
               locale: bg,
             })}
             ч.
@@ -80,21 +82,26 @@ function OrderForPrint({ order }: { order: OrderDTO }) {
       </div>
       <div className={styles.productList}>
         <div className={styles.productRow}>
-          <div className={styles.productName}>
-            <div>Продукти</div>
+          <div className={styles.productContainer}>
+            <div className={styles.productName}>
+              <div>Продукти</div>
+            </div>
+          </div>
+          <div className={styles.productUnitPrice}>
+            <div>Ед.ц.</div>
           </div>
           <div className={styles.productCount}>
             <div>Кол.</div>
           </div>
           <div className={styles.productPrice}>
-            <div>Цена</div>
+            <div>Общо</div>
           </div>
         </div>
 
         {order.orderItems.map((i, index) => (
           <div className={styles.productRow} key={index + "" + i.productId}>
-            <div className={styles.productName}>
-              <div className={styles.bigText}>
+            <div className={styles.productContainer}>
+              <div className={styles.productName}>
                 {index + 1}. {i.product?.name}
               </div>
               <div className={styles.productDescription}>{i.description}</div>
@@ -119,40 +126,36 @@ function OrderForPrint({ order }: { order: OrderDTO }) {
                 )}
               </div>
             </div>
+            <div className={styles.productUnitPrice}>
+              <span>
+                {i.itemUnitPrice} 
+              </span>
+            </div>
             <div className={styles.productCount}>
               <span>
                 {i.productAmount} {i.product?.unit}
               </span>
             </div>
             <div className={styles.productPrice}>
-              <span>
-                {toBGN(i.productAmount * getProductPrice(i, isSpecialPrice))}
-              </span>
+              <span>{toBGN(i.productAmount * i.itemUnitPrice)}</span>
             </div>
           </div>
         ))}
       </div>
 
       <div className={styles.footer}>
-        <Footer order={order} isSpecialPrice={isSpecialPrice} />
+        <Footer order={order} />
       </div>
     </div>
   );
 }
 
-function Footer({
-  order,
-  isSpecialPrice,
-}: {
-  order: OrderDTO;
-  isSpecialPrice: boolean;
-}) {
+function Footer({ order }: { order: OrderDTO }) {
   if (order.isPaid) {
     return (
       <div className={styles.footerRow}>
-        <span className={styles.footerInfo}>ПЛАТЕНА</span>
         <span className={styles.footerTotal}>
-          Сума: {getOrderPrice(order, isSpecialPrice)}
+          ПЛАТЕНА: {toBGN(getOrderPrice(order))}
         </span>
       </div>
     );
@@ -163,7 +166,7 @@ function Footer({
           Капаро: {toBGN(order.advancePaiment)}
         </span>
         <span className={styles.footerTotal}>
-          За доплащане: {toBGN(getOrderPrice(order, isSpecialPrice))}
+          За доплащане: {toBGN(getOrderPrice(order))}
         </span>
       </div>
     );
@@ -172,40 +175,34 @@ function Footer({
       <div className={styles.footerRow}>
         <span></span>
         <span className={styles.footerTotal}>
-          За плащане: {toBGN(getOrderPrice(order, isSpecialPrice))}
+          За плащане: {toBGN(getOrderPrice(order))}
         </span>
       </div>
     );
   }
 }
 
-function getOrderPrice(order: OrderDTO, isSpecialPrice: boolean): number {
-  let price = 0;
+function getOrderPrice(order: OrderDTO): number {
+  let totalPrice = 0;
 
   for (let item of order.orderItems) {
-    price += getProductPrice(item, isSpecialPrice) * item.productAmount;
-    
+    totalPrice += getProductPrice(item) * item.productAmount;
   }
   if (order.advancePaiment > 0) {
-    price = price - order.advancePaiment;
+    totalPrice = totalPrice - order.advancePaiment;
   }
-  return price;
+  return totalPrice;
 }
 
 function toBGN(amount: number): string {
   return amount.toLocaleString("bg-BG", { style: "currency", currency: "BGN" });
 }
 
-function getProductPrice(orderItem: OrderItemDTO, isSpecialPrice: boolean) {
+function getProductPrice(orderItem: OrderItemDTO) {
   let price = 0;
-  if(orderItem.cakeFoto?.trim()!== ""){
+  if (orderItem.cakeFoto?.trim() !== "") {
     price += PhotoPrice;
   }
-  if (isSpecialPrice) {
-    price += Math.round((orderItem.product.priceDrebno / 1.5) * 100) / 100;
-  } else {
-    price += orderItem.product.priceDrebno;
-  }
-
+  price += orderItem.itemUnitPrice;
   return price;
 }

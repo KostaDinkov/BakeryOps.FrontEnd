@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import styles from "./App.module.css";
-import NavBar from "./Components/NavBar";
+import NavBar from "./Components/NavBar/NavBar";
 import AppContext from "./appContext";
 import { productsApi } from "./API/ordersApi.ts";
 import ClientsService from "./API/clientsService";

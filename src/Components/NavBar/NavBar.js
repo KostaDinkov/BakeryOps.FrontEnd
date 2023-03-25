@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import { Link, useNavigate } from "react-router-dom";
 import CalendarModal from "./CalendarModal";
 import { formatISO } from "date-fns";
-import AppContext from "../appContext";
+import AppContext from "../../appContext";
 
 
 const NavBar = () => {

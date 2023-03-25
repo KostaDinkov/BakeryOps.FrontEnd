@@ -1,13 +1,13 @@
 import React, { useContext } from "react";
 import styles from "./PrintOrderView.module.css";
-import OrderDTO from "../Types/OrderDTO";
+import OrderDTO from "../../Types/OrderDTO";
 import { format } from "date-fns";
 import { bg } from "date-fns/locale";
-import { OrdersService } from "../API/ordersApi";
+import { OrdersService } from "../../API/ordersApi";
 import { useLoaderData } from "react-router-dom";
-import AppContext from "../appContext";
+import AppContext from "../../appContext";
 
-import OrderItemDTO from "../Types/OrderItemDTO";
+import OrderItemDTO from "../../Types/OrderItemDTO";
 import PrintIcon from "@mui/icons-material/Print";
 import Button from "@mui/material/Button";
 

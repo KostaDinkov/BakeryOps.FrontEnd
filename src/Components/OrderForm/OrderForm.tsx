@@ -3,12 +3,11 @@ import ProductSelector from "./ProductSelector";
 import AppContext from "../../appContext";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { bg } from "date-fns/locale";
-import { formatISO } from "date-fns";
+import { bg } from "date-fns/locale"
 import Select from "react-select";
 import { OrdersService } from "../../API/ordersApi";
 import { useLoaderData, useNavigate } from "react-router-dom";
-import DeleteOrderDialog from "../DeleteOrderDialog";
+import DeleteOrderDialog from "./DeleteOrderDialog";
 import styles from "./OrderForm.module.css";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
@@ -29,6 +28,7 @@ import {
   clientsToOptions,
   getOrderTimeOrDefault,
   getItemUnitPrice,
+  getStringFromDate,
 } from "./OrderFormHelperFunctions";
 import OrderDTO from "../../Types/OrderDTO";
 import ValidationResult from "../../Types/ValidationResult";
@@ -47,19 +47,18 @@ export async function orderFormLoader({
     throw new UnauthorizedError();
   }
   let isEdit = params.method === "put";
-  let date = new Date();
-  date.setHours(9, 0, 0, 0);
+  
   let order: OrderDTO;
 
   if (isEdit) {
     order = await OrdersService.GetOrderAsync(params.id);
-    date = new Date(order.pickupDate);
+    
   } else {
     order = getDefaultOrderFormData();
 
   }
   return {
-    order: { ...order, pickupDate: date },
+    order,
     isEdit,
   };
 }
@@ -248,9 +247,10 @@ export default function OrderForm() {
               data-test="OrderForm-datePicker"
               onChange={(date) => {
                 if (date) {
+                  
                   setOrderFormData((orderFormData) => ({
                     ...orderFormData,
-                    pickupDate: formatISO(date),
+                    pickupDate: getStringFromDate(date),
                   }));
                 }
               }}

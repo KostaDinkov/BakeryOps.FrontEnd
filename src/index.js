@@ -10,13 +10,13 @@ import reportWebVitals from "./reportWebVitals";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import OrderForm, { orderFormLoader } from "./Components/OrderForm/OrderForm";
 import Error from "./Components/Error";
-import ColumnView, { loader as ordersLoader } from "./Components/ColumnView.tsx";
-import DayView, { DayViewLoader } from "./Components/DayView";
-import LoginForm from "./Components/LoginForm";
+import ColumnView, { loader as ordersLoader } from "./Components/ColumnView/ColumnView.tsx";
+import DayView, { DayViewLoader } from "./Components/DayView/DayView";
+import LoginForm from "./Components/LoginForm/LoginForm";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import EventHub from "./EventHub";
 import PubSub from "pubsub-js";
-import PrintOrderView ,{loader as PrintOrderViewLoader}from "./Components/PrintOrderView";
+import PrintOrderView ,{loader as PrintOrderViewLoader}from "./Components/PrintOrderView/PrintOrderView";
 
 const router = createBrowserRouter([
   {

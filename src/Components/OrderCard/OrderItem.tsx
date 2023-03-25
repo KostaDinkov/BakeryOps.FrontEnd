@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styles from "./OrderItem.module.css";
-import { OrdersService } from "../API/ordersApi";
+import { OrdersService } from "../../API/ordersApi";
 import PubSub from "pubsub-js";
-import OrderItemDTO from "../Types/OrderItemDTO";
-import OrderDTO from "../Types/OrderDTO";
+import OrderItemDTO from "../../Types/OrderItemDTO";
+import OrderDTO from "../../Types/OrderDTO";
 
 
 const OrderItem = ({ itemId, order }: { itemId: number; order: OrderDTO }) => {

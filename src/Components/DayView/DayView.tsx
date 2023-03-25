@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { OrdersService } from "../API/ordersApi";
+import { OrdersService } from "../../API/ordersApi";
 import { format, formatISO } from "date-fns";
 import { bg } from "date-fns/locale";
 import {
@@ -8,10 +8,10 @@ import {
   useParams,
   useNavigation,
 } from "react-router-dom";
-import OrderCard from "./OrderCard";
+import OrderCard from "../OrderCard/OrderCard";
 import styles from "./DayView.module.css";
-import OrderDTO from "../Types/OrderDTO";
-import { sleep } from "../system/utils";
+import OrderDTO from "../../Types/OrderDTO";
+import { sleep } from "../../system/utils";
 import LinearProgress from '@mui/material/LinearProgress';
 
 export async function DayViewLoader({

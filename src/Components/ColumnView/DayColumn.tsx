@@ -1,9 +1,9 @@
 import React from "react";
 import styles from "./DayColumn.module.css";
-import OrderCard from "./OrderCard";
+import OrderCard from "../OrderCard/OrderCard";
 import {format} from 'date-fns';
 import { Link } from "react-router-dom";
-import OrderDTO from "../Types/OrderDTO";
+import OrderDTO from "../../Types/OrderDTO";
 import { bg } from "date-fns/locale";
 
 

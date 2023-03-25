@@ -1,4 +1,4 @@
-@import "../styles/vars.css";
+@import "../../styles/vars.css";
 
 .navBarContainer {
   background-color: var(--color-blueGrey);

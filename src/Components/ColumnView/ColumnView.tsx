@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import DayColumn from "./DayColumn";
 import { useLoaderData, useNavigate, useFetcher } from "react-router-dom";
 import styles from "./ColumnView.module.css";
-import { OrdersService } from "../API/ordersApi";
-import OrderDTO from "../Types/OrderDTO";
+import { OrdersService } from "../../API/ordersApi";
+import OrderDTO from "../../Types/OrderDTO";
 import { formatISO, addDays } from "date-fns";
 import PubSub from "pubsub-js";
 

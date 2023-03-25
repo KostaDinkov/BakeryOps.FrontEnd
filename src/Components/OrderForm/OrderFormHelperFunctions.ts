@@ -1,17 +1,26 @@
-import { formatISO, isValid, format } from "date-fns";
+import { isValid, format } from "date-fns";
 import ValidationResult from "../../Types/ValidationResult";
 import OrderDTO from "../../Types/OrderDTO";
 import ProductDTO from "../../Types/ProductDTO";
 import ClientDTO from "../../Types/ClientDTO";
-import { Label } from "@mui/icons-material";
 import SelectorOption from "../../Types/SelectorOptions";
 import OrderItemDTO from "../../Types/OrderItemDTO";
+
+export const dateTimeFormat = "yyyy-MM-dd'T'HH:mm:ss";
 
 export function getNewDateWithHours(date: Date, hoursStr: string): string {
   let parts = hoursStr.split(":");
   date.setHours(parseInt(parts[0]));
   date.setMinutes(parseInt(parts[1]));
-  return formatISO(date);
+  const dateStr = getStringFromDate(date);
+  console.log(`DateStr: ${dateStr}`);
+  
+  return dateStr;
+  
+}
+
+export function getStringFromDate(date: Date): string {
+  return format(date, dateTimeFormat);
 }
 
 export function validateOrder(order: OrderDTO): ValidationResult {
@@ -28,7 +37,7 @@ export function validateOrder(order: OrderDTO): ValidationResult {
       `Невалидна дата за получаване: ${order.pickupDate} `
     );
   } else {
-    order.pickupDate = formatISO(new Date(order.pickupDate));
+    order.pickupDate = getStringFromDate(new Date(order.pickupDate));
   }
 
   if (order.orderItems.length === 0) {
@@ -61,14 +70,14 @@ export function validateOrder(order: OrderDTO): ValidationResult {
 export function getDefaultOrderFormData(): OrderDTO {
   return {
     operatorId: 0,
-    pickupDate: formatISO(
+    pickupDate: getStringFromDate(
       (() => {
         let date = new Date();
         date.setHours(9, 0, 0, 0);
         return date;
       })()
     ),
-    createdDate: formatISO(new Date()),
+    createdDate: getStringFromDate(new Date()),
     status: 0,
     clientName: "",
     clientPhone: "",

@@ -5,8 +5,8 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import styles from "./LoginForm.module.css";
-import { auth } from "../API/ordersApi";
-import AppContext from "../appContext";
+import { auth } from "../../API/ordersApi";
+import AppContext from "../../appContext";
 
 
 export default function LoginForm() {

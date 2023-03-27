@@ -12,7 +12,8 @@ import OrderCard from "../OrderCard/OrderCard";
 import styles from "./DayView.module.css";
 import OrderDTO from "../../Types/OrderDTO";
 import { sleep } from "../../system/utils";
-import LinearProgress from '@mui/material/LinearProgress';
+import LinearProgress from "@mui/material/LinearProgress";
+import OrderStripe from "./OrderStripe";
 
 export async function DayViewLoader({
   params,
@@ -31,6 +32,7 @@ export default function DayView() {
   const ordersByDate = useLoaderData() as OrderDTO[][];
   const { state } = useNavigation();
   const [orders, setOrders] = useState(ordersByDate[0]);
+  const [stripes, setStripes] = useState(true);
   let params = useParams();
 
   useEffect(() => {
@@ -48,19 +50,27 @@ export default function DayView() {
     return false;
   }
 
-  return (<>
-      
+  return (
+    <>
       {isOrders() ? (
         <div className={styles.layoutContainer}>
-          {state==="loading" &&  <LinearProgress/>}
+          {state === "loading" && <LinearProgress />}
           <div className={styles.title}>
             <h1>{formatDate(orders[0].pickupDate)}</h1>
           </div>
-          <div className={styles.ordersContainer}>
-            {orders.map((order) => (
-              <OrderCard key={order.id} order={order} />
-            ))}
-          </div>
+          {stripes ? (
+            <div className={styles.ordersContainer}>
+              {orders.map((order) => (
+                <OrderStripe key = {order.id} order={order}/>
+              ))}
+            </div>
+          ) : (
+            <div className={styles.ordersContainer}>
+              {orders.map((order) => (
+                <OrderCard key={order.id} order={order} />
+              ))}
+            </div>
+          )}
         </div>
       ) : (
         <div data-test="DayView-noOrdersDiv" className={styles.noOrders}>

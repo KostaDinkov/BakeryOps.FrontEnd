@@ -1,6 +1,6 @@
 export default interface Product{
     
-        id: number;
+        id: string;
         name: string;
         barcode: string;
         category: string;
@@ -9,4 +9,7 @@ export default interface Product{
         code: string;
         dateCreated: string;
         unit:string;
+        hasDiscount: boolean;
+        keepPriceDrebno: boolean;
+        inPriceList: boolean;
 }

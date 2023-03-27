@@ -1,11 +1,6 @@
 @value orderPadding: 2mm;
 @value formWidth: 135mm;
 
-@page {
-  size: A4 landscape;
-  margin: 0.75cm;
-  
-}
 
 @media print{
   body{

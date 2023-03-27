@@ -1,6 +1,6 @@
 export default interface OrderItemDTO{
     id?:number;
-    productId: number;
+    productId: string;
     productAmount: number;
     description: string;
     cakeFoto?: string;

@@ -5,6 +5,7 @@ import NavBar from "./Components/NavBar/NavBar";
 import AppContext from "./appContext";
 import { productsApi } from "./API/ordersApi.ts";
 import ClientsService from "./API/clientsService";
+import ProductsService from "./API/productsService";
 
 
 function App() {
@@ -19,7 +20,7 @@ function App() {
   }, []);
 
   async function fetchProducts() {
-    const products = await productsApi.getProducts()
+    const products = await ProductsService.getProducts()
     setProducts(products);
   }
 

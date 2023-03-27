@@ -1,0 +1,26 @@
+.reportsPageContainer {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+}
+
+.sideBar{
+    background-color: #f5f5f5;
+    border-right: 1px solid #e5e5e5;
+    height: 100%;
+    width: 20%;
+    
+    
+    
+    padding-top: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+}
+
+@media print{
+    .sideBar{
+        display:none!important
+    }
+}

@@ -1,0 +1,10 @@
+.priceListContainer{
+    width:18cm;
+    margin-left: 20px;
+}
+
+@media print{
+    .priceListMenu{
+        display:none!important
+    }
+}

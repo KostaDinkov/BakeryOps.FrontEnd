@@ -17,6 +17,9 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import EventHub from "./EventHub";
 import PubSub from "pubsub-js";
 import PrintOrderView ,{loader as PrintOrderViewLoader}from "./Components/PrintOrderView/PrintOrderView";
+import ReportsPage from "./Components/ReportsPage/ReportsPage";
+import PriceList from "./Components/PriceList/PriceList.tsx";
+import { loader as PriceListLoader } from "./Components/PriceList/PriceList.tsx";
 
 const router = createBrowserRouter([
   {
@@ -57,8 +60,18 @@ const router = createBrowserRouter([
         path: "/login/",
         element: <LoginForm />,
       },
-      
- 
+      {
+        path:"/reports/",
+        element:<ReportsPage/>,
+        children:[
+          {
+            path:"/reports/priceList/",
+            element:<PriceList/>,
+            loader: PriceListLoader,
+          }
+          
+        ]
+      }
     ],
   },
 ]);

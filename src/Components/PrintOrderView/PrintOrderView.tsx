@@ -24,14 +24,20 @@ export default function PrintOrderView() {
   const { products } = useContext(AppContext);
   //TODO change to barcode query
   //TODO remove foto dependency from PrintOrderView
-  const foto = products.find((p) => p.id === 350);
+  const foto = products.find((p) => p.code === "foto");
   if (foto) {
     PhotoPrice = foto.priceDrebno;
   } else {
     throw new Error(`Не може да бъде намерен продукт Фотокартина ${350}`);
   }
   const order = useLoaderData() as OrderDTO;
-
+  const handlePrint = () => {
+    var styleElement = document.getElementById("pageStyle");
+    if (styleElement) {
+      styleElement.innerHTML = `@page{size:A4 landscape; margin: 0.75cm;}`;
+    }
+    window.print();
+  }
   return (
     <div>
       <div className={styles.pageView} data-test="PrintOrderView-container">
@@ -43,9 +49,7 @@ export default function PrintOrderView() {
         <Button
           variant="contained"
           endIcon={<PrintIcon />}
-          onClick={() => {
-            window.print();
-          }}
+          onClick={handlePrint}
         >
           Отпечатай
         </Button>

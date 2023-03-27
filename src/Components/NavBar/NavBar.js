@@ -52,6 +52,16 @@ const NavBar = () => {
           Нова Поръчка
         </Button>
       </Link>
+      <Link to="/reports">
+        <Button
+          className={styles.buttonNew}
+          variant="contained"
+          
+          data-test="NavBar-ReportsBtn"
+        >
+          Справки
+        </Button>
+      </Link>
       {isLogged ? (
         <Button
           className={styles.buttonNew}

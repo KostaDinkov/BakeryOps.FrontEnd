@@ -118,12 +118,7 @@ export class OrdersService {
   }
 }
 
-export const productsApi = {
-  getProducts: async () => {
-    const response = await fetch(`${hostName}/api/products`);
-    return await response.json();
-  },
-};
+
 
 export const auth = {
   login: async (userData: { userName: string; password: string }) :Promise<Response>  => {

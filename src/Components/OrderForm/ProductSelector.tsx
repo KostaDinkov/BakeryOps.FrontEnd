@@ -25,7 +25,7 @@ export default function ProductSelector({
   options: SelectorOption[];
   selectorValues: ProductSelectorValues;
 }) {
-  let [productId, setProductId] = useState(-1);
+  let [productId, setProductId] = useState("");
   let [productAmount, setProductAmount] = useState(0);
   let [cakeTitle, setCakeTitle] = useState("");
   let [cakeFoto, setCakeFoto] = useState("");
@@ -36,7 +36,7 @@ export default function ProductSelector({
   
   useEffect(() => {
     if (selectorValues !== undefined) {
-      setProductId(selectorValues.productId);
+      setProductId(selectorValues.productId || "");
       setProductAmount(selectorValues.productAmount);
       setCakeTitle(selectorValues.cakeTitle);
       setCakeFoto(selectorValues.cakeFoto);
@@ -64,8 +64,8 @@ export default function ProductSelector({
 
   const handleProductChange=(option:SingleValue<SelectorOption>)=>{
     if (option) {
-      setProductId(parseInt(option.value));
-      selectorValues.productId = parseInt(option.value);
+      setProductId(option.value);
+      selectorValues.productId = option.value;
       selectorValues.productCategory = option.category || "";     
     }
   }

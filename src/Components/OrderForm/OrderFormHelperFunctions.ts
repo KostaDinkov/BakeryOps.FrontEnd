@@ -5,6 +5,7 @@ import ProductDTO from "../../Types/ProductDTO";
 import ClientDTO from "../../Types/ClientDTO";
 import SelectorOption from "../../Types/SelectorOptions";
 import OrderItemDTO from "../../Types/OrderItemDTO";
+import { prettyFormat } from "@testing-library/react";
 
 export const dateTimeFormat = "yyyy-MM-dd'T'HH:mm:ss";
 
@@ -47,7 +48,7 @@ export function validateOrder(order: OrderDTO): ValidationResult {
   }
 
   order.orderItems.forEach((element, index) => {
-    if (element.productId === undefined || element.productId === -1) {
+    if (element.productId === undefined || element.productId === null) {
       validationResult.errors.push(
         `Невалидна стойност за продукт номер ${index + 1}`
       );
@@ -88,7 +89,7 @@ export function getDefaultOrderFormData(): OrderDTO {
 }
 
 export class ProductSelectorValues {
-  productId: number;
+  productId?: string;
   productCategory: string;
   productAmount: number;
   cakeFoto: string;
@@ -97,7 +98,7 @@ export class ProductSelectorValues {
   itemUnitPrice: number;
 
   constructor(item?: OrderItemDTO | undefined) {
-    this.productId = item?.productId || -1;
+    this.productId = item?.productId ;
     this.productAmount = item?.productAmount || 0;
     this.cakeFoto = item?.cakeFoto || "";
     this.cakeTitle = item?.cakeTitle || "";
@@ -180,17 +181,21 @@ export function clientsToOptions(clients: ClientDTO[]): {
 // @param discountPercent - discount in percent, like 20 for 20%
 **/
 export function getSpecialPrice(
-  cenaDrebno: number,
-  discountPercent: number
+  product:ProductDTO,
+  discountPercent: number,
+  
 ): number {
+  // If the product has to keep its priceDrebno, we return priceDrebno
   // First we take price without Vat
-  // Next we apply discount
+  // Next we apply discount, if product hasDiscount
   // Next we add half of Vat to the result
   // Last we round to 2 decimal places
+  if(product.keepPriceDrebno) return product.priceDrebno;
   let vat = 0.2;
   let halfVat = vat / 2;
   let discount = discountPercent / 100;
-  let final = (cenaDrebno / (1 + vat) / (1 + discount)) * (1 + halfVat);
+  if(!product.hasDiscount) discount = 0;
+  let final = (product.priceDrebno / (1 + vat) / (1 + discount)) * (1 + halfVat);
 
   return Math.round((final + Number.EPSILON) * 100) / 100;
 }
@@ -206,7 +211,7 @@ export function getItemUnitPrice(
   let product = products.filter((p) => p.id === item.productId)[0];
 
   if (client && client.isSpecialPrice) {
-    return getSpecialPrice(product.priceDrebno, client.discountPercent);
+    return getSpecialPrice(product, client.discountPercent);
   }
   return product.priceDrebno;
 }

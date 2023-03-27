@@ -4,10 +4,10 @@ import ProductDTO from "../../Types/ProductDTO";
 import ProductCountDialog from "./ProductCountDialog";
 import { ProductSelectorValues } from "./OrderFormHelperFunctions";
 import styles from './ProductsAccordion.module.scss';
+import { ProductsByCategory } from "../../Types/helpers";
+import { getProductsByCategory } from "../../system/utils";
 
-interface ProductsByCategory {
-  [category: string]: ProductDTO[];
-}
+
 
 export default function ProductsAccordion({
   products,
@@ -16,10 +16,7 @@ export default function ProductsAccordion({
   products: ProductDTO[];
   addNewProductSelector: (selectorValues: ProductSelectorValues) => void;
 }) {
-  let productsByCat = products.reduce(function (result, product) {
-    (result[product.category] = result[product.category] || []).push(product);
-    return result;
-  }, {} as ProductsByCategory);
+  let productsByCat = getProductsByCategory(products);
 
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [product, setProduct] = React.useState<ProductDTO | null>(null);

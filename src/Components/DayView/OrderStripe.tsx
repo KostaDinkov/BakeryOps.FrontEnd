@@ -22,8 +22,7 @@ export default function OrderStripe({ order }: { order: OrderDTO }) {
 
   return (
     <div className={styles.stripeContainer}>
-      <div className={styles.stripeHeader}>
-        
+      <div className={styles.stripeHeader}>       
             <div className={getTimeStyle()}>
               <span>{format(new Date(order.pickupDate), "HH:mm")}</span>
               <span className={styles.iconLinks}>
@@ -39,9 +38,8 @@ export default function OrderStripe({ order }: { order: OrderDTO }) {
                     </Link>
                 </span>
             </div>
-            
-        
         <div className={styles.clientName}>{order.clientName}</div>
+        <div className={styles.clientName}>{order.clientPhone}</div>
        
       </div>
       <div className={styles.itemsContainer}>

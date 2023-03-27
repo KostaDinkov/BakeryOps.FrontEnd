@@ -1,12 +1,39 @@
+import { useState } from "react";
 import OrderItemDTO from "../../Types/OrderItemDTO";
 import styles from "./OrderStripeItem.module.scss";
 
 export default function OrderStripe({ item }: { item: OrderItemDTO }) {
-  return (
-    <div className={styles.stripeItemContainer}>
+    const [isComplete,setIsComplete] = useState(item.isComplete);
+    const [isInProgress,setIsInProgress] = useState(item.isInProgress);
+
+    const handleClick = () => {
+        if(isInProgress){
+            setIsInProgress(false);
+            setIsComplete(true);
+        }else if(isComplete){
+            setIsInProgress(false);
+            setIsComplete(false);
+        }else{
+            setIsInProgress(true);
+            setIsComplete(false);
+        }
+    };
+
+  
+    const getItemStyles = () => {
+        let stylesArr = [styles.stripeItemContainer];
+        if (isComplete) {
+            stylesArr.push(styles.itemComplete);
+        } else if (isInProgress) {
+            stylesArr.push(styles.itemInProgress);
+        }
+        return stylesArr.join(" ");
+    }
+    return (
+    <div className={getItemStyles()} onClick={handleClick}>
       <div>
         <span className={styles.itemAmount}>
-          <strong>{item.productAmount}</strong>{" "}{item.product.unit}
+          <strong>{item.productAmount}</strong> {item.product.unit}
         </span>
 
         <span className={styles.productName}>{item.product.name}</span>

@@ -1,9 +1,10 @@
 @import  "../../styles/globals";
 @import "../../styles/vars.css";
 
+$font-size-small: 0.8rem;
+
 .orderCardContainer{
     max-width: 350px;
-    
     border-radius: 5px;
     display:inline-block;
      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;;
@@ -21,7 +22,7 @@
     flex-direction: row;
     align-items: center;
     padding:0px 10px 0px 10px;
-    
+    gap:5px;
     border-radius: 5px 5px 0 0;
 }
 .editIcon{
@@ -44,28 +45,21 @@
     color:white;
 }
 
-ul{
-    list-style-type: none;
-    padding-inline-start: 0;
-    margin:0;
-}
 
-.pickupTime{
-    margin-right:30px;
+
+.pickupTime{   
     font-size: 1.2rem;
     font-weight: bold;
 }
 
-.textBadge{
-    border-radius: 5px;
-    padding:0 5px;
-    font-weight: bold;
-}
+
 
 .textBadgeRed{
     @include textChip(var(--color-error-main),white);
+    font-size: $font-size-small;
 }
 
 .textBadgeYellow{
     @include textChip(var(--color-secondary-main),black);
+    font-size: $font-size-small;
 }

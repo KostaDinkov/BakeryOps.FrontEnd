@@ -1,3 +1,5 @@
+//TODO fix magic discount number
+
 import React from "react";
 import ProductDTO from "../../Types/ProductDTO";
 import { getSpecialPrice } from "../OrderForm/OrderFormHelperFunctions";
@@ -38,7 +40,7 @@ export default function Category({
             <span>{product.name}</span>
             {showPriceDrebno && <span>{product.priceDrebno}</span>}
             {showPriceEdro && <span>{product.priceEdro}</span>}
-            {showPriceSpecial && <span>{getSpecialPrice(product, 25)}</span>}
+            {showPriceSpecial && <span>{getSpecialPrice(product, 20)}</span>}
           </div>
         );
       })}

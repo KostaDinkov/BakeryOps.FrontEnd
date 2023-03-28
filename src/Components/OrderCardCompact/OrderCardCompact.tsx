@@ -21,7 +21,7 @@ const OrderCard = ({ order }: { order: OrderDTO }) => {
       " "
     );
   };
-  const getNameStyle = ()=>{
+  const getChipStyle = ()=>{
     const nameStyles = [styles.textBadge];
     if(order.isPaid){
       nameStyles.push(styles.textBadgeRed);
@@ -40,7 +40,9 @@ const OrderCard = ({ order }: { order: OrderDTO }) => {
         <span className={styles.pickupTime}>
           {format(new Date(order.pickupDate), "HH:mm")}
         </span>{" "}
-        <span className={getNameStyle()}>{order.clientName}</span>
+        <span >{order.clientName}</span>
+        {order.isPaid && <span className={getChipStyle()}>платена</span>}
+        {order.advancePaiment>0 && <span className={getChipStyle()}>капаро</span>}
         <div className={styles.editIcon}>
           <Link
             data-test="OrderCard-PrintLink"

@@ -1,0 +1,64 @@
+@import "../../styles/vars.css";
+
+.itemRow {
+  margin: 0px;
+  padding:0px 10px;
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--color-primary-lighter);
+  display: flex;
+  justify-content: space-between;
+}
+
+.itemName {
+  font-size: 0.9rem;
+  align-self: flex-start;
+}
+.icons{
+
+}
+.iconFoto, .iconCakeTitle, .iconDescription{
+  font-size: 0.7rem;
+  padding:0 4px;
+  border-radius: 50%;
+  
+  font-weight: bold;
+  margin:0 1px;
+}
+.iconFoto{
+  background-color: #ffb2d6;
+  color:black;
+}
+.iconCakeTitle{
+  background-color: var(--color-primary-lighter);
+  color:black
+}
+.iconDescription{
+  background-color: var(--color-error-main);
+  color:white;
+}
+
+.itemAmount{
+  font-size: 0.9rem;
+  justify-self:  flex-end;
+}
+
+.completed {
+  background-color: var(--color-green);
+}
+
+.inProgress {
+  background-color: var(--color-yellow);
+}
+.itemDetailsBadge{
+  background-color: var(--color-primary-lighter);
+  color:white;
+  margin-right:4px;
+  border-radius: 4px;
+  padding:0 4px;
+}
+
+.itemDetails{
+  margin:4px 0;
+}
+
+

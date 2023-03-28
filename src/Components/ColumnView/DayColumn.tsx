@@ -1,10 +1,11 @@
 import React from "react";
 import styles from "./DayColumn.module.css";
-import OrderCard from "../OrderCard/OrderCard";
+
 import {format} from 'date-fns';
 import { Link } from "react-router-dom";
 import OrderDTO from "../../Types/OrderDTO";
 import { bg } from "date-fns/locale";
+import OrderCardCompact from "../OrderCardCompact/OrderCardCompact";
 
 
 const DayColumn = ({ data }:{data:OrderDTO[]}) => {
@@ -19,7 +20,7 @@ const DayColumn = ({ data }:{data:OrderDTO[]}) => {
       </header>
       <div className={styles.orderList}>
         {data.map((order) => (
-          <OrderCard key={order.id} order={order}></OrderCard>
+          <OrderCardCompact key={order.id} order={order}></OrderCardCompact>
         ))}
       </div>
     </section>

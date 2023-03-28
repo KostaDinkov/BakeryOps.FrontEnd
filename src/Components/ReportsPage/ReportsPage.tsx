@@ -11,8 +11,7 @@ export default function ReportsPage(){
                         <li>Ценоразпис</li>
                     </Link>
                     <li>Фотокартини</li>
-                    <li>Справка Клиент</li>
-                    <li>Справка Период</li>
+                   
             
                 </ul>
             </div>

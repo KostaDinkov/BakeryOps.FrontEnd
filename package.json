@@ -40,7 +40,6 @@
     "cypress": "npx cypress open",
     "docker-build": "docker build -t orders-frontend .",
     "build:docker": "npm run build && npm run docker-build"
-    
   },
   "eslintConfig": {
     "extends": [
@@ -61,6 +60,7 @@
     ]
   },
   "devDependencies": {
-    "cypress": "^12.8.0"
+    "cypress": "^12.8.0",
+    "msw": "^1.2.1"
   }
 }

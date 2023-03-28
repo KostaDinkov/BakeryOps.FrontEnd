@@ -13,38 +13,45 @@ export default function OrderStripe({ order }: { order: OrderDTO }) {
       stylesArr.push(styles.itemPaid);
     } else if (order.advancePaiment > 0) {
       stylesArr.push(styles.itemKaparo);
-    }
-    else{
-        stylesArr.push(styles.itemNotPaid);
+    } else {
+      stylesArr.push(styles.itemNotPaid);
     }
     return stylesArr.join(" ");
   };
 
   return (
     <div className={styles.stripeContainer}>
-      <div className={styles.stripeHeader}>       
-            <div className={getTimeStyle()}>
-              <span>{format(new Date(order.pickupDate), "HH:mm")}</span>
-              <span className={styles.iconLinks}>
-                    <Link to={`/orders/print/${order.id}`}>
-                        <PrintIcon
-                            fontSize="medium"
-                            cursor="pointer"
-                            sx={{ color: "white" }}
-                        />
-                    </Link>
-                    <Link data-test="OrderStripe-EditLink" to={`/orders/put/${order.id}`}>
-                        <EditIcon fontSize="medium" cursor="pointer" sx={{ color: "white" }} />
-                    </Link>
-                </span>
-            </div>
+      <div className={styles.stripeHeader}>
+        <div className={getTimeStyle()}>
+          <span>{format(new Date(order.pickupDate), "HH:mm")}</span>
+          <span className={styles.iconLinks}>
+            <Link to={`/orders/print/${order.id}`}>
+              <PrintIcon
+                fontSize="medium"
+                cursor="pointer"
+                sx={{ color: "white" }}
+              />
+            </Link>
+            <Link
+              data-test="Order-EditLink"
+              to={`/orders/put/${order.id}`}
+            >
+              <EditIcon
+                fontSize="medium"
+                cursor="pointer"
+                sx={{ color: "white" }}
+              />
+            </Link>
+          </span>
+        </div>
         <div className={styles.clientName}>{order.clientName}</div>
-        <div className={styles.clientName}>{order.clientPhone}</div>
-       
+        {order.clientPhone && <div className={styles.clientPhone}>{order.clientPhone}</div>}
       </div>
       <div className={styles.itemsContainer}>
         {order.orderItems.map((item) => {
-          return <OrderStripeItem order = {order} item={item} key={item.productId} />;
+          return (
+            <OrderStripeItem order={order} item={item} key={item.productId} />
+          );
         })}
       </div>
     </div>

@@ -8,7 +8,6 @@ export default function OrderStripe({ order,item }: {order:OrderDTO, item: Order
     const [isComplete,setIsComplete] = useState(item.isComplete);
     const [isInProgress,setIsInProgress] = useState(item.isInProgress);
     const [shouldUpdate,setShouldUpdate] = useState(false);
-    
 
     const handleClick = () => {
         if(isInProgress){
@@ -41,9 +40,6 @@ export default function OrderStripe({ order,item }: {order:OrderDTO, item: Order
     async function updateOrder() {
         item.isComplete = isComplete;
         item.isInProgress = isInProgress;
-        console.log(item);
-        console.log(order);
-        console.log("calling update")
         await OrdersService.PutOrderAsync(order.id as number, order);
         PubSub.publish("SendUpdateOrders");
         setShouldUpdate(false);

@@ -11,18 +11,19 @@
 .itemsContainer{
     display:flex;
     flex-flow:row wrap;
+    flex-grow:1;
     padding:10px;
     gap: 10px;
     background-color: #a2c8d4;
-    width: 100%;
+    
 }
 .stripeHeader{
     display:flex;
-    flex-direction:column;
+    flex-flow:row wrap;
     color:white;
-    min-width:150px;
-    width:10%;
     padding:5px 5px 5px 0px;
+    
+    
 }
 .itemTime{
     display:flex;
@@ -49,15 +50,18 @@
     background-color: var(--color-primary-lighter);
 }
 
-.clientName{
+.clientName, .clientPhone{
     font-size: large;
     padding-left: 20px;
+    align-self: center;
 }
 
 .iconLinks{
     flex-grow:1;
     display:flex;
     justify-content: flex-end;
+    margin-left:5px;
+    
     
 }
 

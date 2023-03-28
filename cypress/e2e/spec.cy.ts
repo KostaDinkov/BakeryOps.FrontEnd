@@ -41,7 +41,7 @@ describe("Critical App functionality", () => {
     Login(Cypress.env("username"), Cypress.env("password"));
     CreateOrder('02/01/2023');
     cy.visit("/orders/forDay/2023-01-02");
-    cy.get("[data-test='OrderCard-EditLink']").should('have.length', 1).click();
+    cy.get("[data-test='Order-EditLink']").should('have.length', 1).click();
     cy.getByDataAttr("OrderForm-deleteBtn").click();
     cy.getByDataAttr("DeleteOrderDialog-deleteBtn").click();
     cy.location("pathname").should('include','/orders/forDay/2023-01-02');

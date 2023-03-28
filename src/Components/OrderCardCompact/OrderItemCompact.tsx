@@ -1,4 +1,4 @@
-import styles from "./OrderItemCompact.module.css";
+import styles from "./OrderItemCompact.module.scss";
 import OrderItemDTO from "../../Types/OrderItemDTO";
 
 const OrderItem = ({item}: { item: OrderItemDTO}) => {

@@ -1,6 +1,7 @@
 :root{
     --color-blueGrey:#e1e2e1;
     --color-green:rgb(152, 219, 143);
+    --color-pink:#ffb2d6;
     --color-yellow:rgb(255, 208, 0);
     --color-primary-main:#1f5464;
     --color-primary-light:#4b7683;
@@ -13,5 +14,6 @@
 
     --color-secondary-main:#ffb300;
     --color-secondary-light:#FFC233;
+    
     --box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }

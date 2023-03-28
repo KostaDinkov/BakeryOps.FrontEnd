@@ -1,3 +1,4 @@
+@import  "../../styles/globals";
 @import "../../styles/vars.css";
 
 .orderCardContainer{
@@ -57,16 +58,14 @@ ul{
 
 .textBadge{
     border-radius: 5px;
-    padding:5px;
+    padding:0 5px;
     font-weight: bold;
 }
 
 .textBadgeRed{
-    background-color:var(--color-error-main);
-    color:white;
+    @include textChip(var(--color-error-main),white);
 }
 
 .textBadgeYellow{
-    background-color: rgb(255, 200, 0);
-    color:black;
+    @include textChip(var(--color-secondary-main),black);
 }

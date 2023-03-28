@@ -1,4 +1,6 @@
 @import "../../styles/vars.css";
+@import "../../styles/globals.scss"; 
+$-font-size-small: 0.8rem;
 
 .itemRow {
   margin: 0px;
@@ -13,28 +15,19 @@
   font-size: 0.9rem;
   align-self: flex-start;
 }
-.icons{
 
-}
-.iconFoto, .iconCakeTitle, .iconDescription{
-  font-size: 0.7rem;
-  padding:0 4px;
-  border-radius: 50%;
-  
-  font-weight: bold;
-  margin:0 1px;
-}
+
 .iconFoto{
-  background-color: #ffb2d6;
-  color:black;
+  @include textChip(var(--color-pink),black);
+  font-size: $-font-size-small;
 }
 .iconCakeTitle{
-  background-color: var(--color-primary-lighter);
-  color:black
+  @include textChip(var(--color-primary-lighter),black);
+  font-size:  $-font-size-small;
 }
 .iconDescription{
-  background-color: var(--color-error-main);
-  color:white;
+  @include textChip(var(--color-error-main),white);
+  font-size:  $-font-size-small;
 }
 
 .itemAmount{

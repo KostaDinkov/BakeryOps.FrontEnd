@@ -1,4 +1,4 @@
-import styles from "./OrderCardCompact.module.css";
+import styles from "./OrderCardCompact.module.scss";
 import OrderItem from "./OrderItemCompact";
 import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
@@ -21,6 +21,18 @@ const OrderCard = ({ order }: { order: OrderDTO }) => {
       " "
     );
   };
+  const getNameStyle = ()=>{
+    const nameStyles = [styles.textBadge];
+    if(order.isPaid){
+      nameStyles.push(styles.textBadgeRed);
+    }
+    else if(order.advancePaiment>0){
+      nameStyles.push(styles.textBadgeYellow);
+    }
+
+    return nameStyles.join(" ");
+    
+  }
 
   return (
     <div className={containerStyles()}>
@@ -28,7 +40,7 @@ const OrderCard = ({ order }: { order: OrderDTO }) => {
         <span className={styles.pickupTime}>
           {format(new Date(order.pickupDate), "HH:mm")}
         </span>{" "}
-        <span>{order.clientName}</span>
+        <span className={getNameStyle()}>{order.clientName}</span>
         <div className={styles.editIcon}>
           <Link
             data-test="OrderCard-PrintLink"

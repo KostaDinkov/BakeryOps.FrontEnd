@@ -1,0 +1,26 @@
+
+@mixin textChip($bg, $textColor) {
+    color:$textColor;
+    background-color: $bg;
+    border-radius: 999em;
+    padding: 0 5px;
+}
+
+.textChip--yellow {
+    @include textChip(var(--color-secondary-main), black);
+}
+.textChip--green{
+    @include textChip(var(--color-green),black);
+}
+.textChip--red{
+    @include textChip(var(--color-error-main),white);
+}
+.textChip--pink{
+    @include textChip(var(--color-pink), black);
+}
+.textChip--primary-light{
+    @include textChip(var(--color-primary-light),white);
+}
+.textChip--primary-lighter{
+    @include textChip(var(--color-primary-lighter),black);
+}

@@ -44,7 +44,7 @@ export default function OrderStripe({ order }: { order: OrderDTO }) {
       </div>
       <div className={styles.itemsContainer}>
         {order.orderItems.map((item) => {
-          return <OrderStripeItem item={item} key={item.productId} />;
+          return <OrderStripeItem order = {order} item={item} key={item.productId} />;
         })}
       </div>
     </div>

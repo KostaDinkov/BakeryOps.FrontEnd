@@ -38,10 +38,13 @@ export default function DayView() {
   useEffect(() => {
     setOrders(ordersByDate[0]);
   }, [ordersByDate]);
-
-  PubSub.subscribe("DBOrdersUpdated", async (msg) => {
-    setOrders((await DayViewLoader({ params }))[0]);
-  });
+  
+  useEffect(()=>{
+    PubSub.subscribe("DBOrdersUpdated", async (msg) => {
+      setOrders((await DayViewLoader({ params }))[0]);
+    });
+  },[])
+  
 
   function isOrders(): boolean {
     if (ordersByDate && ordersByDate.length > 0 && orders?.length > 0) {

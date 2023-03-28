@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { OrdersService } from "../../API/ordersApi";
+import OrderDTO from "../../Types/OrderDTO";
 import OrderItemDTO from "../../Types/OrderItemDTO";
 import styles from "./OrderStripeItem.module.scss";
 
-export default function OrderStripe({ item }: { item: OrderItemDTO }) {
+export default function OrderStripe({ order,item }: {order:OrderDTO, item: OrderItemDTO }) {
     const [isComplete,setIsComplete] = useState(item.isComplete);
     const [isInProgress,setIsInProgress] = useState(item.isInProgress);
+    const [shouldUpdate,setShouldUpdate] = useState(false);
+    
 
     const handleClick = () => {
         if(isInProgress){
@@ -17,7 +21,33 @@ export default function OrderStripe({ item }: { item: OrderItemDTO }) {
             setIsInProgress(true);
             setIsComplete(false);
         }
+        setShouldUpdate(true);      
     };
+
+    useEffect(()=>{
+        if(shouldUpdate){
+        (async ()=>{
+            
+            await updateOrder();
+        })();}
+        
+    },[shouldUpdate])
+
+    useEffect(()=>{
+        setIsComplete(item.isComplete);
+        setIsInProgress(item.isInProgress);
+    },[order])
+
+    async function updateOrder() {
+        item.isComplete = isComplete;
+        item.isInProgress = isInProgress;
+        console.log(item);
+        console.log(order);
+        console.log("calling update")
+        await OrdersService.PutOrderAsync(order.id as number, order);
+        PubSub.publish("SendUpdateOrders");
+        setShouldUpdate(false);
+    }
 
   
     const getItemStyles = () => {

@@ -195,7 +195,7 @@ export function getSpecialPrice(
   let halfVat = vat / 2;
   let discount = discountPercent / 100;
   if(!product.hasDiscount) discount = 0;
-  let final = (product.priceDrebno / (1 + vat) / (1 + discount)) * (1 + halfVat);
+  let final = ((product.priceDrebno / (1 + vat)) * (1 - discount)) * (1 + halfVat);
 
   return Math.round((final + Number.EPSILON) * 100) / 100;
 }

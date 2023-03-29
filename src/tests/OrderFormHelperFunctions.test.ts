@@ -47,6 +47,11 @@ let products = [
     hasDiscount: false,
     keepPriceDrebno: true,
   },
+  {
+    priceDrebno: 1.55,
+    hasDiscount: true,
+    keepPriceDrebno: false,
+  },
 ];
 
 let cases = [
@@ -59,12 +64,15 @@ let cases = [
   [products[6], 0],
   [products[7], 32.08],
   [products[8], 33.44],
+  [products[9], 1.14],
+
+
 ];
 
 test.each(cases)(
   "For product %p, special price  should be %p",
   (product, expectedPrice) => {
-    let discount = 25;
+    let discount = 20;
 
     let actualPrice = getSpecialPrice(product as ProductDTO, discount);
 

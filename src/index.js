@@ -1,6 +1,6 @@
-//TODO add custom order layout for day view
+//TODO extract business logic from components
 //TODO fix nginx config to allow for react router refresh
-//TODO cleanup and refactor where necessary
+
 
 import React from "react";
 import ReactDOM from "react-dom/client";

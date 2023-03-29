@@ -25,10 +25,13 @@ export default function Category({
   ) : (
     <div className={styles.categoryContainer}>
       <div className={styles.productRow}>
-        <span className={styles.categoryName}>{name} | Цена в лв. </span>
-        {showPriceDrebno && <span className={styles.categoryName}>дребно</span>}
-        {showPriceEdro && <span className={styles.categoryName}>едро</span>}
-        {showPriceSpecial && <span className={styles.categoryName}>спец.</span>}
+        <span className={styles.categoryHeader}>
+          <span className={styles.categoryName}>{name}</span>
+          <span className = {styles.categoryText}>Цена в лв.</span>
+        </span>
+        {showPriceDrebno && <span className={styles.categoryHeader}>Маг. Жана</span>}
+        {showPriceEdro && <span className={styles.categoryHeader}>Дистр.</span>}
+        {showPriceSpecial && <span className={styles.categoryHeader}>Спец.</span>}
       </div>
 
       {products.map((product) => {

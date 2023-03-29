@@ -2,11 +2,20 @@
 
 }
 
-.categoryName{
+.categoryHeader{
+    display:flex; 
     padding: 5px 0;
     background-color: rgb(188, 188, 188);
-    font-weight: bold;
-    font-size: 1.1rem;
+    .categoryName{
+        
+        font-size: 1.1rem;
+        font-weight: bold;
+    }    
+    .categoryText{
+        flex-grow: 1;
+        text-align: right;
+        padding-right: 10px;
+    }
 }
 
 .productRow{
@@ -14,12 +23,12 @@
     flex-direction: row;
     border-bottom: 1px dashed black;
     
-    span:first-child{
+    >span:first-child{
         
         flex-grow:3;
         flex-basis: 0;
     }
-    span:not(:first-child){
+    >span:not(:first-child){
         flex:1;
     }
     :active{

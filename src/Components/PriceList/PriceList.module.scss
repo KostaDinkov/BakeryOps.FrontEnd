@@ -7,4 +7,15 @@
     .priceListMenu{
         display:none!important
     }
+    .companyLabel{
+        display: block!important;
+    }  
+}
+.companyLabel{
+    display: none;
+}
+.buttons{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
 }

@@ -58,11 +58,10 @@ export default function OrderStripe({ order,item }: {order:OrderDTO, item: Order
     return (
     <div className={getItemStyles()} onClick={handleClick}>
       <div>
+        <span className={styles.productName}>{item.product.name}</span>
         <span className="textChip--primary-light">
           <strong>{item.productAmount}</strong> {item.product.unit}
         </span>
-
-        <span className={styles.productName}>{item.product.name}</span>
       </div>
       <div>
         {item.cakeFoto && (

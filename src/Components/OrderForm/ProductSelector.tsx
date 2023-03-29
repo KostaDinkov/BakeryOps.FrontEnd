@@ -41,8 +41,6 @@ export default function ProductSelector({
       setCakeTitle(selectorValues.cakeTitle);
       setCakeFoto(selectorValues.cakeFoto);
       setDescription(selectorValues.description);
-      
-      
     }
   }, [selectorValues]);
 
@@ -53,6 +51,32 @@ export default function ProductSelector({
     //React select option has a specific shape. Custom properties are stored in the data object
     stringify: (option:{label:string, value:string, data:any} ) => `${option.label} ${option.data.code}`,
     matchFrom: "any" as const,
+  };
+
+  const filterOptions = (
+    candidate: { label: string; value: string; data: any },
+    input: string
+  ) => {
+    if (input) {
+      //filter by code
+      if(input.startsWith(".")){
+
+        let name = candidate.label.toLowerCase().replaceAll(/["“\.-]/g,"");
+        let parts = input.slice(1).trim().split(" ");
+        for (let part of parts) {
+          if (!name.includes(part.toLowerCase())) {
+            return false;
+          }
+        }
+        return true;
+      }
+      else{
+        return candidate.data.code.startsWith(input.trim());
+       
+      }
+      
+    }
+    return true;
   };
 
   const isCakeCategory = (category: string): boolean => {
@@ -80,7 +104,7 @@ export default function ProductSelector({
             )}
             placeholder="Продукт ..."
             options={options}
-            filterOption={createFilter(filterConfig)}
+            filterOption={filterOptions}
             onChange={handleProductChange}
             styles={selectorStyles}
             required

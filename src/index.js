@@ -1,7 +1,6 @@
 //TODO extract business logic from components
 //TODO fix nginx config to allow for react router refresh
 
-
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";

@@ -21,7 +21,7 @@ export default function CreateOrder(date:string){
   
       cy.getByDataAttr("ProductSelector-productSelector")
         .find("input")
-        .type("Торта 10п.{enter}");
+        .type(".торта 10п{enter}");
       cy.getByDataAttr("ProductSelector-amountInput").find("input").type("2");
       cy.getByDataAttr("ProductSelector-cakeTitleInput")
         .find("input")

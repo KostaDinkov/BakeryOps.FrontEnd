@@ -1,3 +1,4 @@
+//TODO Add mechanism to sync deleted products from GenSoft DB
 //TODO extract business logic from components
 //TODO fix nginx config to allow for react router refresh
 

@@ -204,9 +204,7 @@ function toBGN(amount: number): string {
 
 function getProductPrice(orderItem: OrderItemDTO) {
   let price = 0;
-  if (orderItem.cakeFoto?.trim() !== "") {
-    price += PhotoPrice;
-  }
+  
   price += orderItem.itemUnitPrice;
   return price;
 }

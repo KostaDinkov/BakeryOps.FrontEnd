@@ -153,14 +153,14 @@ export default function OrderForm() {
       orderItems: orderItems,
     };
 
+    const newValidationResult = validateOrder(newOrder);
+    setValidationResult(newValidationResult);
     //calculate and assign item unit prices
     newOrder.orderItems.forEach((item) => {
       let client = clients.find((c) => c.id === newOrder.clientId);
       item.itemUnitPrice = getItemUnitPrice(item, products, client);
     })
 
-    const newValidationResult = validateOrder(newOrder);
-    setValidationResult(newValidationResult);
 
     let orderResult: OrderDTO;
     if (!newValidationResult.isValid) {

@@ -3,34 +3,34 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@emotion/react": "^11.10.5",
-    "@emotion/styled": "^11.10.5",
-    "@microsoft/signalr": "^7.0.0",
-    "@mui/icons-material": "^5.10.14",
-    "@mui/material": "^5.10.14",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^29.4.0",
-    "@types/node": "^18.14.4",
-    "@types/pubsub-js": "^1.8.3",
-    "@types/react": "^18.0.28",
-    "@types/react-datepicker": "^4.10.0",
-    "@types/react-dom": "^18.0.11",
-    "date-fns": "^2.29.3",
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
+    "@microsoft/signalr": "^8.0.7",
+    "@mui/icons-material": "^5.16.7",
+    "@mui/material": "^5.16.7",
+    "@testing-library/jest-dom": "^6.4.8",
+    "@testing-library/react": "^16.0.0",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^22.1.0",
+    "@types/pubsub-js": "^1.8.6",
+    "@types/react": "^18.3.3",
+    "@types/react-datepicker": "^7.0.0",
+    "@types/react-dom": "^18.3.0",
+    "date-fns": "^3.6.0",
     "localforage": "^1.10.0",
-    "match-sorter": "^6.3.1",
-    "node-sass": "^7.0.3",
+    "match-sorter": "^6.3.4",
     "pubsub-js": "^1.9.4",
-    "react": "^18.2.0",
-    "react-datepicker": "^4.8.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.4.3",
+    "react": "^18.3.1",
+    "react-datepicker": "^7.3.0",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.0",
     "react-scripts": "5.0.1",
-    "react-select": "^5.6.1",
+    "react-select": "^5.8.0",
+    "sass": "^1.77.8",
     "sort-by": "^1.2.0",
-    "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4"
+    "typescript": "^5.5.4",
+    "web-vitals": "^4.2.3"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -38,7 +38,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "cypress": "npx cypress open",
-    "deploy":"@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./deploy.ps1"
+    "deploy": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./deploy.ps1"
   },
   "eslintConfig": {
     "extends": [
@@ -59,7 +59,7 @@
     ]
   },
   "devDependencies": {
-    "cypress": "^12.8.0",
-    "msw": "^1.2.1"
+    "cypress": "^13.13.2",
+    "msw": "^2.3.5"
   }
 }

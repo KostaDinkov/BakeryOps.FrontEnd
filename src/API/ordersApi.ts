@@ -122,7 +122,7 @@ export class OrdersService {
 
 export const auth = {
   login: async (userData: { userName: string; password: string }) :Promise<Response>  => {
-    let response = await fetch(`${hostName}/api/security`, {
+    let response = await fetch(`${hostName}/api/security/getToken`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

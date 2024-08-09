@@ -1,0 +1,24 @@
+#calendarBox  .react-datepicker__current-month{
+    font-size: 2rem;
+    height: 2rem;
+}
+#calendarBox .react-datepicker__day-name{
+    width:3rem;
+    height:2rem;
+    font-size: 1rem;
+}
+#calendarBox .react-datepicker__day{
+    font-size:2rem;
+    width:3rem;
+    height: 3rem;
+    line-height: 3rem;
+}
+
+#calendarBox .react-datepicker__navigation{
+    top: 12px;
+    
+}
+#calendarBox .react-datepicker__navigation-icon{
+    top:16px;
+    font-size:3rem;
+}

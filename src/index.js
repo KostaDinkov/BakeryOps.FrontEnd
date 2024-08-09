@@ -9,18 +9,26 @@ import "./styles/globals.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import OrderForm, { orderFormLoader } from "./Components/OrderForm/OrderForm";
+import OrderForm, {
+  orderFormLoader,
+} from "./Modules/Orders/OrderForm/OrderForm";
 import Error from "./Components/Error";
-import ColumnView, { loader as ordersLoader } from "./Components/ColumnView/ColumnView.tsx";
-import DayView, { DayViewLoader } from "./Components/DayView/DayView";
+import Home from "./Modules/Home/Home";
+import DayView, { DayViewLoader } from "./Modules/Orders/DayView/DayView";
 import LoginForm from "./Components/LoginForm/LoginForm";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import EventHub from "./EventHub";
 import PubSub from "pubsub-js";
-import PrintOrderView ,{loader as PrintOrderViewLoader}from "./Components/PrintOrderView/PrintOrderView";
+import PrintOrderView, {
+  loader as PrintOrderViewLoader,
+} from "./Modules/Orders/PrintOrderView/PrintOrderView";
 import ReportsPage from "./Components/ReportsPage/ReportsPage";
 import PriceList from "./Components/PriceList/PriceList.tsx";
 import { loader as PriceListLoader } from "./Components/PriceList/PriceList.tsx";
+import ColumnView, {
+  loader as ordersLoader,
+} from "./Modules/Orders/ColumnView/ColumnView";
+import OrdersHome from "./Modules/Orders/OrdersHome/OrdersHome";
 
 const router = createBrowserRouter([
   {
@@ -29,59 +37,75 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <ColumnView />,
+        element: <Home />,
         errorElement: <Error />,
-        loader: ordersLoader,
       },
       {
-        path: "/orders/:method/:id",
-        element: <OrderForm />,
-        loader: orderFormLoader,
-        errorElement:<Error/>
+        element: <OrdersHome />,
+        path: "/orders/",
+        children: [
+          {
+            index: true,
+            element: <ColumnView />,
+            loader: ordersLoader,
+            errorElement: <Error />,
+          },
+          {
+            path: ":method/:id",
+            element: <OrderForm />,
+            loader: orderFormLoader,
+            errorElement: <Error />,
+          },
+          {
+            path: ":method/",
+            element: <OrderForm />,
+            loader: orderFormLoader,
+            errorElement: <Error />,
+          },
+          {
+            path: "print/:id",
+            element: <PrintOrderView />,
+            loader: PrintOrderViewLoader,
+            errorElement: <Error />,
+          },
+          {
+            path: "forDay/:date",
+            element: <DayView />,
+            loader: DayViewLoader,
+            errorElement: <Error />,
+          },
+        ],
       },
-      {
-        path: "/orders/:method/",
-        element: <OrderForm />,
-        loader: orderFormLoader,
-        errorElement:<Error/>
-      },
-      {
-        path:"/orders/print/:id",
-        element:<PrintOrderView/>,
-        loader: PrintOrderViewLoader,
-        errorElement:<Error/>
-      },
-      {
-        path: "/orders/forDay/:date",
-        element: <DayView />,
-        loader: DayViewLoader,
-        errorElement:<Error/>
-      },
+
       {
         path: "/login/",
         element: <LoginForm />,
       },
       {
-        path:"/reports/",
-        element:<ReportsPage/>,
-        children:[
+        path: "/reports/",
+        element: <ReportsPage />,
+        children: [
           {
-            path:"/reports/priceList/",
-            element:<PriceList/>,
+            path: "/reports/priceList/",
+            element: <PriceList />,
             loader: PriceListLoader,
-          }
-          
-        ]
-      }
+          },
+        ],
+      },
     ],
   },
 ]);
 
 //Disable window vertical scrolling with the arrow keys.
-window.addEventListener("keydown",function(e){
-  if(["ArrowUp","ArrowDown"].indexOf(e.code) > -1) {
-    e.preventDefault();
-}},false);
+window.addEventListener(
+  "keydown",
+  function (e) {
+    if (["ArrowUp", "ArrowDown"].indexOf(e.code) > -1) {
+      e.preventDefault();
+    }
+  },
+  false
+);
 
 const eventHub = new EventHub();
 PubSub.subscribe("SendUpdateOrders", eventHub.sendUpdateOrders);

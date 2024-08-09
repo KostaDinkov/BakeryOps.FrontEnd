@@ -1,0 +1,57 @@
+@import "../../../styles/vars.css";
+@import "../../../styles/globals.scss"; 
+$-font-size-small: 0.8rem;
+
+.itemRow {
+  margin: 0px;
+  padding:0px 10px;
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--color-primary-lighter);
+  display: flex;
+  justify-content: space-between;
+}
+
+.itemName {
+  font-size: 0.9rem;
+  align-self: flex-start;
+}
+
+
+.iconFoto{
+  @include textChip(var(--color-pink),black);
+  font-size: $-font-size-small;
+}
+.iconCakeTitle{
+  @include textChip(var(--color-primary-lighter),black);
+  font-size:  $-font-size-small;
+}
+.iconDescription{
+  @include textChip(var(--color-error-main),white);
+  font-size:  $-font-size-small;
+}
+
+.itemAmount{
+  font-size: 0.9rem;
+  justify-self:  flex-end;
+}
+
+.completed {
+  background-color: var(--color-green);
+}
+
+.inProgress {
+  background-color: var(--color-yellow);
+}
+.itemDetailsBadge{
+  background-color: var(--color-primary-lighter);
+  color:white;
+  margin-right:4px;
+  border-radius: 4px;
+  padding:0 4px;
+}
+
+.itemDetails{
+  margin:4px 0;
+}
+
+

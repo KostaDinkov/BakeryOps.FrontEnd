@@ -23,12 +23,14 @@ import PrintOrderView, {
   loader as PrintOrderViewLoader,
 } from "./Modules/Orders/PrintOrderView/PrintOrderView";
 import ReportsPage from "./Components/ReportsPage/ReportsPage";
-import PriceList from "./Components/PriceList/PriceList.tsx";
-import { loader as PriceListLoader } from "./Components/PriceList/PriceList.tsx";
+import PriceList from "./Components/PriceList/PriceList";
+import { loader as PriceListLoader } from "./Components/PriceList/PriceList";
 import ColumnView, {
   loader as ordersLoader,
 } from "./Modules/Orders/ColumnView/ColumnView";
 import OrdersHome from "./Modules/Orders/OrdersHome/OrdersHome";
+import AdminHomePage from "./Modules/Administration/AdminHomePage";
+import UsersHomePage, { usersLoader } from "./Modules/Administration/Users/UsersHomePage";
 
 const router = createBrowserRouter([
   {
@@ -81,6 +83,24 @@ const router = createBrowserRouter([
         path: "/login/",
         element: <LoginForm />,
       },
+      {
+        path: "/admin/",
+        
+        children:[
+          {
+            index:true,
+            element:<AdminHomePage/>
+          },
+
+          {
+            path:"users/",
+            element: <UsersHomePage/>,
+            loader: usersLoader
+            
+          }
+        ]
+      },
+
       {
         path: "/reports/",
         element: <ReportsPage />,

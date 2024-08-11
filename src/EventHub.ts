@@ -1,14 +1,16 @@
 import {
+  HubConnection,
   HubConnectionBuilder,
   HubConnectionState,
   LogLevel,
 } from "@microsoft/signalr";
 import PubSub from "pubsub-js";
 
-const hostName = process.env.REACT_APP_API_SERVER_URL;
-const eventHubPath = process.env.REACT_APP_API_SERVER_EVENT_HUB_PATH;
+const hostName = import.meta.env.VITE_API_SERVER_URL;
+const eventHubPath = import.meta.env.VITE_API_SERVER_EVENT_HUB_PATH;
 
 export default class EventHub {
+  eventConnection: HubConnection;
   constructor() {
     this.eventConnection = new HubConnectionBuilder()
       .withUrl(`${hostName}${eventHubPath}`)

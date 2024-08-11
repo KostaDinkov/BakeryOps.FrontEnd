@@ -25,18 +25,18 @@
     "react-datepicker": "^7.3.0",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.0",
-    "react-scripts": "5.0.1",
     "react-select": "^5.8.0",
     "sass": "^1.77.8",
     "sort-by": "^1.2.0",
     "typescript": "^5.5.4",
+    "vite-plugin-svgr": "^4.2.0",
+    "vite-tsconfig-paths": "^5.0.1",
     "web-vitals": "^4.2.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "start": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview",
     "cypress": "npx cypress open",
     "deploy": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./deploy.ps1"
   },
@@ -59,7 +59,9 @@
     ]
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
     "cypress": "^13.13.2",
-    "msw": "^2.3.5"
+    "msw": "^2.3.5",
+    "vite": "^5.4.0"
   }
 }

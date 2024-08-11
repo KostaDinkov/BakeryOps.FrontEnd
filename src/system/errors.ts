@@ -1,5 +1,5 @@
 export class UnauthorizedError extends Error{
-    constructor(message){
+    constructor(message:string){
         super();
         if(message !== null && typeof message === undefined && message !==""){
             super.message = message;
@@ -12,7 +12,7 @@ export class UnauthorizedError extends Error{
 }
 
 export class NotFoundError extends Error{
-    constructor(message){
+    constructor(message:string){
         super();
         if(message !== null && typeof message === undefined && message !==""){
             super.message = message;

@@ -2,7 +2,8 @@ import { add, formatISO } from "date-fns";
 import { NotFoundError, UnauthorizedError } from "../system/errors";
 import OrderDTO from "../Types/OrderDTO";
 
-const hostName =  process.env.REACT_APP_API_SERVER_URL;
+const hostName =  import.meta.env.VITE_API_SERVER_URL;
+console.log(hostName);
 
 export class OrdersService {
   static async GetOrdersAsync(
@@ -120,16 +121,4 @@ export class OrdersService {
 
 
 
-export const auth = {
-  login: async (userData: { userName: string; password: string }) :Promise<Response>  => {
-    let response = await fetch(`${hostName}/api/security/getToken`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userData),
-    });
-    return response
-    
-  },
-};
+

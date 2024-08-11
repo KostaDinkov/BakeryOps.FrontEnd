@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import styles from "./LoginForm.module.css";
-import { auth } from "../../API/ordersApi";
+import { auth } from "../../API/authenticationService.ts";
 import AppContext from "../../appContext";
 
 
@@ -20,9 +20,7 @@ export default function LoginForm() {
 
   const handleSubmit = async (evt:React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    
     let response = await auth.login({userName, password});
-    
     if(response.status === 200){
       setIsLogged?.(true);
       localStorage.setItem("token", await response.text());

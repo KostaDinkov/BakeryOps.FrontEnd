@@ -5,6 +5,7 @@ export default function Home() {
         <div>
             <h1>Начална страница</h1>
             <Link to="/orders">Поръчки</Link>
+            <Link to="/admin">Администрация</Link>
         </div>
     )
 }

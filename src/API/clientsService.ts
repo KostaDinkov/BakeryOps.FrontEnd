@@ -2,7 +2,7 @@
 import { NotFoundError, UnauthorizedError } from "../system/errors";
 import ClientDTO from "../Types/ClientDTO";
 
-export const hostName = process.env.REACT_APP_API_SERVER_URL;
+export const hostName = import.meta.env.VITE_API_SERVER_URL;
 
 export default class ClientsService {
   static async GetClientsAsync(): Promise<ClientDTO[][]> {

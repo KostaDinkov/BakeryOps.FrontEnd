@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import styles from "./App.module.css";
-import NavBar from "./Components/NavBar/NavBar";
-import AppContext from "./appContext";
+import NavBar from "./Components/NavBar/NavBar.js";
+import AppContext from "./appContext.ts";
 import { productsApi } from "./API/ordersApi.ts";
-import ClientsService from "./API/clientsService";
-import ProductsService from "./API/productsService";
+import ClientsService from "./API/clientsService.ts";
+import ProductsService from "./API/productsService.ts";
 
 
 function App() {

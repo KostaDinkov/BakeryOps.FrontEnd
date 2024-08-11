@@ -1,16 +1,17 @@
 @import "../../styles/vars.css";
 
 .navBarContainer {
-  background-color: var(--color-blueGrey);
-  height: 5vh;
+  background-color: var(--color-primary-dark-grey);
+  height: 6vh;
   display: flex;
   flex-direction: row;
   gap: 20px;
   align-items: center;
   padding-left: 20px;
-  padding-top: 20px;
+  
   box-sizing: border-box;
   justify-content: center;
+  color:white;
   
 }
 @media print{
@@ -27,4 +28,5 @@
 .navBarContainer.buttonMain {
   font-weight: bold;
   font-size: 1rem;
+  background-color: #fd826c;
 }

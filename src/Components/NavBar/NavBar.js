@@ -1,49 +1,28 @@
-import React, { useState, useContext } from "react";
+import  { useContext } from "react";
 import styles from "./NavBar.module.css";
 import Button from "@mui/material/Button";
 import { Link, useNavigate } from "react-router-dom";
-import CalendarModal from "./CalendarModal";
-import { formatISO } from "date-fns";
 import AppContext from "../../appContext";
 
-
 const NavBar = () => {
-  const {isLogged,setIsLogged} = useContext(AppContext);
-  const [calendarOpen, setCalendarOpen] = React.useState(false);
-  const todayStr = formatISO(new Date(), {representation:"date"});
-  
+  const { isLogged, setIsLogged } = useContext(AppContext);
+
   const navigate = useNavigate();
-  
-  function handleLogout(){
-    localStorage.setItem("isLogged","false");
-    localStorage.setItem("token","");
+
+  function handleLogout() {
+    localStorage.setItem("isLogged", "false");
+    localStorage.setItem("token", "");
     setIsLogged(false);
     navigate("/");
   }
   return (
-    <div className={styles.navBarContainer} >
-      <Link to="/">
-        <Button className={styles.buttonMain} variant="contained">
-          Начало
-        </Button>
-      </Link>
-      
-      
+    <div className={styles.navBarContainer}>
+      <Link to="/">Лого за началната страница</Link>
+      <span>Ime na potrebitel</span>
 
-      
-      <Link to="/reports">
-        <Button
-          className={styles.buttonNew}
-          variant="contained"
-          
-          data-test="NavBar-ReportsBtn"
-        >
-          Справки
-        </Button>
-      </Link>
       {isLogged ? (
         <Button
-          className={styles.buttonNew}
+          
           variant="contained"
           color="primary"
           onClick={handleLogout}
@@ -54,7 +33,7 @@ const NavBar = () => {
       ) : (
         <Link to="/login/">
           <Button
-            className={styles.buttonNew}
+            
             variant="contained"
             color="primary"
             data-test="NavBar-LoginBtn"
@@ -63,8 +42,6 @@ const NavBar = () => {
           </Button>
         </Link>
       )}
-
-      <CalendarModal open={calendarOpen} setOpen={setCalendarOpen} />
     </div>
   );
 };

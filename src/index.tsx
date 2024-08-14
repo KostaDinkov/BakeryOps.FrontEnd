@@ -30,7 +30,11 @@ import ColumnView, {
 } from "./Modules/Orders/ColumnView/ColumnView";
 import OrdersHome from "./Modules/Orders/OrdersHome/OrdersHome";
 import AdminHomePage from "./Modules/Administration/AdminHomePage";
-import UsersHomePage, { usersLoader } from "./Modules/Administration/Users/UsersHomePage";
+import UsersHomePage, {
+  usersLoader,
+} from "./Modules/Administration/Users/UsersHomePage";
+import AddNewUserPage from "./Modules/Administration/Users/AddNewUserPage";
+import EditUserPage from "./Modules/Administration/Users/EditUserPage";
 
 const router = createBrowserRouter([
   {
@@ -85,20 +89,33 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin/",
-        
-        children:[
+
+        children: [
           {
-            index:true,
-            element:<AdminHomePage/>
+            index: true,
+            element: <AdminHomePage />,
           },
 
           {
-            path:"users/",
-            element: <UsersHomePage/>,
-            loader: usersLoader
-            
-          }
-        ]
+            path: "users/",
+
+            children: [
+              {
+                index: true,
+                element: <UsersHomePage />,
+                loader: usersLoader,
+              },
+              {
+                path:"add",
+                element:<AddNewUserPage/>
+              },
+              {
+                path:"edit/:id",
+                element:<EditUserPage/>
+              }
+            ],
+          },
+        ],
       },
 
       {

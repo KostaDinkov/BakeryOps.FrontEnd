@@ -6,3 +6,8 @@ export default interface UserDTO {
   userName: string;
   permissions: string[];
 }
+
+export interface NewUserDTO extends Omit<UserDTO, 'id'|'permissions'> {
+ 
+  password: string,
+}

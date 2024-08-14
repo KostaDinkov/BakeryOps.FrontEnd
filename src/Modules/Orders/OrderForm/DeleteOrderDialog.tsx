@@ -6,7 +6,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-export default function DeleteOrderDialog({open, setOpen, onDelete}) {
+export default function DeleteOrderDialog({open, setOpen, onDelete}:
+  {open:boolean,setOpen: (open:boolean)=>void, onDelete:()=>void}) {
 
   const handleClose = () => {
     setOpen(false);

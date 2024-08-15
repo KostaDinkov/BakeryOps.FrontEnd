@@ -1,8 +1,9 @@
-
+import {useState} from "react";
 import { Link, useLoaderData, useParams } from "react-router-dom";
 import { getUsers } from "../../../API/usersService";
 import UserDTO from "../../../Types/UserDTO";
 import { Button } from "@mui/material";
+import {deleteUser} from "../../../API/usersService";
 
 export async function usersLoader() {
   let users = await getUsers();
@@ -10,8 +11,13 @@ export async function usersLoader() {
 }
 export default function UsersHomePage() {
 
-    let users = useLoaderData() as UserDTO[] ;
-    
+    const [users, setUsers] = useState<UserDTO[]>(useLoaderData() as UserDTO[]);
+
+    const handleDeleteUser = async (id: string) => {
+      console.log("delete user with id", id);
+      setUsers(users.filter((user) => user.id !== id));
+      await deleteUser(id);
+    }
     return (
     <div>
       <h1>Потребители</h1>
@@ -23,7 +29,7 @@ export default function UsersHomePage() {
                     <Link to={`/admin/users/edit/${user.id}`} >
                         <Button>Редактирай</Button>
                     </Link>
-                    <Button>Изтрий</Button>
+                    <Button onClick={()=>handleDeleteUser(user.id)}>Изтрий</Button>
                 </p>
 
             </li>

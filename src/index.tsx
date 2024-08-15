@@ -3,7 +3,7 @@
 //TODO fix nginx config to allow for react router refresh
 
 import React from "react";
-import ReactDOM from "react-dom/client";
+import ReactDOM, { createRoot } from "react-dom/client";
 import "./index.css";
 import "./styles/globals.scss";
 import App from "./App";
@@ -35,6 +35,7 @@ import UsersHomePage, {
 } from "./Modules/Administration/Users/UsersHomePage";
 import AddNewUserPage from "./Modules/Administration/Users/AddNewUserPage";
 import EditUserPage from "./Modules/Administration/Users/EditUserPage";
+
 
 const router = createBrowserRouter([
   {
@@ -147,6 +148,8 @@ window.addEventListener(
 const eventHub = new EventHub();
 PubSub.subscribe("SendUpdateOrders", eventHub.sendUpdateOrders);
 
+const root= ReactDOM.createRoot(document.getElementById("root"));
+
 const muiTheme = createTheme({
   palette: {
     type: "light",
@@ -161,13 +164,16 @@ const muiTheme = createTheme({
       paper: "#f5f5f6",
     },
   },
+
 });
-const root = ReactDOM.createRoot(document.getElementById("root"));
+
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={muiTheme}>
-      <RouterProvider router={router} />
-    </ThemeProvider>
+    
+      <ThemeProvider theme={muiTheme}>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    
   </React.StrictMode>
 );
 

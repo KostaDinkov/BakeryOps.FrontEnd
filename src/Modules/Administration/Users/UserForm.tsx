@@ -1,42 +1,66 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { NewUserDTO } from "../../../Types/UserDTO";
+import { addUser } from "../../../API/usersService";
+import { useNavigate } from "react-router-dom";
 
 export default function UserForm() {
   const {
     register,
     handleSubmit,
-    watch,
+    
     formState: { errors },
   } = useForm<NewUserDTO>();
 
-  const onSubmit: SubmitHandler<NewUserDTO> = (data) => {
+  const navigate = useNavigate();
+  
+  const onSubmit: SubmitHandler<NewUserDTO> = async (data) => {
     console.log(data);
+    data.permissions = [];
+    const response  = await addUser(data);
+    navigate("/admin/users");
+    
+
   };
   return (
-    <div>
+    <div >
       User Form
       <form onSubmit={handleSubmit(onSubmit)}>
         <label>
-          First Name
-          <input {...register("firstName",{
-            required: "This is required",
-            maxLength: {value: 20, message: "Max length is 20"}
-          })} placeholder="First Name" />
+          Име
+          <input
+            {...register("firstName", {
+              required: "This is required",
+              maxLength: { value: 20, message: "Max length is 20" },
+            })}
+            placeholder="Име"
+          />
         </label>
 
         <label>
-          Last Name
-          <input {...register("lastName")} placeholder="Last Name" />
+          Фамилия
+          <input {...register("lastName")} placeholder="Фамилия" />
         </label>
 
         <label>
-          User Name
-          <input {...register("userName")} placeholder="User Name" />
+          Потребителско име
+          <input {...register("userName")} placeholder="Потребителско име" />
         </label>
 
         <label>
-          Password
-          <input {...register("password")} placeholder="Password" />
+          Парола
+          <input
+            type="password"
+            {...register("password")}
+            placeholder="Парола"
+          />
+        </label>
+        <label>
+          Парола (потвърди)
+          <input
+            type="password"
+            {...register("confirmPassword")}
+            placeholder="Потвърди Парола"
+          />
         </label>
 
         <input type="submit" />

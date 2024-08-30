@@ -78,7 +78,7 @@ export const browserRouter = createBrowserRouter([
         element: <LoginForm />,
       },
       {
-        path: "/admin/",
+        path: "admin/",
         handle:{
             crumb:()=><Link to="/admin">Администрация</Link>
         },
@@ -86,6 +86,20 @@ export const browserRouter = createBrowserRouter([
           {
             index: true,
             element: <AdminHomePage />,
+          },
+          {
+            path: "reports/",
+            element: <ReportsPage />,
+            handle:{
+                crumb:()=><Link to="/admin/reports">Справки</Link>
+            },
+            children: [
+              {
+                path: "priceList/",
+                element: <PriceList />,
+                loader: PriceListLoader,
+              },
+            ],
           },
 
           {
@@ -112,17 +126,7 @@ export const browserRouter = createBrowserRouter([
         ],
       },
 
-      {
-        path: "/reports/",
-        element: <ReportsPage />,
-        children: [
-          {
-            path: "/reports/priceList/",
-            element: <PriceList />,
-            loader: PriceListLoader,
-          },
-        ],
-      },
+      
     ],
   },
 ]);

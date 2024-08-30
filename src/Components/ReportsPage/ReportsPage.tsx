@@ -7,7 +7,7 @@ export default function ReportsPage(){
         <div className={styles.reportsPageContainer}>
             <div className={styles.sideBar}>
                 <ul>
-                    <Link to="/reports/priceList">
+                    <Link to="priceList">
                         <li>Ценоразпис</li>
                     </Link>
                     <li>Фотокартини</li>

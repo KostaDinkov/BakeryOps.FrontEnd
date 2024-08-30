@@ -33,7 +33,10 @@ function App() {
     <div className={styles.app}>
       <AppContext.Provider value={{ products, clients, isLogged, setIsLogged }}>
         <NavBar />
-        <Outlet />
+        <div className={styles.homeContainer}>
+          <Outlet />
+        </div>
+        
       </AppContext.Provider>
     </div>
   );

@@ -4,6 +4,13 @@
   height: 100vh;
   
 }
-
+.homeContainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+  
+}
 
 

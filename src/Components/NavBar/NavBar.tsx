@@ -3,10 +3,10 @@ import styles from "./NavBar.module.css";
 import Button from "@mui/material/Button";
 import { Link, useNavigate } from "react-router-dom";
 import AppContext from "../../appContext";
+import BreadCrumbs from "../BreadCrumbs/BreadCrumbs";
 
 const NavBar = () => {
   const { isLogged, setIsLogged } = useContext(AppContext);
-
   const navigate = useNavigate();
 
   function handleLogout() {
@@ -16,6 +16,7 @@ const NavBar = () => {
     navigate("/");
   }
   return (
+    <>
     <div className={styles.navBarContainer}>
       <Link to="/">Лого за началната страница</Link>
       <span>Ime na potrebitel</span>
@@ -43,6 +44,8 @@ const NavBar = () => {
         </Link>
       )}
     </div>
+    <BreadCrumbs/>
+    </>
   );
 };
 

@@ -1,4 +1,4 @@
-import React from "react";
+
 import { useRouteError } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 
@@ -9,7 +9,7 @@ export default function Error() {
 
   return (
     <div className={styles.layout}>
-      <Typography variant="h5" data-test="Error-error-message"color="error">{error.message}</Typography>
+      <Typography variant="h5" data-test="Error-error-message"color="error"> {error.message} </Typography>
     </div>
   );
 }

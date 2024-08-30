@@ -13,3 +13,14 @@ export const auth = {
       
     },
   };
+
+  export const getPermissions = async (): Promise<string[]> => {
+    let response = await fetch(`${hostName}/api/security/getPermissions`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    return response.json();
+  }

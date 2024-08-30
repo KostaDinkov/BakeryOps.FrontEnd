@@ -13,7 +13,8 @@ export default function UsersHomePage() {
 
     const [users, setUsers] = useState<UserDTO[]>(useLoaderData() as UserDTO[]);
 
-    const handleDeleteUser = async (id: string) => {
+    const handleDeleteUser = async (id: string | null) => {
+      if(!id) return;
       console.log("delete user with id", id);
       setUsers(users.filter((user) => user.id !== id));
       await deleteUser(id);
@@ -23,17 +24,17 @@ export default function UsersHomePage() {
       <h1>Потребители</h1>
       <Link to="/admin/users/add"><Button variant="contained" color="primary">Добави потребител</Button></Link>
         <ul>
-            {users.map((user) => (
-            <li key={user.id}>
-                <p>{user.firstName} {user.lastName} - {user.userName} 
-                    <Link to={`/admin/users/edit/${user.id}`} >
-                        <Button>Редактирай</Button>
-                    </Link>
-                    <Button onClick={()=>handleDeleteUser(user.id)}>Изтрий</Button>
-                </p>
+          {users.map((user) => (
+          <li key={user.id}>
+            <p>{user.firstName} {user.lastName} - {user.userName} 
+              <Link to={`/admin/users/edit/${user.id}`} state = {{user:user}} >
+                <Button>Редактирай</Button>
+              </Link>
+              <Button onClick={()=>handleDeleteUser(user.id)}>Изтрий</Button>
+            </p>
 
-            </li>
-            ))}
+          </li>
+          ))}
         </ul>
     </div>
   );

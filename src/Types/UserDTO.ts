@@ -1,13 +1,13 @@
 
 export default interface UserDTO {
-  id: string;
+  id: string | null;
   firstName: string | null;
   lastName: string | null;
   userName: string;
   permissions: string[];
 }
 
-export interface NewUserDTO extends Omit<UserDTO, 'id'> {
+export interface NewUserDTO extends UserDTO {
  
   password: string,
   

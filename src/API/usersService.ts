@@ -55,3 +55,38 @@ export async function deleteUser(id:string): Promise<void>{
     }
     
 }
+
+export async function getUserById(id:string): Promise<UserDTO>{
+    let response = await fetch(
+      `${hostName}/api/users/getUserById/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    if (response.status === 401) {
+      throw new UnauthorizedError("Not authorized to get user");
+    }
+    return response.json();
+}
+
+export async function updateUser(user:UserDTO): Promise<UserDTO>{
+    let response = await fetch(
+      `${hostName}/api/users/updateUser`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body:JSON.stringify(user)
+      }
+    );
+    if (response.status === 401) {
+      throw new UnauthorizedError("Not authorized to edit user");
+    }
+    return response.json();
+} 

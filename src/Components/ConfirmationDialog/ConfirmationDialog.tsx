@@ -21,7 +21,7 @@ export default function ConfirmationDialog({
   promptText: string;
   agreeBtnText: string;
   disagreeBtnText: string;
-  handleAgree: () => boolean;
+  handleAgree: () => void;
 }) {
 
   const handleClose = () => {
@@ -32,7 +32,6 @@ export default function ConfirmationDialog({
     <>
       <Dialog
         open={isOpen}
-        
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
@@ -47,7 +46,7 @@ export default function ConfirmationDialog({
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>{disagreeBtnText}</Button>
-          <Button onClick={() => handleAgree()} autoFocus>
+          <Button onClick={() => {handleAgree(); setIsOpen(false);}} autoFocus>
             {agreeBtnText}
           </Button>
         </DialogActions>

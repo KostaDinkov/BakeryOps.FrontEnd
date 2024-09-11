@@ -5,8 +5,8 @@ export default function AdminHomePage() {
     return (
         <div className = {styles.container}>
             <h1>Администрация</h1>
-            <Link to="/admin/users">Потребители</Link>
-            <Link to="/admin/reports">Справки</Link>
+            <Link to="users">Потребители</Link>
+            <Link to="reports">Справки</Link>
             <Outlet />
         </div>
     )

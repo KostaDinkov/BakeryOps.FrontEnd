@@ -73,7 +73,11 @@ export default function UserForm() {
       <h2>
         {isEdit ? "Редактиране на потребител" : "Добавяне на нов потребител"}
       </h2>
-      <form onSubmit={handleSubmit(onSubmit)} className={styles.userForm}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className={styles.userForm}
+        autoComplete="off"
+      >
         <label className={styles.label} htmlFor="firstName">
           Име
         </label>
@@ -82,7 +86,8 @@ export default function UserForm() {
           id="firstName"
           {...register("firstName", {
             required: "This is required",
-            maxLength: { value: 20, message: "Max length is 20" },
+            maxLength: { value: 20, message: "Максимум 20 символа" },
+            minLength: { value: 4, message: "Минимум 4 символа" },
           })}
           placeholder="Име"
           defaultValue={user?.firstName || ""}
@@ -105,10 +110,13 @@ export default function UserForm() {
         <input
           className={styles.input}
           id="userName"
-          {...register("userName")}
+          {...register("userName", {
+            required: true,
+            minLength: { value: 5, message: "Минимум 5 символа" },
+          })}
           placeholder="Потребителско име"
           defaultValue={user?.userName || ""}
-          required
+          autoComplete="off"
         />
 
         <label className={styles.label} htmlFor="password">

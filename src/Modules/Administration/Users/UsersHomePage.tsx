@@ -24,7 +24,7 @@ export default function UsersHomePage() {
   const confirmDelete = (id: string | null) => {
     setDeleteUserId(id);
     setIsDialogOpen(true);
-  }
+  };
 
   return (
     <div>
@@ -36,9 +36,7 @@ export default function UsersHomePage() {
         agreeBtnText="Да"
         disagreeBtnText="Не"
         handleAgree={() => {
-          handleDeleteUser(deleteUserId)
-          setIsDialogOpen(false);
-          return true;
+          handleDeleteUser(deleteUserId);
         }}
       />
       <h1>Потребители</h1>

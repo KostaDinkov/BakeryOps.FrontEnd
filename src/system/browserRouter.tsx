@@ -23,6 +23,8 @@ import PrintOrderView, {
   loader as PrintOrderViewLoader,
 } from "../Modules/Orders/PrintOrderView/PrintOrderView";
 import Error from "../Components/Error";
+import NomenclatureHomePage from "../Modules/Nomenclature/NomenclatureHomePage";
+import MaterialsPage from "../Modules/Nomenclature/Materials/MaterialsPage";
 export const browserRouter = createBrowserRouter([
   {
     path: "/",
@@ -36,8 +38,8 @@ export const browserRouter = createBrowserRouter([
       {
         element: <OrdersHome />,
         path: "/orders/",
-        handle:{
-            crumb:()=><Link to="/orders">Поръчки</Link>
+        handle: {
+          crumb: () => <Link to="/orders">Поръчки</Link>,
         },
         children: [
           {
@@ -79,8 +81,8 @@ export const browserRouter = createBrowserRouter([
       },
       {
         path: "admin/",
-        handle:{
-            crumb:()=><Link to="/admin">Администрация</Link>
+        handle: {
+          crumb: () => <Link to="/admin">Администрация</Link>,
         },
         children: [
           {
@@ -90,8 +92,8 @@ export const browserRouter = createBrowserRouter([
           {
             path: "reports/",
             element: <ReportsPage />,
-            handle:{
-                crumb:()=><Link to="/admin/reports">Справки</Link>
+            handle: {
+              crumb: () => <Link to="/admin/reports">Справки</Link>,
             },
             children: [
               {
@@ -104,8 +106,8 @@ export const browserRouter = createBrowserRouter([
 
           {
             path: "users/",
-            handle:{
-                crumb:()=><Link to="/admin/users">Потребители</Link>
+            handle: {
+              crumb: () => <Link to="/admin/users">Потребители</Link>,
             },
             children: [
               {
@@ -126,7 +128,29 @@ export const browserRouter = createBrowserRouter([
         ],
       },
 
-      
+      {
+        path: "/nomenclature/",
+
+        handle: {
+          crumb: () => <Link to="/nomenclature">Номенклатура</Link>,
+        },
+        children: [
+          {
+            index: true,
+            element: <NomenclatureHomePage />,
+            errorElement: <Error />,
+          },
+
+          {
+            path: "materials",
+            element: <MaterialsPage />,
+            errorElement: <Error />,
+            handle: {
+              crumb: () => <Link to="/nomenclature/materials">Стоки</Link>,
+            },
+          },
+        ],
+      },
     ],
   },
 ]);

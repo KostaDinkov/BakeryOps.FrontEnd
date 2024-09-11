@@ -1,10 +1,10 @@
-import UserDTO, { NewUserDTO } from "../Types/UserDTO";
+import Vendor from "../Types/Vendor";
 import { UnauthorizedError } from "../system/errors";
 
 const hostName = import.meta.env.VITE_API_SERVER_URL;
 
-export async function getUsers(): Promise<UserDTO[]> {
-  let response = await fetch(`${hostName}/api/users/getUsers`, {
+export async function getVendors(): Promise<Vendor[]> {
+  let response = await fetch(`${hostName}/api/vendors/getVendors`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -12,19 +12,19 @@ export async function getUsers(): Promise<UserDTO[]> {
     },
   });
   if (response.status === 401) {
-    throw new UnauthorizedError("Not authorized to get users");
+    throw new UnauthorizedError("Not authorized to get vendors");
   }
   return response.json();
 }
 
-export async function addUser(user: NewUserDTO): Promise<UserDTO> {
-  let response = await fetch(`${hostName}/api/users/addUser`, {
+export async function addVendor(vendor: Vendor): Promise<Vendor> {
+  let response = await fetch(`${hostName}/api/vendors/addVendor`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
-    body: JSON.stringify(user),
+    body: JSON.stringify(vendor),
   });
   if (response.status !== 200) {
     throw new Error(`${response.status} - ${response.statusText}`);
@@ -33,8 +33,8 @@ export async function addUser(user: NewUserDTO): Promise<UserDTO> {
   return response.json();
 }
 
-export async function deleteUser(id: string): Promise<void> {
-  let response = await fetch(`${hostName}/api/users/deleteUser/${id}`, {
+export async function deleteVendor(id: string): Promise<void> {
+  let response = await fetch(`${hostName}/api/vendors/deleteVendor/${id}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -42,12 +42,12 @@ export async function deleteUser(id: string): Promise<void> {
     },
   });
   if (response.status === 401) {
-    throw new UnauthorizedError("Not authorized to delete user");
+    throw new UnauthorizedError("Not authorized to delete vendor");
   }
 }
 
-export async function getUserById(id: string): Promise<UserDTO> {
-  let response = await fetch(`${hostName}/api/users/getUserById/${id}`, {
+export async function getVendorById(id: string): Promise<Vendor> {
+  let response = await fetch(`${hostName}/api/vendors/getVendor/${id}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -55,22 +55,23 @@ export async function getUserById(id: string): Promise<UserDTO> {
     },
   });
   if (response.status === 401) {
-    throw new UnauthorizedError("Not authorized to get user");
+    throw new UnauthorizedError("Not authorized to get vendor");
   }
   return response.json();
 }
 
-export async function updateUser(user: UserDTO): Promise<UserDTO> {
-  let response = await fetch(`${hostName}/api/users/updateUser`, {
+export async function updateVendor(vendor: Vendor): Promise<Vendor> {
+  let response = await fetch(`${hostName}/api/vendors/updateVendor`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
-    body: JSON.stringify(user),
+    body: JSON.stringify(vendor),
   });
-  if (response.status === 401) {
-    throw new UnauthorizedError("Not authorized to edit user");
+  if (response.status !== 200) {
+    throw new Error(`${response.status} - ${response.statusText}`);
   }
+
   return response.json();
 }

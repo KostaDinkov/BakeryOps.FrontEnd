@@ -3,16 +3,18 @@ import { Outlet } from "react-router-dom";
 import styles from "./App.module.css";
 import NavBar from "./Components/NavBar/NavBar.js";
 import AppContext from "./appContext.ts";
-import ClientsService from "./API/clientsService.ts";
+import * as ClientsService from "./API/clientsService.ts";
 import ProductsService from "./API/productsService.ts";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import ClientDTO from "./Types/ClientDTO.ts";
+import ProductDTO from "./Types/ProductDTO.ts";
 
 const queryClient = new QueryClient();
 
 function App() {
-  let [products, setProducts] = useState([]);
-  let [clients, setClients] = useState([]);
+  let [products, setProducts] = useState<ProductDTO[]>([]);
+  let [clients, setClients] = useState<ClientDTO[]>([]);
   let [isLogged, setIsLogged] = useState(
     JSON.parse(localStorage.getItem("isLogged"))
   );
@@ -28,9 +30,10 @@ function App() {
   }
 
   async function fetchClients() {
-    const clients = await ClientsService.GetClientsAsync();
+    const clients = await ClientsService.getAllItems();
     setClients(clients);
   }
+  
   
 
   return (

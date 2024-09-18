@@ -25,6 +25,8 @@ import PrintOrderView, {
 import Error from "../Components/Error";
 import NomenclatureHomePage from "../Modules/Nomenclature/NomenclatureHomePage";
 import MaterialsPage from "../Modules/Nomenclature/Materials/MaterialsPage";
+import VendorsPage from "../Modules/Nomenclature/Vendors/VendorsPage";
+import ClientsPage from "../Modules/Nomenclature/Clients/ClientsPage";
 export const browserRouter = createBrowserRouter([
   {
     path: "/",
@@ -149,6 +151,22 @@ export const browserRouter = createBrowserRouter([
               crumb: () => <Link to="/nomenclature/materials">Стоки</Link>,
             },
           },
+          {
+            path:"vendors",
+            element:<VendorsPage/>,
+            errorElement:<Error/>,
+            handle:{
+              crumb:()=><Link to="/nomenclature/vendors">Доставчици</Link>
+            }
+          },
+          {
+            path:"clients",
+            element:<ClientsPage/>,
+            errorElement:<Error/>,
+            handle:{
+              crumb:()=><Link to="/nomenclature/clients">Клиенти</Link>
+            }
+          }
         ],
       },
     ],

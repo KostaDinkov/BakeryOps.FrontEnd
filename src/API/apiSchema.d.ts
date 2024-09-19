@@ -111,7 +111,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Categories/UpdateCategory/{id}": {
+    "/api/Categories/UpdateCategory": {
         parameters: {
             query?: never;
             header?: never;
@@ -123,9 +123,7 @@ export interface paths {
             parameters: {
                 query?: never;
                 header?: never;
-                path: {
-                    id: string;
-                };
+                path?: never;
                 cookie?: never;
             };
             requestBody?: {

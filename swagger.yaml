@@ -43,17 +43,10 @@ paths:
       responses:
         '200':
           description: OK
-  '/api/Categories/UpdateCategory/{id}':
+  /api/Categories/UpdateCategory:
     put:
       tags:
         - Categories
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
       requestBody:
         content:
           application/json:

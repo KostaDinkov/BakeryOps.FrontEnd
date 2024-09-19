@@ -1,4 +1,4 @@
-import styles from "../Materials/MaterialsPage.module.css";
+
 import { useState } from "react";
 import { Button } from "@mui/material";
 import ConfirmationDialog from "../../../Components/ConfirmationDialog/ConfirmationDialog";
@@ -98,7 +98,7 @@ export default function GenericCRUDView<TItem>({
   return (
     <div className="verticalMenu">
       <h1>{title}</h1>
-      <div className={styles.twoColumnView}>
+      <div className={"twoColumnView"}>
         <div className="allMaterials">
           {itemsQuery.isLoading && <div>Loading...</div>}
           {itemsQuery.isError && <div>{itemsQuery.error.message}</div>}

@@ -27,6 +27,7 @@ import NomenclatureHomePage from "../Modules/Nomenclature/NomenclatureHomePage";
 import MaterialsPage from "../Modules/Nomenclature/Materials/MaterialsPage";
 import VendorsPage from "../Modules/Nomenclature/Vendors/VendorsPage";
 import ClientsPage from "../Modules/Nomenclature/Clients/ClientsPage";
+import CategoriesPage from "../Modules/Nomenclature/Categories/CategoriesPage";
 export const browserRouter = createBrowserRouter([
   {
     path: "/",
@@ -165,6 +166,14 @@ export const browserRouter = createBrowserRouter([
             errorElement:<Error/>,
             handle:{
               crumb:()=><Link to="/nomenclature/clients">Клиенти</Link>
+            }
+          },
+          {
+            path:"categories",
+            element:<CategoriesPage/>,
+            errorElement:<Error/>,
+            handle:{
+              crumb:()=><Link to="/nomenclature/categories">Категории Стоки</Link>
             }
           }
         ],

@@ -9,6 +9,7 @@ export default function AdminHomePage() {
             <Link to="products">Продукти</Link>
             <Link to="vendors">Доставчици</Link>
             <Link to="clients">Клиенти</Link>
+            <Link to="categories">Категории Стоки</Link>
             <Outlet />
         </div>
     )

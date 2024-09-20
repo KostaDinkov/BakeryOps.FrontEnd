@@ -276,7 +276,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    id: number;
+                    id: string;
                 };
                 cookie?: never;
             };
@@ -298,7 +298,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    id: number;
+                    id: string;
                 };
                 cookie?: never;
             };
@@ -1340,8 +1340,8 @@ export interface components {
             name: string | null;
         };
         ClientDTO: {
-            /** Format: int32 */
-            id?: number;
+            /** Format: uuid */
+            id?: string;
             name?: string | null;
             phone?: string | null;
             email?: string | null;
@@ -1380,8 +1380,8 @@ export interface components {
             createdDate?: string | null;
             clientName?: string | null;
             clientPhone?: string | null;
-            /** Format: int32 */
-            clientId?: number | null;
+            /** Format: uuid */
+            clientId?: string | null;
             isPaid?: boolean | null;
             /** Format: double */
             advancePaiment?: number | null;

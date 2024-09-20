@@ -31,8 +31,8 @@ export default function CategoriesPage() {
       });
       return result.data as unknown as CategoryDTO;
     },
-    deleteItem: async (id: string|number) => {
-      await apiClient.DELETE("/api/Categories/DeleteCategory/{id}", {params:{path:{id:id.toString()}}}); ;
+    deleteItem: async (id: string) => {
+      await apiClient.DELETE("/api/Categories/DeleteCategory/{id}", {params:{path:{id}}}); ;
     },
 
   }
@@ -79,6 +79,7 @@ export default function CategoriesPage() {
       ItemDetails={CategoryDetails}
       itemSchema={categorySchema}
       itemOperations={categoryOperations}
+      newBtnText="Добави Категория"
     />
   );
 }

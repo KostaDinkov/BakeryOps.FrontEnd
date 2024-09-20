@@ -1,24 +1,28 @@
 
 import { useState } from "react";
-import { Button } from "@mui/material";
+import { Button, Paper } from "@mui/material";
 import ConfirmationDialog from "../../../Components/ConfirmationDialog/ConfirmationDialog";
 import { z } from "zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import styles from './GenericCRUD.module.scss';
+
 export interface IItemOperations<TItem> {
   queryKey: string[];
   getItems: () => Promise<TItem[]>;
   createItem: (item: TItem) => Promise<TItem>;
   updateItem: (item: TItem) => Promise<TItem>;
-  deleteItem: (id: string | number) => Promise<void>;
+  deleteItem: (id: string ) => Promise<void>;
 }
 
 export default function GenericCRUDView<TItem>({
+
   title,
   ItemFormFields,
   ItemsList,
   ItemDetails,
   itemSchema,
   itemOperations,
+  newBtnText = "Нов",
 }: {
   title: string;
   ItemFormFields: React.FC<{ selectedItem: TItem | null }>;
@@ -29,8 +33,9 @@ export default function GenericCRUDView<TItem>({
   ItemDetails: React.FC<{ selectedItem: TItem | null }>;
   itemSchema: z.ZodSchema<TItem>;
   itemOperations: IItemOperations<TItem>;
+  newBtnText?: string;
 }) {
-  type IId = TItem & { id: string | number };
+  type IId = TItem & { id: string  };
 
   const [mode, setMode] = useState<"viewItem" | "updateItem" | "createItem">(
     "viewItem"
@@ -92,38 +97,43 @@ export default function GenericCRUDView<TItem>({
       }
     };
 
-    return <form onSubmit={handleSubmit}>{children}</form>;
+    return <form className={styles.itemsForm} onSubmit={handleSubmit}>{children}</form>;
   }
 
   return (
     <div className="verticalMenu">
-      <h1>{title}</h1>
-      <div className={"twoColumnView"}>
-        <div className="allMaterials">
+      
+        <h1>{title}</h1> 
+      
+      <div className={styles.twoColumnView}>
+        <div className={styles.itemsList}>
           {itemsQuery.isLoading && <div>Loading...</div>}
           {itemsQuery.isError && <div>{itemsQuery.error.message}</div>}
           {itemsQuery.isSuccess && (
-            <ItemsList
-              setSelectedItem={setSelectedItem}
-              data={itemsQuery.data}
-            />
+            <Paper elevation={0} sx={{padding:"1rem"}}>
+              
+              <ItemsList
+                setSelectedItem={setSelectedItem}
+                data={itemsQuery.data}
+              />
+            </Paper>
           )}
         </div>
         <div className="materialDetails">
           {mode === "viewItem" ? (
             <div>
               <Button
-                variant="outlined"
-                onClick={() => {
-                  setMode("createItem");
-                  setSelectedItem(null);
-                }}
-              >
-                Нов
-              </Button>
+                  variant="outlined"
+                  onClick={() => {
+                    setMode("createItem");
+                    setSelectedItem(null);
+                  }}
+                >
+                  {newBtnText}
+                </Button>
               <ItemDetails selectedItem={selectedItem} />
               {selectedItem && (
-                <div>
+                <div className={styles.editDeleteButtonGroup}>
                   <Button
                     variant="contained"
                     onClick={() => setMode("updateItem")}
@@ -146,12 +156,15 @@ export default function GenericCRUDView<TItem>({
             <div>
               <GenericForm>
                 <ItemFormFields selectedItem={selectedItem} />
+                <div className={styles.saveButtonGroup}>
                 <Button variant="outlined" onClick={() => setMode("viewItem")}>
                   Откажи
                 </Button>
-                <Button variant="contained" type="submit" color="error">
+                <Button variant="contained" type="submit" color="primary">
                   Запази
                 </Button>
+                </div>
+                
               </GenericForm>
             </div>
           )}

@@ -35,9 +35,9 @@ export default function VendorsPage() {
       });
       return response.data as unknown as VendorDTO;
     },
-    deleteItem: async (id: string | number) => {
+    deleteItem: async (id: string ) => {
       await apiClient.DELETE("/api/Vendors/DeleteVendor/{id}", {
-        params: { path: { id:String(id) } },
+        params: { path: { id} },
       });
     },
     queryKey: ["vendors"],
@@ -121,7 +121,7 @@ export default function VendorsPage() {
       ItemsList={VendorsList}
       ItemDetails={VendorDetails}
       itemOperations={vendorsOperations}
-      
+      newBtnText="Добави Доставчик"
     />
   );
 }

@@ -12,21 +12,19 @@ import { components } from "../../../API/apiSchema";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { z } from "zod";
 
-
 type MaterialDTO = components["schemas"]["MaterialDTO"];
 type CategoryDTO = components["schemas"]["CategoryDTO"];
 type VendorDTO = components["schemas"]["VendorDTO"];
 
- // Define the schema for client formData parsing and validation
- //@ts-ignore
- const materialSchema: z.ZodSchema<MaterialDTO> = z.object({
+// Define the schema for client formData parsing and validation
+//@ts-ignore
+const materialSchema: z.ZodSchema<MaterialDTO> = z.object({
   id: z.string().uuid().default("00000000-0000-0000-0000-000000000000"),
   name: z.string().min(3).max(50),
   description: z.string().max(200).nullable().default(null).optional(),
   unit: z.string().nullable(),
-  vendorId:z.string().uuid(),
-  categoryId: z.string().uuid()
-  
+  vendorId: z.string().uuid(),
+  categoryId: z.string().uuid(),
 });
 
 export default function MaterialsPage() {
@@ -47,25 +45,25 @@ export default function MaterialsPage() {
   });
 
   const getCategoryDTO = (id: string) => {
-    if(categoriesQuery.data === undefined) {
+    if (categoriesQuery.data === undefined) {
       throw new Error("CategoriesQuery: Categories data is undefined");
     }
-    const categoryDTO = categoriesQuery.data.filter((c) => c.id === id)[0] ;
-    if(categoryDTO === undefined) {
+    const categoryDTO = categoriesQuery.data.filter((c) => c.id === id)[0];
+    if (categoryDTO === undefined) {
       throw new Error("CategoriesQuery: Category not found");
     }
-    return categoryDTO ;
-  }
+    return categoryDTO;
+  };
   const getVendorDTO = (id: string) => {
-    if(vendorsQuery.data === undefined) {
+    if (vendorsQuery.data === undefined) {
       throw new Error("VendorsQuery: Vendors data is undefined");
     }
-    const vendorDTO = vendorsQuery.data.filter((v) => v.id === id)[0] ;
-    if(vendorDTO === undefined) {
+    const vendorDTO = vendorsQuery.data.filter((v) => v.id === id)[0];
+    if (vendorDTO === undefined) {
       throw new Error("VendorsQuery: Vendor not found");
     }
-    return vendorDTO; ;
-  }
+    return vendorDTO;
+  };
 
   // functions to create, update and delete clients, that use tanstack-query, and automatically invalidate the clients query
   const materialOperations: IItemOperations<MaterialDTO> = {
@@ -157,8 +155,6 @@ export default function MaterialsPage() {
     );
   };
 
- 
-
   const MaterialFormFields: React.FC<{
     selectedItem: MaterialDTO | null;
   }> = ({ selectedItem }) => {
@@ -182,10 +178,14 @@ export default function MaterialsPage() {
             (category) => ({ value: category.id, label: category.name } as any)
           )}
           name="categoryId"
-          defaultValue={selectedItem? {
-            value: selectedItem?.categoryId,
-            label: getCategoryDTO(selectedItem?.categoryId)?.name,
-          }: undefined}
+          defaultValue={
+            selectedItem
+              ? {
+                  value: selectedItem?.categoryId,
+                  label: getCategoryDTO(selectedItem?.categoryId)?.name,
+                }
+              : undefined
+          }
         />
 
         <Select
@@ -193,10 +193,14 @@ export default function MaterialsPage() {
           options={vendorsQuery.data?.map(
             (vendor) => ({ value: vendor.id, label: vendor.name } as any)
           )}
-          defaultValue={selectedItem?{
-            value: selectedItem?.vendorId,
-            label: getVendorDTO(selectedItem?.vendorId)?.name,
-          }: undefined}
+          defaultValue={
+            selectedItem
+              ? {
+                  value: selectedItem?.vendorId,
+                  label: getVendorDTO(selectedItem?.vendorId)?.name,
+                }
+              : undefined
+          }
         />
 
         <TextField
@@ -213,15 +217,14 @@ export default function MaterialsPage() {
     return <div>Loading data from queries...</div>;
   }
   return (
-    <div>
-      <GenericCRUDView
-        title="Стоки"
-        ItemsList={MaterialsList}
-        ItemFormFields={MaterialFormFields}
-        ItemDetails={MaterialDetails}
-        itemSchema={materialSchema}
-        itemOperations={materialOperations}
-      />
-    </div>
+    <GenericCRUDView
+      title="Стоки"
+      ItemsList={MaterialsList}
+      ItemFormFields={MaterialFormFields}
+      ItemDetails={MaterialDetails}
+      itemSchema={materialSchema}
+      itemOperations={materialOperations}
+      newBtnText="Добави Стока"
+    />
   );
 }

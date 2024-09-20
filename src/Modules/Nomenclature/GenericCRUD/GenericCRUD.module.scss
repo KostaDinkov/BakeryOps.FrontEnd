@@ -1,0 +1,29 @@
+.twoColumnView{
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+}
+
+.itemsList{
+    padding-left:1rem;
+}
+
+.itemsForm{
+    display:flex;
+    flex-direction: column;
+    padding-right:1rem;
+    gap:1rem;
+}
+
+.saveButtonGroup{
+    display:flex;
+    justify-content: flex-end;
+    gap:1rem;
+}
+
+.editDeleteButtonGroup{
+    display:flex;
+    justify-content: flex-start;
+    gap:1rem;
+}

@@ -8,7 +8,6 @@ import { z } from "zod";
 type ClientDTO = components["schemas"]["ClientDTO"];
 
 export default function ClientsPage() {
-  
   const clientsOperations: IItemOperations<ClientDTO> = {
     getItems: async () => {
       const response = await apiClient.GET("/api/Clients");
@@ -23,9 +22,9 @@ export default function ClientsPage() {
       const response = await apiClient.PUT("/api/Clients", { body: item });
       return response.data as unknown as ClientDTO;
     },
-    deleteItem: async (id: string | number) => {
+    deleteItem: async (id: string) => {
       await apiClient.DELETE(`/api/Clients/{id}`, {
-        params: { path: { id:Number(id) } },
+        params: { path: { id: id } },
       });
       return;
     },
@@ -73,7 +72,7 @@ export default function ClientsPage() {
 
   // Define the schema for client formData parsing and validation
   const clientSchema: z.ZodSchema<ClientDTO> = z.object({
-    id: z.number().default(0),
+    id: z.string().default("00000000-0000-0000-0000-000000000000"),
     name: z.string().min(3).max(50),
     phone: z.string().min(5).max(20).nullable().default(null),
     email: z.string().email().nullable().default(null),
@@ -127,15 +126,14 @@ export default function ClientsPage() {
   };
 
   return (
-    <div>
-      <GenericCRUDView
-        title="Clients"
-        ItemsList={ClientsList}
-        ItemFormFields={ClientFormFields}
-        ItemDetails={ClientDetails}
-        itemSchema={clientSchema}
-        itemOperations={clientsOperations}
-      />
-    </div>
+    <GenericCRUDView
+      title="Clients"
+      ItemsList={ClientsList}
+      ItemFormFields={ClientFormFields}
+      ItemDetails={ClientDetails}
+      itemSchema={clientSchema}
+      itemOperations={clientsOperations}
+      newBtnText="Добави Клиент"
+    />
   );
 }

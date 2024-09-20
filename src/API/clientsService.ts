@@ -1,6 +1,8 @@
 
 import { NotFoundError, UnauthorizedError } from "../system/errors";
-import {ClientDTO} from "../Types/ClientDTO";
+import {components } from '../API/apiSchema';
+
+type ClientDTO = components["schemas"]["ClientDTO"];
 
 
 export const hostName = import.meta.env.VITE_API_SERVER_URL;

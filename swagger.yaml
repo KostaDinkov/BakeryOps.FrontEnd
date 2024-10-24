@@ -406,6 +406,77 @@ paths:
       responses:
         '200':
           description: OK
+  /api/Recipes/GetRecipes:
+    get:
+      tags:
+        - Recipes
+      responses:
+        '200':
+          description: OK
+  '/api/Recipes/GetRecipe/{id}':
+    get:
+      tags:
+        - Recipes
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+  /api/Recipes/AddRecipe:
+    post:
+      tags:
+        - Recipes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeDTO'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RecipeDTO'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/RecipeDTO'
+      responses:
+        '200':
+          description: OK
+  /api/Recipes/UpdateRecipe:
+    put:
+      tags:
+        - Recipes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeDTO'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RecipeDTO'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/RecipeDTO'
+      responses:
+        '200':
+          description: OK
+  '/api/Recipes/DeleteRecipe/{id}':
+    delete:
+      tags:
+        - Recipes
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
   /api/Security/GetToken:
     post:
       tags:
@@ -428,6 +499,31 @@ paths:
     get:
       tags:
         - Security
+      responses:
+        '200':
+          description: OK
+  /api/Units/GetUnits:
+    get:
+      tags:
+        - Units
+      responses:
+        '200':
+          description: OK
+  /api/Units/AddUnit:
+    post:
+      tags:
+        - Units
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Unit'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Unit'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Unit'
       responses:
         '200':
           description: OK
@@ -627,7 +723,7 @@ components:
         - categoryId
         - id
         - name
-        - unit
+        - unitId
         - vendorId
       type: object
       properties:
@@ -640,9 +736,12 @@ components:
         description:
           type: string
           nullable: true
-        unit:
+        unitId:
           type: string
-          nullable: true
+          format: uuid
+        latestPrice:
+          type: number
+          format: double
         categoryId:
           type: string
           format: uuid
@@ -780,12 +879,81 @@ components:
           type: string
           format: date-time
       additionalProperties: false
+    RecipeDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        lastUpdated:
+          type: string
+          format: date
+        productId:
+          type: string
+          format: uuid
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipeMaterialDto'
+          nullable: true
+        subRecipes:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubRecipeDto'
+          nullable: true
+        workHours:
+          type: number
+          format: double
+        yield:
+          type: number
+          format: double
+        unitId:
+          type: string
+          format: uuid
+      additionalProperties: false
+    RecipeMaterialDto:
+      type: object
+      properties:
+        materialId:
+          type: string
+          format: uuid
+        quantity:
+          type: number
+          format: double
+      additionalProperties: false
     Status:
       enum:
         - 0
         - 1
       type: integer
       format: int32
+    SubRecipeDto:
+      type: object
+      properties:
+        subRecipeId:
+          type: string
+          format: uuid
+        quantity:
+          type: number
+          format: double
+      additionalProperties: false
+    Unit:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+      additionalProperties: false
     UserCredentialsDTO:
       type: object
       properties:

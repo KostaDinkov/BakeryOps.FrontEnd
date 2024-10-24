@@ -29,6 +29,7 @@ import VendorsPage from "../Modules/Nomenclature/Vendors/VendorsPage";
 import ClientsPage from "../Modules/Nomenclature/Clients/ClientsPage";
 import CategoriesPage from "../Modules/Nomenclature/Categories/CategoriesPage";
 import ProductsPage from "../Modules/Nomenclature/Products/ProductsPage";
+import RecipesHomePage from "../Modules/Recipes/RecipesHomePage";
 export const browserRouter = createBrowserRouter([
   {
     path: "/",
@@ -187,6 +188,14 @@ export const browserRouter = createBrowserRouter([
           }
         ],
       },
+      {
+        path:"recipes",
+        element:<RecipesHomePage/>,
+        handle: {
+          crumb: () => <Link to="/recipes">Рецепти</Link>,
+        },
+
+      }
     ],
   },
 ]);

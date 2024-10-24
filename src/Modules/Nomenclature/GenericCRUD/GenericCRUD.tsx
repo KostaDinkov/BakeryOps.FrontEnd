@@ -1,21 +1,19 @@
-
 import { useState } from "react";
 import { Button, Paper } from "@mui/material";
 import ConfirmationDialog from "../../../Components/ConfirmationDialog/ConfirmationDialog";
 import { z } from "zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import styles from './GenericCRUD.module.scss';
+import styles from "./GenericCRUD.module.scss";
 
 export interface IItemOperations<TItem> {
   queryKey: string[];
   getItems: () => Promise<TItem[]>;
   createItem: (item: TItem) => Promise<TItem>;
   updateItem: (item: TItem) => Promise<TItem>;
-  deleteItem: (id: string ) => Promise<void>;
+  deleteItem: (id: string) => Promise<void>;
 }
 
 export default function GenericCRUDView<TItem>({
-
   title,
   ItemFormFields,
   ItemsList,
@@ -23,6 +21,7 @@ export default function GenericCRUDView<TItem>({
   itemSchema,
   itemOperations,
   newBtnText = "Нов",
+  customFormDataParse = null ,
 }: {
   title: string;
   ItemFormFields: React.FC<{ selectedItem: TItem | null }>;
@@ -34,8 +33,9 @@ export default function GenericCRUDView<TItem>({
   itemSchema: z.ZodSchema<TItem>;
   itemOperations: IItemOperations<TItem>;
   newBtnText?: string;
+  customFormDataParse?: ((formData: any) => any ) | null;
 }) {
-  type IId = TItem & { id: string  };
+  type IId = TItem & { id: string };
 
   const [mode, setMode] = useState<"viewItem" | "updateItem" | "createItem">(
     "viewItem"
@@ -70,8 +70,12 @@ export default function GenericCRUDView<TItem>({
   function GenericForm({ children }: { children: React.ReactNode }) {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-
-      const formData = Object.fromEntries(new FormData(e.currentTarget));
+      
+      let formData = Object.fromEntries(new FormData(e.currentTarget));
+      
+      if(customFormDataParse){
+        formData = customFormDataParse(formData);
+      }  
       const parsedResult = itemSchema.safeParse(formData);
 
       if (parsedResult.success) {
@@ -97,21 +101,23 @@ export default function GenericCRUDView<TItem>({
       }
     };
 
-    return <form className={styles.itemsForm} onSubmit={handleSubmit}>{children}</form>;
+    return (
+      <form className={styles.itemsForm} onSubmit={handleSubmit}>
+        {children}
+      </form>
+    );
   }
 
   return (
     <div className="verticalMenu">
-      
-        <h1>{title}</h1> 
-      
+      <h1>{title}</h1>
+
       <div className={styles.twoColumnView}>
         <div className={styles.itemsList}>
           {itemsQuery.isLoading && <div>Loading...</div>}
           {itemsQuery.isError && <div>{itemsQuery.error.message}</div>}
           {itemsQuery.isSuccess && (
-            <Paper elevation={0} sx={{padding:"1rem"}}>
-              
+            <Paper elevation={0} sx={{ padding: "1rem" }}>
               <ItemsList
                 setSelectedItem={setSelectedItem}
                 data={itemsQuery.data}
@@ -123,14 +129,14 @@ export default function GenericCRUDView<TItem>({
           {mode === "viewItem" ? (
             <div>
               <Button
-                  variant="outlined"
-                  onClick={() => {
-                    setMode("createItem");
-                    setSelectedItem(null);
-                  }}
-                >
-                  {newBtnText}
-                </Button>
+                variant="outlined"
+                onClick={() => {
+                  setMode("createItem");
+                  setSelectedItem(null);
+                }}
+              >
+                {newBtnText}
+              </Button>
               <ItemDetails selectedItem={selectedItem} />
               {selectedItem && (
                 <div className={styles.editDeleteButtonGroup}>
@@ -157,14 +163,17 @@ export default function GenericCRUDView<TItem>({
               <GenericForm>
                 <ItemFormFields selectedItem={selectedItem} />
                 <div className={styles.saveButtonGroup}>
-                <Button variant="outlined" onClick={() => setMode("viewItem")}>
-                  Откажи
-                </Button>
-                <Button variant="contained" type="submit" color="primary">
-                  Запази
-                </Button>
+                  <Button
+                    variant="outlined"
+                    onClick={() => setMode("viewItem")}
+                  >
+                    Откажи
+                  </Button>
+
+                  <Button variant="contained" type="submit" color="primary">
+                    Запази
+                  </Button>
                 </div>
-                
               </GenericForm>
             </div>
           )}

@@ -15,6 +15,7 @@ import { z } from "zod";
 type MaterialDTO = components["schemas"]["MaterialDTO"];
 type CategoryDTO = components["schemas"]["CategoryDTO"];
 type VendorDTO = components["schemas"]["VendorDTO"];
+type Unit = components["schemas"]["Unit"];
 
 // Define the schema for client formData parsing and validation
 //@ts-ignore
@@ -22,9 +23,10 @@ const materialSchema: z.ZodSchema<MaterialDTO> = z.object({
   id: z.string().uuid().default("00000000-0000-0000-0000-000000000000"),
   name: z.string().min(3).max(50),
   description: z.string().max(200).nullable().default(null).optional(),
-  unit: z.string().nullable(),
+  unitId: z.string().uuid(),
   vendorId: z.string().uuid(),
   categoryId: z.string().uuid(),
+  latestPrice: z.coerce.number().positive().default(0),
 });
 
 export default function MaterialsPage() {
@@ -32,6 +34,7 @@ export default function MaterialsPage() {
     queryKey: ["categories"],
     queryFn: async () => {
       const response = await apiClient.GET("/api/Categories/GetCategories");
+
       return response.data;
     },
   });
@@ -40,6 +43,14 @@ export default function MaterialsPage() {
     queryKey: ["vendors"],
     queryFn: async () => {
       const response = await apiClient.GET("/api/Vendors/GetVendors");
+      return response.data;
+    },
+  });
+
+  const unitsQuery: UseQueryResult<Unit[], Error> = useQuery({
+    queryKey: ["units"],
+    queryFn: async () => {
+      const response = await apiClient.GET("/api/Units/GetUnits");
       return response.data;
     },
   });
@@ -142,7 +153,11 @@ export default function MaterialsPage() {
             <dt>Име</dt>
             <dd>{selectedItem?.name}</dd>
             <dt>Мярка</dt>
-            <dd>{selectedItem?.unit}</dd>
+            <dd>
+              {unitsQuery.data?.find((u) => u.id === selectedItem.unitId)?.name}
+            </dd>
+            <dt>Актуална Цена</dt>
+            <dd>{selectedItem?.latestPrice} лв.</dd>
             <dt>Категория</dt>
             <dd>{getCategoryDTO(selectedItem?.categoryId)?.name}</dd>
             <dt>Доставчик</dt>
@@ -166,14 +181,36 @@ export default function MaterialsPage() {
           name="name"
           defaultValue={selectedItem?.name}
         />
-        <TextField
-          label="Мярка"
-          id="unit"
-          name="unit"
-          defaultValue={selectedItem?.unit}
-        />
 
+        
         <Select
+          placeholder="Избери мярка"
+          options={unitsQuery.data?.map(
+            (unit) => ({ value: unit.id, label: unit.name } as any)
+          )}
+          name="unitId"
+          id="unitId"
+          defaultValue={
+            selectedItem
+              ? {
+                  value: selectedItem.unitId,
+                  label: unitsQuery.data?.find(
+                    (u) => u.id === selectedItem.unitId
+                  )?.name,
+                }
+              : undefined
+          }
+        />
+        <TextField
+          type="number"
+          label="Актуална Цена"
+          name="latestPrice"
+          id="latestPrice"
+          inputProps={{ step: "0.01" }}
+          defaultValue={selectedItem?.latestPrice}
+        />
+        <Select
+          placeholder="Избери категория"
           options={categoriesQuery.data?.map(
             (category) => ({ value: category.id, label: category.name } as any)
           )}
@@ -189,6 +226,7 @@ export default function MaterialsPage() {
         />
 
         <Select
+          placeholder="Избери доставчик"
           name="vendorId"
           options={vendorsQuery.data?.map(
             (vendor) => ({ value: vendor.id, label: vendor.name } as any)

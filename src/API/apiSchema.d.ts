@@ -861,6 +861,187 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/Recipes/GetRecipes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Recipes/GetRecipe/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Recipes/AddRecipe": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["RecipeDTO"];
+                    "text/json": components["schemas"]["RecipeDTO"];
+                    "application/*+json": components["schemas"]["RecipeDTO"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Recipes/UpdateRecipe": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["RecipeDTO"];
+                    "text/json": components["schemas"]["RecipeDTO"];
+                    "application/*+json": components["schemas"]["RecipeDTO"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Recipes/DeleteRecipe/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/Security/GetToken": {
         parameters: {
             query?: never;
@@ -927,6 +1108,78 @@ export interface paths {
         };
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Units/GetUnits": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Units/AddUnit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["Unit"];
+                    "text/json": components["schemas"]["Unit"];
+                    "application/*+json": components["schemas"]["Unit"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
         delete?: never;
         options?: never;
         head?: never;
@@ -1355,7 +1608,10 @@ export interface components {
             id: string;
             name: string | null;
             description?: string | null;
-            unit: string | null;
+            /** Format: uuid */
+            unitId: string;
+            /** Format: double */
+            latestPrice?: number;
             /** Format: uuid */
             categoryId: string;
             /** Format: uuid */
@@ -1418,11 +1674,46 @@ export interface components {
             /** Format: date-time */
             dateCreated?: string;
         };
+        RecipeDTO: {
+            /** Format: uuid */
+            id?: string;
+            name?: string | null;
+            /** Format: date */
+            lastUpdated?: string;
+            /** Format: uuid */
+            productId?: string | null;
+            description?: string | null;
+            ingredients?: components["schemas"]["RecipeMaterialDto"][] | null;
+            subRecipes?: components["schemas"]["SubRecipeDto"][] | null;
+            /** Format: double */
+            workHours?: number;
+            /** Format: double */
+            yield?: number;
+            /** Format: uuid */
+            unitId?: string;
+        };
+        RecipeMaterialDto: {
+            /** Format: uuid */
+            materialId?: string;
+            /** Format: double */
+            quantity?: number;
+        };
         /**
          * Format: int32
          * @enum {integer}
          */
         Status: 0 | 1;
+        SubRecipeDto: {
+            /** Format: uuid */
+            subRecipeId?: string;
+            /** Format: double */
+            quantity?: number;
+        };
+        Unit: {
+            /** Format: uuid */
+            id?: string;
+            name?: string | null;
+        };
         UserCredentialsDTO: {
             userName?: string | null;
             password?: string | null;

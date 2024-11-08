@@ -8,6 +8,7 @@ export default function Home() {
             <Link to="/orders">Поръчки</Link>
             <Link to="/admin">Администрация</Link>
             <Link to="/nomenclature">Номенклатура</Link>
+            <Link to="/deliveries">Доставки</Link>
             <Link to="/recipes">Рецепти</Link>
         </>
     )

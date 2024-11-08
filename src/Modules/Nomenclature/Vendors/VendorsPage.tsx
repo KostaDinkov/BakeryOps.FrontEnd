@@ -1,11 +1,11 @@
 //TODO update details view
-import { components } from "../../../API/apiSchema";
 import { apiClient } from "../../../API/apiClient";
 import GenericCRUDView, { IItemOperations } from "../GenericCRUD/GenericCRUD";
 import { TextField } from "@mui/material";
 import { z } from "zod";
+import { VendorDTO } from "../../../Types/types";
 
-type VendorDTO = components["schemas"]["VendorDTO"];
+
 
 export const vendorSchema: z.ZodSchema<VendorDTO> = z.object({
   id: z.string().uuid().default("00000000-0000-0000-0000-000000000000"),

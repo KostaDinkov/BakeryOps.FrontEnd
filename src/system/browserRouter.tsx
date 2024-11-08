@@ -30,6 +30,7 @@ import ClientsPage from "../Modules/Nomenclature/Clients/ClientsPage";
 import CategoriesPage from "../Modules/Nomenclature/Categories/CategoriesPage";
 import ProductsPage from "../Modules/Nomenclature/Products/ProductsPage";
 import RecipesHomePage from "../Modules/Recipes/RecipesHomePage";
+import DeliveriesHome from "../Modules/Deliveries/DeliveriesHome";
 export const browserRouter = createBrowserRouter([
   {
     path: "/",
@@ -195,6 +196,13 @@ export const browserRouter = createBrowserRouter([
           crumb: () => <Link to="/recipes">Рецепти</Link>,
         },
 
+      },
+      {
+        path:"deliveries",
+        element:<DeliveriesHome/>,
+        handle: {
+          crumb: () => <Link to="/deliveries">Доставки</Link>,
+        },
       }
     ],
   },

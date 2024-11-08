@@ -8,14 +8,11 @@ import {
   TextField,
 } from "@mui/material";
 import { apiClient } from "../../../API/apiClient";
-import { components } from "../../../API/apiSchema";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { z } from "zod";
+import { CategoryDTO, MaterialDTO, Unit, VendorDTO } from "../../../Types/types";
 
-type MaterialDTO = components["schemas"]["MaterialDTO"];
-type CategoryDTO = components["schemas"]["CategoryDTO"];
-type VendorDTO = components["schemas"]["VendorDTO"];
-type Unit = components["schemas"]["Unit"];
+
 
 // Define the schema for client formData parsing and validation
 //@ts-ignore

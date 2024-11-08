@@ -13,6 +13,11 @@ export interface IItemOperations<TItem> {
   deleteItem: (id: string) => Promise<void>;
 }
 
+export type IItemsList<TItem> = React.FC<{
+  setSelectedItem: React.Dispatch<TItem | null>;
+  data: TItem[];
+}>;
+
 export default function GenericCRUDView<TItem>({
   title,
   ItemFormFields,
@@ -25,10 +30,7 @@ export default function GenericCRUDView<TItem>({
 }: {
   title: string;
   ItemFormFields: React.FC<{ selectedItem: TItem | null }>;
-  ItemsList: React.FC<{
-    setSelectedItem: React.Dispatch<TItem | null>;
-    data: any;
-  }>;
+  ItemsList: IItemsList<TItem>;
   ItemDetails: React.FC<{ selectedItem: TItem | null }>;
   itemSchema: z.ZodSchema<TItem>;
   itemOperations: IItemOperations<TItem>;
@@ -90,7 +92,6 @@ export default function GenericCRUDView<TItem>({
           }
         } else if (mode === "updateItem") {
           item.id = (selectedItem as IId).id;
-
           const data = await updateItemMutation.mutateAsync(item);
           console.log(data);
         }
@@ -111,7 +112,7 @@ export default function GenericCRUDView<TItem>({
   return (
     <div className="verticalMenu">
       <h1>{title}</h1>
-
+      { mode==="viewItem" &&
       <div className={styles.twoColumnView}>
         <div className={styles.itemsList}>
           {itemsQuery.isLoading && <div>Loading...</div>}
@@ -126,7 +127,7 @@ export default function GenericCRUDView<TItem>({
           )}
         </div>
         <div className="materialDetails">
-          {mode === "viewItem" ? (
+         
             <div>
               <Button
                 variant="outlined"
@@ -158,27 +159,31 @@ export default function GenericCRUDView<TItem>({
                 </div>
               )}
             </div>
-          ) : (
-            <div>
-              <GenericForm>
-                <ItemFormFields selectedItem={selectedItem} />
-                <div className={styles.saveButtonGroup}>
-                  <Button
-                    variant="outlined"
-                    onClick={() => setMode("viewItem")}
-                  >
-                    Откажи
-                  </Button>
-
-                  <Button variant="contained" type="submit" color="primary">
-                    Запази
-                  </Button>
-                </div>
-              </GenericForm>
-            </div>
-          )}
+           
         </div>
-      </div>
+        
+      </div>}
+      {(mode === "createItem" || mode === "updateItem" ) &&
+        (
+          <div>
+            <GenericForm>
+              <ItemFormFields selectedItem={selectedItem} />
+              <div className={styles.saveButtonGroup}>
+                <Button
+                  variant="outlined"
+                  onClick={() => setMode("viewItem")}
+                >
+                  Откажи
+                </Button>
+
+                <Button variant="contained" type="submit" color="primary">
+                  Запази
+                </Button>
+              </div>
+            </GenericForm>
+          </div>
+        )
+      }
       <ConfirmationDialog
         isOpen={deleteItemDialogOpen}
         setIsOpen={function (isOpen: boolean): void {

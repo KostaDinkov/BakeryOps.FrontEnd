@@ -143,6 +143,63 @@ paths:
       responses:
         '200':
           description: OK
+  /api/Deliveries/GetAll:
+    get:
+      tags:
+        - Deliveries
+      responses:
+        '200':
+          description: OK
+  /api/Deliveries/Create:
+    post:
+      tags:
+        - Deliveries
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DeliveryDto'
+      responses:
+        '200':
+          description: OK
+  /api/Deliveries/Update:
+    put:
+      tags:
+        - Deliveries
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryDto'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryDto'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/DeliveryDto'
+      responses:
+        '200':
+          description: OK
+  '/api/Deliveries/Delete/{id}':
+    delete:
+      tags:
+        - Deliveries
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
   /api/Materials/GetMaterials:
     get:
       tags:
@@ -717,6 +774,63 @@ components:
           type: boolean
         isSpecialPrice:
           type: boolean
+      additionalProperties: false
+    DeliveryDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        deliveryDate:
+          type: string
+          format: date
+        vendorId:
+          type: string
+          format: uuid
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeliveryItemDto'
+          nullable: true
+        invoiceNumber:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DeliveryItemDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        deliveryId:
+          type: string
+          format: uuid
+        materialId:
+          type: string
+          format: uuid
+        quantity:
+          type: number
+          format: double
+        unitPrice:
+          type: number
+          format: double
+          nullable: true
+        vat:
+          type: number
+          format: double
+        expirationDate:
+          type: string
+          format: date
+          nullable: true
+        lotNumber:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
       additionalProperties: false
     MaterialDTO:
       required:

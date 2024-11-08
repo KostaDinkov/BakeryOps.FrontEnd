@@ -318,6 +318,152 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/Deliveries/GetAll": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Deliveries/Create": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["DeliveryDto"];
+                    "text/json": components["schemas"]["DeliveryDto"];
+                    "application/*+json": components["schemas"]["DeliveryDto"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Deliveries/Update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["DeliveryDto"];
+                    "text/json": components["schemas"]["DeliveryDto"];
+                    "application/*+json": components["schemas"]["DeliveryDto"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Deliveries/Delete/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/Materials/GetMaterials": {
         parameters: {
             query?: never;
@@ -1602,6 +1748,35 @@ export interface components {
             discountPercent?: number;
             isCompany?: boolean;
             isSpecialPrice?: boolean;
+        };
+        DeliveryDto: {
+            /** Format: uuid */
+            id?: string;
+            /** Format: date */
+            deliveryDate?: string;
+            /** Format: uuid */
+            vendorId?: string;
+            items?: components["schemas"]["DeliveryItemDto"][] | null;
+            invoiceNumber?: string | null;
+            notes?: string | null;
+        };
+        DeliveryItemDto: {
+            /** Format: uuid */
+            id?: string;
+            /** Format: uuid */
+            deliveryId?: string;
+            /** Format: uuid */
+            materialId?: string;
+            /** Format: double */
+            quantity?: number;
+            /** Format: double */
+            unitPrice?: number | null;
+            /** Format: double */
+            vat?: number;
+            /** Format: date */
+            expirationDate?: string | null;
+            lotNumber?: string | null;
+            notes?: string | null;
         };
         MaterialDTO: {
             /** Format: uuid */

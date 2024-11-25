@@ -3,7 +3,7 @@ import { DeliveryDTO } from "../../Types/types";
 
 export const deliverySchema: z.ZodSchema<DeliveryDTO> = z.object({
   id: z.string().uuid().default("00000000-0000-0000-0000-000000000000"),
-  deliveryDate: z.string().optional(),
+  deliveryDate: z.string().datetime().optional(),
   vendorId: z.string().uuid(),
   invoiceNumber: z
     .string({
@@ -13,16 +13,15 @@ export const deliverySchema: z.ZodSchema<DeliveryDTO> = z.object({
     .regex(/^\d{10}$/),
   notes: z.string().nullable().default(null),
 
-  deliveryItems: z.array(
+  items: z.array(
     z.object({
       id: z.string().uuid().default("00000000-0000-0000-0000-000000000000"),
       materialId: z.string().uuid(),
-      deliveryId: z.string().uuid(),
       quantity: z.number().positive(),
-      price: z.number().positive(),
-      expirationDate: z.string().date(),
+      unitPrice: z.number().positive(),
+      expirationDate: z.string().datetime().optional(),
       lotNumber: z.string().optional(),
-      vat: z.number().positive(),
+      vat: z.number().positive().optional(),
       notes: z.string().optional(),
     })
   ),

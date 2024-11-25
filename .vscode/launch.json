@@ -12,6 +12,13 @@
             "webRoot": "${workspaceFolder}"
         },
         {
+            "type": "msedge",
+            "request": "launch",
+            "name": "Launch Edge against localhost",
+            "url": "http://localhost:5173",
+            "webRoot": "${workspaceFolder}"
+        },
+        {
             "name": "Debug CRA Tests",
             "type": "node",
             "request": "launch",

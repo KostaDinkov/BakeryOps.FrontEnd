@@ -20,22 +20,26 @@ export type IItemsList<TItem> = React.FC<{
 
 export default function GenericCRUDView<TItem>({
   title,
-  ItemFormFields,
+  ItemForm,
   ItemsList,
   ItemDetails,
   itemSchema,
   itemOperations,
   newBtnText = "Нов",
-  customFormDataParse = null ,
+  customFormDataParse = null,
 }: {
   title: string;
-  ItemFormFields: React.FC<{ selectedItem: TItem | null }>;
+  ItemForm: React.FC<{
+    selectedItem: TItem | null;
+    handleSave: (e: any) => {};
+    onCancel: () => void;
+  }>;
   ItemsList: IItemsList<TItem>;
   ItemDetails: React.FC<{ selectedItem: TItem | null }>;
   itemSchema: z.ZodSchema<TItem>;
   itemOperations: IItemOperations<TItem>;
   newBtnText?: string;
-  customFormDataParse?: ((formData: any) => any ) | null;
+  customFormDataParse?: ((formData: any) => any) | null;
 }) {
   type IId = TItem & { id: string };
 
@@ -69,65 +73,78 @@ export default function GenericCRUDView<TItem>({
       queryClient.invalidateQueries({ queryKey: itemOperations.queryKey }),
   });
 
-  function GenericForm({ children }: { children: React.ReactNode }) {
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      
-      let formData = Object.fromEntries(new FormData(e.currentTarget));
-      
-      if(customFormDataParse){
-        formData = customFormDataParse(formData);
-      }  
-      const parsedResult = itemSchema.safeParse(formData);
-
-      if (parsedResult.success) {
-        const item = parsedResult.data as IId;
-
-        if (mode === "createItem") {
-          try {
-            const data = await createItemMutation.mutateAsync(item);
-            console.log(data);
-          } catch (e) {
-            console.log("Error creating item", e);
-          }
-        } else if (mode === "updateItem") {
-          item.id = (selectedItem as IId).id;
-          const data = await updateItemMutation.mutateAsync(item);
-          console.log(data);
-        }
-        setMode("viewItem");
-        setSelectedItem(null);
-      } else {
-        console.log(parsedResult.error.errors);
+  function GenericForm() {
+    const handleSubmit = async (item: IId) => {
+      // validate item
+      const zodValidationResult = itemSchema.safeParse(item);
+      console.log(`Item from form: \n`, item);
+      if (!zodValidationResult.success) {
+        console.log(zodValidationResult.error.errors);
+        return;
       }
+
+      // create / update item in database
+      if (mode === "createItem") {
+        try {
+          const data = await createItemMutation.mutateAsync(item);
+          console.log(data);
+        } catch (e) {
+          console.log("Error creating item", e);
+        }
+      } else if (mode === "updateItem") {
+        item.id = (selectedItem as IId).id;
+        const data = await updateItemMutation.mutateAsync(item);
+        console.log(data);
+      }
+      setMode("viewItem");
+      setSelectedItem(null);
+    };
+    const handleCancel = () => {
+      setMode("viewItem");
+      setSelectedItem(null);
+    };
+    const Buttons = () => {
+      return (
+        <div className={styles.saveButtonGroup}>
+          <Button variant="outlined" onClick={handleCancel}>
+            Откажи
+          </Button>
+
+          <Button variant="contained" type="submit" color="primary">
+            Запази
+          </Button>
+        </div>
+      );
     };
 
     return (
-      <form className={styles.itemsForm} onSubmit={handleSubmit}>
-        {children}
-      </form>
+      <ItemForm
+        selectedItem={selectedItem}
+        handleSave={handleSubmit}
+        onCancel={handleCancel}
+        Buttons={Buttons}
+      />
     );
   }
 
   return (
     <div className="verticalMenu">
       <h1>{title}</h1>
-      { mode==="viewItem" &&
-      <div className={styles.twoColumnView}>
-        <div className={styles.itemsList}>
-          {itemsQuery.isLoading && <div>Loading...</div>}
-          {itemsQuery.isError && <div>{itemsQuery.error.message}</div>}
-          {itemsQuery.isSuccess && (
-            <Paper elevation={0} sx={{ padding: "1rem" }}>
-              <ItemsList
-                setSelectedItem={setSelectedItem}
-                data={itemsQuery.data}
-              />
-            </Paper>
-          )}
-        </div>
-        <div className="materialDetails">
-         
+      {mode === "viewItem" && (
+        <div className={styles.twoColumnView}>
+          <div className={styles.itemsList}>
+            {itemsQuery.isLoading && <div>Loading...</div>}
+            {itemsQuery.isError && <div>{itemsQuery.error.message}</div>}
+            {itemsQuery.isSuccess && (
+              <Paper elevation={0} sx={{ padding: "1rem" }}>
+                <ItemsList
+                  setSelectedItem={setSelectedItem}
+                  data={itemsQuery.data}
+                />
+              </Paper>
+            )}
+          </div>
+          <div className="materialDetails">
             <div>
               <Button
                 variant="outlined"
@@ -159,31 +176,10 @@ export default function GenericCRUDView<TItem>({
                 </div>
               )}
             </div>
-           
-        </div>
-        
-      </div>}
-      {(mode === "createItem" || mode === "updateItem" ) &&
-        (
-          <div>
-            <GenericForm>
-              <ItemFormFields selectedItem={selectedItem} />
-              <div className={styles.saveButtonGroup}>
-                <Button
-                  variant="outlined"
-                  onClick={() => setMode("viewItem")}
-                >
-                  Откажи
-                </Button>
-
-                <Button variant="contained" type="submit" color="primary">
-                  Запази
-                </Button>
-              </div>
-            </GenericForm>
           </div>
-        )
-      }
+        </div>
+      )}
+      {(mode === "createItem" || mode === "updateItem") && <GenericForm />}
       <ConfirmationDialog
         isOpen={deleteItemDialogOpen}
         setIsOpen={function (isOpen: boolean): void {

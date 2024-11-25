@@ -51,8 +51,13 @@ export default function DeliveriesHome() {
 
   const ItemFormFields = ({
     selectedItem,
+    onCancel,
+    handleSave,
+    Buttons
   }: {
     selectedItem: DeliveryDTO | null;
+    onCancel: () => void;
+    handleSave: (e: any) => void;
   }) => {
     return (
       <DeliveryFormFields
@@ -62,46 +67,24 @@ export default function DeliveriesHome() {
           materials: materialsQuery.data as unknown as MaterialDTO[],
           units: unitsQuery.data as unknown as Unit[],
         }}
+        onCancel={onCancel}
+        handleSave={handleSave}
+        Buttons={Buttons}
       />
     );
   };
 
-  const handleSubmit = (formData: any) => {
-    
-    console.log(formData);
-    const deliveryItems: DeliveryItemDTO[] = [];
-    const regex = new RegExp(
-      `^([0-9A-Fa-f]{8}[-]?(?:[0-9A-Fa-f]{4}[-]?){3}[0-9A-Fa-f]{12})-([a-zA-Z]+)$`,
-      "is"
-    );
-    const deliveryItemRows = Object.entries(formData)
-      .filter(([key, value]) => key.match(regex));
-      
 
-    const deliveryItemsByRowId = Object.groupBy(deliveryItemRows, ([key, value]) => key.match(regex)![1]);
-    
-    Object.entries(deliveryItemsByRowId).forEach(([rowId, rowItems]) => {
-      let deliveryItem: DeliveryItemDTO = {};
-      rowItems?.forEach(([key, value]) => {
-        const fieldName = key.match(regex)![2];
-        deliveryItem[fieldName] = value;
-      });
-      deliveryItems.push(deliveryItem);
-  });
-
-    console.log(deliveryItems); 
-
-  };
 
   return (
     <GenericCRUDView
       title={"Доставки"}
-      ItemFormFields={ItemFormFields}
+      ItemForm={ItemFormFields}
       ItemsList={DeliveriesList}
       ItemDetails={ItemDetails}
       itemSchema={deliverySchema}
       itemOperations={deliveryOperations}
-      customFormDataParse={handleSubmit}
+      
     />
   );
 }

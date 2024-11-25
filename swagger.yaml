@@ -783,7 +783,7 @@ components:
           format: uuid
         deliveryDate:
           type: string
-          format: date
+          nullable: true
         vendorId:
           type: string
           format: uuid
@@ -805,9 +805,6 @@ components:
         id:
           type: string
           format: uuid
-        deliveryId:
-          type: string
-          format: uuid
         materialId:
           type: string
           format: uuid
@@ -823,7 +820,6 @@ components:
           format: double
         expirationDate:
           type: string
-          format: date
           nullable: true
         lotNumber:
           type: string

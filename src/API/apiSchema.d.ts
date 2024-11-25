@@ -1752,8 +1752,7 @@ export interface components {
         DeliveryDto: {
             /** Format: uuid */
             id?: string;
-            /** Format: date */
-            deliveryDate?: string;
+            deliveryDate?: string | null;
             /** Format: uuid */
             vendorId?: string;
             items?: components["schemas"]["DeliveryItemDto"][] | null;
@@ -1764,8 +1763,6 @@ export interface components {
             /** Format: uuid */
             id?: string;
             /** Format: uuid */
-            deliveryId?: string;
-            /** Format: uuid */
             materialId?: string;
             /** Format: double */
             quantity?: number;
@@ -1773,7 +1770,6 @@ export interface components {
             unitPrice?: number | null;
             /** Format: double */
             vat?: number;
-            /** Format: date */
             expirationDate?: string | null;
             lotNumber?: string | null;
             notes?: string | null;

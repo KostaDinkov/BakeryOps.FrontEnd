@@ -65,6 +65,8 @@ export default function DeliveryFormFields({
         onChange={(e) =>
           setDeliveryInfo({ ...deliveryInfo, invoiceNumber: e.target.value })
         }
+        slotProps={{htmlInput:{["data-testid"]:"documentNumber"}}}
+        
       />
       <DatePicker
         label="Дата на документ"

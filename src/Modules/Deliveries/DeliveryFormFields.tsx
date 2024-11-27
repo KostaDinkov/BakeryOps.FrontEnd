@@ -1,3 +1,4 @@
+import {memo} from "react";
 import {
   TextField,
   Autocomplete,
@@ -255,3 +256,4 @@ function DynamicMaterialInputList({
     </>
   );
 }
+

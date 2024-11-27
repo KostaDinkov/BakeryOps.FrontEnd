@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Button, Paper } from "@mui/material";
 import ConfirmationDialog from "../../../Components/ConfirmationDialog/ConfirmationDialog";
 import { z } from "zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import styles from "./GenericCRUD.module.scss";
+import { set } from "date-fns";
 
 export interface IItemOperations<TItem> {
   queryKey: string[];
@@ -15,7 +16,7 @@ export interface IItemOperations<TItem> {
 
 export type IItemsList<TItem> = React.FC<{
   setSelectedItem: React.Dispatch<TItem | null>;
-  data: TItem[];
+  fetchResponse: { data: TItem[]; error?: any; response?: Response };
 }>;
 
 export default function GenericCRUDView<TItem>({
@@ -26,7 +27,6 @@ export default function GenericCRUDView<TItem>({
   itemSchema,
   itemOperations,
   newBtnText = "Нов",
-  customFormDataParse = null,
 }: {
   title: string;
   ItemForm: React.FC<{
@@ -39,7 +39,6 @@ export default function GenericCRUDView<TItem>({
   itemSchema: z.ZodSchema<TItem>;
   itemOperations: IItemOperations<TItem>;
   newBtnText?: string;
-  customFormDataParse?: ((formData: any) => any) | null;
 }) {
   type IId = TItem & { id: string };
 
@@ -57,11 +56,6 @@ export default function GenericCRUDView<TItem>({
     queryFn: itemOperations.getItems,
   });
 
-  const createItemMutation = useMutation({
-    mutationFn: itemOperations.createItem,
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: itemOperations.queryKey }),
-  });
   const updateItemMutation = useMutation({
     mutationFn: itemOperations.updateItem,
     onSuccess: () =>
@@ -73,36 +67,73 @@ export default function GenericCRUDView<TItem>({
       queryClient.invalidateQueries({ queryKey: itemOperations.queryKey }),
   });
 
-  function GenericForm() {
+function GenericForm() {
+    const createItemMutation = useMutation({
+      mutationFn: itemOperations.createItem,
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: itemOperations.queryKey });
+      },
+    });
+
+    const [validationObject, setValidationObject] =
+      useState<z.SafeParseReturnType<TItem, TItem> | null>(null);
+    const [serverError, setServerError] = useState<string | null>(null);
+
     const handleSubmit = async (item: IId) => {
       // validate item
       const zodValidationResult = itemSchema.safeParse(item);
-      console.log(`Item from form: \n`, item);
+
+      setValidationObject(zodValidationResult);
+
       if (!zodValidationResult.success) {
-        console.log(zodValidationResult.error.errors);
         return;
       }
 
       // create / update item in database
-      if (mode === "createItem") {
-        try {
-          const data = await createItemMutation.mutateAsync(item);
-          console.log(data);
-        } catch (e) {
-          console.log("Error creating item", e);
-        }
-      } else if (mode === "updateItem") {
-        item.id = (selectedItem as IId).id;
-        const data = await updateItemMutation.mutateAsync(item);
-        console.log(data);
+      try {
+        if (mode === "createItem") {
+            await createItemMutation.mutateAsync(item, {
+            onError: (error) => {
+              console.log("Inside", error);
+            },
+            onSettled(data, error, variables, context) {
+              
+              if (error) {
+                setServerError(error.message);
+              }
+            },
+            onSuccess: (data) => {
+              setMode("viewItem");
+              setSelectedItem(null);
+            }
+          });
+        } else if (mode === "updateItem") {
+          item.id = (selectedItem as IId).id;
+          await updateItemMutation.mutateAsync(item,{
+            onError: (error) => {
+              console.log("Inside update item:", error);
+            },
+            onSettled(data, error, variables, context) {
+              if (error) {
+                setServerError(error.message);
+              }
+            },
+            onSuccess: (data) => {
+              setMode("viewItem");
+              setSelectedItem(null);
+            }
+          });
+        } 
+      } catch (error) {
+        console.error(error);
       }
-      setMode("viewItem");
-      setSelectedItem(null);
     };
+
     const handleCancel = () => {
       setMode("viewItem");
       setSelectedItem(null);
     };
+
     const Buttons = () => {
       return (
         <div className={styles.saveButtonGroup}>
@@ -118,14 +149,34 @@ export default function GenericCRUDView<TItem>({
     };
 
     return (
-      <ItemForm
-        selectedItem={selectedItem}
-        handleSave={handleSubmit}
-        onCancel={handleCancel}
-        Buttons={Buttons}
-      />
+      <>
+        <ItemForm
+          selectedItem={selectedItem}
+          handleSave={handleSubmit}
+          onCancel={handleCancel}
+          Buttons={Buttons}
+        />
+        {validationObject && !validationObject.success && (
+          <div>
+            <h3>Грешки при валидация:</h3>
+            <ul>
+              {validationObject.error.errors.map((error) => (
+                <li key={error.message}>
+                  {error.path}: {error.message}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {serverError && (
+          <div>
+            <h3>Грешка при записване:</h3>
+            {serverError}
+          </div>
+        )}
+      </>
     );
-  }
+  };
 
   return (
     <div className="verticalMenu">
@@ -139,7 +190,7 @@ export default function GenericCRUDView<TItem>({
               <Paper elevation={0} sx={{ padding: "1rem" }}>
                 <ItemsList
                   setSelectedItem={setSelectedItem}
-                  data={itemsQuery.data}
+                  fetchResponse={itemsQuery.data}
                 />
               </Paper>
             )}

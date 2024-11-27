@@ -8,11 +8,9 @@ import "./index.css";
 import "./styles/globals.scss";
 //import reportWebVitals from "./reportWebVitals";
 import { RouterProvider } from "react-router-dom";
-
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import EventHub from "./EventHub";
 import PubSub from "pubsub-js";
-
 import { browserRouter } from "./system/browserRouter";
 
 const router = browserRouter;

@@ -2,15 +2,15 @@ import { DeliveryDTO } from "../../Types/types";
 
 export default function ({
   setSelectedItem,
-  data,
+  fetchResponse,
 }: {
   setSelectedItem: React.Dispatch<DeliveryDTO | null>;
-  data: DeliveryDTO[];
+  fetchResponse: {data: DeliveryDTO[], error:any, response:Response};
 }) {
   return (
     <>
       <ul>
-        {data.map((delivery) => (
+        {fetchResponse.data.map((delivery) => (
           <li key={delivery.id} onClick={() => setSelectedItem(delivery)}>
             {delivery.invoiceNumber} от {delivery.deliveryDate}
           </li>

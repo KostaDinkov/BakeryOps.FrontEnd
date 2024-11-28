@@ -1755,7 +1755,8 @@ export interface components {
             deliveryDate?: string | null;
             /** Format: uuid */
             vendorId?: string;
-            items?: components["schemas"]["DeliveryItemDto"][] | null;
+            /** @description List of items in the delivery */
+            items?: components["schemas"]["DeliveryItemDto"][];
             invoiceNumber?: string | null;
             notes?: string | null;
         };

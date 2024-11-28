@@ -791,7 +791,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DeliveryItemDto'
-          nullable: true
+          description: List of items in the delivery
         invoiceNumber:
           type: string
           nullable: true

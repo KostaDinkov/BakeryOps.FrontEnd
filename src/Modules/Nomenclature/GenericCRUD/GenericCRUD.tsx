@@ -97,7 +97,7 @@ function GenericForm() {
               console.log("Inside", error);
             },
             onSettled(data, error, variables, context) {
-              
+
               if (error) {
                 setServerError(error.message);
               }

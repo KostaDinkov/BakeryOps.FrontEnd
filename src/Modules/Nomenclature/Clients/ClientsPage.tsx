@@ -1,4 +1,4 @@
-import GenericCRUDView, { IItemOperations } from "../GenericCRUD/GenericCRUD";
+import GenericCRUDView, { IItemOperations } from "../../../Components/GenericCRUD/GenericCRUD";
 import { Checkbox, TextField } from "@mui/material";
 import { apiClient } from "../../../API/apiClient";
 import { components } from "../../../API/apiSchema";

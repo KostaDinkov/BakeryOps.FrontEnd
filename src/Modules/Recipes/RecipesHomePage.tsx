@@ -1,6 +1,6 @@
 import GenericCRUDView, {
   IItemOperations,
-} from "../Nomenclature/GenericCRUD/GenericCRUD";
+} from "../../Components/GenericCRUD/GenericCRUD";
 import { components } from "../../API/apiSchema";
 import { apiClient } from "../../API/apiClient";
 import { Button, TextField } from "@mui/material";

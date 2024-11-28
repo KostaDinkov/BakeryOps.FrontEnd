@@ -1,6 +1,6 @@
 //TODO update details view
 import { apiClient } from "../../../API/apiClient";
-import GenericCRUDView, { IItemOperations } from "../GenericCRUD/GenericCRUD";
+import GenericCRUDView, { IItemOperations } from "../../../Components/GenericCRUD/GenericCRUD";
 import { TextField } from "@mui/material";
 import { z } from "zod";
 import { VendorDTO } from "../../../Types/types";

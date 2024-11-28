@@ -1,6 +1,6 @@
-import GenericCRUDView from "../Nomenclature/GenericCRUD/GenericCRUD";
+import GenericCRUDView from "../../Components/GenericCRUD/GenericCRUD";
 import { apiClient } from "../../API/apiClient";
-import { DeliveryDTO, DeliveryItemDTO, MaterialDTO, Unit, VendorDTO } from "../../Types/types";
+import { DeliveryDTO, MaterialDTO, Unit, VendorDTO } from "../../Types/types";
 import { deliveryOperations } from "./deliveryOperations";
 import { deliverySchema } from "./deliverySchema";
 import DeliveriesList from "./DeliveriesList";
@@ -9,28 +9,19 @@ import { useQuery } from "@tanstack/react-query";
 import DeliveryFormFields from "./DeliveryFormFields";
 
 export default function DeliveriesHome() {
-  const vendorsQuery = useQuery({
-    queryKey: ["vendors"],
-    queryFn: async () => {
-      const response = await apiClient.GET("/api/Vendors/GetVendors");
-      return response.data;
-    },
-  });
-  const materialsQuery = useQuery({
-    queryKey: ["materials"],
-    queryFn: async () => {
-      const response = await apiClient.GET("/api/Materials/GetMaterials");
-      return response.data;
-    },
-  });
+  const vendorsQuery = useItemsQuery({queryKey:"vendors",url:"/api/Vendors/GetVendors"});
+  const materialsQuery = useItemsQuery({queryKey:"materials", url:"/api/Materials/GetMaterials"});
+  const unitsQuery = useItemsQuery({queryKey:"units", url:"/api/Units/GetUnits"})
 
-  const unitsQuery = useQuery({
-    queryKey: ["units"],
-    queryFn: async () => {
-      const response = await apiClient.GET("/api/Units/GetUnits");
-      return response.data;
-    },
-  });
+  function useItemsQuery({queryKey, url}:{queryKey:string, url:string}) {
+    return useQuery({
+      queryKey: [queryKey],
+      queryFn: async () => {
+        const response = await apiClient.GET(url);
+        return response.data;
+      },
+    });
+  }
 
   const ItemDetails = ({
     selectedItem,
@@ -67,7 +58,6 @@ export default function DeliveriesHome() {
           materials: materialsQuery.data as unknown as MaterialDTO[],
           units: unitsQuery.data as unknown as Unit[],
         }}
-        onCancel={onCancel}
         handleSave={handleSave}
         Buttons={Buttons}
       />
@@ -84,7 +74,6 @@ export default function DeliveriesHome() {
       ItemDetails={ItemDetails}
       itemSchema={deliverySchema}
       itemOperations={deliveryOperations}
-      
     />
   );
 }

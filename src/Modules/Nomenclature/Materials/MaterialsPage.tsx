@@ -1,5 +1,5 @@
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
-import GenericCRUDView, { IItemOperations } from "../GenericCRUD/GenericCRUD";
+import GenericCRUDView, { IItemOperations } from "../../../Components/GenericCRUD/GenericCRUD";
 import Select from "react-select";
 import {
   Accordion,

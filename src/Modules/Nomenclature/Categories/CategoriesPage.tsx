@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { apiClient } from "../../../API/apiClient";
 import { components } from "../../../API/apiSchema";
-import GenericCRUDView, { IItemOperations } from "../GenericCRUD/GenericCRUD";
+import GenericCRUDView, { IItemOperations } from "../../../Components/GenericCRUD/GenericCRUD";
 import { TextField } from "@mui/material";
 
 type CategoryDTO = components["schemas"]["CategoryDTO"];

@@ -1,10 +1,9 @@
 import { useState, memo } from "react";
 import { Button, Paper } from "@mui/material";
-import ConfirmationDialog from "../../../Components/ConfirmationDialog/ConfirmationDialog";
+import ConfirmationDialog from "../../Components/ConfirmationDialog/ConfirmationDialog";
 import { z } from "zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import styles from "./GenericCRUD.module.scss";
-import { set } from "date-fns";
 
 export interface IItemOperations<TItem> {
   queryKey: string[];

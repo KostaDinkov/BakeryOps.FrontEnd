@@ -1,15 +1,14 @@
 import React from "react";
 import GenericCRUDView, {
   IItemOperations,
-  ItemForm,
+  ItemFormType,
 } from "../../../Components/GenericCRUD/GenericCRUD";
 import z from "zod";
 import { handleApiResponse } from "../../../API/apiUtils";
 import { components } from "../../../API/apiSchema";
 import { TextField } from "@mui/material";
 import { apiClient } from "../../../API/apiClient";
-
-type CategoryDTO = components["schemas"]["CategoryDTO"];
+import { CategoryDTO } from "../../../Types/types";
 
 export default function CategoriesPage() {
   //Todo: Implement item schema. See the example below
@@ -113,23 +112,23 @@ export default function CategoriesPage() {
   const itemOperations: IItemOperations<CategoryDTO> = {
     queryKey: ["enter query key here"],
     getItems: async () =>
-      handleApiResponse(
+      await handleApiResponse(
         async () => await apiClient.GET("/api/Categories/GetCategories")
       ),
     createItem: async (item: CategoryDTO) =>
-      handleApiResponse(
+      await handleApiResponse(
         async () => await apiClient.POST("/api/Categories/AddCategory", {
           body: item,
         }) 
       ),
     updateItem: async (item: CategoryDTO) =>
-      handleApiResponse(
+      await handleApiResponse(
         async () => await apiClient.PUT("/api/Categories/UpdateCategory", {
           body: item,
         })
       ),
     deleteItem: async (id: string) =>
-      handleApiResponse(
+      await handleApiResponse(
         async () => await apiClient.DELETE("/api/Categories/DeleteCategory/{id}", {params:{path:{id}}}) 
       ),
   };

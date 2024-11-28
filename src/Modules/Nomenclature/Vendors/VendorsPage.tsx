@@ -1,11 +1,14 @@
 //TODO update details view
 import { apiClient } from "../../../API/apiClient";
-import GenericCRUDView, { IItemOperations } from "../../../Components/GenericCRUD/GenericCRUD";
+import GenericCRUDView, {
+  IItemOperations,
+  IItemsList,
+  ItemFormType,
+} from "../../../Components/GenericCRUD/GenericCRUD";
 import { TextField } from "@mui/material";
 import { z } from "zod";
 import { VendorDTO } from "../../../Types/types";
-
-
+import { handleApiResponse } from "../../../API/apiUtils";
 
 export const vendorSchema: z.ZodSchema<VendorDTO> = z.object({
   id: z.string().uuid().default("00000000-0000-0000-0000-000000000000"),
@@ -16,37 +19,40 @@ export const vendorSchema: z.ZodSchema<VendorDTO> = z.object({
   description: z.string().nullable().default(null),
 });
 
-
 export default function VendorsPage() {
-  const vendorsOperations:IItemOperations<VendorDTO> = {
-    getItems: async()=>{
-      const response = await apiClient.GET("/api/Vendors/GetVendors");
-      return response.data as unknown as VendorDTO[];
-    },
-    createItem: async (item: VendorDTO) => {
-      const response = await apiClient.POST("/api/Vendors/AddVendor", {
-        body: item,
-      });
-      return response.data as unknown as VendorDTO;
-    },
-    updateItem: async (item: VendorDTO) => {
-      const response = await apiClient.PUT("/api/Vendors/UpdateVendor", {
-        body: item,
-      });
-      return response.data as unknown as VendorDTO;
-    },
-    deleteItem: async (id: string ) => {
-      await apiClient.DELETE("/api/Vendors/DeleteVendor/{id}", {
-        params: { path: { id} },
-      });
-    },
+  const vendorsOperations: IItemOperations<VendorDTO> = {
+    getItems: async () =>
+      await handleApiResponse(
+        async () => await apiClient.GET("/api/Vendors/GetVendors")
+      ),
+    createItem: async (item: VendorDTO) =>
+      await handleApiResponse(
+        async () =>
+          await apiClient.POST("/api/Vendors/AddVendor", {
+            body: item,
+          })
+      ),
+
+    updateItem: async (item: VendorDTO) =>
+      await handleApiResponse(
+        async () =>
+          await apiClient.PUT("/api/Vendors/UpdateVendor", {
+            body: item,
+          })
+      ),
+
+    deleteItem: async (id: string) =>
+      await handleApiResponse(
+        async () =>
+          await apiClient.DELETE("/api/Vendors/DeleteVendor/{id}", {
+            params: { path: { id } },
+          })
+      ),
+
     queryKey: ["vendors"],
   };
 
-  const VendorsList: React.FC<{
-    setSelectedItem: React.Dispatch<VendorDTO | null>;
-    data: VendorDTO[];
-  }> = ({ setSelectedItem, data }) => {
+  const VendorsList:IItemsList<VendorDTO>= ({ setSelectedItem, data }) => {
     return (
       <div>
         {data &&
@@ -80,13 +86,24 @@ export default function VendorsPage() {
     );
   };
 
-  const VendorFormFields = ({
-    selectedItem,
-  }: {
-    selectedItem: VendorDTO | null;
-  }) => {
+  const VendorForm:ItemFormType<VendorDTO> = ({ selectedItem, handleSave, Buttons }) => {
+    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+      e.preventDefault();
+      const form = e.currentTarget as HTMLFormElement;
+      const formData = new FormData(form);
+      const data: VendorDTO = {
+        id: selectedItem?.id,
+        name: formData.get("name") as string,
+        address: formData.get("address") as string,
+        phoneNumber: formData.get("phoneNumber") as string,
+        email: formData.get("email") as string,
+        description: formData.get("description") as string,
+      };
+      handleSave(data);
+    }
     return (
-      <>
+
+        <form onSubmit={handleSubmit}>
         <TextField defaultValue={selectedItem?.name} label="Име" name="name" />
         <TextField
           defaultValue={selectedItem?.phoneNumber}
@@ -109,7 +126,8 @@ export default function VendorsPage() {
           label="Описание"
           name={"description"}
         />
-      </>
+        <Buttons />
+      </form>
     );
   };
 
@@ -117,7 +135,7 @@ export default function VendorsPage() {
     <GenericCRUDView
       itemSchema={vendorSchema}
       title="Доставчици"
-      ItemFormFields={VendorFormFields}
+      ItemForm={VendorForm}
       ItemsList={VendorsList}
       ItemDetails={VendorDetails}
       itemOperations={vendorsOperations}

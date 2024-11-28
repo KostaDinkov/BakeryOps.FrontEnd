@@ -1,55 +1,53 @@
-import { UseQueryResult, useQuery } from "@tanstack/react-query";
-import GenericCRUDView, { IItemOperations } from "../../../Components/GenericCRUD/GenericCRUD";
-import Select from "react-select";
+import GenericCRUDView, {
+  IItemOperations,
+  ItemFormType,
+} from "../../../Components/GenericCRUD/GenericCRUD";
 import {
+  Autocomplete,
   Accordion,
   AccordionDetails,
   AccordionSummary,
   TextField,
+  AutocompleteRenderInputParams,
 } from "@mui/material";
 import { apiClient } from "../../../API/apiClient";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { z } from "zod";
-import { CategoryDTO, MaterialDTO, Unit, VendorDTO } from "../../../Types/types";
-
-
+import {
+  CategoryDTO,
+  MaterialDTO,
+  Unit,
+  VendorDTO,
+} from "../../../Types/types";
+import { useItemsQuery } from "../../../API/crudOperations";
+import { handleApiResponse } from "../../../API/apiUtils";
+import { useState } from "react";
 
 // Define the schema for client formData parsing and validation
 //@ts-ignore
 const materialSchema: z.ZodSchema<MaterialDTO> = z.object({
+  
   id: z.string().uuid().default("00000000-0000-0000-0000-000000000000"),
-  name: z.string().min(3).max(50),
+  name: z.string({required_error:"Въведете име на продукта", invalid_type_error:"Името на продукта трябва да бъде между 3 и 50 символа"}).min(3).max(50),
   description: z.string().max(200).nullable().default(null).optional(),
-  unitId: z.string().uuid(),
-  vendorId: z.string().uuid(),
-  categoryId: z.string().uuid(),
-  latestPrice: z.coerce.number().positive().default(0),
+  unitId: z.string({required_error:"Изберете мерна единица"}).uuid(),
+  vendorId: z.string({required_error:"Изберете доставчик"}).uuid(),
+  categoryId: z.string({required_error:"Изберете категория на продукта"}).uuid(),
+  latestPrice: z.coerce.number({required_error:"Актуалната цена трябва да е положително число"}).positive().default(0),
 });
 
 export default function MaterialsPage() {
-  const categoriesQuery: UseQueryResult<CategoryDTO[], Error> = useQuery({
-    queryKey: ["categories"],
-    queryFn: async () => {
-      const response = await apiClient.GET("/api/Categories/GetCategories");
-
-      return response.data;
-    },
+  const categoriesQuery = useItemsQuery({
+    queryKey: "categories",
+    url: "/api/Categories/GetCategories",
   });
-
-  const vendorsQuery: UseQueryResult<VendorDTO[], Error> = useQuery({
-    queryKey: ["vendors"],
-    queryFn: async () => {
-      const response = await apiClient.GET("/api/Vendors/GetVendors");
-      return response.data;
-    },
+  const vendorsQuery = useItemsQuery({
+    queryKey: "vendors",
+    url: "/api/Vendors/GetVendors",
   });
-
-  const unitsQuery: UseQueryResult<Unit[], Error> = useQuery({
-    queryKey: ["units"],
-    queryFn: async () => {
-      const response = await apiClient.GET("/api/Units/GetUnits");
-      return response.data;
-    },
+  const unitsQuery = useItemsQuery({
+    queryKey: "units",
+    url: "/api/Units/GetUnits",
   });
 
   const getCategoryDTO = (id: string) => {
@@ -75,43 +73,50 @@ export default function MaterialsPage() {
 
   // functions to create, update and delete clients, that use tanstack-query, and automatically invalidate the clients query
   const materialOperations: IItemOperations<MaterialDTO> = {
-    getItems: async () => {
-      const response = await apiClient.GET("/api/Materials/GetMaterials");
-      return response.data as unknown as MaterialDTO[];
-    },
-    createItem: async (item: MaterialDTO) => {
-      const response = await apiClient.POST("/api/Materials/AddMaterial", {
-        body: item,
-      });
-      return response.data as unknown as MaterialDTO; // Return the data property of the response
-    },
-    updateItem: async (item: MaterialDTO) => {
-      const response = await apiClient.PUT("/api/Materials/UpdateMaterial", {
-        body: item,
-      });
-      return response.data as unknown as MaterialDTO;
-    },
-    deleteItem: async (id: string | number) => {
-      await apiClient.DELETE("/api/Materials/DeleteMaterial/{id}", {
-        params: { path: { id: String(id) } },
-      });
-      return;
-    },
+    getItems: async () =>
+      await handleApiResponse(
+        async () => await apiClient.GET("/api/Materials/GetMaterials")
+      ),
+
+    createItem: async (item: MaterialDTO) =>
+      handleApiResponse(
+        async () =>
+          await apiClient.POST("/api/Materials/AddMaterial", {
+            body: item,
+          })
+      ),
+
+    updateItem: async (item: MaterialDTO) =>
+      await handleApiResponse(
+        async () =>
+          await apiClient.PUT("/api/Materials/UpdateMaterial", {
+            body: item,
+          })
+      ),
+
+    deleteItem: async (id: string | number) =>
+      await handleApiResponse(
+        async () =>
+          await apiClient.DELETE("/api/Materials/DeleteMaterial/{id}", {
+            params: { path: { id: String(id) } },
+          })
+      ),
+
     queryKey: ["materials"],
   };
 
   // Custom view for the clients list
   const MaterialsList: React.FC<{
     setSelectedItem: React.Dispatch<MaterialDTO | null>;
-    data: any;
+    data: MaterialDTO[];
   }> = ({ setSelectedItem, data }) => {
-    //@ts-ignore
-    data = Object.groupBy(data, (m: MaterialDTO) => m.categoryId) as {
+    
+    let byCategory = Object.groupBy(data, (m: MaterialDTO) => m.categoryId) as {
       [key: string]: MaterialDTO[];
     };
     return (
-      data &&
-      Object.keys(data).map((categoryId) => (
+      byCategory &&
+      Object.keys(byCategory).map((categoryId) => (
         <Accordion key={categoryId} defaultExpanded>
           <AccordionSummary
             expandIcon={<ArrowDropDownIcon />}
@@ -122,7 +127,7 @@ export default function MaterialsPage() {
           </AccordionSummary>
           <AccordionDetails>
             <ul>
-              {data[categoryId].map((material: MaterialDTO) => {
+              {byCategory[categoryId]?.map((material: MaterialDTO) => {
                 return (
                   <li
                     key={material.id}
@@ -167,95 +172,104 @@ export default function MaterialsPage() {
     );
   };
 
-  const MaterialFormFields: React.FC<{
-    selectedItem: MaterialDTO | null;
-  }> = ({ selectedItem }) => {
+  const MaterialForm: ItemFormType<MaterialDTO> = ({ selectedItem, handleSave, Buttons }) => {
+
+    const units= unitsQuery.data as Unit[];
+    const vendors = vendorsQuery.data as VendorDTO[];
+    const categories = categoriesQuery.data as CategoryDTO[];
+
+    const [formData, setFormData] = useState<MaterialDTO | null>(selectedItem);
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      if (formData === null) {
+        handleSave({});
+        return;
+      }
+        
+      handleSave(formData);
+    }
     return (
-      <>
+      <form onSubmit={handleSubmit}>
         <TextField
           label="Име"
-          id="name"
-          name="name"
-          defaultValue={selectedItem?.name}
+          value={formData?.name || ""}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value } as MaterialDTO)}
         />
+        <Autocomplete
+        options={units} 
+        getOptionLabel={(option) => option.name || ""}
+        onChange={(event, value) => {
+          setFormData({ ...formData, unitId: value?.id } as MaterialDTO);
+        }}
+        value={units.find((u) => u.id === formData?.unitId) || null}
+        renderInput={function (
+          params: AutocompleteRenderInputParams
+        ): React.ReactNode {
+          return <TextField {...params} label="Мерна единица" />;
+        }}
+      />
 
         
-        <Select
-          placeholder="Избери мярка"
-          options={unitsQuery.data?.map(
-            (unit) => ({ value: unit.id, label: unit.name } as any)
-          )}
-          name="unitId"
-          id="unitId"
-          defaultValue={
-            selectedItem
-              ? {
-                  value: selectedItem.unitId,
-                  label: unitsQuery.data?.find(
-                    (u) => u.id === selectedItem.unitId
-                  )?.name,
-                }
-              : undefined
-          }
-        />
         <TextField
           type="number"
           label="Актуална Цена"
           name="latestPrice"
           id="latestPrice"
-          inputProps={{ step: "0.01" }}
-          defaultValue={selectedItem?.latestPrice}
+          slotProps={{htmlInput:{ step: "0.01" }}}
+          value={formData?.latestPrice || ""}
+          onChange = {(e) => setFormData({ ...formData, latestPrice: parseFloat(e.target.value) } as MaterialDTO)}
         />
-        <Select
-          placeholder="Избери категория"
-          options={categoriesQuery.data?.map(
-            (category) => ({ value: category.id, label: category.name } as any)
-          )}
-          name="categoryId"
-          defaultValue={
-            selectedItem
-              ? {
-                  value: selectedItem?.categoryId,
-                  label: getCategoryDTO(selectedItem?.categoryId)?.name,
-                }
-              : undefined
-          }
+        <Autocomplete
+          
+          options={categories}
+          getOptionLabel={(option) => option.name || ""}
+          value={categories.find((c) => c.id === formData?.categoryId) || null}
+          onChange={(event, value) => {
+            setFormData({ ...formData, categoryId: value?.id } as MaterialDTO);
+          }}
+          renderInput={function (
+            params: AutocompleteRenderInputParams
+          ): React.ReactNode {
+            return <TextField {...params} label="Категория" />;
+          }}
         />
 
-        <Select
-          placeholder="Избери доставчик"
-          name="vendorId"
-          options={vendorsQuery.data?.map(
-            (vendor) => ({ value: vendor.id, label: vendor.name } as any)
-          )}
-          defaultValue={
-            selectedItem
-              ? {
-                  value: selectedItem?.vendorId,
-                  label: getVendorDTO(selectedItem?.vendorId)?.name,
-                }
-              : undefined
-          }
+        <Autocomplete
+          options={vendors}
+          getOptionLabel={(option) => option.name || ""}
+          value={vendors.find((v) => v.id === formData?.vendorId) || null}
+          onChange={(event, value) => {
+            setFormData({ ...formData, vendorId: value?.id } as MaterialDTO);
+          }}
+          renderInput={function (
+            params: AutocompleteRenderInputParams
+          ): React.ReactNode {
+            return <TextField {...params} label="Доставчик" />;
+          }}
+
         />
 
         <TextField
           label="Описание"
           id="description"
           name="description"
-          defaultValue={selectedItem?.description}
+          value={formData?.description || ""}
+          onChange={(e) => setFormData({ ...formData, description: e.target.value } as MaterialDTO)}
         />
-      </>
+        <Buttons/>
+      </form>
     );
   };
 
-  if (categoriesQuery.data === undefined || vendorsQuery.data === undefined) {
+  if (categoriesQuery.isLoading|| vendorsQuery.isLoading || unitsQuery.isLoading) {
     return <div>Loading data from queries...</div>;
   }
   return (
     <GenericCRUDView
       title="Стоки"
       ItemsList={MaterialsList}
-      ItemFormFields={MaterialFormFields}
+      ItemForm={MaterialForm}
       ItemDetails={MaterialDetails}
       itemSchema={materialSchema}
       itemOperations={materialOperations}

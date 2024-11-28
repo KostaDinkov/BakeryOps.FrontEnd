@@ -13,7 +13,7 @@ export interface IItemOperations<TItem> {
   deleteItem: (id: string) => Promise<void>;
 }
 
-export type ItemForm <TItem> = React.FC<{
+export type ItemFormType <TItem> = React.FC<{
   selectedItem: TItem | null;
   handleSave: (e: any) => {};
   Buttons: React.FC;
@@ -34,7 +34,7 @@ export default function GenericCRUDView<TItem>({
   newBtnText = "Нов",
 }: {
   title: string;
-  ItemForm: ItemForm<TItem>;
+  ItemForm: ItemFormType<TItem>;
   ItemsList: IItemsList<TItem>;
   ItemDetails: React.FC<{ selectedItem: TItem | null }>;
   itemSchema: z.ZodSchema<TItem>;

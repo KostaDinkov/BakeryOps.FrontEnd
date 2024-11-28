@@ -1,5 +1,5 @@
 import React from "react";
-import GenericCRUDView, { IItemOperations, ItemForm } from "./GenericCRUD";
+import GenericCRUDView, { IItemOperations, ItemFormType } from "./GenericCRUD";
 import z from "zod";
 import { handleApiResponse } from "../../API/apiUtils";
 

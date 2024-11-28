@@ -27,7 +27,7 @@ import NomenclatureHomePage from "../Modules/Nomenclature/NomenclatureHomePage";
 import MaterialsPage from "../Modules/Nomenclature/Materials/MaterialsPage";
 import VendorsPage from "../Modules/Nomenclature/Vendors/VendorsPage";
 import ClientsPage from "../Modules/Nomenclature/Clients/ClientsPage";
-import CategoriesPage from "../Modules/Nomenclature/Categories/CategoriesPage-old";
+import CategoriesPage from "../Modules/Nomenclature/Categories/CategoriesPage";
 import ProductsPage from "../Modules/Nomenclature/Products/ProductsPage";
 import RecipesHomePage from "../Modules/Recipes/RecipesHomePage";
 import DeliveriesHome from "../Modules/Deliveries/DeliveriesHome";

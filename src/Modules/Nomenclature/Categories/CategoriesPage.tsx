@@ -11,7 +11,7 @@ import { apiClient } from "../../../API/apiClient";
 
 type CategoryDTO = components["schemas"]["CategoryDTO"];
 
-export default function CrudTemplate() {
+export default function CategoriesPage() {
   //Todo: Implement item schema. See the example below
   const categorySchema: z.ZodSchema<CategoryDTO> = z.object({
     id: z.string().uuid().default("00000000-0000-0000-0000-000000000000"),

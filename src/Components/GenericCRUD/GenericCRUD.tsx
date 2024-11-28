@@ -1,4 +1,4 @@
-import { useState, memo } from "react";
+import { useState } from "react";
 import { Button, Paper } from "@mui/material";
 import ConfirmationDialog from "../../Components/ConfirmationDialog/ConfirmationDialog";
 import { z } from "zod";
@@ -13,9 +13,15 @@ export interface IItemOperations<TItem> {
   deleteItem: (id: string) => Promise<void>;
 }
 
+export type ItemForm <TItem> = React.FC<{
+  selectedItem: TItem | null;
+  handleSave: (e: any) => {};
+  Buttons: React.FC;
+}>;
+
 export type IItemsList<TItem> = React.FC<{
   setSelectedItem: React.Dispatch<TItem | null>;
-  fetchResponse: { data: TItem[]; error?: any; response?: Response };
+  data: TItem[];
 }>;
 
 export default function GenericCRUDView<TItem>({
@@ -28,11 +34,7 @@ export default function GenericCRUDView<TItem>({
   newBtnText = "Нов",
 }: {
   title: string;
-  ItemForm: React.FC<{
-    selectedItem: TItem | null;
-    handleSave: (e: any) => {};
-    onCancel: () => void;
-  }>;
+  ItemForm: ItemForm<TItem>;
   ItemsList: IItemsList<TItem>;
   ItemDetails: React.FC<{ selectedItem: TItem | null }>;
   itemSchema: z.ZodSchema<TItem>;
@@ -152,7 +154,6 @@ function GenericForm() {
         <ItemForm
           selectedItem={selectedItem}
           handleSave={handleSubmit}
-          onCancel={handleCancel}
           Buttons={Buttons}
         />
         {validationObject && !validationObject.success && (
@@ -189,7 +190,7 @@ function GenericForm() {
               <Paper elevation={0} sx={{ padding: "1rem" }}>
                 <ItemsList
                   setSelectedItem={setSelectedItem}
-                  fetchResponse={itemsQuery.data}
+                  data={itemsQuery.data}
                 />
               </Paper>
             )}

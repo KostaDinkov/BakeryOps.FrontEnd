@@ -1,27 +1,16 @@
 import GenericCRUDView from "../../Components/GenericCRUD/GenericCRUD";
-import { apiClient } from "../../API/apiClient";
 import { DeliveryDTO, MaterialDTO, Unit, VendorDTO } from "../../Types/types";
 import { deliveryOperations } from "./deliveryOperations";
 import { deliverySchema } from "./deliverySchema";
 import DeliveriesList from "./DeliveriesList";
 import DeliveryDetails from "./ItemDetails";
-import { useQuery } from "@tanstack/react-query";
 import DeliveryFormFields from "./DeliveryFormFields";
+import { useItemsQuery } from "../../API/crudOperations";
 
 export default function DeliveriesHome() {
   const vendorsQuery = useItemsQuery({queryKey:"vendors",url:"/api/Vendors/GetVendors"});
   const materialsQuery = useItemsQuery({queryKey:"materials", url:"/api/Materials/GetMaterials"});
   const unitsQuery = useItemsQuery({queryKey:"units", url:"/api/Units/GetUnits"})
-
-  function useItemsQuery({queryKey, url}:{queryKey:string, url:string}) {
-    return useQuery({
-      queryKey: [queryKey],
-      queryFn: async () => {
-        const response = await apiClient.GET(url);
-        return response.data;
-      },
-    });
-  }
 
   const ItemDetails = ({
     selectedItem,

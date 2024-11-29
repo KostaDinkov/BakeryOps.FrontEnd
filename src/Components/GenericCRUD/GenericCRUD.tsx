@@ -95,11 +95,11 @@ function GenericForm() {
 
       // create / update item in database
         const queryOptions = {
-          onError: (error) => {
+          onError: (error:any) => {
             const errorInfo = getErrorInfo(error);
             setServerError(errorInfo);
           },
-          onSuccess: (data) => {
+          onSuccess: () => {
             setMode("viewItem");
             setSelectedItem(null);
           }

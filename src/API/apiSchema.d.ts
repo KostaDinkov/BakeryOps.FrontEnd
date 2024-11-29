@@ -1777,7 +1777,7 @@ export interface components {
         };
         MaterialDTO: {
             /** Format: uuid */
-            id: string;
+            id?: string;
             name: string | null;
             description?: string | null;
             /** Format: uuid */

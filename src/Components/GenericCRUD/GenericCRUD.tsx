@@ -4,6 +4,8 @@ import ConfirmationDialog from "../../Components/ConfirmationDialog/Confirmation
 import { z } from "zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import styles from "./GenericCRUD.module.scss";
+import { getErrorInfo } from "./crudHelperFunctions";
+
 
 export interface IItemOperations<TItem> {
   queryKey: string[];
@@ -57,11 +59,7 @@ export default function GenericCRUDView<TItem>({
     queryFn: itemOperations.getItems,
   });
 
-  const updateItemMutation = useMutation({
-    mutationFn: itemOperations.updateItem,
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: itemOperations.queryKey }),
-  });
+  
   const deleteItemMutation = useMutation({
     mutationFn: itemOperations.deleteItem,
     onSuccess: () =>
@@ -74,6 +72,11 @@ function GenericForm() {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: itemOperations.queryKey });
       },
+    });
+    const updateItemMutation = useMutation({
+      mutationFn: itemOperations.updateItem,
+      onSuccess: () =>
+        queryClient.invalidateQueries({ queryKey: itemOperations.queryKey }),
     });
 
     const [validationObject, setValidationObject] =
@@ -91,43 +94,26 @@ function GenericForm() {
       }
 
       // create / update item in database
-      try {
+        const queryOptions = {
+          onError: (error) => {
+            const errorInfo = getErrorInfo(error);
+            setServerError(errorInfo);
+          },
+          onSuccess: (data) => {
+            setMode("viewItem");
+            setSelectedItem(null);
+          }
+        }
+        try{
         if (mode === "createItem") {
-            await createItemMutation.mutateAsync(item, {
-            onError: (error) => {
-              console.log("Inside", error);
-            },
-            onSettled(data, error, variables, context) {
-
-              if (error) {
-                setServerError(error.message);
-              }
-            },
-            onSuccess: (data) => {
-              setMode("viewItem");
-              setSelectedItem(null);
-            }
-          });
+            await createItemMutation.mutateAsync(item, queryOptions );
         } else if (mode === "updateItem") {
           item.id = (selectedItem as IId).id;
-          await updateItemMutation.mutateAsync(item,{
-            onError: (error) => {
-              console.log("Inside update item:", error);
-            },
-            onSettled(data, error, variables, context) {
-              if (error) {
-                setServerError(error.message);
-              }
-            },
-            onSuccess: (data) => {
-              setMode("viewItem");
-              setSelectedItem(null);
-            }
-          });
-        } 
-      } catch (error) {
-        console.error(error);
-      }
+          await updateItemMutation.mutateAsync(item, queryOptions);
+        } } catch (error) {
+          console.log("Error in create/update item:", error)
+        }
+      
     };
 
     const handleCancel = () => {
@@ -169,7 +155,7 @@ function GenericForm() {
           </div>
         )}
         {serverError && (
-          <div>
+          <div style={{whiteSpace:"pre-line"}}>
             <h3>Грешка при записване:</h3>
             {serverError}
           </div>

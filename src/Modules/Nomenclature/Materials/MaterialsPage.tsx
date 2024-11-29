@@ -26,14 +26,25 @@ import { useState } from "react";
 // Define the schema for client formData parsing and validation
 //@ts-ignore
 const materialSchema: z.ZodSchema<MaterialDTO> = z.object({
-  
   id: z.string().uuid().default("00000000-0000-0000-0000-000000000000"),
-  name: z.string({required_error:"Въведете име на продукта", invalid_type_error:"Името на продукта трябва да бъде между 3 и 50 символа"}).min(3).max(50),
+  name: z
+    .string({
+      required_error: "Въведете име на продукта",
+      invalid_type_error:
+        "Името на продукта трябва да бъде между 3 и 50 символа",
+    })
+    .min(3)
+    .max(50),
   description: z.string().max(200).nullable().default(null).optional(),
-  unitId: z.string({required_error:"Изберете мерна единица"}).uuid(),
-  vendorId: z.string({required_error:"Изберете доставчик"}).uuid(),
-  categoryId: z.string({required_error:"Изберете категория на продукта"}).uuid(),
-  latestPrice: z.coerce.number({required_error:"Актуалната цена трябва да е положително число"}).positive().default(0),
+  unitId: z.string({ required_error: "Изберете мерна единица" }).uuid(),
+  vendorId: z.string({ required_error: "Изберете доставчик" }).uuid(),
+  categoryId: z
+    .string({ required_error: "Изберете категория на продукта" })
+    .uuid(),
+  latestPrice: z.coerce
+    .number({ required_error: "Актуалната цена трябва да е положително число" })
+    .positive()
+    .default(0),
 });
 
 export default function MaterialsPage() {
@@ -73,19 +84,12 @@ export default function MaterialsPage() {
 
   // functions to create, update and delete clients, that use tanstack-query, and automatically invalidate the clients query
   const materialOperations: IItemOperations<MaterialDTO> = {
-    getItems: async () =>
-      await handleApiResponse(
-        async () => await apiClient.GET("/api/Materials/GetMaterials")
-      ),
+    getItems: async () =>  handleApiResponse(async ()=> await apiClient.GET("/api/Materials/GetMaterials")),
 
-    createItem: async (item: MaterialDTO) =>
-      handleApiResponse(
-        async () =>
-          await apiClient.POST("/api/Materials/AddMaterial", {
-            body: item,
-          })
-      ),
-
+    createItem: async (item: MaterialDTO) => handleApiResponse(async ()=>
+      await apiClient.POST("/api/Materials/AddMaterial", {
+        body: item,
+      })),
     updateItem: async (item: MaterialDTO) =>
       await handleApiResponse(
         async () =>
@@ -110,7 +114,6 @@ export default function MaterialsPage() {
     setSelectedItem: React.Dispatch<MaterialDTO | null>;
     data: MaterialDTO[];
   }> = ({ setSelectedItem, data }) => {
-    
     let byCategory = Object.groupBy(data, (m: MaterialDTO) => m.categoryId) as {
       [key: string]: MaterialDTO[];
     };
@@ -172,9 +175,12 @@ export default function MaterialsPage() {
     );
   };
 
-  const MaterialForm: ItemFormType<MaterialDTO> = ({ selectedItem, handleSave, Buttons }) => {
-
-    const units= unitsQuery.data as Unit[];
+  const MaterialForm: ItemFormType<MaterialDTO> = ({
+    selectedItem,
+    handleSave,
+    Buttons,
+  }) => {
+    const units = unitsQuery.data as Unit[];
     const vendors = vendorsQuery.data as VendorDTO[];
     const categories = categoriesQuery.data as CategoryDTO[];
 
@@ -186,42 +192,47 @@ export default function MaterialsPage() {
         handleSave({});
         return;
       }
-        
+
       handleSave(formData);
-    }
+    };
     return (
       <form onSubmit={handleSubmit}>
         <TextField
           label="Име"
           value={formData?.name || ""}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value } as MaterialDTO)}
+          onChange={(e) =>
+            setFormData({ ...formData, name: e.target.value } as MaterialDTO)
+          }
         />
         <Autocomplete
-        options={units} 
-        getOptionLabel={(option) => option.name || ""}
-        onChange={(event, value) => {
-          setFormData({ ...formData, unitId: value?.id } as MaterialDTO);
-        }}
-        value={units.find((u) => u.id === formData?.unitId) || null}
-        renderInput={function (
-          params: AutocompleteRenderInputParams
-        ): React.ReactNode {
-          return <TextField {...params} label="Мерна единица" />;
-        }}
-      />
+          options={units}
+          getOptionLabel={(option) => option.name || ""}
+          onChange={(event, value) => {
+            setFormData({ ...formData, unitId: value?.id } as MaterialDTO);
+          }}
+          value={units.find((u) => u.id === formData?.unitId) || null}
+          renderInput={function (
+            params: AutocompleteRenderInputParams
+          ): React.ReactNode {
+            return <TextField {...params} label="Мерна единица" />;
+          }}
+        />
 
-        
         <TextField
           type="number"
           label="Актуална Цена"
           name="latestPrice"
           id="latestPrice"
-          slotProps={{htmlInput:{ step: "0.01" }}}
+          slotProps={{ htmlInput: { step: "0.01" } }}
           value={formData?.latestPrice || ""}
-          onChange = {(e) => setFormData({ ...formData, latestPrice: parseFloat(e.target.value) } as MaterialDTO)}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              latestPrice: parseFloat(e.target.value),
+            } as MaterialDTO)
+          }
         />
         <Autocomplete
-          
           options={categories}
           getOptionLabel={(option) => option.name || ""}
           value={categories.find((c) => c.id === formData?.categoryId) || null}
@@ -247,7 +258,6 @@ export default function MaterialsPage() {
           ): React.ReactNode {
             return <TextField {...params} label="Доставчик" />;
           }}
-
         />
 
         <TextField
@@ -255,14 +265,23 @@ export default function MaterialsPage() {
           id="description"
           name="description"
           value={formData?.description || ""}
-          onChange={(e) => setFormData({ ...formData, description: e.target.value } as MaterialDTO)}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              description: e.target.value,
+            } as MaterialDTO)
+          }
         />
-        <Buttons/>
+        <Buttons />
       </form>
     );
   };
 
-  if (categoriesQuery.isLoading|| vendorsQuery.isLoading || unitsQuery.isLoading) {
+  if (
+    categoriesQuery.isLoading ||
+    vendorsQuery.isLoading ||
+    unitsQuery.isLoading
+  ) {
     return <div>Loading data from queries...</div>;
   }
   return (

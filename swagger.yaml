@@ -831,7 +831,6 @@ components:
     MaterialDTO:
       required:
         - categoryId
-        - id
         - name
         - unitId
         - vendorId

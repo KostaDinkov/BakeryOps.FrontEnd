@@ -76,6 +76,7 @@ export default function CrudTemplate() {
     /**
      * React functional component for displaying the details of a selected item
      * @param selectedItem the selected item
+     * @param queryData optional data that can be used in the details view
      * @returns
      */
     function ItemDetails({ selectedItem, queryData }: { selectedItem: ExampleItem | null, queryData?: object }) {

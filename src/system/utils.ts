@@ -17,3 +17,12 @@ export function getProductsByCategory(products: ProductDTO[]): ProductsByCategor
   sortedKeys.forEach(key=>sortedProductsByCat[key]=productsByCat[key]);
   return sortedProductsByCat;  
 }
+
+export const customInvalidProps = (message:string) => {
+  return {
+    onInvalid: (e) =>
+      (e.target as HTMLInputElement).setCustomValidity(message),
+    onInput: (e) => (e.target as HTMLInputElement).setCustomValidity(""),
+    
+  };
+}

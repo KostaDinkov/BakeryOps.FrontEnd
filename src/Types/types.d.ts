@@ -7,3 +7,4 @@ export type MaterialDTO = components["schemas"]["MaterialDTO"];
 export type CategoryDTO = components["schemas"]["CategoryDTO"];
 export type ClientDTO = components["schemas"]["ClientDTO"];
 export type Unit = components["schemas"]["Unit"];
+export type RecipeDTO = components["schemas"]["RecipeDTO"];

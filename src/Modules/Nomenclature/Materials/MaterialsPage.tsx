@@ -22,6 +22,7 @@ import {
 import { useItemsQuery } from "../../../API/crudOperations";
 import { handleApiResponse } from "../../../API/apiUtils";
 import { useState } from "react";
+import { customInvalidProps } from "../../../system/utils";
 
 // Define the schema for client formData parsing and validation
 //@ts-ignore
@@ -195,9 +196,12 @@ export default function MaterialsPage() {
 
       handleSave(formData);
     };
+   
     return (
       <form onSubmit={handleSubmit}>
         <TextField
+          required
+          {...customInvalidProps("Името на продукта е задължително")}
           label="Име"
           value={formData?.name || ""}
           onChange={(e) =>
@@ -205,16 +209,18 @@ export default function MaterialsPage() {
           }
         />
         <Autocomplete
+          
           options={units}
           getOptionLabel={(option) => option.name || ""}
           onChange={(event, value) => {
+            
             setFormData({ ...formData, unitId: value?.id } as MaterialDTO);
           }}
           value={units.find((u) => u.id === formData?.unitId) || null}
           renderInput={function (
             params: AutocompleteRenderInputParams
           ): React.ReactNode {
-            return <TextField {...params} label="Мерна единица" />;
+            return <TextField {...params} label="Мерна единица" required />;
           }}
         />
 
@@ -242,7 +248,7 @@ export default function MaterialsPage() {
           renderInput={function (
             params: AutocompleteRenderInputParams
           ): React.ReactNode {
-            return <TextField {...params} label="Категория" />;
+            return <TextField {...params} label="Категория" required />;
           }}
         />
 
@@ -256,7 +262,7 @@ export default function MaterialsPage() {
           renderInput={function (
             params: AutocompleteRenderInputParams
           ): React.ReactNode {
-            return <TextField {...params} label="Доставчик" />;
+            return <TextField {...params} label="Доставчик" required />;
           }}
         />
 

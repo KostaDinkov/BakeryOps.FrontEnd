@@ -1,33 +1,57 @@
-import GenericCRUDView, { IItemOperations } from "../../../Components/GenericCRUD/GenericCRUD";
-import { Checkbox, TextField } from "@mui/material";
+import GenericCRUDView, {
+  IItemOperations,
+  ItemFormType,
+} from "../../../Components/GenericCRUD/GenericCRUD";
+import { Checkbox, FormControlLabel, TextField } from "@mui/material";
 import { apiClient } from "../../../API/apiClient";
 import { components } from "../../../API/apiSchema";
-
 import { z } from "zod";
+import { handleApiResponse } from "../../../API/apiUtils";
+import { customInvalidProps } from "../../../system/utils";
+
 
 type ClientDTO = components["schemas"]["ClientDTO"];
 
 export default function ClientsPage() {
+  // Define the schema for client formData parsing and validation
+  const clientSchema: z.ZodSchema<ClientDTO> = z.object({
+    id: z.string().default("00000000-0000-0000-0000-000000000000"),
+    name: z
+      .string({ required_error: "Името на клиента е задължително", invalid_type_error: "Името на клиента е задължително" })
+      .min(3,{message:"Името на клиента трябва да е минимум 3 символа"})
+      .max(50,{message:"Името на клиента трябва да е максимум 50 символа"}),
+    phone: z.string().min(5,{message:"Телефонният номер трябва да е минимум 5 символа"}).max(20).nullable().default(null),
+    email: z
+      .string()
+      .email({ message: "Невалиден формат на мейла." })
+      .nullable()
+      .default(null),
+    isCompany: z.coerce.boolean(),
+    isSpecialPrice: z.coerce.boolean(),
+    discountPercent: z.coerce.number().int().default(20),
+  });
   const clientsOperations: IItemOperations<ClientDTO> = {
-    getItems: async () => {
-      const response = await apiClient.GET("/api/Clients");
-      return response.data as unknown as ClientDTO[];
-    },
+    getItems: async () =>
+      await handleApiResponse(async () => apiClient.GET("/api/Clients")),
 
-    createItem: async (item: ClientDTO) => {
-      const response = await apiClient.POST("/api/Clients", { body: item });
-      return response.data as unknown as ClientDTO; // Return the data property of the response
-    },
-    updateItem: async (item: ClientDTO) => {
-      const response = await apiClient.PUT("/api/Clients", { body: item });
-      return response.data as unknown as ClientDTO;
-    },
-    deleteItem: async (id: string) => {
-      await apiClient.DELETE(`/api/Clients/{id}`, {
-        params: { path: { id: id } },
-      });
-      return;
-    },
+    createItem: async (item: ClientDTO) =>
+      await handleApiResponse(
+        async () => await apiClient.POST("/api/Clients", { body: item })
+      ),
+
+    updateItem: async (item: ClientDTO) =>
+      await handleApiResponse(
+        async () => await apiClient.PUT("/api/Clients", { body: item })
+      ),
+
+    deleteItem: async (id: string) =>
+      await handleApiResponse(
+        async () =>
+          await apiClient.DELETE(`/api/Clients/{id}`, {
+            params: { path: { id: id } },
+          })
+      ),
+
     queryKey: ["clients"],
   };
 
@@ -40,7 +64,7 @@ export default function ClientsPage() {
       <div>
         {data &&
           data.map((client: ClientDTO) => (
-            <div key={client.name} onClick={() => setSelectedItem(client)}>
+            <div key={client.id} onClick={() => setSelectedItem(client)}>
               {client.name}
             </div>
           ))}
@@ -70,58 +94,77 @@ export default function ClientsPage() {
     );
   };
 
-  // Define the schema for client formData parsing and validation
-  const clientSchema: z.ZodSchema<ClientDTO> = z.object({
-    id: z.string().default("00000000-0000-0000-0000-000000000000"),
-    name: z.string().min(3).max(50),
-    phone: z.string().min(5).max(20).nullable().default(null),
-    email: z.string().email().nullable().default(null),
-    isCompany: z.coerce.boolean(),
-    isSpecialPrice: z.coerce.boolean(),
-    discountPercent: z.coerce.number().int().default(20),
-  });
-
   // Custom form fields for the client
-  const ClientFormFields: React.FC<{ selectedItem: ClientDTO | null }> = ({
+  const ClientForm: ItemFormType<ClientDTO> = ({
     selectedItem,
+    handleSave,
+    Buttons,
   }) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      const formData = new FormData(e.currentTarget as HTMLFormElement);
+      const clientDto: ClientDTO = {
+        id: selectedItem?.id || undefined,
+        name: (formData.get("name") as string) || null,
+        phone: (formData.get("phone") as string) || null,
+        email: (formData.get("email") as string) || null,
+        isCompany: formData.get("isCompany") === "on" || false,
+        isSpecialPrice: formData.get("isSpecialPrice") === "on" || false,
+        discountPercent:
+          parseInt(formData.get("discountPercent") as string) || 0,
+      };
+
+      handleSave(clientDto);
+    };
+
     return (
-      <>
+      <form onSubmit={handleSubmit}>
         <TextField
+          required
           label="Име"
-          id="name"
           name="name"
-          defaultValue={selectedItem?.name}
+          {...customInvalidProps("Името на клиента е задължително")}
+          defaultValue={selectedItem?.name || ""}
         />
         <TextField
           label="Телефон"
-          id="phone"
+          defaultValue={selectedItem?.phone || null}
           name="phone"
-          defaultValue={selectedItem?.phone}
         />
         <TextField
           label="Мейл"
-          id="email"
           name="email"
-          defaultValue={selectedItem?.email}
+          defaultValue={selectedItem?.email || null}
         />
-        <Checkbox
-          id="isCompany"
-          name="isCompany"
-          defaultChecked={selectedItem?.isCompany}
+        <FormControlLabel
+          label="Компания?"
+          labelPlacement="start"
+          control={
+            <Checkbox
+              name="isCompany"
+              defaultChecked={selectedItem?.isCompany || false}
+            />
+          }
         />
-        <Checkbox
-          id="isSpecialPrice"
-          name="isSpecialPrice"
-          defaultChecked={selectedItem?.isSpecialPrice}
+        <FormControlLabel
+          label="Ползва специални цени?"
+          labelPlacement="start"
+          control={
+            <Checkbox
+              name="isSpecialPrice"
+              defaultChecked={selectedItem?.isSpecialPrice || false}
+            />
+          }
         />
-        <TextField
+
+        {/* <TextField
           label="Отстъпка (%)"
           id="discountPercent"
           name="discountPercent"
           defaultValue={selectedItem?.discountPercent}
-        />
-      </>
+        /> */}
+        <Buttons />
+      </form>
     );
   };
 
@@ -129,7 +172,7 @@ export default function ClientsPage() {
     <GenericCRUDView
       title="Clients"
       ItemsList={ClientsList}
-      ItemFormFields={ClientFormFields}
+      ItemForm={ClientForm}
       ItemDetails={ClientDetails}
       itemSchema={clientSchema}
       itemOperations={clientsOperations}

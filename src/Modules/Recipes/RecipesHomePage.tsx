@@ -1,13 +1,17 @@
 import GenericCRUDView, {
   IItemOperations,
+  ItemFormType,
 } from "../../Components/GenericCRUD/GenericCRUD";
 import { components } from "../../API/apiSchema";
 import { apiClient } from "../../API/apiClient";
-import { Button, TextField } from "@mui/material";
-import Select from "react-select";
-import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import { Autocomplete, Button, TextField } from "@mui/material";
+import { UseQueryResult } from "@tanstack/react-query";
 import IngredientsInputs from "./IngredientsInputs";
 import { z } from "zod";
+import { useItemsQuery } from "../../API/crudOperations";
+import { useState } from "react";
+import { handleApiResponse } from "../../API/apiUtils";
+import { Unit } from "../../Types/types";
 
 type RecipeDTO = components["schemas"]["RecipeDTO"];
 type MaterialDTO = components["schemas"]["MaterialDTO"];
@@ -18,52 +22,60 @@ const recipeSchema: z.ZodSchema<RecipeDTO> = z.object({
   name: z.string().min(3).max(50),
   lastUpdated: z.string().optional(),
   productId: z.string().uuid().nullable().default(null),
-  yield: z.number().positive("Изходното количество трябва да е положително число").default(0),
-  workHours: z.number().positive("Човеко-часовете трябва да са положително число").default(0),
+  yield: z
+    .number()
+    .positive("Изходното количество трябва да е положително число")
+    .default(0),
+  workHours: z
+    .number()
+    .positive("Човеко-часовете трябва да са положително число")
+    .default(0),
   ingredients: z.array(
     z.object({
       materialId: z.string().uuid(),
-      quantity: z.number().positive("Количеството на съставката трябва да бъде положително число"),
+      quantity: z
+        .number()
+        .positive(
+          "Количеството на съставката трябва да бъде положително число"
+        ),
     })
   ),
   subRecipes: z.array(
     z.object({
       subRecipeId: z.string().uuid(),
-      quantity: z.number().positive("Количеството на под-рецептата трябва да бъде положително число"),
+      quantity: z
+        .number()
+        .positive(
+          "Количеството на под-рецептата трябва да бъде положително число"
+        ),
     })
   ),
-  
+
   description: z.string().nullable().default(null),
 });
 
 export default function RecipesHomePage() {
-  const productsQuery: UseQueryResult<Product[], Error> = useQuery({
-    queryKey: ["products"],
-    queryFn: async () => {
-      const response = await apiClient.GET("/api/Products/GetAllProducts");
-      return response.data;
-    },
+  const productsQuery: UseQueryResult<Product[], Error> = useItemsQuery({
+    queryKey: "products",
+    url: "/api/Products/GetAllProducts",
   });
-  const materialsQuery: UseQueryResult<MaterialDTO[], Error> = useQuery({
-    queryKey: ["materials"],
-    queryFn: async () => {
-      const response = await apiClient.GET("/api/Materials/GetMaterials");
-      return response.data;
-    },
+  const materialsQuery: UseQueryResult<MaterialDTO[], Error> = useItemsQuery({
+    queryKey: "materials",
+    url: "/api/Materials/GetMaterials",
   });
-  const recipesQuery: UseQueryResult<RecipeDTO[], Error> = useQuery({
-    queryKey: ["recipes"],
-    queryFn: async () => {
-      const response = await apiClient.GET("/api/Recipes/GetRecipes");
-      return response.data;
-    },
+  const recipesQuery: UseQueryResult<RecipeDTO[], Error> = useItemsQuery({
+    queryKey: "recipes",
+    url: "/api/Recipes/GetRecipes",
+  });
+  const unitsQuery: UseQueryResult<Unit[], Error> = useItemsQuery({
+    queryKey: "units",
+    url: "/api/Units/GetUnits",
   });
 
   const RecipesList: React.FC<{
     setSelectedItem: React.Dispatch<RecipeDTO | null>;
     data: RecipeDTO[];
   }> = ({ setSelectedItem, data }) => {
-    console.log(data);
     return (
       <div>
         {data &&
@@ -112,7 +124,8 @@ export default function RecipesHomePage() {
                     recipesQuery.data?.find(
                       (r) => r.id === subRecipe.subRecipeId
                     )?.name
-                  } - {subRecipe.quantity}
+                  }{" "}
+                  - {subRecipe.quantity}
                 </li>
               ))}
             </ul>
@@ -122,124 +135,176 @@ export default function RecipesHomePage() {
     );
   };
 
-  const handleSubmit =  (formData:any) => {
-    
-    const ingredients = parseIngredients(formData, "material");
-    const subRecipes = parseIngredients(formData, "subRecipe");
+  const RecipesForm: ItemFormType<RecipeDTO> = ({
+    selectedItem,
+    handleSave,
+    Buttons,
+  }) => {
+    const [materialsQtty, setMaterialsQtty] = useState<{
+      [key: string]: { item: MaterialDTO; quantity: number };
+    }>(
+      Object.fromEntries(
+        selectedItem?.ingredients?.map((i) => [
+          i.materialId,
+          {
+            item:
+              materialsQuery.data?.find((m) => m.id === i.materialId) || null,
+            quantity: i.quantity,
+          },
+        ]) || []
+      )
+    );
+    const [subRecipesQtty, setSubRecipesQtty] = useState<{
+      [key: string]: { item: RecipeDTO; quantity: number };
+    }>(
+      Object.fromEntries(
+        selectedItem?.subRecipes?.map((r) => [
+          r.subRecipeId,
+          {
+            item:
+              recipesQuery.data?.find((i) => i.id === r.subRecipeId) || null,
+            quantity: r.quantity,
+          },
+        ]) || []
+      )
+    );
+    const [formData, setFormData] = useState<RecipeDTO | null>(selectedItem);
 
-    let recipe: RecipeDTO = {
-      name: formData.name,
-      productId: formData.product || null,
-      yield: Number(formData.yield),
-      workHours: Number(formData.workHours),
-      ingredients: ingredients,
-      subRecipes: subRecipes,
+    const handleSubmit = (e) => {
+      e.preventDefault();
+
+      const ingredients = Object.keys(materialsQtty).map((key) => ({
+        materialId: materialsQtty[key]?.item.id,
+        quantity: Number(materialsQtty[key]?.quantity),
+      }));
+
+      const subRecipes = Object.keys(subRecipesQtty).map((key) => ({
+        subRecipeId: subRecipesQtty[key]?.item.id,
+        quantity: Number(subRecipesQtty[key]?.quantity),
+      }));
+
+      let newRecipe = { ...formData, ingredients, subRecipes };
+      console.log(newRecipe);
+      handleSave(newRecipe);
     };
-    console.log(recipe);
-    return recipe;
-   
-  };
-
-  const RecipesFormFields: React.FC<{
-    selectedItem: RecipeDTO | null;
-  }> = ({ selectedItem }) => {
     return (
-      <>
+      <form onSubmit={handleSubmit}>
         <TextField
           label="Име"
-          id="name"
-          name="name"
-          defaultValue={selectedItem?.name}
+          value={formData?.name || ""}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
         />
         <label htmlFor="product">За продукт</label>
-        <Select
-          menuPortalTarget={document.body}
-          styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
-          options={productsQuery.data?.map(
-            (product) => ({ value: product.id, label: product.name } as any)
+        <Autocomplete
+          options={productsQuery.data}
+          getOptionLabel={(option) => option.name}
+          value={productsQuery.data?.find(
+            (p) => p.id === selectedItem?.productId
+          )}
+          onChange={(event, value) => {
+            setFormData({ ...formData, productId: value?.id });
+          }}
+          renderInput={(params) => (
+            <TextField {...params} label="Продукт" size="small" />
           )}
           name="product"
-          defaultValue={
-            selectedItem
-              ? {
-                  value: productsQuery.data?.find(p=>p.id === selectedItem?.productId)?.id,
-                  label: productsQuery.data?.find(p=>p.id === selectedItem?.productId)?.name ,
-                }
-              : undefined
-          }
         />
 
         <TextField
           label="Изходно Количество"
-          id="yield"
-          name="yield"
-          defaultValue={selectedItem?.yield}
+          value={formData?.yield || ""}
+          onChange={(e) =>
+            setFormData({ ...formData, yield: Number(e.target.value) })
+          }
+        />
+        <Autocomplete
+          options={unitsQuery.data}
+          getOptionLabel={(option) => option.name}
+          value={
+            unitsQuery.data?.find((u) => u.id === formData?.unitId) || null
+          }
+          onChange={(event, value) => {
+            setFormData({ ...formData, unitId: value?.id });
+          }}
+          renderInput={(params) => (
+            <TextField {...params} label="Мерна единица" size="small" />
+          )}
         />
 
         <TextField
           label="Човекочасове"
-          id="workHours"
-          name="workHours"
-          defaultValue={selectedItem?.workHours}
+          value={formData?.workHours || ""}
+          onChange={(e) =>
+            setFormData({ ...formData, workHours: Number(e.target.value) })
+          }
         />
 
         <IngredientsInputs
-          defaultIngredients={selectedItem?.ingredients}
+          itemsQuantity={materialsQtty}
+          setItems={setMaterialsQtty}
           itemQuery={materialsQuery}
           buttonText="Добави съставка (стока)"
           type="material"
         />
         <IngredientsInputs
-          defaultIngredients={selectedItem?.subRecipes}
+          itemsQuantity={subRecipesQtty}
+          setItems={setSubRecipesQtty}
           itemQuery={recipesQuery}
           buttonText="Добави под-рецепта"
           type="subRecipe"
         />
-      </>
+        <Buttons />
+      </form>
     );
   };
 
   const recipesOperations: IItemOperations<RecipeDTO> = {
     queryKey: ["recipes"],
-    getItems: async () => {
-      const response = await apiClient.GET("/api/Recipes/GetRecipes");
-      return response.data as unknown as RecipeDTO[];
-    },
-    createItem: async (item: RecipeDTO) => {
-      const response = await apiClient.POST("/api/Recipes/AddRecipe", {
-        body: item,
-      });
-      return response.data as unknown as RecipeDTO;
-    },
-    updateItem: async (item: RecipeDTO) => {
-      const response = await apiClient.PUT("/api/Recipes/UpdateRecipe", {
-        body: item,
-      });
-      return response.data as unknown as RecipeDTO;
-    },
-    deleteItem: async (id: string) => {
-      await apiClient.DELETE("/api/Recipes/DeleteRecipe/{id}", {
-        params: { path: { id } },
-      });
-      return;
-    },
+    getItems: async () =>
+      await handleApiResponse(
+        async () => await apiClient.GET("/api/Recipes/GetRecipes")
+      ),
+    createItem: async (item: RecipeDTO) =>
+      await handleApiResponse(
+        async () =>
+          await apiClient.POST("/api/Recipes/AddRecipe", {
+            body: item,
+          })
+      ),
+    updateItem: async (item: RecipeDTO) =>
+      await handleApiResponse(
+        async () =>
+          await apiClient.PUT("/api/Recipes/UpdateRecipe", {
+            body: item,
+          })
+      ),
+    deleteItem: async (id: string) =>
+      await handleApiResponse(
+        async () =>
+          await apiClient.DELETE("/api/Recipes/DeleteRecipe/{id}", {
+            params: { path: { id } },
+          })
+      ),
   };
   return (
     <GenericCRUDView
       title={"Рецепти"}
-      ItemFormFields={RecipesFormFields}
+      ItemForm={RecipesForm}
       ItemsList={RecipesList}
       ItemDetails={RecipeDetails}
       itemSchema={recipeSchema}
       itemOperations={recipesOperations}
-      customFormDataParse={handleSubmit}
+      newBtnText={"Добави рецепта"}
     />
   );
 }
 
 function parseIngredients(formData: any, type: "material" | "subRecipe") {
-  let ingredients: { [typeId:string]: string|number; }[] = [];
-  const regex = new RegExp(`^${type}-[0-9A-Fa-f]{8}[-]?(?:[0-9A-Fa-f]{4}[-]?){3}[0-9A-Fa-f]{12}$`, "is");
+  let ingredients: { [typeId: string]: string | number }[] = [];
+  const regex = new RegExp(
+    `^${type}-[0-9A-Fa-f]{8}[-]?(?:[0-9A-Fa-f]{4}[-]?){3}[0-9A-Fa-f]{12}$`,
+    "is"
+  );
   Object.keys(formData)
     .filter((key) => key.match(regex))
     .forEach((key) =>

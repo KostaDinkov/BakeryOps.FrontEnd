@@ -9,12 +9,13 @@ import { components } from "../../../API/apiSchema";
 import { TextField } from "@mui/material";
 import { apiClient } from "../../../API/apiClient";
 import { CategoryDTO } from "../../../Types/types";
+import { customInvalidProps } from "../../../system/utils";
 
 export default function CategoriesPage() {
   //Todo: Implement item schema. See the example below
   const categorySchema: z.ZodSchema<CategoryDTO> = z.object({
     id: z.string().uuid().default("00000000-0000-0000-0000-000000000000"),
-    name: z.string().min(3).max(50),
+    name: z.string().min(3,{message:"Името на категорията трябва да е от минимум 3 символа"}).max(50),
   });
 
   //Todo: Implement item operations. See the example below
@@ -54,6 +55,8 @@ export default function CategoriesPage() {
     return (
       <form onSubmit={handleSubmit}>
         <TextField
+          required
+          {...customInvalidProps("Името на категорията е задължително")}
           name="name"
           label="Име"
           value={formData?.name || ""}

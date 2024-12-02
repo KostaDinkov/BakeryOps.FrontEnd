@@ -13,7 +13,7 @@ export const deliverySchema: z.ZodSchema<DeliveryDTO> = z.object({
       required_error: "Полето Номер на документ е задължително",
       invalid_type_error: "Номер на документ трябва да е текст от 10 цифри",
     })
-    .regex(/^\d{10}$/),
+    .regex(/^\d{10}$/,{message:"Номер на документ трябва да съдържа точно 10 цифри"}),
   notes: z.string().nullable().default(null),
 
   items: z.array(

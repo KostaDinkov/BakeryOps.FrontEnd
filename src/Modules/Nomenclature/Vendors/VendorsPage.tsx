@@ -9,14 +9,28 @@ import { TextField } from "@mui/material";
 import { z } from "zod";
 import { VendorDTO } from "../../../Types/types";
 import { handleApiResponse } from "../../../API/apiUtils";
+import { customInvalidProps } from "../../../system/utils";
 
 export const vendorSchema: z.ZodSchema<VendorDTO> = z.object({
   id: z.string().uuid().default("00000000-0000-0000-0000-000000000000"),
-  name: z.string().min(3).max(50),
+  name: z
+    .string()
+    .min(3, { message: "Името на доставчика трябва да е минимум 3 символа" })
+    .max(50, {
+      message: "Името на доставчика трябва да е максимум 50 символа",
+    }),
   address: z.string().min(0).max(50).nullable().default(null),
-  phoneNumber: z.string().min(0).max(50).nullable().default(null),
-  email: z.string().email().nullable().default(null),
-  description: z.string().nullable().default(null),
+  phoneNumber: z.string().min(5).max(15).nullable().default(null),
+  email: z
+    .string()
+    .email({ message: "Невалиден формат на мейла" })
+    .nullable()
+    .default(null),
+  description: z
+    .string()
+    .max(200, { message: "Описанието може да съдържа максимално 200 символа" })
+    .nullable()
+    .default(null),
 });
 
 export default function VendorsPage() {
@@ -52,7 +66,7 @@ export default function VendorsPage() {
     queryKey: ["vendors"],
   };
 
-  const VendorsList:IItemsList<VendorDTO>= ({ setSelectedItem, data }) => {
+  const VendorsList: IItemsList<VendorDTO> = ({ setSelectedItem, data }) => {
     return (
       <div>
         {data &&
@@ -86,7 +100,11 @@ export default function VendorsPage() {
     );
   };
 
-  const VendorForm:ItemFormType<VendorDTO> = ({ selectedItem, handleSave, Buttons }) => {
+  const VendorForm: ItemFormType<VendorDTO> = ({
+    selectedItem,
+    handleSave,
+    Buttons,
+  }) => {
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
       e.preventDefault();
       const form = e.currentTarget as HTMLFormElement;
@@ -94,17 +112,22 @@ export default function VendorsPage() {
       const data: VendorDTO = {
         id: selectedItem?.id,
         name: formData.get("name") as string,
-        address: formData.get("address") as string,
-        phoneNumber: formData.get("phoneNumber") as string,
-        email: formData.get("email") as string,
-        description: formData.get("description") as string,
+        address: (formData.get("address") as string) || null,
+        phoneNumber: (formData.get("phoneNumber") as string) || null,
+        email: (formData.get("email") as string) || null,
+        description: (formData.get("description") as string) || null,
       };
       handleSave(data);
     }
     return (
-
-        <form onSubmit={handleSubmit}>
-        <TextField defaultValue={selectedItem?.name} label="Име" name="name" />
+      <form onSubmit={handleSubmit}>
+        <TextField
+          required
+          {...customInvalidProps("Името на доставчика е задължително")}
+          defaultValue={selectedItem?.name}
+          label="Име"
+          name="name"
+        />
         <TextField
           defaultValue={selectedItem?.phoneNumber}
           label="Телефон"

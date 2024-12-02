@@ -16,6 +16,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { parseISO } from "date-fns";
 import { useState } from "react";
 import styles from "./deliveries.module.scss";
+import { customInvalidProps } from "../../system/utils";
 
 type DeliveryItems = {
   [key: string]: DeliveryItemDTO;
@@ -72,6 +73,8 @@ export default function DeliveryFormFields({
           setDeliveryInfo({ ...deliveryInfo, invoiceNumber: e.target.value })
         }
         slotProps={{ htmlInput: { ["data-testid"]: "documentNumber" } }}
+        
+        {...customInvalidProps("Номера на документа е задължителен")}
       />
       <DatePicker
         label="Дата на документ"
@@ -84,6 +87,7 @@ export default function DeliveryFormFields({
         }}
       />
       <Autocomplete
+        
         options={queryData.vendors}
         getOptionLabel={(option) => option.name || ""}
         onChange={(event, value) => {
@@ -205,6 +209,7 @@ function InputRow({
         }}
       />
       <TextField
+        required
         label="Количество"
         type="number"
         slotProps={{ htmlInput: { step: "1" } }}
@@ -214,6 +219,7 @@ function InputRow({
             quantity: Number(e.target.value),
           })
         }
+        {...customInvalidProps("Количеството е задължително")}
       />
       <TextField
         label="Единична цена"
@@ -225,6 +231,8 @@ function InputRow({
             unitPrice: Number(e.target.value),
           })
         }
+        required
+        {...customInvalidProps("Цената е задължителна")}
       />
       <TextField
         label="Партиден номер"

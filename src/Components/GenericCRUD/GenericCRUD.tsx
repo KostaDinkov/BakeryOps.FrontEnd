@@ -72,6 +72,9 @@ function GenericForm() {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: itemOperations.queryKey });
       },
+      onError:(error:any) => {
+        console.log("Error in create item:", error)
+      }
     });
     const updateItemMutation = useMutation({
       mutationFn: itemOperations.updateItem,

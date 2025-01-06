@@ -1863,6 +1863,8 @@ export interface components {
             yield?: number;
             /** Format: uuid */
             unitId?: string;
+            /** Format: double */
+            cost?: number;
         };
         RecipeMaterialDto: {
             /** Format: uuid */

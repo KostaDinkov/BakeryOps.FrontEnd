@@ -1026,6 +1026,9 @@ components:
         unitId:
           type: string
           format: uuid
+        cost:
+          type: number
+          format: double
       additionalProperties: false
     RecipeMaterialDto:
       type: object

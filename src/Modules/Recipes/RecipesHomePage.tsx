@@ -130,6 +130,8 @@ export default function RecipesHomePage() {
               ))}
             </ul>
           </dd>
+          <dt>Себестойност</dt>
+          <dd>{selectedItem.cost}</dd>
         </dl>
       )
     );

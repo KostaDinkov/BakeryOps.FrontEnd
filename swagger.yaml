@@ -147,6 +147,19 @@ paths:
     get:
       tags:
         - Deliveries
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            default: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            format: int32
+            default: 10
       responses:
         '200':
           description: OK
@@ -796,6 +809,9 @@ components:
           type: string
           nullable: true
         notes:
+          type: string
+          nullable: true
+        vendorName:
           type: string
           nullable: true
       additionalProperties: false

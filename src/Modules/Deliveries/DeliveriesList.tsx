@@ -12,7 +12,7 @@ export default function ({
       <ul>
         {data.map((delivery) => (
           <li key={delivery.id} onClick={() => setSelectedItem(delivery)}>
-            {delivery.invoiceNumber} от {delivery.deliveryDate}
+            {delivery.vendorName} от {delivery.deliveryDate}
           </li>
         ))}
       </ul>

@@ -327,7 +327,10 @@ export interface paths {
         };
         get: {
             parameters: {
-                query?: never;
+                query?: {
+                    page?: number;
+                    pageSize?: number;
+                };
                 header?: never;
                 path?: never;
                 cookie?: never;
@@ -1759,6 +1762,7 @@ export interface components {
             items?: components["schemas"]["DeliveryItemDto"][];
             invoiceNumber?: string | null;
             notes?: string | null;
+            vendorName?: string | null;
         };
         DeliveryItemDto: {
             /** Format: uuid */

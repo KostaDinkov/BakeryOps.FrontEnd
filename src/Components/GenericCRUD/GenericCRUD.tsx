@@ -2,20 +2,19 @@ import { useState } from "react";
 import { Button, Paper } from "@mui/material";
 import ConfirmationDialog from "../../Components/ConfirmationDialog/ConfirmationDialog";
 import { z } from "zod";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import styles from "./GenericCRUD.module.scss";
 import { getErrorInfo } from "./crudHelperFunctions";
 
-
 export interface IItemOperations<TItem> {
   queryKey: string[];
-  getItems: () => Promise<TItem[]>;
+  getItems: ({page, pageSize}:{page:number,pageSize:number}) => Promise<TItem[]>;
   createItem: (item: TItem) => Promise<TItem>;
   updateItem: (item: TItem) => Promise<TItem>;
   deleteItem: (id: string) => Promise<void>;
 }
 
-export type ItemFormType <TItem> = React.FC<{
+export type ItemFormType<TItem> = React.FC<{
   selectedItem: TItem | null;
   handleSave: (e: any) => {};
   Buttons: React.FC;
@@ -48,6 +47,8 @@ export default function GenericCRUDView<TItem>({
   const [mode, setMode] = useState<"viewItem" | "updateItem" | "createItem">(
     "viewItem"
   );
+  const [page, setPage] = useState(1);
+  const pageSize = 10;
   const [deleteItemDialogOpen, setDeleteItemDialogOpen] = useState(false);
 
   const [selectedItem, setSelectedItem] = useState<TItem | null>(null);
@@ -55,26 +56,26 @@ export default function GenericCRUDView<TItem>({
   const queryClient = useQueryClient();
 
   const itemsQuery = useQuery({
-    queryKey: itemOperations.queryKey,
-    queryFn: itemOperations.getItems,
+    queryKey: [...itemOperations.queryKey, [page]],
+    queryFn: async () => itemOperations.getItems({ page, pageSize }),
+    placeholderData: keepPreviousData
   });
 
-  
   const deleteItemMutation = useMutation({
     mutationFn: itemOperations.deleteItem,
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: itemOperations.queryKey }),
   });
 
-function GenericForm() {
+  function GenericForm() {
     const createItemMutation = useMutation({
       mutationFn: itemOperations.createItem,
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: itemOperations.queryKey });
       },
-      onError:(error:any) => {
-        console.log("Error in create item:", error)
-      }
+      onError: (error: any) => {
+        console.log("Error in create item:", error);
+      },
     });
     const updateItemMutation = useMutation({
       mutationFn: itemOperations.updateItem,
@@ -97,26 +98,26 @@ function GenericForm() {
       }
 
       // create / update item in database
-        const queryOptions = {
-          onError: (error:any) => {
-            const errorInfo = getErrorInfo(error);
-            setServerError(errorInfo);
-          },
-          onSuccess: () => {
-            setMode("viewItem");
-            setSelectedItem(null);
-          }
-        }
-        try{
+      const queryOptions = {
+        onError: (error: any) => {
+          const errorInfo = getErrorInfo(error);
+          setServerError(errorInfo);
+        },
+        onSuccess: () => {
+          setMode("viewItem");
+          setSelectedItem(null);
+        },
+      };
+      try {
         if (mode === "createItem") {
-            await createItemMutation.mutateAsync(item, queryOptions );
+          await createItemMutation.mutateAsync(item, queryOptions);
         } else if (mode === "updateItem") {
           item.id = (selectedItem as IId).id;
           await updateItemMutation.mutateAsync(item, queryOptions);
-        } } catch (error) {
-          console.log("Error in create/update item:", error)
         }
-      
+      } catch (error) {
+        console.log("Error in create/update item:", error);
+      }
     };
 
     const handleCancel = () => {
@@ -158,14 +159,14 @@ function GenericForm() {
           </div>
         )}
         {serverError && (
-          <div style={{whiteSpace:"pre-line"}}>
+          <div style={{ whiteSpace: "pre-line" }}>
             <h3>Грешка при записване:</h3>
             {serverError}
           </div>
         )}
       </>
     );
-  };
+  }
 
   return (
     <div className="verticalMenu">
@@ -181,6 +182,22 @@ function GenericForm() {
                   setSelectedItem={setSelectedItem}
                   data={itemsQuery.data}
                 />
+                <Button
+                  onClick={() => {
+                    setPage((old) => Math.max(old - 1, 1));
+                  }}
+                >
+                  Предишна страница
+                </Button>
+                <span> Страница: {page}</span>
+                <Button
+                  onClick={() => {
+                    setPage((old) => old + 1);
+                  }}
+                  disabled = {itemsQuery.isPlaceholderData || itemsQuery.data.length < pageSize}
+                >
+                  Следваща страница
+                </Button>
               </Paper>
             )}
           </div>

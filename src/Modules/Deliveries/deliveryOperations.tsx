@@ -3,13 +3,16 @@ import { DeliveryDTO } from "../../Types/types";
 import { IItemOperations } from "../../Components/GenericCRUD/GenericCRUD";
 import { handleApiResponse } from "../../API/apiUtils";
 
-export const deliveryOperations: IItemOperations<DeliveryDTO> = {
+export const deliveryOperations:  IItemOperations<DeliveryDTO>=
+ {
   queryKey: ["deliveries"],
-  getItems: async () => {
-    return handleApiResponse(async () =>
-      apiClient.GET("/api/Deliveries/GetAll")
-    );
-  },
+  getItems: async ({page, pageSize}:{page:number, pageSize:number}) =>
+        handleApiResponse(
+          async () =>
+            await apiClient.GET("/api/Deliveries/GetAll", {
+              params: { query: { page, pageSize } },
+            })
+        ),
   createItem: async (item) =>
     handleApiResponse(
       async () => await apiClient.POST("/api/Deliveries/Create", { body: item })
@@ -25,3 +28,5 @@ export const deliveryOperations: IItemOperations<DeliveryDTO> = {
       })
     ),
 };
+
+

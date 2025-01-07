@@ -8,9 +8,18 @@ import DeliveryFormFields from "./DeliveryFormFields";
 import { useItemsQuery } from "../../API/crudOperations";
 
 export default function DeliveriesHome() {
-  const vendorsQuery = useItemsQuery({queryKey:"vendors",url:"/api/Vendors/GetVendors"});
-  const materialsQuery = useItemsQuery({queryKey:"materials", url:"/api/Materials/GetMaterials"});
-  const unitsQuery = useItemsQuery({queryKey:"units", url:"/api/Units/GetUnits"})
+  const vendorsQuery = useItemsQuery({
+    queryKey: "vendors",
+    url: "/api/Vendors/GetVendors",
+  });
+  const materialsQuery = useItemsQuery({
+    queryKey: "materials",
+    url: "/api/Materials/GetMaterials",
+  });
+  const unitsQuery = useItemsQuery({
+    queryKey: "units",
+    url: "/api/Units/GetUnits",
+  });
 
   const ItemDetails = ({
     selectedItem,
@@ -31,13 +40,12 @@ export default function DeliveriesHome() {
 
   const ItemFormFields = ({
     selectedItem,
-    onCancel,
     handleSave,
-    Buttons
+    Buttons,
   }: {
     selectedItem: DeliveryDTO | null;
-    onCancel: () => void;
     handleSave: (e: any) => void;
+    Buttons: React.FC;
   }) => {
     return (
       <DeliveryFormFields
@@ -52,8 +60,6 @@ export default function DeliveriesHome() {
       />
     );
   };
-
-
 
   return (
     <GenericCRUDView

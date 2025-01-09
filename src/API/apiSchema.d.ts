@@ -1758,17 +1758,25 @@ export interface components {
             deliveryDate?: string | null;
             /** Format: uuid */
             vendorId?: string;
+            vendorName?: string | null;
             /** @description List of items in the delivery */
             items?: components["schemas"]["DeliveryItemDto"][];
             invoiceNumber?: string | null;
             notes?: string | null;
-            vendorName?: string | null;
+            /** Format: double */
+            total?: number;
+            /** Format: double */
+            tax?: number;
+            /** Format: double */
+            totalWithTax?: number;
         };
         DeliveryItemDto: {
             /** Format: uuid */
             id?: string;
             /** Format: uuid */
             materialId?: string;
+            materialName?: string | null;
+            materialUnit?: string | null;
             /** Format: double */
             quantity?: number;
             /** Format: double */

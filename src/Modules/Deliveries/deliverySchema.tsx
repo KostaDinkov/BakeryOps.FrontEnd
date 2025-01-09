@@ -30,10 +30,10 @@ export const deliverySchema: z.ZodSchema<DeliveryDTO> = z.object({
         required_error: "Полето Единична цена е задължително",
         invalid_type_error: "Единична цена трябва да е полoжително число",
       }).positive(),
-      expirationDate: z.string().datetime().optional(),
-      lotNumber: z.string().optional(),
+      expirationDate: z.string().datetime().optional().nullable(),
+      lotNumber: z.string().optional().nullable(),
       vat: z.number().positive().optional(),
-      notes: z.string().optional(),
+      notes: z.string().optional().nullable(),
     })
   ).nonempty({
     message: "Добавете поне един артикул към доставката",

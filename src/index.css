@@ -1,7 +1,9 @@
 @import "./styles/vars.css";
+@import "./styles/overrides.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 
 body {

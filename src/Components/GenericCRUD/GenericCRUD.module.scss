@@ -1,12 +1,13 @@
 .twoColumnView{
     width: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: max-content auto;
     grid-gap: 20px;
 }
 
 .itemsList{
     padding-left:1rem;
+    
 }
 
 .itemsForm{

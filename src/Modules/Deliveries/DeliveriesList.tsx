@@ -1,4 +1,6 @@
+import { dateToString } from "../../system/utils";
 import { DeliveryDTO } from "../../Types/types";
+
 
 export default function ({
   setSelectedItem,
@@ -12,7 +14,7 @@ export default function ({
       <ul>
         {data.map((delivery) => (
           <li key={delivery.id} onClick={() => setSelectedItem(delivery)}>
-            {delivery.vendorName} от {delivery.deliveryDate}
+             {dateToString(delivery.deliveryDate)} - {delivery.vendorName}
           </li>
         ))}
       </ul>

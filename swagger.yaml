@@ -800,6 +800,9 @@ components:
         vendorId:
           type: string
           format: uuid
+        vendorName:
+          type: string
+          nullable: true
         items:
           type: array
           items:
@@ -811,9 +814,15 @@ components:
         notes:
           type: string
           nullable: true
-        vendorName:
-          type: string
-          nullable: true
+        total:
+          type: number
+          format: double
+        tax:
+          type: number
+          format: double
+        totalWithTax:
+          type: number
+          format: double
       additionalProperties: false
     DeliveryItemDto:
       type: object
@@ -824,6 +833,12 @@ components:
         materialId:
           type: string
           format: uuid
+        materialName:
+          type: string
+          nullable: true
+        materialUnit:
+          type: string
+          nullable: true
         quantity:
           type: number
           format: double

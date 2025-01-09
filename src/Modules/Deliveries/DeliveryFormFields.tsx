@@ -17,6 +17,7 @@ import { parseISO } from "date-fns";
 import { useState } from "react";
 import styles from "./deliveries.module.scss";
 import { customInvalidProps } from "../../system/utils";
+import { VAT } from "../../system/constants";
 
 type DeliveryItems = {
   [key: string]: DeliveryItemDTO;
@@ -59,6 +60,9 @@ export default function DeliveryFormFields({
       ...deliveryInfo,
       items: Object.values(deliveryItems),
     };
+    delivery.total= delivery.items.reduce((acc, item) => acc + item.quantity * item.unitPrice, 0); 
+    delivery.tax = delivery.total * VAT;
+    delivery.totalWithTax = delivery.total + delivery.tax;
 
     handleSave(delivery);
   };

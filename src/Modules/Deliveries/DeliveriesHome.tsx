@@ -3,7 +3,7 @@ import { DeliveryDTO, MaterialDTO, Unit, VendorDTO } from "../../Types/types";
 import { deliveryOperations } from "./deliveryOperations";
 import { deliverySchema } from "./deliverySchema";
 import DeliveriesList from "./DeliveriesList";
-import DeliveryDetails from "./ItemDetails";
+import DeliveryDetails from "./DeliveryDetails";
 import DeliveryFormFields from "./DeliveryFormFields";
 import { useItemsQuery } from "../../API/crudOperations";
 

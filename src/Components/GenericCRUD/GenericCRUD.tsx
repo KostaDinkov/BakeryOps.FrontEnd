@@ -5,6 +5,8 @@ import { z } from "zod";
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import styles from "./GenericCRUD.module.scss";
 import { getErrorInfo } from "./crudHelperFunctions";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowforwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 export interface IItemOperations<TItem> {
   queryKey: string[];
@@ -186,17 +188,19 @@ export default function GenericCRUDView<TItem>({
                   onClick={() => {
                     setPage((old) => Math.max(old - 1, 1));
                   }}
+                  variant="outlined"
                 >
-                  Предишна страница
+                  <ArrowBackIosIcon />
                 </Button>
-                <span> Страница: {page}</span>
+                <span> Стр. {page}</span>
                 <Button
                   onClick={() => {
                     setPage((old) => old + 1);
                   }}
                   disabled = {itemsQuery.isPlaceholderData || itemsQuery.data.length < pageSize}
+                  variant="outlined"
                 >
-                  Следваща страница
+                  <ArrowforwardIosIcon/>
                 </Button>
               </Paper>
             )}

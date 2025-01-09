@@ -23,7 +23,9 @@ export default function ProductsPage() {
       }
     },
   });
-  return (
+  return productsQuery.isLoading ? (
+    <div>Loading...</div>
+  ) : (
     <div>
       <h1>Products</h1>
 

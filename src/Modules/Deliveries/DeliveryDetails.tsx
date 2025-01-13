@@ -3,9 +3,9 @@ import globalStyles from "../../styles/globalStyles.module.css";
 import { dateToString } from "../../system/utils";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
+
 export default function ItemDetails({
   selectedItem,
-  
 }: {
   selectedItem: DeliveryDTO | null;
   queryData: { vendors: VendorDTO[]; materials: MaterialDTO[]; units: Unit[] };
@@ -97,6 +97,8 @@ export default function ItemDetails({
             hideFooter
             rowHeight={30}
             disableColumnResize
+            disableColumnSorting
+            disableColumnMenu
           />
         </div>
       </>

@@ -13,12 +13,12 @@ type Story = StoryObj<typeof Table>;
 export const Default: Story = {
   args: {
     columns: [
-      { target: "name", label: "Име" },
-      { target: "description", label: "Описание" },
-      { target: "age", label: "Възраст" },
-      { target: "homeTown", label: "Град" },
-      { target: "occupation", label: "Професия" },
-      { target: "phoneNumber", label: "Телефон" },
+      { field: "name", label: "Име" },
+      { field: "description", label: "Описание" },
+      { field: "age", label: "Възраст" },
+      { field: "homeTown", label: "Град" },
+      { field: "occupation", label: "Професия" },
+      { field: "phoneNumber", label: "Телефон" },
     ],
     data: [
       {

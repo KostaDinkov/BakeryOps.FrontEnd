@@ -51,12 +51,15 @@
     "serve": "vite preview",
     "cypress": "npx cypress open",
     "deploy": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./deploy.ps1",
-    "updateApi": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./updateApi.ps1 && npx openapi-typescript swagger.yaml -o ./src/API/apiSchema.d.ts"
+    "updateApi": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./updateApi.ps1 && npx openapi-typescript swagger.yaml -o ./src/API/apiSchema.d.ts",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
+      "react-app/jest",
+      "plugin:storybook/recommended"
     ]
   },
   "browserslist": {
@@ -72,10 +75,21 @@
     ]
   },
   "devDependencies": {
+    "@chromatic-com/storybook": "^3.2.3",
     "@playwright/test": "^1.49.0",
+    "@storybook/addon-essentials": "^8.4.7",
+    "@storybook/addon-interactions": "^8.4.7",
+    "@storybook/addon-onboarding": "^8.4.7",
+    "@storybook/blocks": "^8.4.7",
+    "@storybook/react": "^8.4.7",
+    "@storybook/react-vite": "^8.4.7",
+    "@storybook/test": "^8.4.7",
     "@vitejs/plugin-react": "^4.3.1",
+    "@wixc3/react-board": "^4.6.2",
     "cypress": "^13.16.0",
+    "eslint-plugin-storybook": "^0.11.2",
     "msw": "^2.3.5",
+    "storybook": "^8.4.7",
     "vite": "^5.4.0"
   }
 }

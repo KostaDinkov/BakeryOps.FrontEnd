@@ -23,6 +23,7 @@ import { useItemsQuery } from "../../../API/crudOperations";
 import { handleApiResponse } from "../../../API/apiUtils";
 import { useState } from "react";
 import { customInvalidProps } from "../../../system/utils";
+import globalStyles from "../../../styles/globalStyles.module.css";
 
 // Define the schema for client formData parsing and validation
 //@ts-ignore
@@ -153,9 +154,9 @@ export default function MaterialsPage() {
     selectedItem,
   }) => {
     return (
-      <div>
+      <>
         {selectedItem !== null ? (
-          <dl>
+          <dl className={globalStyles.twoColumnGrid}>
             <dt>Име</dt>
             <dd>{selectedItem?.name}</dd>
             <dt>Мярка</dt>
@@ -172,7 +173,7 @@ export default function MaterialsPage() {
             <dd>{selectedItem?.description}</dd>
           </dl>
         ) : null}
-      </div>
+      </>
     );
   };
 

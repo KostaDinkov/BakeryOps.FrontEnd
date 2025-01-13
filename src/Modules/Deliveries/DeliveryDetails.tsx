@@ -1,5 +1,5 @@
 import { DeliveryDTO, MaterialDTO, Unit, VendorDTO } from "../../Types/types";
-import styles from "./itemDetails.module.css";
+import globalStyles from "../../styles/globalStyles.module.css";
 import { dateToString } from "../../system/utils";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
@@ -65,7 +65,7 @@ export default function ItemDetails({
   return (
     selectedItem && (
       <>
-        <div className={styles.deliveryInfo}>
+        <div className={globalStyles.twoColumnGrid}>
           <div>Доставчик:</div>
           <div className="font-bold">{selectedItem.vendorName}</div>
           <div>От дата:</div>

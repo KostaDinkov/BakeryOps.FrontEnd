@@ -12,7 +12,11 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import EventHub from "./EventHub";
 import PubSub from "pubsub-js";
 import { browserRouter } from "./system/browserRouter";
+import { setMuiLicense } from "./muiLicense";
 
+
+
+setMuiLicense();
 const router = browserRouter;
 
 //Disable window vertical scrolling with the arrow keys.

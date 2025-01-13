@@ -205,8 +205,8 @@ export default function GenericCRUDView<TItem>({
               </Paper>
             )}
           </div>
-          <div className="materialDetails">
-            <div>
+          <div >
+           
               <Button
                 variant="outlined"
                 onClick={() => {
@@ -238,7 +238,7 @@ export default function GenericCRUDView<TItem>({
               )}
             </div>
           </div>
-        </div>
+        
       )}
       {(mode === "createItem" || mode === "updateItem") && <GenericForm />}
       <ConfirmationDialog

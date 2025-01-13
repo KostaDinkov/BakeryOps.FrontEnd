@@ -1,8 +1,7 @@
 import { DeliveryDTO, MaterialDTO, Unit, VendorDTO } from "../../Types/types";
 import globalStyles from "../../styles/globalStyles.module.css";
 import { dateToString } from "../../system/utils";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
-
+import { DataGridPremium, GridColDef } from "@mui/x-data-grid-premium";
 
 export default function ItemDetails({
   selectedItem,
@@ -64,7 +63,7 @@ export default function ItemDetails({
   ];
   return (
     selectedItem && (
-      <>
+      <div >
         <div className={globalStyles.twoColumnGrid}>
           <div>Доставчик:</div>
           <div className="font-bold">{selectedItem.vendorName}</div>
@@ -88,20 +87,20 @@ export default function ItemDetails({
           )}
         </div>
 
-        <div className="w-full">
-          <DataGrid
-            sx={{ backgroundColor: "white", margin: "1rem 1rem 1rem 0" }}
-            rows={selectedItem.items}
-            columns={columns}
-            autosizeOnMount
-            hideFooter
-            rowHeight={30}
-            disableColumnResize
-            disableColumnSorting
-            disableColumnMenu
-          />
-        </div>
-      </>
+        <DataGridPremium
+          sx={{ backgroundColor: "white", margin: "1rem 1rem 1rem 0", display:"grid" }}
+          rows={selectedItem.items}
+          columns={columns}
+          hideFooter
+          rowHeight={30}
+          disableColumnResize
+          disableColumnSorting
+          disableColumnMenu
+          initialState={{pinnedColumns: {left: ["materialName"]}}}
+          
+          
+        />
+      </div>
     )
   );
 }

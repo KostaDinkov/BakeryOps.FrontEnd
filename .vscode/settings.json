@@ -59,5 +59,8 @@
         
         
 
-    ]
+    ],
+    "color-blocks.wrapText.enabled": false,
+    "color-blocks.background.opacity": 0.5,
+    "color-blocks.commentLine.largeText": false
 }

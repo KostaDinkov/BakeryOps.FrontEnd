@@ -184,24 +184,26 @@ export default function GenericCRUDView<TItem>({
                   setSelectedItem={setSelectedItem}
                   data={itemsQuery.data}
                 />
-                <Button
-                  onClick={() => {
-                    setPage((old) => Math.max(old - 1, 1));
-                  }}
-                  variant="outlined"
-                >
-                  <ArrowBackIosIcon />
-                </Button>
-                <span> Стр. {page}</span>
-                <Button
-                  onClick={() => {
-                    setPage((old) => old + 1);
-                  }}
-                  disabled = {itemsQuery.isPlaceholderData || itemsQuery.data.length < pageSize}
-                  variant="outlined"
-                >
-                  <ArrowforwardIosIcon/>
-                </Button>
+                <div className="flex flex-row justify-between items-center mt-2 gap-1">
+                  <Button
+                    onClick={() => {
+                      setPage((old) => Math.max(old - 1, 1));
+                    }}
+                    variant="outlined"
+                  >
+                    <ArrowBackIosIcon />
+                  </Button>
+                  <span> Стр. {page}</span>
+                  <Button
+                    onClick={() => {
+                      setPage((old) => old + 1);
+                    }}
+                    disabled = {itemsQuery.isPlaceholderData || itemsQuery.data.length < pageSize}
+                    variant="outlined"
+                  >
+                    <ArrowforwardIosIcon/>
+                  </Button>
+                </div>
               </Paper>
             )}
           </div>

@@ -10,6 +10,7 @@ import { z } from "zod";
 import { VendorDTO } from "../../../Types/types";
 import { handleApiResponse } from "../../../API/apiUtils";
 import { customInvalidProps } from "../../../system/utils";
+import { twoColumnGrid } from "../../../styles/globalStyles.module.css";
 
 export const vendorSchema: z.ZodSchema<VendorDTO> = z.object({
   id: z.string().uuid().default("00000000-0000-0000-0000-000000000000"),
@@ -84,7 +85,7 @@ export default function VendorsPage() {
   }) => {
     return (
       selectedItem && (
-        <dl>
+        <dl className={twoColumnGrid}>
           <dt>Име</dt>
           <dd>{selectedItem.name}</dd>
           <dt>Адрес</dt>

@@ -13,8 +13,8 @@ import EventHub from "./EventHub";
 import PubSub from "pubsub-js";
 import { browserRouter } from "./system/browserRouter";
 import { setMuiLicense } from "./muiLicense";
-
-
+import type {} from '@mui/x-data-grid/themeAugmentation';
+import { getCssVariable } from "./system/utils";
 
 setMuiLicense();
 const router = browserRouter;
@@ -47,6 +47,14 @@ const muiTheme = createTheme({
     background: {
       default: "#e1e2e1",
       paper: "#f5f5f6",
+    },
+  },
+  mixins: {
+    MuiDataGrid: {
+      // Pinned columns sections
+      pinnedBackground: getCssVariable('--color-dataGrid-pinned'),
+      // Headers, and top & bottom fixed rows
+      //containerBackground: '#343434',
     },
   },
 });

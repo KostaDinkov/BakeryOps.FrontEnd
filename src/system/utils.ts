@@ -42,5 +42,9 @@ export function dateToString(date: Date | string): string | undefined {
     return format(date, "dd.MM.yyyy");
   }
 
-  
+}
+
+export function getCssVariable(variableName: string): string | null {
+  const root = document.documentElement;
+  return getComputedStyle(root).getPropertyValue(variableName).trim() || null;
 }

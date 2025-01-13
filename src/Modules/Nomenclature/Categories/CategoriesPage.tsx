@@ -5,11 +5,11 @@ import GenericCRUDView, {
 } from "../../../Components/GenericCRUD/GenericCRUD";
 import z from "zod";
 import { handleApiResponse } from "../../../API/apiUtils";
-import { components } from "../../../API/apiSchema";
 import { TextField } from "@mui/material";
 import { apiClient } from "../../../API/apiClient";
 import { CategoryDTO } from "../../../Types/types";
 import { customInvalidProps } from "../../../system/utils";
+import {twoColumnGrid} from "../../../styles/globalStyles.module.css"
 
 export default function CategoriesPage() {
   //Todo: Implement item schema. See the example below
@@ -105,7 +105,7 @@ export default function CategoriesPage() {
     queryData?: object;
   }) {
     return selectedItem &&
-    (<dl>
+    (<dl className={twoColumnGrid}>
       <dt>Име</dt>
       <dd>{selectedItem.name}</dd>
     </dl>);

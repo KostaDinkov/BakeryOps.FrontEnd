@@ -8,6 +8,7 @@ import { components } from "../../../API/apiSchema";
 import { z } from "zod";
 import { handleApiResponse } from "../../../API/apiUtils";
 import { customInvalidProps } from "../../../system/utils";
+import {twoColumnGrid} from "../../../styles/globalStyles.module.css"
 
 
 type ClientDTO = components["schemas"]["ClientDTO"];
@@ -78,7 +79,7 @@ export default function ClientsPage() {
   }) => {
     return (
       selectedItem && (
-        <dl>
+        <dl className={twoColumnGrid}>
           <dt>Име</dt>
           <dd>{selectedItem.name}</dd>
           <dt>Телефон</dt>
@@ -170,7 +171,7 @@ export default function ClientsPage() {
 
   return (
     <GenericCRUDView
-      title="Clients"
+      title="Клиенти"
       ItemsList={ClientsList}
       ItemForm={ClientForm}
       ItemDetails={ClientDetails}

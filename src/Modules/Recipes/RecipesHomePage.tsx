@@ -12,6 +12,7 @@ import { useItemsQuery } from "../../API/crudOperations";
 import { useState } from "react";
 import { handleApiResponse } from "../../API/apiUtils";
 import { Unit } from "../../Types/types";
+import {twoColumnGrid} from "../../styles/globalStyles.module.css"
 
 type RecipeDTO = components["schemas"]["RecipeDTO"];
 type MaterialDTO = components["schemas"]["MaterialDTO"];
@@ -93,7 +94,7 @@ export default function RecipesHomePage() {
   }) => {
     return (
       selectedItem && (
-        <dl>
+        <dl className={twoColumnGrid}>
           <dt>Рецепта за:</dt>
           <dd>{selectedItem.name}</dd>
           <dt>Изходно количество</dt>

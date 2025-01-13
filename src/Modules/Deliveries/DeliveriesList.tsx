@@ -31,11 +31,11 @@ export default function ({
         onRowClick={(row) => setSelectedItem(row.row)}
         hideFooter
         disableColumnMenu
+        disableColumnResize
         autosizeOptions={{
           includeHeaders: true,
           includeOutliers: true,
           outliersFactor: 5,
-          
         }}
       />
     </>

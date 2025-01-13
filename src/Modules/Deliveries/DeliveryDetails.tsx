@@ -9,6 +9,7 @@ export default function ItemDetails({
   selectedItem: DeliveryDTO | null;
   queryData: { vendors: VendorDTO[]; materials: MaterialDTO[]; units: Unit[] };
 }) {
+
   const columns: GridColDef[] = [
     {
       field: "materialName",
@@ -61,6 +62,8 @@ export default function ItemDetails({
       headerClassName: "bg-white",
     },
   ];
+
+  //#region Returns
   return (
     selectedItem && (
       <div >
@@ -86,7 +89,7 @@ export default function ItemDetails({
             </>
           )}
         </div>
-
+       
         <DataGridPremium
           sx={{ backgroundColor: "white", margin: "1rem 1rem 1rem 0", display:"grid" }}
           rows={selectedItem.items}
@@ -97,10 +100,9 @@ export default function ItemDetails({
           disableColumnSorting
           disableColumnMenu
           initialState={{pinnedColumns: {left: ["materialName"]}}}
-          
-          
         />
       </div>
     )
   );
+  //#endregion
 }

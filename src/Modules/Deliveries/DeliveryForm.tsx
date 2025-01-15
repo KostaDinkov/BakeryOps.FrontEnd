@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React from "react";
 import {
   TextField,
   Autocomplete,
@@ -15,40 +15,39 @@ import {
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { parseISO } from "date-fns";
 import { useState } from "react";
-import styles from "./deliveries.module.scss";
 import { customInvalidProps } from "../../system/utils";
 import { VAT } from "../../system/constants";
+import styles from "./DeliveryForm.module.css";
 
 type DeliveryItems = {
   [key: string]: DeliveryItemDTO;
 };
 
-export default function DeliveryFormFields({
+export default function DeliveryForm({
   selectedItem,
   queryData,
   handleSave,
   Buttons,
 }: {
   selectedItem: DeliveryDTO | null;
-  queryData: { materials: MaterialDTO[]; units: Unit[]; vendors: VendorDTO[] };
+  queryData: { materials: MaterialDTO[]; vendors: VendorDTO[] };
   handleSave: (item: any) => void;
   Buttons: React.FC;
 }) {
-  
-  
-  const getDeliveryItems = (items: DeliveryItemDTO[] ) => {
+  const getDeliveryItems = (items: DeliveryItemDTO[]) => {
     let result: { [key: string]: DeliveryItemDTO } = {};
     if (items.length === 0) return result;
     for (const item of items) {
-      if(item.id){
-        result[item.id] = item;      }
+      if (item.id) {
+        result[item.id] = item;
+      }
     }
     return result;
   };
 
   const [deliveryItems, setDeliveryItems] = useState<{
     [key: string]: DeliveryItemDTO | null;
-  }>(getDeliveryItems(selectedItem?.items || [] ));
+  }>(getDeliveryItems(selectedItem?.items || []));
 
   const [deliveryInfo, setDeliveryInfo] = useState<DeliveryDTO | null>(
     selectedItem
@@ -60,7 +59,10 @@ export default function DeliveryFormFields({
       ...deliveryInfo,
       items: Object.values(deliveryItems),
     };
-    delivery.total= delivery.items.reduce((acc, item) => acc + item.quantity * item.unitPrice, 0); 
+    delivery.total = delivery.items.reduce(
+      (acc, item) => acc + item?.quantity * item?.unitPrice ,
+      0
+    );
     delivery.tax = delivery.total * VAT;
     delivery.totalWithTax = delivery.total + delivery.tax;
 
@@ -68,51 +70,68 @@ export default function DeliveryFormFields({
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <TextField
-        label="Номер на документ"
-        required
-        value={deliveryInfo?.invoiceNumber || ""}
-        onChange={(e) =>
-          setDeliveryInfo({ ...deliveryInfo, invoiceNumber: e.target.value })
-        }
-        slotProps={{ htmlInput: { ["data-testid"]: "documentNumber" } }}
-        
-        {...customInvalidProps("Номера на документа е задължителен")}
-      />
-      <DatePicker
-        label="Дата на документ"
-        value={parseISO(deliveryInfo?.deliveryDate ?? "")}
-        onChange={(date) => {
-          setDeliveryInfo({
-            ...deliveryInfo,
-            deliveryDate: date?.toISOString(),
-          });
-        }}
-      />
-      <Autocomplete
-        
-        options={queryData.vendors}
-        getOptionLabel={(option) => option.name || ""}
-        onChange={(event, value) => {
-          setDeliveryInfo({ ...deliveryInfo, vendorId: value?.id });
-        }}
-        value={queryData.vendors.find((v) => v.id === deliveryInfo?.vendorId)||null}
-        renderInput={function (
-          params: AutocompleteRenderInputParams
-        ): React.ReactNode {
-          return <TextField {...params} label="Доставчик" />;
-        }}
-      />
+    <form className={styles.deliveryForm} onSubmit={handleSubmit}>
+      <div className={styles.deliveryInfo}>
+        {/* //-- VENDOR */}
+        <Autocomplete
+        size="small"
+          options={queryData.vendors}
+          getOptionLabel={(option) => option.name || ""}
+          onChange={(event, value) => {
+            setDeliveryInfo({ ...deliveryInfo, vendorId: value?.id });
+          }}
+          value={
+            queryData.vendors.find((v) => v.id === deliveryInfo?.vendorId) ||
+            null
+          }
+          renderInput={function (
+            params: AutocompleteRenderInputParams
+          ): React.ReactNode {
+            return <TextField {...params} label="Доставчик" />;
+          }}
+        />
+        {/* //-- DOCUMENT DATE */}
+        <DatePicker
+          
+          label="Дата на документ"
+          value={parseISO(deliveryInfo?.deliveryDate ?? "")}
+          onChange={(date) => {
+            setDeliveryInfo({
+              ...deliveryInfo,
+              deliveryDate: date?.toISOString(),
+            });
+          }}
+          slotProps={{ textField: { size: "small" } }}
+        />
+        {/* //-- DOCUMENT NUMBER */}
+        <TextField
+          size="small"
+          label="Номер на документ"
+          required
+          value={deliveryInfo?.invoiceNumber || ""}
+          onChange={(e) =>
+            setDeliveryInfo({ ...deliveryInfo, invoiceNumber: e.target.value })
+          }
+          slotProps={{ htmlInput: { ["data-testid"]: "documentNumber" } }}
+          {...customInvalidProps("Номера на документа е задължителен")}
+        />
 
-      <TextField
-        label="Бележки"
-        name="notes"
-        value={deliveryInfo?.notes || ""}
-        onChange={(e) =>
-          setDeliveryInfo({ ...deliveryInfo, notes: e.target.value })
-        }
-      />
+        {/* //-- NOTES */}
+        <div className={styles.fullGridRow}>
+        <TextField
+          label="Бележки"
+          size="small"
+          name="notes"
+          value={deliveryInfo?.notes || ""}
+          onChange={(e) =>
+            setDeliveryInfo({ ...deliveryInfo, notes: e.target.value })
+          }
+          fullWidth
+        />
+        </div>
+      </div>
+
+      {/* //-- MATERIALS */}
       <DynamicMaterialInputList
         materials={queryData.materials}
         setDeliveryItems={setDeliveryItems}
@@ -131,10 +150,9 @@ function DynamicMaterialInputList({
   materials: MaterialDTO[];
   deliveryItems: DeliveryItems | {};
   setDeliveryItems: React.Dispatch<
-    React.SetStateAction<{ [key: string]: DeliveryItemDTO|null }>
+    React.SetStateAction<{ [key: string]: DeliveryItemDTO | null }>
   >;
 }) {
-  
   const updateDeliveryItem = (key: string, property: any) => {
     setDeliveryItems((deliveryItems) => {
       const deliveryItemsCopy = { ...deliveryItems };
@@ -145,16 +163,22 @@ function DynamicMaterialInputList({
 
   return (
     <>
-      <ul>
+      <ul className={styles.deliveryList}>
         {Object.keys(deliveryItems).map((key) => {
           let deliveryItem = null;
-          if(Object.keys(deliveryItems).length >0){
+          if (Object.keys(deliveryItems).length > 0) {
             deliveryItem = (deliveryItems as DeliveryItems)[key] || null;
           }
           return (
             <li key={key} className={styles.deliveryRowWithDelete}>
-              {React.createElement(InputRow, {rowId:key, materials, deliveryItem, updateDeliveryItem})}
+              {React.createElement(InputRow, {
+                rowId: key,
+                materials,
+                deliveryItem,
+                updateDeliveryItem,
+              })}
               <Button
+              size="small"
                 variant="contained"
                 color="error"
                 onClick={() =>
@@ -172,6 +196,9 @@ function DynamicMaterialInputList({
         })}
       </ul>
       <Button
+        size="medium"
+        variant="outlined"
+        
         onClick={() => {
           const key = crypto.randomUUID();
           setDeliveryItems({
@@ -194,12 +221,13 @@ function InputRow({
 }: {
   rowId: string;
   materials: MaterialDTO[];
-  deliveryItem:  DeliveryItemDTO | null ;
+  deliveryItem: DeliveryItemDTO | null;
   updateDeliveryItem: (key: string, property: any) => void;
 }) {
   return (
     <div className={styles.deliveryRow}>
       <Autocomplete
+        size="small"
         options={materials}
         getOptionLabel={(option) => option.name || ""}
         onChange={(event, value) => {
@@ -214,6 +242,7 @@ function InputRow({
       />
       <TextField
         required
+        size="small"
         label="Количество"
         type="number"
         slotProps={{ htmlInput: { step: "1" } }}
@@ -226,6 +255,7 @@ function InputRow({
         {...customInvalidProps("Количеството е задължително")}
       />
       <TextField
+        size="small"
         label="Единична цена"
         type="number"
         slotProps={{ htmlInput: { step: "0.01" } }}
@@ -239,10 +269,13 @@ function InputRow({
         {...customInvalidProps("Цената е задължителна")}
       />
       <TextField
+        size="small"
         label="Партиден номер"
         type="text"
         value={deliveryItem?.lotNumber || ""}
-        onChange={(e) => updateDeliveryItem(rowId, { lotNumber: e.target.value })}
+        onChange={(e) =>
+          updateDeliveryItem(rowId, { lotNumber: e.target.value })
+        }
       />
       <DatePicker
         label="Срок на годност"
@@ -252,8 +285,10 @@ function InputRow({
             expirationDate: date?.toISOString(),
           })
         }
+        slotProps={{ textField: { size: "small" } }}
       />
       <TextField
+      size="small"
         label="Бележка"
         type="text"
         value={deliveryItem?.notes || ""}

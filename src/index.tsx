@@ -8,13 +8,13 @@ import "./index.css";
 import "./styles/globals.scss";
 //import reportWebVitals from "./reportWebVitals";
 import { RouterProvider } from "react-router-dom";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import EventHub from "./EventHub";
 import PubSub from "pubsub-js";
 import { browserRouter } from "./system/browserRouter";
 import { setMuiLicense } from "./muiLicense";
 import type {} from '@mui/x-data-grid/themeAugmentation';
-import { getCssVariable } from "./system/utils";
+import { muiTheme } from "./styles/muiTheme";
 
 setMuiLicense();
 const router = browserRouter;
@@ -34,30 +34,6 @@ const eventHub = new EventHub();
 PubSub.subscribe("SendUpdateOrders", eventHub.sendUpdateOrders);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-
-const muiTheme = createTheme({
-  palette: {
-    type: "light",
-    primary: {
-      main: "#1f5464",
-    },
-    secondary: {
-      main: "#ffb300",
-    },
-    background: {
-      default: "#e1e2e1",
-      paper: "#f5f5f6",
-    },
-  },
-  mixins: {
-    MuiDataGrid: {
-      // Pinned columns sections
-      pinnedBackground: getCssVariable('--color-dataGrid-pinned'),
-      // Headers, and top & bottom fixed rows
-      //containerBackground: '#343434',
-    },
-  },
-});
 
 root.render(
   <React.StrictMode>

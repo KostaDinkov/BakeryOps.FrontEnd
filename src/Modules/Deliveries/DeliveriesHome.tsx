@@ -4,7 +4,7 @@ import { deliveryOperations } from "./deliveryOperations";
 import { deliverySchema } from "./deliverySchema";
 import DeliveriesList from "./DeliveriesList";
 import DeliveryDetails from "./DeliveryDetails";
-import DeliveryFormFields from "./DeliveryFormFields";
+import DeliveryForm from "./DeliveryForm";
 import { useItemsQuery } from "../../API/crudOperations";
 
 export default function DeliveriesHome() {
@@ -48,7 +48,7 @@ export default function DeliveriesHome() {
     Buttons: React.FC;
   }) => {
     return (
-      <DeliveryFormFields
+      <DeliveryForm
         selectedItem={selectedItem}
         queryData={{
           vendors: vendorsQuery.data as unknown as VendorDTO[],

@@ -553,9 +553,9 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    "application/json": components["schemas"]["MaterialDTO"];
-                    "text/json": components["schemas"]["MaterialDTO"];
-                    "application/*+json": components["schemas"]["MaterialDTO"];
+                    "application/json": components["schemas"]["MaterialDto"];
+                    "text/json": components["schemas"]["MaterialDto"];
+                    "application/*+json": components["schemas"]["MaterialDto"];
                 };
             };
             responses: {
@@ -591,9 +591,9 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    "application/json": components["schemas"]["MaterialDTO"];
-                    "text/json": components["schemas"]["MaterialDTO"];
-                    "application/*+json": components["schemas"]["MaterialDTO"];
+                    "application/json": components["schemas"]["MaterialDto"];
+                    "text/json": components["schemas"]["MaterialDto"];
+                    "application/*+json": components["schemas"]["MaterialDto"];
                 };
             };
             responses: {
@@ -1787,19 +1787,22 @@ export interface components {
             lotNumber?: string | null;
             notes?: string | null;
         };
-        MaterialDTO: {
+        MaterialDto: {
             /** Format: uuid */
             id?: string;
             name: string | null;
             description?: string | null;
             /** Format: uuid */
             unitId: string;
+            unitName?: string | null;
             /** Format: double */
             latestPrice?: number;
             /** Format: uuid */
             categoryId: string;
+            categoryName?: string | null;
             /** Format: uuid */
-            vendorId: string;
+            vendorId?: string | null;
+            vendorName?: string | null;
         };
         NewUserDTO: {
             id?: string | null;

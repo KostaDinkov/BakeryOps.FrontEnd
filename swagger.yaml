@@ -242,13 +242,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/MaterialDTO'
+              $ref: '#/components/schemas/MaterialDto'
           text/json:
             schema:
-              $ref: '#/components/schemas/MaterialDTO'
+              $ref: '#/components/schemas/MaterialDto'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/MaterialDTO'
+              $ref: '#/components/schemas/MaterialDto'
       responses:
         '200':
           description: OK
@@ -260,13 +260,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/MaterialDTO'
+              $ref: '#/components/schemas/MaterialDto'
           text/json:
             schema:
-              $ref: '#/components/schemas/MaterialDTO'
+              $ref: '#/components/schemas/MaterialDto'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/MaterialDTO'
+              $ref: '#/components/schemas/MaterialDto'
       responses:
         '200':
           description: OK
@@ -859,12 +859,11 @@ components:
           type: string
           nullable: true
       additionalProperties: false
-    MaterialDTO:
+    MaterialDto:
       required:
         - categoryId
         - name
         - unitId
-        - vendorId
       type: object
       properties:
         id:
@@ -879,15 +878,25 @@ components:
         unitId:
           type: string
           format: uuid
+        unitName:
+          type: string
+          nullable: true
         latestPrice:
           type: number
           format: double
         categoryId:
           type: string
           format: uuid
+        categoryName:
+          type: string
+          nullable: true
         vendorId:
           type: string
           format: uuid
+          nullable: true
+        vendorName:
+          type: string
+          nullable: true
       additionalProperties: false
     NewUserDTO:
       required:

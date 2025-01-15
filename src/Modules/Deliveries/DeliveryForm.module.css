@@ -1,0 +1,34 @@
+.deliveryForm{
+    display:flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.deliveryInfo{
+    display: grid;
+    grid-template-columns: 2fr auto auto;
+    grid-template-rows: auto auto;
+    gap: 0.5rem;
+}
+
+.fullGridRow{
+    grid-column: 1 / span 3;
+}
+
+.deliveryRow{
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr 1fr 1fr 3fr;
+    gap: 0.5rem;
+}
+
+.deliveryList{
+    display: flex;
+    flex-direction: column;
+    gap:0.5rem;
+}
+
+.deliveryRowWithDelete{
+    display: flex;
+    flex-direction: row;
+    gap:0.5rem;
+    
+}

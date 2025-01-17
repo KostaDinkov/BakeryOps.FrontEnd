@@ -1,13 +1,15 @@
+@import "../../styles/vars.css";
 .deliveryForm{
     display:flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: var(--gap-small);
+    max-width:900px;
 }
 .deliveryInfo{
     display: grid;
     grid-template-columns: 2fr auto auto;
     grid-template-rows: auto auto;
-    gap: 0.5rem;
+    gap: var(--gap-small);
 }
 
 .fullGridRow{
@@ -16,19 +18,40 @@
 
 .deliveryRow{
     display: grid;
-    grid-template-columns: 3fr 1fr 1fr 1fr 1fr 3fr;
-    gap: 0.5rem;
+    grid-template-columns: 3fr 1fr 1fr 1fr 1fr;
+    grid-template-areas: "item quantity price lot expDate"
+                         "item notes notes notes notes";
+    gap: var(--gap-small);
+    .item{
+        grid-area: item;
+    }
+    .quantity{
+        grid-area: quantity;
+    }
+    .price{
+        grid-area: price;
+    }
+    .lot{
+        grid-area: lot;
+    }
+    .expDate{
+        grid-area: expDate;
+    }
+    .notes{
+        grid-area: notes;
+    }
 }
 
 .deliveryList{
     display: flex;
     flex-direction: column;
-    gap:0.5rem;
+    gap:var(--gap-large);
 }
 
 .deliveryRowWithDelete{
     display: flex;
     flex-direction: row;
-    gap:0.5rem;
+    gap:var(--gap-small);
+    align-items: center;
     
 }

@@ -60,7 +60,7 @@ export default function DeliveryForm({
       items: Object.values(deliveryItems),
     };
     delivery.total = delivery.items.reduce(
-      (acc, item) => acc + item?.quantity * item?.unitPrice ,
+      (acc, item) => acc + item?.quantity * item?.unitPrice,
       0
     );
     delivery.tax = delivery.total * VAT;
@@ -74,7 +74,7 @@ export default function DeliveryForm({
       <div className={styles.deliveryInfo}>
         {/* //-- VENDOR */}
         <Autocomplete
-        size="small"
+          size="small"
           options={queryData.vendors}
           getOptionLabel={(option) => option.name || ""}
           onChange={(event, value) => {
@@ -92,7 +92,6 @@ export default function DeliveryForm({
         />
         {/* //-- DOCUMENT DATE */}
         <DatePicker
-          
           label="Дата на документ"
           value={parseISO(deliveryInfo?.deliveryDate ?? "")}
           onChange={(date) => {
@@ -118,16 +117,16 @@ export default function DeliveryForm({
 
         {/* //-- NOTES */}
         <div className={styles.fullGridRow}>
-        <TextField
-          label="Бележки"
-          size="small"
-          name="notes"
-          value={deliveryInfo?.notes || ""}
-          onChange={(e) =>
-            setDeliveryInfo({ ...deliveryInfo, notes: e.target.value })
-          }
-          fullWidth
-        />
+          <TextField
+            label="Бележки"
+            size="small"
+            name="notes"
+            value={deliveryInfo?.notes || ""}
+            onChange={(e) =>
+              setDeliveryInfo({ ...deliveryInfo, notes: e.target.value })
+            }
+            fullWidth
+          />
         </div>
       </div>
 
@@ -178,7 +177,8 @@ function DynamicMaterialInputList({
                 updateDeliveryItem,
               })}
               <Button
-              size="small"
+                sx={{minWidth:0, height:"fit-content",}}
+                size="small"
                 variant="contained"
                 color="error"
                 onClick={() =>
@@ -198,7 +198,6 @@ function DynamicMaterialInputList({
       <Button
         size="medium"
         variant="outlined"
-        
         onClick={() => {
           const key = crypto.randomUUID();
           setDeliveryItems({
@@ -226,7 +225,9 @@ function InputRow({
 }) {
   return (
     <div className={styles.deliveryRow}>
+      {/* //--PRODUCT NAME */}
       <Autocomplete
+        className={styles.item}
         size="small"
         options={materials}
         getOptionLabel={(option) => option.name || ""}
@@ -240,7 +241,9 @@ function InputRow({
           return <TextField {...params} label="Име на стока" />;
         }}
       />
+      {/* //--PRODUCT QUANTITY */}
       <TextField
+        className={styles.quantity}
         required
         size="small"
         label="Количество"
@@ -254,7 +257,9 @@ function InputRow({
         }
         {...customInvalidProps("Количеството е задължително")}
       />
+      {/* //--PRODUCT UNIT */}
       <TextField
+        className={styles.price}
         size="small"
         label="Единична цена"
         type="number"
@@ -268,7 +273,9 @@ function InputRow({
         required
         {...customInvalidProps("Цената е задължителна")}
       />
+      {/* //--PRODUCT LOT */}
       <TextField
+        className={styles.lot}
         size="small"
         label="Партиден номер"
         type="text"
@@ -277,7 +284,9 @@ function InputRow({
           updateDeliveryItem(rowId, { lotNumber: e.target.value })
         }
       />
+      {/* //--PRODUCT EXPIRATION DATE */}
       <DatePicker
+        className={styles.expDate}
         label="Срок на годност"
         value={parseISO(deliveryItem?.expirationDate ?? "")}
         onChange={(date) =>
@@ -287,8 +296,10 @@ function InputRow({
         }
         slotProps={{ textField: { size: "small" } }}
       />
+      {/* //--PRODUCT NOTES */}
       <TextField
-      size="small"
+        className={styles.notes}
+        size="small"
         label="Бележка"
         type="text"
         value={deliveryItem?.notes || ""}

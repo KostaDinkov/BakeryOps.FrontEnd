@@ -171,7 +171,7 @@ export default function GenericCRUDView<TItem>({
   }
 
   return (
-    <div className="verticalMenu">
+    <div className="fullWidthColumnLayout">
       <h1>{title}</h1>
       {mode === "viewItem" && (
         <div className={styles.twoColumnView}>

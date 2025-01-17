@@ -14,4 +14,8 @@
     --color-secondary-light:#FFC233;
     --box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     --color-dataGrid-pinned:#edf2f3;
+
+    --gap-small:0.5rem;
+    --gap-medium:1rem;
+    --gap-large:1.5rem;
 }

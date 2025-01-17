@@ -8,11 +8,17 @@
   gap: 20px;
   align-items: center;
   padding-left: 20px;
-  
   box-sizing: border-box;
-  justify-content: center;
+  justify-content: start;
   color:white;
-  
+  a{
+    height:100%;
+    img{
+      height:100%;
+      padding:0.25rem;
+    }
+  }
+
 }
 @media print{
   .navBarContainer{
@@ -22,6 +28,14 @@
 
 .navBarContainer .button:hover {
   background-color: #fd826c;
+}
+
+.logControls{
+  margin-left:auto;
+  padding-right:1rem;
+  span{
+    margin-right:var(--gap-medium)
+  }
 }
 
 .navBarContainer.buttonNew,

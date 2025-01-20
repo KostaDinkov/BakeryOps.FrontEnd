@@ -1,4 +1,4 @@
-import { getSpecialPrice } from "../Modules/Orders/OrderForm/OrderFormHelperFunctions";
+import { getSpecialPrice } from "../Pages/Orders/OrderForm/OrderFormHelperFunctions";
 import ProductDTO from "../Types/ProductDTO";
 
 let products = [

@@ -4,13 +4,13 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import CategoryIcon from '@mui/icons-material/Category';
-import styles from "./Home.module.scss";
+import styles from "./Home.module.css";
 import { Button } from "@mui/material";
 
 export default function Home() {
     return (
         < >
-            <menu className="grid grid-cols-2 gap-2">
+            <nav className="grid grid-cols-2 gap-2">
                 <Button startIcon={<CakeIcon />} variant="contained" color="primary">
                     <Link to="/orders">Поръчки</Link>
                 </Button>
@@ -26,7 +26,7 @@ export default function Home() {
                 <Button startIcon = {<CategoryIcon/>} variant="contained" color="primary">
                     <Link to="/recipes">Рецепти</Link>
                 </Button>
-            </menu>
+            </nav>
         </>
     )
 }

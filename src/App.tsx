@@ -9,10 +9,13 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ClientDTO } from "./Types/types";
 import ProductDTO from "./Types/ProductDTO.ts";
+import { ThemeProvider } from "@mui/material/styles";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { bgBG } from "@mui/x-date-pickers/locales";
 import { bg } from "date-fns/locale";
+import { muiTheme } from "./styles/muiTheme";
+
 
 const queryClient = new QueryClient();
 
@@ -40,6 +43,7 @@ function App() {
 
   return (
     <div className={styles.app}>
+      <ThemeProvider theme={muiTheme}>
       <LocalizationProvider dateAdapter={AdapterDateFns} localeText={bgBG.components.MuiLocalizationProvider.defaultProps.localeText} adapterLocale={bg}>
         <AppContext.Provider
           value={{ products, clients, isLogged, setIsLogged }}
@@ -53,6 +57,7 @@ function App() {
           </QueryClientProvider>
         </AppContext.Provider>
       </LocalizationProvider>
+      </ThemeProvider>
     </div>
   );
 }

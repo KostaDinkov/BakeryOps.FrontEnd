@@ -6,15 +6,13 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import "./styles/globals.scss";
-//import reportWebVitals from "./reportWebVitals";
 import { RouterProvider } from "react-router-dom";
-import { ThemeProvider } from "@mui/material/styles";
 import EventHub from "./EventHub";
 import PubSub from "pubsub-js";
 import { browserRouter } from "./system/browserRouter";
 import { setMuiLicense } from "./muiLicense";
 import type {} from '@mui/x-data-grid/themeAugmentation';
-import { muiTheme } from "./styles/muiTheme";
+
 
 setMuiLicense();
 const router = browserRouter;
@@ -37,9 +35,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={muiTheme}>
       <RouterProvider router={router} />
-    </ThemeProvider>
   </React.StrictMode>
 );
 

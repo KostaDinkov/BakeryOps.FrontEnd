@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import { Link, useNavigate } from "react-router-dom";
 import AppContext from "../../appContext";
 import BreadCrumbs from "../BreadCrumbs/BreadCrumbs";
+import { Typography } from "@mui/material";
 
 const NavBar = () => {
   const { isLogged, setIsLogged } = useContext(AppContext);
@@ -12,7 +13,7 @@ const NavBar = () => {
   function handleLogout() {
     localStorage.setItem("isLogged", "false");
     localStorage.setItem("token", "");
-    setIsLogged(false);
+    setIsLogged && setIsLogged(false);
     navigate("/");
   }
   return (
@@ -21,6 +22,7 @@ const NavBar = () => {
         <Link to="/">
           <img src="/images/logo.svg" alt="logo" />
         </Link>
+        <Typography component="span">Информационна Система Жана</Typography>
 
         <div className={styles.logControls}>
           {isLogged ? (

@@ -23,23 +23,23 @@ function App() {
   let [products, setProducts] = useState<ProductDTO[]>([]);
   let [clients, setClients] = useState<ClientDTO[]>([]);
   let [isLogged, setIsLogged] = useState(
-    JSON.parse(localStorage.getItem("isLogged"))
+    JSON.parse(localStorage.getItem("isLogged")??'false')
   );
-
-  useEffect(() => {
-    fetchProducts();
-    fetchClients();
-  }, []);
 
   async function fetchProducts() {
     const products = await ProductsService.getProducts();
     setProducts(products);
   }
-
+  //TODO -move queries to their respective components (orders)
   async function fetchClients() {
     const clients = await ClientsService.getAllItems();
     setClients(clients);
   }
+
+  useEffect(() => {
+    fetchProducts();
+    fetchClients();
+  }, []);
 
   return (
     <div className={styles.app}>

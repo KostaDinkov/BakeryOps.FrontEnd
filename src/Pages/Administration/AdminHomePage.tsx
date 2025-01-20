@@ -1,13 +1,17 @@
-import { Link, Outlet } from "react-router-dom";
-import styles from './AdminHomePage.module.scss'
+import { Outlet } from "react-router-dom";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import NavigationPanel from "../../Components/NavigationPanel";
+//import styles from "./AdminHomePage.module.scss";
 
 export default function AdminHomePage() {
-    return (
-        <div className = {styles.container}>
-            <h1>Администрация</h1>
-            <Link to="users">Потребители</Link>
-            <Link to="reports">Справки</Link>
-            <Outlet />
-        </div>
-    )
+  const links = [
+    { to: "users", text: "Потребители", icon: <PeopleAltIcon /> },
+    { to: "reports", text: "Справки", icon: <TrendingUpIcon /> },
+  ];
+  return (
+    <NavigationPanel title="Администрация" hasBackButton={true} links={links}>
+      <Outlet />
+    </NavigationPanel>
+  );
 }

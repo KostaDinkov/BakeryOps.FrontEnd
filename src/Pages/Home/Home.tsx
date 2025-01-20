@@ -4,8 +4,8 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import CategoryIcon from '@mui/icons-material/Category';
-import styles from "./Home.module.css";
 import { Button } from "@mui/material";
+//import styles from "./Home.module.css";
 
 export default function Home() {
     return (

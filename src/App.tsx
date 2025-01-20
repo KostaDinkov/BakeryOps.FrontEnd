@@ -50,9 +50,9 @@ function App() {
         >
           <QueryClientProvider client={queryClient}>
             <NavBar />
-            <div className={styles.homeContainer}>
+            <main className={styles.homeContainer}>
               <Outlet />
-            </div>
+            </main>
             <ReactQueryDevtools initialIsOpen={false} />
           </QueryClientProvider>
         </AppContext.Provider>

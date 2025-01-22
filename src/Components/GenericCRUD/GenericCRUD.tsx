@@ -1,16 +1,29 @@
 import { useState } from "react";
-import { Button, Paper } from "@mui/material";
+import { Button, Paper, Typography } from "@mui/material";
 import ConfirmationDialog from "../../Components/ConfirmationDialog/ConfirmationDialog";
 import { z } from "zod";
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import styles from "./GenericCRUD.module.scss";
 import { getErrorInfo } from "./crudHelperFunctions";
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ArrowforwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ArrowforwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useNavigate } from "react-router-dom";
 
 export interface IItemOperations<TItem> {
   queryKey: string[];
-  getItems: ({page, pageSize}:{page:number,pageSize:number}) => Promise<TItem[]>;
+  getItems: ({
+    page,
+    pageSize,
+  }: {
+    page: number;
+    pageSize: number;
+  }) => Promise<TItem[]>;
   createItem: (item: TItem) => Promise<TItem>;
   updateItem: (item: TItem) => Promise<TItem>;
   deleteItem: (id: string) => Promise<void>;
@@ -52,7 +65,7 @@ export default function GenericCRUDView<TItem>({
   const [page, setPage] = useState(1);
   const pageSize = 10;
   const [deleteItemDialogOpen, setDeleteItemDialogOpen] = useState(false);
-
+  const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState<TItem | null>(null);
 
   const queryClient = useQueryClient();
@@ -60,7 +73,7 @@ export default function GenericCRUDView<TItem>({
   const itemsQuery = useQuery({
     queryKey: [...itemOperations.queryKey, [page]],
     queryFn: async () => itemOperations.getItems({ page, pageSize }),
-    placeholderData: keepPreviousData
+    placeholderData: keepPreviousData,
   });
 
   const deleteItemMutation = useMutation({
@@ -172,7 +185,11 @@ export default function GenericCRUDView<TItem>({
 
   return (
     <div className="fullWidthColumnLayout">
-      <h1>{title}</h1>
+      <div className="self-start flex flex-row items-center justify-between gap-2">
+        <Button variant="outlined" startIcon={<ArrowBackIcon />} onClick={()=>{navigate(-1)}}/>
+        <Typography variant="h5">{title}</Typography>
+      </div>
+
       {mode === "viewItem" && (
         <div className={styles.twoColumnView}>
           <div className={styles.itemsList}>
@@ -198,49 +215,50 @@ export default function GenericCRUDView<TItem>({
                     onClick={() => {
                       setPage((old) => old + 1);
                     }}
-                    disabled = {itemsQuery.isPlaceholderData || itemsQuery.data.length < pageSize}
+                    disabled={
+                      itemsQuery.isPlaceholderData ||
+                      itemsQuery.data.length < pageSize
+                    }
                     variant="outlined"
                   >
-                    <ArrowforwardIosIcon/>
+                    <ArrowforwardIosIcon />
                   </Button>
                 </div>
               </Paper>
             )}
           </div>
-          <div >
-           
-              <Button
-                variant="outlined"
-                onClick={() => {
-                  setMode("createItem");
-                  setSelectedItem(null);
-                }}
-              >
-                {newBtnText}
-              </Button>
-              <ItemDetails selectedItem={selectedItem} />
-              {selectedItem && (
-                <div className={styles.editDeleteButtonGroup}>
-                  <Button
-                    variant="contained"
-                    onClick={() => setMode("updateItem")}
-                  >
-                    Редактирай
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="error"
-                    onClick={() => {
-                      setDeleteItemDialogOpen(true);
-                    }}
-                  >
-                    Изтрий
-                  </Button>
-                </div>
-              )}
-            </div>
+          <div>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setMode("createItem");
+                setSelectedItem(null);
+              }}
+            >
+              {newBtnText}
+            </Button>
+            <ItemDetails selectedItem={selectedItem} />
+            {selectedItem && (
+              <div className={styles.editDeleteButtonGroup}>
+                <Button
+                  variant="contained"
+                  onClick={() => setMode("updateItem")}
+                >
+                  Редактирай
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={() => {
+                    setDeleteItemDialogOpen(true);
+                  }}
+                >
+                  Изтрий
+                </Button>
+              </div>
+            )}
           </div>
-        
+        </div>
       )}
       {(mode === "createItem" || mode === "updateItem") && <GenericForm />}
       <ConfirmationDialog

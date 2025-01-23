@@ -2,16 +2,14 @@
 
 .navBarContainer {
   background-color: var(--color-blueGrey);
-  height: 5vh;
   display: flex;
   flex-direction: row;
-  gap: 20px;
+  gap: 1rem;
   align-items: center;
-  padding-left: 20px;
-  padding-top: 20px;
+  align-self:start;
   box-sizing: border-box;
-  justify-content: center;
-  
+  justify-content: start;
+  width: 100%;
 }
 @media print{
   .navBarContainer{

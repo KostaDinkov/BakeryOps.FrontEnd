@@ -15,9 +15,7 @@ import ColumnView, {
   loader as ordersLoader,
 } from "../Pages/Orders/ColumnView/ColumnView";
 import DayView, { DayViewLoader } from "../Pages/Orders/DayView/DayView";
-import OrderForm, {
-  orderFormLoader,
-} from "../Pages/Orders/OrderForm/OrderForm";
+import OrderForm from "../Pages/Orders/OrderForm/OrderForm";
 import OrdersHome from "../Pages/Orders/OrdersHome/OrdersHome";
 import PrintOrderView, {
   loader as PrintOrderViewLoader,
@@ -60,13 +58,11 @@ export const browserRouter = createBrowserRouter([
           {
             path: ":method/:id",
             element: <OrderForm />,
-            loader: orderFormLoader,
             errorElement: <Error />,
           },
           {
             path: ":method/",
             element: <OrderForm />,
-            loader: orderFormLoader,
             errorElement: <Error />,
           },
           {

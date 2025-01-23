@@ -1,9 +1,10 @@
+import { useQuery } from "@tanstack/react-query";
 import { useState, useContext, useEffect } from "react";
 import ProductSelector from "./ProductSelector";
 import AppContext from "../../../appContext";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { bg } from "date-fns/locale"
+import { bg } from "date-fns/locale";
 import Select from "react-select";
 import { OrdersService } from "../../../API/ordersApi";
 import { useLoaderData, useNavigate } from "react-router-dom";
@@ -13,7 +14,6 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
-import { UnauthorizedError } from "../../../system/errors";
 import Dialog from "@mui/material/Dialog";
 import PubSub from "pubsub-js";
 
@@ -33,51 +33,31 @@ import {
 import OrderDTO from "../../../Types/OrderDTO";
 import ValidationResult from "../../../Types/ValidationResult";
 import OrderItemDTO from "../../../Types/OrderItemDTO";
-
-export async function orderFormLoader({
-  params,
-}: {
-  params: { method: string; id: number };
-}) {
-  if (
-    localStorage.getItem("isLogged") === null ||
-    localStorage.getItem("isLogged") === "false"
-  ) {
-    //&& !JSON.parse(localStorage.getItem("isLogged"))
-    throw new UnauthorizedError();
-  }
-  let isEdit = params.method === "put";
-  
-  let order: OrderDTO;
-
-  if (isEdit) {
-    order = await OrdersService.GetOrderAsync(params.id);
-    
-  } else {
-    order = getDefaultOrderFormData();
-
-  }
-  return {
-    order,
-    isEdit,
-  };
-}
+import { apiClient } from "../../../API/apiClient";
+import { handleApiResponse } from "../../../API/apiUtils";
 
 export const textFieldStyle = { backgroundColor: "white", borderRadius: "4px" };
 
-export default function OrderForm() {
+export default function OrderForm({selectedItem}: {selectedItem: OrderDTO}) {
   registerLocale("bg", bg);
   const navigate = useNavigate();
 
-  let { isEdit, order } = useLoaderData() as {
-    isEdit: boolean;
-    order: OrderDTO;
-  };
+  let isEdit = selectedItem ? true : false;
   const [productAccordionOpen, setProductAccordionOpen] = useState(false);
-  let { products } = useContext(AppContext); // the products from the DB
-  let { clients } = useContext(AppContext); // the clients from the DB
-  let productOptions = productsToOptions(products); //options for the ProductSelector component, based on products
-  let [orderFormData, setOrderFormData] = useState(order); //setting and getting the values for the form inputs
+
+  const productsQuery = useQuery({
+    queryKey: ["products"],
+    queryFn: async ()=> handleApiResponse ( async()=> apiClient.GET("/api/Products/GetAllProducts")),
+  });
+
+  const clientsQuery = useQuery({
+    queryKey: ["clients"],
+    queryFn: async() => handleApiResponse( async()=> apiClient.GET("/api/Clients")),
+  });
+
+
+ 
+  let [orderFormData, setOrderFormData] = useState(selectedItem); //setting and getting the values for the form inputs
   let [showDeleteDialog, setShowDeleteDialog] = useState(false); // show/hide confirmation dialog on order delete
   let [validationResult, setValidationResult] = useState({
     isValid: true,
@@ -85,9 +65,9 @@ export default function OrderForm() {
   } as ValidationResult);
 
   let [productSelectorList, setProductSelectorList] = useState(
-    order.orderItems.map((item) => (
+    selectedItem.orderItems.map((item) => (
       <ProductSelector
-        options={productOptions}
+        options={productsToOptions(productsQuery.data)}
         selectorValues={new ProductSelectorValues(item)}
       />
     ))
@@ -144,7 +124,7 @@ export default function OrderForm() {
   //-- SUBMIT ORDER --
   async function handleSubmit(event: any) {
     event.preventDefault();
-    let orderItems:OrderItemDTO[] = productSelectorList.map(
+    let orderItems: OrderItemDTO[] = productSelectorList.map(
       (selector) => selector.props.selectorValues
     );
 
@@ -157,10 +137,9 @@ export default function OrderForm() {
     setValidationResult(newValidationResult);
     //calculate and assign item unit prices
     newOrder.orderItems.forEach((item) => {
-      let client = clients.find((c) => c.id === newOrder.clientId);
+      let client = clientsQuery.data.find((c) => c.id === newOrder.clientId);
       item.itemUnitPrice = getItemUnitPrice(item, products, client);
-    })
-
+    });
 
     let orderResult: OrderDTO;
     if (!newValidationResult.isValid) {
@@ -191,9 +170,12 @@ export default function OrderForm() {
   const handleProductAccordionClose = () => {
     setProductAccordionOpen(false);
   };
+  if(clientsQuery.isLoading && productsQuery.isLoading) return <div>Loading...</div>;
+  if(clientsQuery.isError || productsQuery.isError) return <div>Error...</div>;
 
   //-- RETURN HTML --
   return (
+
     <div className={styles.formContainer}>
       <form>
         <Typography variant="h3">
@@ -224,7 +206,7 @@ export default function OrderForm() {
           />{" "}
           {/*//-- Client Selector */}
           <Select
-            options={clientsToOptions(clients)}
+            options={clientsToOptions(clientsQuery.data)}
             placeholder="Клиент"
             data-test="OrderForm-clientSelector"
             onChange={(option) => {
@@ -247,7 +229,6 @@ export default function OrderForm() {
               data-test="OrderForm-datePicker"
               onChange={(date) => {
                 if (date) {
-                  
                   setOrderFormData((orderFormData) => ({
                     ...orderFormData,
                     pickupDate: getStringFromDate(date),
@@ -378,7 +359,7 @@ export default function OrderForm() {
           <Button variant="contained" onClick={closeForm}>
             Откажи
           </Button>
-          
+
           <Button
             variant="contained"
             onClick={handleSubmit}
@@ -411,7 +392,7 @@ export default function OrderForm() {
         onClose={handleProductAccordionClose}
       >
         <ProductsAccordion
-          products={products}
+          products={productsQuery.data}
           addNewProductSelector={addNewProductSelector}
         />
       </Dialog>

@@ -33,6 +33,7 @@ export default function index({
       <div className="grid grid-cols-2 gap-2">
         {links.map((link, index) => (
           <Button
+            key={index}
             sx={{ justifyContent: "start" }}
             variant="outlined"
             color="primary"

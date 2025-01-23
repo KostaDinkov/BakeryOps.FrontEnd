@@ -62,6 +62,7 @@ export class OrdersService {
   }
 
   static async PostOrderAsync(data: OrderDTO): Promise<OrderDTO> {
+    console.log(data);
     try {
       const response = await fetch(`${hostName}/api/orders`, {
         method: "POST",

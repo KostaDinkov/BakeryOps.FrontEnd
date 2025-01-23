@@ -1,6 +1,7 @@
 @import "../../../styles/vars.css";
 
 .daysContainer{
+    width: 100%;
     display:flex;
     flex-flow: row no-wrap;
     justify-content: flex-start;

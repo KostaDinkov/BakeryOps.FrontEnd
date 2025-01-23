@@ -185,7 +185,7 @@ export default function GenericCRUDView<TItem>({
 
   return (
     <div className="fullWidthColumnLayout">
-      <div className="self-start flex flex-row items-center justify-between gap-2">
+      <div className="self-start flex flex-row items-center justify-between gap-2 py-4">
         <Button variant="outlined" startIcon={<ArrowBackIcon />} onClick={()=>{navigate(-1)}}/>
         <Typography variant="h5">{title}</Typography>
       </div>
@@ -201,7 +201,7 @@ export default function GenericCRUDView<TItem>({
                   setSelectedItem={setSelectedItem}
                   data={itemsQuery.data}
                 />
-                <div className="flex flex-row justify-between items-center mt-2 gap-1">
+                <div className="flex flex-row justify-between items-center mt-2 gap-1 ">
                   <Button
                     onClick={() => {
                       setPage((old) => Math.max(old - 1, 1));

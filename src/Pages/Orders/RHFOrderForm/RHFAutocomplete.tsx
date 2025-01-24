@@ -2,11 +2,12 @@ import { Controller, Control, FieldValues, Path } from 'react-hook-form';
 import Autocomplete, { AutocompleteProps } from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import FormHelperText from '@mui/material/FormHelperText';
+import { useEffect, useState } from 'react';
 
 interface RHFAutocompleteProps<T extends { id: string }, TForm extends FieldValues>
   extends Omit<
     AutocompleteProps<T, false, false, false>,
-    'renderInput' | 'onChange' | 'value'
+    'renderInput' | 'onChange' | 'value' | 'inputValue'
   > {
   control: Control<TForm>;
   name: Path<TForm>;
@@ -25,16 +26,23 @@ export default function RHFAutocomplete<T extends { id: string }, TForm extends 
   getOptionLabel,
   ...autocompleteProps
 }: RHFAutocompleteProps<T, TForm>) {
+  const [inputValue, setInputValue] = useState('');
+
   return (
     <Controller
       control={control}
       name={name}
       defaultValue={null}
       render={({ field: { value, onChange, ...rest }, fieldState: { error } }) => {
-        // Handle both string (free text) and object (selected option) values
-        const currentValue = typeof value === 'string' 
-          ? value 
-          : options.find(option => option.id === value?.id) || null;
+        // Sync input value with form value changes
+        useEffect(() => {
+          if (typeof value === 'string') {
+            const option = options.find(o => o.id === value);
+            setInputValue(option ? getOptionLabel(option) : value);
+          } else {
+            setInputValue('');
+          }
+        }, [value, options, getOptionLabel]);
 
         return (
           <>
@@ -42,31 +50,29 @@ export default function RHFAutocomplete<T extends { id: string }, TForm extends 
               {...autocompleteProps}
               {...rest}
               options={options}
-              
-              value={currentValue}
+              inputValue={inputValue}
+              onInputChange={(_, newValue) => {
+                setInputValue(newValue);
+                // Only update form value if it's not a valid option ID
+                if (!options.some(o => o.id === newValue)) {
+                  onChange(newValue);
+                }
+              }}
               getOptionLabel={(option) => 
                 typeof option === 'string' ? option : getOptionLabel(option)
               }
               isOptionEqualToValue={(option, value) => {
-                if (typeof value === 'string') return option.id === value;
-                return option.id === value?.id;
+                return option.id === (typeof value === 'string' ? value : value?.id);
               }}
               onChange={(_, newValue) => {
-                if (typeof newValue === 'string') {
-                  // Store free text directly
-                  onChange(newValue);
-                } else if (newValue?.id) {
+                if (typeof newValue === 'object' && newValue !== null) {
                   // Store ID when selecting from options
                   onChange(newValue.id);
-                } else {
+                  setInputValue(getOptionLabel(newValue));
+                } else if (newValue === null) {
                   // Handle clear action
                   onChange(null);
-                }
-              }}
-              onInputChange={(_, newInputValue) => {
-                // Update immediately for free text input
-                if (!options.some(option => option.id === newInputValue)) {
-                  onChange(newInputValue);
+                  setInputValue('');
                 }
               }}
               renderInput={(params) => (

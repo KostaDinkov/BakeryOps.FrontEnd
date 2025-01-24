@@ -40,7 +40,7 @@ export default function RHFOrderForm({products, clients}: {products: ProductDTO[
           transformValue={(value) =>value}
           options={clients}
           control={control}
-          
+          freeSolo
         />
         <TextField
           {...register("clientPhone")}

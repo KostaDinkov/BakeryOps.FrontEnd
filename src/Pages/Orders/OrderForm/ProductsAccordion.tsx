@@ -7,8 +7,6 @@ import styles from './ProductsAccordion.module.scss';
 import { ProductsByCategory } from "../../../Types/helpers";
 import { getProductsByCategory } from "../../../system/utils";
 
-
-
 export default function ProductsAccordion({
   products,
   addNewProductSelector,

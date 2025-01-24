@@ -928,9 +928,8 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          format: int32
-          nullable: true
+          type: string
+          format: uuid
         operatorId:
           type: integer
           format: int32

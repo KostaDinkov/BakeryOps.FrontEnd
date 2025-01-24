@@ -113,7 +113,7 @@ export default function CategoriesPage() {
 
   //Todo:Implement item operations. See the example below
   const itemOperations: IItemOperations<CategoryDTO> = {
-    queryKey: ["enter query key here"],
+    queryKey: ["categories"],
     getItems: async () =>
       await handleApiResponse(
         async () => await apiClient.GET("/api/Categories/GetCategories")

@@ -1813,8 +1813,8 @@ export interface components {
             password: string | null;
         };
         OrderDTO: {
-            /** Format: int32 */
-            id?: number | null;
+            /** Format: uuid */
+            id?: string;
             /** Format: int32 */
             operatorId?: number | null;
             /** Format: date-time */

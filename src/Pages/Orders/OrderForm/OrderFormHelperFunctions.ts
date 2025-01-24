@@ -15,9 +15,7 @@ export function getNewDateWithHours(date: Date, hoursStr: string): string {
   date.setMinutes(parseInt(parts[1]));
   const dateStr = getStringFromDate(date);
   console.log(`DateStr: ${dateStr}`);
-  
   return dateStr;
-  
 }
 
 export function getStringFromDate(date: Date): string {
@@ -98,7 +96,7 @@ export class ProductSelectorValues {
   itemUnitPrice: number;
 
   constructor(item?: OrderItemDTO | undefined) {
-    this.productId = item?.productId ;
+    this.productId = item?.productId || crypto.randomUUID() ;
     this.productAmount = item?.productAmount || 0;
     this.cakeFoto = item?.cakeFoto || "";
     this.cakeTitle = item?.cakeTitle || "";
@@ -215,3 +213,5 @@ export function getItemUnitPrice(
   }
   return product.priceDrebno;
 }
+
+

@@ -1,82 +1,85 @@
-import { useQuery } from "@tanstack/react-query";
-import { useState, useContext, useEffect } from "react";
-import ProductSelector from "./ProductSelector";
-import AppContext from "../../../appContext";
-import DatePicker, { registerLocale } from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { bg } from "date-fns/locale";
-import Select from "react-select";
-import { OrdersService } from "../../../API/ordersApi";
-import { useLoaderData, useNavigate } from "react-router-dom";
-import DeleteOrderDialog from "./DeleteOrderDialog";
-import styles from "./OrderForm.module.css";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
-import Checkbox from "@mui/material/Checkbox";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import PubSub from "pubsub-js";
-
-import ProductsAccordion from "./ProductsAccordion";
 import {
+  Autocomplete,
+  Button,
+  Checkbox,
+  Dialog,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
+import styles from "./OrderForm.module.css";
+import DatePicker from "react-datepicker";
+import {
+  getHoursOptions,
   getNewDateWithHours,
-  validateOrder,
-  getDefaultOrderFormData,
+  getOrderTimeOrDefault,
+  getStringFromDate,
   ProductSelectorValues,
   productsToOptions,
-  getHoursOptions,
-  clientsToOptions,
-  getOrderTimeOrDefault,
-  getItemUnitPrice,
-  getStringFromDate,
 } from "./OrderFormHelperFunctions";
-import OrderDTO from "../../../Types/OrderDTO";
-import ValidationResult from "../../../Types/ValidationResult";
-import OrderItemDTO from "../../../Types/OrderItemDTO";
-import { apiClient } from "../../../API/apiClient";
-import { handleApiResponse } from "../../../API/apiUtils";
+import { useState } from "react";
+import type { OrderDTO, OrderItemDTO } from "../../../Types/types.d.ts";
+import DeleteOrderDialog from "./DeleteOrderDialog.tsx";
+import ProductsAccordion from "./ProductsAccordion.tsx";
+import type { ClientDTO } from "../../../Types/types.d.ts";
+import Product from "../../../Types/ProductDTO.ts";
+import ProductSelector from "./ProductSelector.tsx";
+import { set } from "date-fns";
 
-export const textFieldStyle = { backgroundColor: "white", borderRadius: "4px" };
+export default function OrderForm({
+  order,
+  clients,
+  products,
+}: {
+  order: OrderDTO;
+  clients: ClientDTO[];
+  products: Product[];
+}) {
+  const isEdit = !!order;
+  const defaultFormData: {
+    id: number;
+    status: number;
+    clientId: string;
+    clientName: string;
+    clientPhone: string;
+    pickupDate: string;
+    isPaid: boolean;
+    advancePaiment: number;
+    orderItems: { key: string; value: OrderItemDTO };
+  } = {
+    id: 0,
+    status: 0,
+    clientId: "",
+    clientName: "",
+    clientPhone: "",
+    pickupDate: new Date().toISOString(),
+    isPaid: false,
+    advancePaiment: 0,
+    orderItems: {},
+  };
+  function formDataFromOrder(order: OrderDTO): typeof defaultFormData {
+    return {
+      id: order.id ?? crypto.randomUUID(),
+      status: order.status,
+      clientId: order.clientId.toString(),
+      clientName: order.clientName,
+      clientPhone: order.clientPhone,
+      pickupDate: order.pickupDate,
+      isPaid: order.isPaid,
+      advancePaiment: order.advancePaiment,
+      orderItems: order.orderItems.reduce((acc, item) => {
+        acc[item.productId] = item;
+        return acc;
+      }, {}),
+    };
+  }
+  const [orderFormData, setOrderFormData] = useState(order ?? defaultFormData);
+  let [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
-export default function OrderForm({selectedItem}: {selectedItem: OrderDTO}) {
-  registerLocale("bg", bg);
-  const navigate = useNavigate();
-
-  let isEdit = selectedItem ? true : false;
   const [productAccordionOpen, setProductAccordionOpen] = useState(false);
-
-  const productsQuery = useQuery({
-    queryKey: ["products"],
-    queryFn: async ()=> handleApiResponse ( async()=> apiClient.GET("/api/Products/GetAllProducts")),
-  });
-
-  const clientsQuery = useQuery({
-    queryKey: ["clients"],
-    queryFn: async() => handleApiResponse( async()=> apiClient.GET("/api/Clients")),
-  });
-
-
- 
-  let [orderFormData, setOrderFormData] = useState(selectedItem); //setting and getting the values for the form inputs
-  let [showDeleteDialog, setShowDeleteDialog] = useState(false); // show/hide confirmation dialog on order delete
-  let [validationResult, setValidationResult] = useState({
-    isValid: true,
-    errors: [],
-  } as ValidationResult);
-
-  let [productSelectorList, setProductSelectorList] = useState(
-    selectedItem.orderItems.map((item) => (
-      <ProductSelector
-        options={productsToOptions(productsQuery.data)}
-        selectorValues={new ProductSelectorValues(item)}
-      />
-    ))
-  ); // list of ProductSelector components added to the OrderForm
-
-  useEffect(() => {
-    focusNewSelector();
-  }, [productSelectorList]);
-
+  const handleProductAccordionClose = () => {
+    setProductAccordionOpen(false);
+  };
   //-- ADD NEW PRODUCT TO ORDER
   /**
    * Dynamically add an input to the order form for an a new order Item with default values
@@ -86,96 +89,25 @@ export default function OrderForm({selectedItem}: {selectedItem: OrderDTO}) {
     if (!selectorValues) {
       selectorValues = new ProductSelectorValues();
     }
-    setProductSelectorList((list) => {
-      return [
-        ...list,
-        <ProductSelector
-          options={productOptions}
-          selectorValues={selectorValues}
-        />,
-      ];
+    setOrderFormData((orderFormData) => {
+      return {
+        ...orderFormData,
+        orderItems: [...(orderFormData.orderItems || []), selectorValues],
+      };
+    });
+  }
+  function removeItem(productId: string | undefined) {
+    setOrderFormData((orderFormData) => {
+      return {
+        ...orderFormData,
+        orderItems: orderFormData.orderItems?.filter(
+          (item) => item.productId !== productId
+        ),
+      };
     });
   }
 
-  function focusNewSelector() {
-    let allProductNameFields = [
-      ...document.querySelectorAll('[data-field="productNameField"]'),
-    ];
-
-    if (allProductNameFields.length > 0) {
-      let input = allProductNameFields
-        .pop()
-        ?.querySelector("input") as HTMLInputElement;
-
-      input.focus();
-    }
-  }
-
-  //-- REMOVE PRODUCT FROM ORDER --
-  /**
-   * Remove an orderItem (productSelector) from the order
-   * @param {int} index
-   */
-  function removeProduct(index: number) {
-    productSelectorList.splice(index, 1);
-    setProductSelectorList([...productSelectorList]);
-  }
-
-  //-- SUBMIT ORDER --
-  async function handleSubmit(event: any) {
-    event.preventDefault();
-    let orderItems: OrderItemDTO[] = productSelectorList.map(
-      (selector) => selector.props.selectorValues
-    );
-
-    let newOrder: OrderDTO = {
-      ...orderFormData,
-      orderItems: orderItems,
-    };
-
-    const newValidationResult = validateOrder(newOrder);
-    setValidationResult(newValidationResult);
-    //calculate and assign item unit prices
-    newOrder.orderItems.forEach((item) => {
-      let client = clientsQuery.data.find((c) => c.id === newOrder.clientId);
-      item.itemUnitPrice = getItemUnitPrice(item, products, client);
-    });
-
-    let orderResult: OrderDTO;
-    if (!newValidationResult.isValid) {
-      console.log(newValidationResult.errors);
-    } else {
-      if (isEdit && newOrder.id) {
-        orderResult = await OrdersService.PutOrderAsync(newOrder.id, newOrder);
-      } else {
-        orderResult = await OrdersService.PostOrderAsync(newOrder);
-      }
-      PubSub.publish("SendUpdateOrders");
-      navigate(`/orders/print/${orderResult.id}`);
-    }
-  }
-
-  function closeForm() {
-    navigate(-1);
-  }
-
-  async function deleteOrder() {
-    if (isEdit && orderFormData.id) {
-      await OrdersService.DeleteOrderAsync(orderFormData.id);
-      PubSub.publish("SendUpdateOrders");
-      closeForm();
-    }
-  }
-
-  const handleProductAccordionClose = () => {
-    setProductAccordionOpen(false);
-  };
-  if(clientsQuery.isLoading && productsQuery.isLoading) return <div>Loading...</div>;
-  if(clientsQuery.isError || productsQuery.isError) return <div>Error...</div>;
-
-  //-- RETURN HTML --
   return (
-
     <div className={styles.formContainer}>
       <form>
         <Typography variant="h3">
@@ -193,7 +125,6 @@ export default function OrderForm({selectedItem}: {selectedItem: OrderDTO}) {
         <div className={styles.mainInfo}>
           <TextField
             value={orderFormData.clientName}
-            sx={textFieldStyle}
             size="small"
             label="Клиент ..."
             data-test="OrderForm-clientNameInput"
@@ -205,10 +136,9 @@ export default function OrderForm({selectedItem}: {selectedItem: OrderDTO}) {
             }}
           />{" "}
           {/*//-- Client Selector */}
-          <Select
-            options={clientsToOptions(clientsQuery.data)}
-            placeholder="Клиент"
-            data-test="OrderForm-clientSelector"
+          <Autocomplete
+            options={clients.map((c) => ({ label: c.name, value: c.id }))}
+            renderInput={(params) => <TextField {...params} label="Клиент" />}
             onChange={(option) => {
               if (option) {
                 let result = {
@@ -235,16 +165,16 @@ export default function OrderForm({selectedItem}: {selectedItem: OrderDTO}) {
                   }));
                 }
               }}
-              customInput={<TextField sx={textFieldStyle} size="small" />}
+              customInput={<TextField size="small" />}
             />
           </div>
           {/*//-- TIME Selector */}
           <div data-test="OrderForm-timeSelector">
-            <Select
+            <Autocomplete
               value={getOrderTimeOrDefault(orderFormData.pickupDate)}
               options={getHoursOptions()}
-              placeholder="Час ..."
-              onChange={(option) => {
+              renderInput={(params) => <TextField {...params} label="Час" />}
+              onChange={(event, option) => {
                 if (option) {
                   let result = {
                     ...orderFormData,
@@ -262,7 +192,6 @@ export default function OrderForm({selectedItem}: {selectedItem: OrderDTO}) {
           <TextField
             size="small"
             type="tel"
-            sx={textFieldStyle}
             value={orderFormData.clientPhone}
             label="Телефон"
             data-test="OrderForm-phoneInput"
@@ -277,7 +206,6 @@ export default function OrderForm({selectedItem}: {selectedItem: OrderDTO}) {
           <TextField
             size="small"
             value={orderFormData.advancePaiment || ""}
-            sx={textFieldStyle}
             label="Капаро"
             data-test="OrderForm-kaparoInput"
             type="number"
@@ -302,7 +230,7 @@ export default function OrderForm({selectedItem}: {selectedItem: OrderDTO}) {
             <Checkbox
               size="medium"
               color="error"
-              checked={orderFormData.isPaid}
+              checked={orderFormData.isPaid ?? false}
               data-test="OrderForm-paidCheckbox"
               onChange={(evt) => {
                 setOrderFormData((orderFormData) => ({
@@ -316,25 +244,32 @@ export default function OrderForm({selectedItem}: {selectedItem: OrderDTO}) {
         <hr />
         {/*//-- PRODUCT Selectors */}
         <ul>
-          {productSelectorList.map((el, index) => (
-            <div key={index}>
-              <li className={styles.productListItem}>
-                <div style={{ flexGrow: "1", maxWidth: "1025px" }}>{el}</div>
-                <Button
-                  tabIndex={-1}
-                  size="small"
-                  color="error"
-                  variant="outlined"
-                  onClick={() => {
-                    removeProduct(index);
-                  }}
-                >
-                  X{" "}
-                </Button>
-              </li>
-              <hr />
-            </div>
-          ))}
+          {orderFormData.orderItems &&
+            orderFormData.orderItems.map((item, index) => (
+              <div key={item.productId}>
+                <li className={styles.productListItem}>
+                  <div style={{ flexGrow: "1", maxWidth: "1025px" }}>
+                    <ProductSelector
+                      options={productsToOptions(products)}
+                      item={item}
+                      setOrderFormData={setOrderFormData}
+                    />
+                  </div>
+                  <Button
+                    tabIndex={-1}
+                    size="small"
+                    color="error"
+                    variant="outlined"
+                    onClick={() => {
+                      removeItem(item.productId);
+                    }}
+                  >
+                    X{" "}
+                  </Button>
+                </li>
+                <hr />
+              </div>
+            ))}
         </ul>
         <Button
           variant="outlined"
@@ -356,20 +291,20 @@ export default function OrderForm({selectedItem}: {selectedItem: OrderDTO}) {
           Избери продукти
         </Button>
         <div className={styles.submitGroup}>
-          <Button variant="contained" onClick={closeForm}>
+          <Button variant="contained" onClick={() => {}}>
             Откажи
           </Button>
 
           <Button
             variant="contained"
-            onClick={handleSubmit}
+            onClick={() => {}}
             color="secondary"
             data-test="OrderForm-submitBtn"
           >
             Запази
           </Button>
         </div>
-        {!validationResult.isValid && (
+        {/* {!validationResult.isValid && (
           <div>
             <h3>Невалидни стойности на поръчката:</h3>
             <ul>
@@ -378,11 +313,11 @@ export default function OrderForm({selectedItem}: {selectedItem: OrderDTO}) {
               ))}
             </ul>
           </div>
-        )}
+        )} */}
         <DeleteOrderDialog
           open={showDeleteDialog}
           setOpen={setShowDeleteDialog}
-          onDelete={deleteOrder}
+          onDelete={() => {}}
         />
       </form>
       <Dialog
@@ -392,7 +327,7 @@ export default function OrderForm({selectedItem}: {selectedItem: OrderDTO}) {
         onClose={handleProductAccordionClose}
       >
         <ProductsAccordion
-          products={productsQuery.data}
+          products={products}
           addNewProductSelector={addNewProductSelector}
         />
       </Dialog>

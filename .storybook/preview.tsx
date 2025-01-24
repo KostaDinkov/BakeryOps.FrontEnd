@@ -7,6 +7,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { bgBG } from "@mui/x-date-pickers/locales";
 import { bg } from "date-fns/locale";
 import { ThemeProvider } from "@mui/material";
+import {withConsole} from '@storybook/addon-console';
 
 const preview: Preview = {
   parameters: {
@@ -17,15 +18,9 @@ const preview: Preview = {
       },
     },
   },
+  decorators: [
+    (Story,context)=> withConsole()(Story)(context),
 
-  decorators: [withThemeByClassName({
-      themes: {
-          // nameOfTheme: 'classNameForTheme',
-          light: '',
-          dark: 'dark',
-      },
-      defaultTheme: 'light',
-  }),
   (Story) => (
     <ThemeProvider theme={muiTheme}>
         <LocalizationProvider dateAdapter={AdapterDateFns} localeText={bgBG.components.MuiLocalizationProvider.defaultProps.localeText} adapterLocale={bg}>

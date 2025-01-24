@@ -26,28 +26,26 @@ function App() {
     JSON.parse(localStorage.getItem("isLogged")??'false')
   );
 
-  async function fetchProducts() {
-    const products = await ProductsService.getProducts();
-    setProducts(products);
-  }
-  //TODO -move queries to their respective components (orders)
-  async function fetchClients() {
-    const clients = await ClientsService.getAllItems();
-    setClients(clients);
-  }
+  // async function fetchProducts() {
+  //   const products = await ProductsService.getProducts();
+  //   setProducts(products);
+  // }
+  // //TODO -move queries to their respective components (orders)
+  // async function fetchClients() {
+  //   const clients = await ClientsService.getAllItems();
+  //   setClients(clients);
+  // }
 
-  useEffect(() => {
-    fetchProducts();
-    fetchClients();
-  }, []);
+  // useEffect(() => {
+  //   fetchProducts();
+  //   fetchClients();
+  // }, []);
 
   return (
     <div className={styles.app}>
       <ThemeProvider theme={muiTheme}>
       <LocalizationProvider dateAdapter={AdapterDateFns} localeText={bgBG.components.MuiLocalizationProvider.defaultProps.localeText} adapterLocale={bg}>
-        <AppContext.Provider
-          value={{ products, clients, isLogged, setIsLogged }}
-        >
+        
           <QueryClientProvider client={queryClient}>
             <NavBar />
             <main className={styles.homeContainer}>
@@ -55,7 +53,7 @@ function App() {
             </main>
             <ReactQueryDevtools initialIsOpen={false} />
           </QueryClientProvider>
-        </AppContext.Provider>
+        
       </LocalizationProvider>
       </ThemeProvider>
     </div>

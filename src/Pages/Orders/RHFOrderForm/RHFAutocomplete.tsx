@@ -14,6 +14,7 @@ interface RHFAutocompleteProps<T extends { id: string }, TForm extends FieldValu
   label?: string;
   required?: boolean;
   options: T[];
+  freeText?: boolean;
   getOptionLabel: (option: T) => string;
   customOnChange?:(option: T|null) => void;
 }
@@ -26,7 +27,9 @@ export default function RHFAutocomplete<T extends { id: string }, TForm extends 
   options,
   getOptionLabel,
   customOnChange,
+  freeText,
   ...autocompleteProps
+
 }: RHFAutocompleteProps<T, TForm>) {
   const [inputValue, setInputValue] = useState('');
 
@@ -46,17 +49,18 @@ export default function RHFAutocomplete<T extends { id: string }, TForm extends 
         }, [value, options, getOptionLabel]);
 
         return (
-          <>
+          <div>
             <Autocomplete
               {...autocompleteProps}
               {...rest}
+              freeSolo={freeText || false}
               defaultValue={null}
               options={options}
               inputValue={inputValue}
               onInputChange={(_, newValue) => {
                 setInputValue(newValue);
                 // Only update form value if it's not a valid option ID
-                if (!options.some(o => o.id === newValue)) {
+                if (!options.some(o => o.id === newValue) && freeText) {
                   onChange(newValue);
                 }
               }}
@@ -87,12 +91,8 @@ export default function RHFAutocomplete<T extends { id: string }, TForm extends 
                 />
               )}
             />
-            {error && (
-              <FormHelperText error sx={{ mx: '14px', mt: '4px' }}>
-                {error.message}
-              </FormHelperText>
-            )}
-          </>
+            
+          </div>
         );
       }}
     />

@@ -29,7 +29,7 @@ import CategoriesPage from "../Pages/Nomenclature/Categories/CategoriesPage";
 import ProductsPage from "../Pages/Nomenclature/Products/ProductsPage";
 import RecipesHomePage from "../Pages/Recipes/RecipesHomePage";
 import DeliveriesHome from "../Pages/Deliveries/DeliveriesHome";
-import OrderFormProvider from "../Components/RHFOrderForm/OrderFormProvider";
+import OrderFormProvider from "../Pages/Orders/RHFOrderForm/OrderFormProvider";
 
 export const browserRouter = createBrowserRouter([
   {

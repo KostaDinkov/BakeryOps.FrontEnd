@@ -1,6 +1,6 @@
 import { Checkbox, FormControlLabel, TextField } from "@mui/material";
 import RHFAutocomplete from "./RHFAutocomplete";
-import { OrderItemDTO, ProductDTO } from "../../../Types/types";
+import { OrderItemDTO, ProductDTO } from "../../Types/types";
 import {
   Control,
   FormState,

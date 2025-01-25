@@ -7,7 +7,7 @@ import {
 import { orderFormSchema, type OrderFormSchemaType } from "./formSchema";
 import RHFAutocomplete from "./RHFAutocomplete";
 import { TextField } from "@mui/material";
-import { ClientDTO, OrderItemDTO, ProductDTO } from "../../../Types/types";
+import { ClientDTO, OrderItemDTO, ProductDTO } from "../../Types/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DevTool } from "@hookform/devtools";
 import OrderItems from "./OrderItem";

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { OrderDTO } from "../../../Types/types";
+import { OrderDTO } from "../../Types/types";
 
 export const orderFormSchema: z.ZodSchema<OrderDTO> = z.object({
     id: z.string().uuid().default("00000000-0000-0000-0000-000000000000"),

@@ -29,7 +29,7 @@ import CategoriesPage from "../Pages/Nomenclature/Categories/CategoriesPage";
 import ProductsPage from "../Pages/Nomenclature/Products/ProductsPage";
 import RecipesHomePage from "../Pages/Recipes/RecipesHomePage";
 import DeliveriesHome from "../Pages/Deliveries/DeliveriesHome";
-import OrderFormProvider from "../Pages/Orders/RHFOrderForm/OrderFormProvider";
+import OrderFormProvider from "../Components/RHFOrderForm/OrderFormProvider";
 
 export const browserRouter = createBrowserRouter([
   {
@@ -205,10 +205,10 @@ export const browserRouter = createBrowserRouter([
         path: "/login/",
         element: <LoginForm />,
       },
-      {
-        path:'/test',
-        element: <OrderFormProvider/>
-      }
+      // {
+      //   path:'/test',
+      //   element: <OrderFormProvider/>
+      // }
     ],
   },
 ]);

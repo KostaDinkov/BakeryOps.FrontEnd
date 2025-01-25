@@ -10,4 +10,4 @@ export type Unit = components["schemas"]["Unit"];
 export type RecipeDTO = components["schemas"]["RecipeDTO"];
 export type OrderDTO = components["schemas"]["OrderDTO"];
 export type OrderItemDTO = components["schemas"]["OrderItemDTO"];
-export type ProductDTO = components["schemas"]["ProductDTO"];
+export type ProductDTO = components["schemas"]["Product"];

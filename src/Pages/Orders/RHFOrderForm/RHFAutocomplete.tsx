@@ -15,6 +15,7 @@ interface RHFAutocompleteProps<T extends { id: string }, TForm extends FieldValu
   required?: boolean;
   options: T[];
   getOptionLabel: (option: T) => string;
+  customOnChange?:(option: T|null) => void;
 }
 
 export default function RHFAutocomplete<T extends { id: string }, TForm extends FieldValues>({
@@ -24,6 +25,7 @@ export default function RHFAutocomplete<T extends { id: string }, TForm extends 
   required = false,
   options,
   getOptionLabel,
+  customOnChange,
   ...autocompleteProps
 }: RHFAutocompleteProps<T, TForm>) {
   const [inputValue, setInputValue] = useState('');
@@ -32,7 +34,6 @@ export default function RHFAutocomplete<T extends { id: string }, TForm extends 
     <Controller
       control={control}
       name={name}
-      defaultValue={null}
       render={({ field: { value, onChange, ...rest }, fieldState: { error } }) => {
         // Sync input value with form value changes
         useEffect(() => {
@@ -49,6 +50,7 @@ export default function RHFAutocomplete<T extends { id: string }, TForm extends 
             <Autocomplete
               {...autocompleteProps}
               {...rest}
+              defaultValue={null}
               options={options}
               inputValue={inputValue}
               onInputChange={(_, newValue) => {
@@ -65,6 +67,7 @@ export default function RHFAutocomplete<T extends { id: string }, TForm extends 
                 return option.id === (typeof value === 'string' ? value : value?.id);
               }}
               onChange={(_, newValue) => {
+                customOnChange && customOnChange(newValue);
                 if (typeof newValue === 'object' && newValue !== null) {
                   // Store ID when selecting from options
                   onChange(newValue.id);

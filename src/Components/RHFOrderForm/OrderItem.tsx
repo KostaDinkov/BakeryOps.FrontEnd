@@ -10,7 +10,7 @@ import {
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import RHFAutocomplete from "./RHFAutocomplete";
 import { createFilterOptions } from "@mui/material/Autocomplete";
-import { OrderItemDTO, ProductDTO } from "../../../Types/types";
+import { OrderItemDTO, ProductDTO } from "../../Types/types";
 import {
   Control,
   FormState,
@@ -40,16 +40,15 @@ export default function OrderItems({
   index: number;
   field: OrderItemDTO & { id: string };
 }) {
-  const [isCakeCategory, _setIsCakeCategory] = useState<boolean>(false);
-  const [showNote, setShowNote] = useState<boolean>(false);
-  const setIsCakeCategory = (product: ProductDTO) => {
-    if (product.category?.toLowerCase().includes("торта")) {
-      console.log("is cake category");
-      _setIsCakeCategory(true);
-      return;
-    }
-    _setIsCakeCategory(false);
-  };
+  const [showCakeFields, setShowCakeFields] = useState<boolean>(
+    isCakeCategory(products.find((p) => p.id === field.productId))
+  );
+  const [showNote, setShowNote] = useState<boolean>(field.description?.length>0?true:false);
+
+  function isCakeCategory(product: ProductDTO | null | undefined) {
+    if (!product) return false;
+    return product.category?.toLowerCase().includes("торта") || false;
+  }
 
   const filterOptions = createFilterOptions<ProductDTO>({
     stringify: (option: ProductDTO) => String(option.name) + option.code,
@@ -57,7 +56,6 @@ export default function OrderItems({
 
   return (
     <div className={styles.orderItemContainer}>
-      
       <div className={styles.product}>
         {/* //--Product Select  */}
         <RHFAutocomplete
@@ -67,7 +65,7 @@ export default function OrderItems({
           label="Изберете продукт"
           name={`orderItems.${index}.productId`}
           customOnChange={(option) => {
-            setIsCakeCategory(option);
+            setShowCakeFields(isCakeCategory(option));
           }}
           filterOptions={filterOptions}
           getOptionLabel={(option: ProductDTO) => option.name}
@@ -87,7 +85,7 @@ export default function OrderItems({
         />
 
         {/* //--Product Cake Fields  */}
-        {isCakeCategory && (
+        {showCakeFields && (
           <>
             <TextField
               label="Фото №"
@@ -123,7 +121,7 @@ export default function OrderItems({
       {/* //--Product Note */}
       {showNote && (
         <TextField
-        size="small"
+          size="small"
           className={styles.note}
           {...useFormMethods.register(`orderItems.${index}.description`)}
           label="Бележка"

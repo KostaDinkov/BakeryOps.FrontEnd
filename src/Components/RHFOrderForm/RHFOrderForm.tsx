@@ -1,5 +1,10 @@
 // #region IMPORTS
-import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
+import {
+  Controller,
+  SubmitHandler,
+  useFieldArray,
+  useForm,
+} from "react-hook-form";
 import { orderFormSchema, type OrderFormSchemaType } from "./formSchema";
 import RHFAutocomplete from "./RHFAutocomplete";
 import {
@@ -10,48 +15,108 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { ClientDTO, OrderItemDTO, ProductDTO } from "../../../Types/types";
+import {
+  ClientDTO,
+  OrderDTO,
+  OrderItemDTO,
+  ProductDTO,
+} from "../../Types/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DevTool } from "@hookform/devtools";
 import OrderItems from "./OrderItem";
 import styles from "./RHFOrderForm.module.css";
 import RFHDatePicker from "./RHFDatePicker";
+import { getSpecialPrice } from "../../Pages/Orders/OrderForm/OrderFormHelperFunctions";
+import { error } from "console";
+import { formatISO, parseISO } from "date-fns";
 // #endregion
 
 export default function RHFOrderForm({
   products,
   clients,
+  order,
+  submitOrder
 }: {
   products: ProductDTO[];
   clients: ClientDTO[];
+  order?: OrderDTO;
+  submitOrder: (data: OrderDTO) => void;
 }) {
+  const isUpdate = !!order;
+
+  function getDefaultValues(order?: OrderDTO): OrderFormSchemaType {
+    if (!order) {
+      return {
+        operatorId: null,
+        clientId: null,
+        clientPhone: null,
+        pickupDate: null,
+        clientName: null,
+        isPaid: false,
+        advancePaiment: 0,
+        orderItems: [],
+        createdDate: formatISO(new Date()),
+      };
+    }
+    return {
+      clientId: order.clientId,
+      clientPhone: order.clientPhone,
+      pickupDate: parseISO(order.pickupDate),
+      isPaid: order.isPaid,
+      advancePaiment: order.advancePaiment,
+      orderItems: order.orderItems,
+    };
+  }
+
   const { control, handleSubmit, register, getValues, formState } =
     useForm<OrderFormSchemaType>({
       mode: "all",
       resolver: zodResolver(orderFormSchema),
-      defaultValues: { clientName: "1", clientPhone: "1234567890" },
+      defaultValues: getDefaultValues(order),
     });
 
-  const { fields, append, prepend, remove } =
-    useFieldArray<OrderFormSchemaType>({
-      name: "orderItems",
-      control,
-      rules: {
-        required: "Please append at least 1 item",
-      },
-    });
+  const { fields, append, remove } = useFieldArray<OrderFormSchemaType>({
+    name: "orderItems",
+    control,
+    rules: {
+      required: "Please append at least 1 item",
+    },
+  });
 
   const onSubmit: SubmitHandler<OrderFormSchemaType> = (data) => {
-    console.log("Submitted data:");
-    console.log(data);
+    const orderDTO: OrderDTO = {
+      clientId: data.clientId || null,
+      clientPhone: data.clientPhone,
+      clientName:
+        data.clientName || clients.find((c) => c.id === data.clientId)?.name,
+      pickupDate: data.pickupDate,
+      createdDate: data.createdDate,
+      isPaid: data.isPaid,
+      advancePaiment: data.advancePaiment,
+      orderItems: data.orderItems?.map((item: OrderItemDTO) => ({
+        productId: item.productId,
+        productAmount: item.productAmount,
+        description: item.description,
+        cakeFoto: item.cakeFoto,
+        cakeTitle: item.cakeTitle,
+        isInProgress: false,
+        isComplete: false,
+        itemUnitPrice: getSpecialPrice(
+          products.find((p) => p.id === item.productId),
+          clients.find((c) => c.id === data.clientId)?.discountPercent
+        ),
+      })),
+    };
+    console.log("OrderDTO", orderDTO);
+    submitOrder(orderDTO);
   };
 
   return (
     <form
-	  className={styles.formContainer}
+      className={styles.formContainer}
       onSubmit={handleSubmit(onSubmit, (errors) => {
-        console.log("Validation errors", errors);
-        console.log(getValues());
+        console.log("Form data", getValues());
+        console.log("Errors", errors);
       })}
     >
       {/* //--Form meta data */}
@@ -72,11 +137,24 @@ export default function RHFOrderForm({
           label="Телефон на клиент"
         />
         <RFHDatePicker control={control} name="pickupDate" />
-        <FormControlLabel
-          control={<Checkbox {...register("isPaid")} />}
-          label="Платена?"
+        
+		<Controller
+          name="isPaid"
+          control={control}
+          render={({ field }) => (
+            <FormControlLabel
+              control={
+                <Checkbox                 
+                  onChange={(_, checked) => field.onChange(checked)}
+                  checked={field.value||false}
+                />
+              }
+              label="Платена?"
+            />
+          )}
         />
-        <TextField
+
+		<TextField
           {...register("advancePaiment", { valueAsNumber: true })}
           label="Капаро"
           type={"number"}

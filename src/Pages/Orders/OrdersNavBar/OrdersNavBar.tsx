@@ -35,7 +35,7 @@ const NavBar = () => {
         >
           Избери Дата
         </Button>
-        <Link to="/orders/post/">
+        <Link to="/orders/create/">
           <Button
             className={styles.buttonNew}
             variant="contained"

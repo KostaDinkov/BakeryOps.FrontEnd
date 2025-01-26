@@ -28,14 +28,14 @@
         "playwright.config.ts": true,
         "postcss.config.js": true,
         "tsconfig.json": true,
-        ".vscode": true,
         "updateApi.ps1": true,
         "tailwind.config.js": true,
         "swagger.yaml": true,
         "vite.config.ts": true,
         "zodDef.ts": true,
         "README.md": true,
-        "src/tests": true
+        "src/tests": true,
+        "src/routes": true
     },
     "hide-files.files": [
         ".mightymeld",
@@ -59,13 +59,13 @@
         "playwright.config.ts",
         "postcss.config.js",
         "tsconfig.json",
-        ".vscode",
         "updateApi.ps1",
         "tailwind.config.js",
         "swagger.yaml",
         "vite.config.ts",
         "zodDef.ts",
         "README.md",
-        "src/tests"
+        "src/tests",
+        "src/routes"
     ]
 }

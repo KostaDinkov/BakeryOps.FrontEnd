@@ -57,7 +57,7 @@ export default function RHFDatePicker<T extends FieldValues>({
               hours: renderDigitalClockTimeView,
               minutes: null,
             }}
-            views={["year", "month", "day", "hours", "minutes"]}
+            views={["year", "month", "day", "hours"]}
             openTo="day"
             slotProps={{
               textField: {

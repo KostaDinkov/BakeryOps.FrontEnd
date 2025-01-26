@@ -57,6 +57,7 @@ export default function RHFAutocomplete<T extends { id: string }, TForm extends 
               defaultValue={null}
               options={options}
               inputValue={inputValue}
+              value={options.find(o => o.id === value) || null}
               onInputChange={(_, newValue) => {
                 setInputValue(newValue);
                 // Only update form value if it's not a valid option ID
@@ -91,7 +92,6 @@ export default function RHFAutocomplete<T extends { id: string }, TForm extends 
                 />
               )}
             />
-            
           </div>
         );
       }}

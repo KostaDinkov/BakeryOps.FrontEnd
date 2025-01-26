@@ -16,7 +16,7 @@ import ColumnView, {
 } from "../Pages/Orders/ColumnView/ColumnView";
 import DayView, { DayViewLoader } from "../Pages/Orders/DayView/DayView";
 import OrderForm from "../Pages/Orders/OrderForm/OrderFormController";
-import OrdersHome from "../Pages/Orders/OrdersHome/OrdersHome";
+import OrdersHome from "../Pages/Orders";
 import PrintOrderView, {
   loader as PrintOrderViewLoader,
 } from "../Pages/Orders/PrintOrderView/PrintOrderView";
@@ -29,7 +29,8 @@ import CategoriesPage from "../Pages/Nomenclature/Categories/CategoriesPage";
 import ProductsPage from "../Pages/Nomenclature/Products/ProductsPage";
 import RecipesHomePage from "../Pages/Recipes/RecipesHomePage";
 import DeliveriesHome from "../Pages/Deliveries/DeliveriesHome";
-import OrderFormProvider from "../Pages/Orders/RHFOrderForm/OrderFormProvider";
+import CreateUpdateOrder from "../Pages/Orders/CreateUpdateOrder";
+
 
 export const browserRouter = createBrowserRouter([
   {
@@ -57,11 +58,21 @@ export const browserRouter = createBrowserRouter([
             errorElement: <Error />,
           },
           {
-            path: ":method/:id?",
-            element: <OrderForm />,
+            path: "create/",
+            element: <CreateUpdateOrder />,
             errorElement: <Error />,
+            handle: {
+              crumb: () => <Link to="/orders/create">Нова Поръчка</Link>,
+            },
           },
-          
+          {
+            path:"update/:id",
+            element: <CreateUpdateOrder />,
+            errorElement: <Error />,
+            handle: {
+              crumb: () => <Link to="/orders/update/:id">Редактиране на Поръчка</Link>,
+            },
+          },
           {
             path: "print/:id",
             element: <PrintOrderView />,

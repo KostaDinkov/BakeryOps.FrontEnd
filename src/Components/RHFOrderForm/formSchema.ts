@@ -1,19 +1,14 @@
 import { z } from "zod";
-import { OrderDTO } from "../../../Types/types";
 
-export const orderFormSchema: z.ZodSchema<OrderDTO> = z.object({
+export const orderFormSchema = z.object({
     id: z.string().uuid().default("00000000-0000-0000-0000-000000000000"),
     deliveryDate: z.string().datetime().optional(),
-    clientId: z.string({
-        required_error: "Изберете клиент от падащото меню",
-    }),
-    clientPhone: z.string({required_error:"Телефонът е задължителен"}).min(10, {"message": "Телефонът трябва да е от минимум 10 символа"}).regex(/^\d+$/, {"message": "Телефонът трябва да съдържа само цифри"}),
-    clientName: z.string({required_error:"Името на клиента е задължително"}).min(3, {"message": "Името на клиента трябва да е от минимум 3 символа"}),
-    operatorId: z.string().uuid(),
+    clientId: z.string({}).optional(),
+    clientPhone: z.string().optional().nullable(),
+    clientName: z.string().optional().nullable(),
     isPaid: z.boolean().default(false),
     advancePayment: z.number().positive().optional(),
-    status: z.number().int().default(0),
-    pickupDate: z.string().datetime(),
+    pickupDate: z.string().datetime({offset:true}),
     orderItems: z.array(
         z.object({
             id: z.string().uuid().default("00000000-0000-0000-0000-000000000000"),
@@ -27,10 +22,10 @@ export const orderFormSchema: z.ZodSchema<OrderDTO> = z.object({
             description: z.string().optional(),
             cakeFoto: z.string().optional(),
             cakeTitle: z.string().optional(),
-            itemUnitPrice: z.number().positive(),
+            itemUnitPrice: z.number().positive().optional(),
             isInProgress: z.boolean().default(false),
             isComplete: z.boolean().default(false),
-            
+
         })
     ).nonempty({
         message: "Добавете поне един артикул към поръчката",

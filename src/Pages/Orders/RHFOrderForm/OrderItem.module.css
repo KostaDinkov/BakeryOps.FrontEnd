@@ -1,54 +1,61 @@
-.iconBtnStyle{
 
-    &:hover{
-        background-color:var(--mui-palette-error-main);
-        svg{
-            color:var(--mui-palette-background-default);
-        }
-    }
-    svg{
-        color:var(--color-primary-dark);
-        transition:0.3s;
-    }
 
+.orderItemContainer {
+  display: grid;
+  /* grid-auto-rows: auto; */
+  grid-template-areas:
+    "product delete"
+    "note    delete";
+  gap: var(--gap-small);
+  background-color: rgb(255, 255, 255);
+  padding: 0.5rem 0.5rem 0 0.5rem;
+  border-radius: 5px;
+  align-items: flex-end;
+ 
+  
+  .product {
+    grid-area: product;
+    display: grid;
+    gap: var(--gap-small);
+    grid-template-columns: 4fr 1fr 1fr auto auto;
+    align-items: center;
+    
+  }
+  .note {
+    grid-area: note;
+    width: 90%;
+    justify-self: end;
+    margin-bottom:var(--gap-small)
+  }
+  .delete {
+    align-self:center;
+    grid-area: delete;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  span.checkBox {
+    &:global(.Mui-checked) {
+      background-color: var(--mui-palette-primary-main);
+      color: white;
+      transition: 0.3s;
+    }
+  }
+  .iconBtnStyle {
+    &:hover {
+      background-color: var(--mui-palette-error-main);
+      svg {
+        color: var(--mui-palette-background-default);
+      }
+    }
+    svg {
+      color: var(--color-primary-dark);
+      transition: 0.3s;
+    }
+  }
 }
-
-.orderItemContainer{
-    display:grid;
-    grid-template-areas: 'product delete'
-                         'note    delete';
-    gap:var(--gap-small);
-    .product{
-        grid-area:product;
-        display:grid;
-        gap:var(--gap-small);
-        grid-template-columns: 4fr 1fr 1fr auto auto;
-    }
-    .note{
-        grid-area:note;
-        width:90%;
-        justify-self: end;
-    }
-    .delete{
-        grid-area:delete;
-        display:flex;
-        justify-content:flex-end;
-        align-items:center;
-    }
-    span.checkBox{
-        &:global(.Mui-checked){
-            background-color:var(--mui-palette-primary-main);
-            color:white;
-            transition:0.3s;
-        }
-    }
-   
+.checkBox {
+  height: 2rem;
+  width: 2rem;
+  transition: 0.3s;
 }
-.checkBox{
-    height: 3rem;
-    width: 3rem;
-    align-self: start;
-    transition:0.3s;
-}
-
-

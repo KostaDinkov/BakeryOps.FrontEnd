@@ -1,17 +1,22 @@
-import {
-  SubmitHandler,
-  useFieldArray,
-  useForm,
-} from "react-hook-form";
+// #region IMPORTS
+import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { orderFormSchema, type OrderFormSchemaType } from "./formSchema";
 import RHFAutocomplete from "./RHFAutocomplete";
-import { Button, Stack, TextField } from "@mui/material";
+import {
+  Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  Stack,
+  TextField,
+} from "@mui/material";
 import { ClientDTO, OrderItemDTO, ProductDTO } from "../../../Types/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DevTool } from "@hookform/devtools";
 import OrderItems from "./OrderItem";
 import styles from "./RHFOrderForm.module.css";
 import RFHDatePicker from "./RHFDatePicker";
+// #endregion
 
 export default function RHFOrderForm({
   products,
@@ -40,60 +45,79 @@ export default function RHFOrderForm({
     console.log("Submitted data:");
     console.log(data);
   };
+
   return (
-    <div>
-      <form
-        onSubmit={handleSubmit(onSubmit, (errors) => {
-          console.log("Validation errors", errors);
-          console.log(getValues());
-        })}
-      >
-        <div className={styles.formMetaData}>
-          <RHFAutocomplete<ClientDTO, OrderFormSchemaType>
-            name="clientId"
-            label="Име на клиент"
-            getOptionLabel={(option) => option.name || ""}
-            options={clients}
-            control={control}
-            freeText
-          />
-          <TextField
-            {...register("clientPhone")}
-            error={!!formState.errors.clientPhone}
-            helperText={formState.errors.clientPhone?.message}
-            label="Телефон на клиент"
-          />
-          <RFHDatePicker control={control} name="pickupDate"/>
-        </div>
-        <Stack direction="column" spacing={2}>
+    <form
+	  className={styles.formContainer}
+      onSubmit={handleSubmit(onSubmit, (errors) => {
+        console.log("Validation errors", errors);
+        console.log(getValues());
+      })}
+    >
+      {/* //--Form meta data */}
+      <div className={styles.formMetaData}>
+        <RHFAutocomplete<ClientDTO, OrderFormSchemaType>
+          name="clientId"
+          label="Име на клиент"
+          getOptionLabel={(option) => option.name || ""}
+          options={clients}
+          control={control}
+          freeText
+        />
+
+        <TextField
+          {...register("clientPhone")}
+          error={!!formState.errors.clientPhone}
+          helperText={formState.errors.clientPhone?.message}
+          label="Телефон на клиент"
+        />
+        <RFHDatePicker control={control} name="pickupDate" />
+        <FormControlLabel
+          control={<Checkbox {...register("isPaid")} />}
+          label="Платена?"
+        />
+        <TextField
+          {...register("advancePaiment", { valueAsNumber: true })}
+          label="Капаро"
+          type={"number"}
+        />
+      </div>
+
+      {/* //--Order Items */}
+      <Stack direction="column" spacing={1}>
         {fields.map((field, index) => (
-          <div key={field.id} >
-           <OrderItems
-             remove={ remove }
-             useFormMethods={{ control, register, formState }}
-             products={products}
-             index={index}
-             field={field}
-             />
+          <div key={field.id}>
+            <OrderItems
+              remove={remove}
+              useFormMethods={{ control, register, formState }}
+              products={products}
+              index={index}
+              field={field}
+            />
           </div>
         ))}
-        </Stack>
-        
-        <div>
-          <Button
-            type="button"
-            variant="outlined"
-            onClick={() => {
-              append({ productId: "", productAmount: 0 });
-            }}
-          >
-            Добави Продукт
+      </Stack>
+
+      {/* //--Footer */}
+      <div className={styles.footerRow}>
+        <Button
+          type="button"
+          variant="outlined"
+          onClick={() => {
+            append({ productId: "", productAmount: 0 });
+          }}
+        >
+          Добави Продукт
+        </Button>
+        <div className={styles.saveCancel}>
+          <Button type="button" variant="outlined" onClick={() => {}}>
+            Откажи
           </Button>
-          <Button  type="submit" variant="contained">Запази Поръчката</Button>
+          <Button type="submit" variant="contained">
+            Запази Поръчката
+          </Button>
         </div>
-      </form>
-      <DevTool control={control} />
-      
-    </div>
+      </div>
+    </form>
   );
 }

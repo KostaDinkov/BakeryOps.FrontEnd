@@ -1,3 +1,4 @@
+// #region Imports
 import {
   Button,
   Checkbox,
@@ -20,6 +21,7 @@ import { type OrderFormSchemaType } from "./formSchema";
 import { useState } from "react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import styles from "./OrderItem.module.css";
+// #endregion
 
 export default function OrderItems({
   remove,
@@ -55,9 +57,12 @@ export default function OrderItems({
 
   return (
     <div className={styles.orderItemContainer}>
+      
       <div className={styles.product}>
+        {/* //--Product Select  */}
         <RHFAutocomplete
           sx={{ flexGrow: "1" }}
+          size="small"
           control={useFormMethods.control}
           label="Изберете продукт"
           name={`orderItems.${index}.productId`}
@@ -68,25 +73,32 @@ export default function OrderItems({
           getOptionLabel={(option: ProductDTO) => option.name}
           options={products}
         />
+
+        {/* //--Product Quantity  */}
         <TextField
           label="Количество"
           {...useFormMethods.register(`orderItems.${index}.productAmount`, {
             valueAsNumber: true,
           })}
+          size="small"
           error={
             !!useFormMethods.formState.errors.orderItems?.[index]?.productAmount
           }
         />
+
+        {/* //--Product Cake Fields  */}
         {isCakeCategory && (
           <>
             <TextField
               label="Фото №"
+              size="small"
               {...useFormMethods.register(`orderItems.${index}.cakeFoto`)}
               error={
                 !!useFormMethods.formState.errors.orderItems?.[index]?.cakeFoto
               }
             />
             <TextField
+              size="small"
               label="Надпис на тортата"
               {...useFormMethods.register(`orderItems.${index}.cakeTitle`)}
               error={
@@ -96,6 +108,7 @@ export default function OrderItems({
           </>
         )}
 
+        {/* //--NOTE Checkbox  */}
         <Checkbox
           className={styles.checkBox}
           // sx={{"&.Mui-checked": {color: "secondary.main", backgroundColor:"green"}}}
@@ -103,11 +116,14 @@ export default function OrderItems({
           checkedIcon={<EditNoteIcon />}
           checked={showNote}
           onChange={() => setShowNote(!showNote)}
-          size="large"
+          size="medium"
         />
       </div>
+
+      {/* //--Product Note */}
       {showNote && (
         <TextField
+        size="small"
           className={styles.note}
           {...useFormMethods.register(`orderItems.${index}.description`)}
           label="Бележка"
@@ -116,9 +132,11 @@ export default function OrderItems({
           }
         />
       )}
+
+      {/* //--Delete Order Item Btn */}
       <div className={styles.delete}>
         <IconButton
-        size="large"
+          size="large"
           className={styles.iconBtnStyle}
           type="button"
           onClick={() => remove(index)}

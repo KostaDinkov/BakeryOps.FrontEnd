@@ -34,7 +34,7 @@ export default function OrderStripe({ order }: { order: OrderDTO }) {
             </Link>
             <Link
               data-test="Order-EditLink"
-              to={`/orders/put/${order.id}`}
+              to={`/orders/update/${order.id}`}
             >
               <EditIcon
                 fontSize="medium"

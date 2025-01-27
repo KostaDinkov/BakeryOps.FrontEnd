@@ -648,7 +648,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Orders/{id}": {
+    "/api/Orders/GetOrder/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -660,7 +660,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    id: number;
+                    id: string;
                 };
                 cookie?: never;
             };
@@ -675,59 +675,15 @@ export interface paths {
                 };
             };
         };
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["OrderDTO"];
-                    "text/json": components["schemas"]["OrderDTO"];
-                    "application/*+json": components["schemas"]["OrderDTO"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
+        put?: never;
         post?: never;
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/Orders": {
+    "/api/Orders/GetOrdersBetween": {
         parameters: {
             query?: never;
             header?: never;
@@ -756,6 +712,55 @@ export interface paths {
             };
         };
         put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Orders/GetOrders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Orders/CreateOrder": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
         post: {
             parameters: {
                 query?: never;
@@ -781,6 +786,82 @@ export interface paths {
             };
         };
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Orders/UpdateOrder/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["OrderDTO"];
+                    "text/json": components["schemas"]["OrderDTO"];
+                    "application/*+json": components["schemas"]["OrderDTO"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Orders/DeleteOrder/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
         options?: never;
         head?: never;
         patch?: never;
@@ -1818,16 +1899,16 @@ export interface components {
             /** Format: int32 */
             operatorId?: number | null;
             /** Format: date-time */
-            pickupDate?: string | null;
+            pickupDate?: string;
             /** Format: date-time */
-            createdDate?: string | null;
+            createdDate?: string;
             clientName?: string | null;
             clientPhone?: string | null;
             /** Format: uuid */
             clientId?: string | null;
-            isPaid?: boolean | null;
+            isPaid?: boolean;
             /** Format: double */
-            advancePaiment?: number | null;
+            advancePaiment?: number;
             status?: components["schemas"]["Status"];
             orderItems?: components["schemas"]["OrderItemDTO"][] | null;
         };
@@ -1891,7 +1972,7 @@ export interface components {
          * Format: int32
          * @enum {integer}
          */
-        Status: 0 | 1;
+        Status: 0 | 1 | 2;
         SubRecipeDto: {
             /** Format: uuid */
             subRecipeId?: string;

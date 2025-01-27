@@ -70,7 +70,7 @@ export const NewUserDTO = z.object({
 });
 
 export type Status = z.infer<typeof Status>;
-export const Status = z.union([z.literal(0), z.literal(1)]);
+export const Status = z.union([z.literal(0), z.literal(1), z.literal(2)]);
 
 export type OrderItemDTO = z.infer<typeof OrderItemDTO>;
 export const OrderItemDTO = z.object({
@@ -88,13 +88,13 @@ export type OrderDTO = z.infer<typeof OrderDTO>;
 export const OrderDTO = z.object({
   id: z.string().optional(),
   operatorId: z.union([z.number(), z.null()]).optional(),
-  pickupDate: z.union([z.string(), z.null()]).optional(),
-  createdDate: z.union([z.string(), z.null()]).optional(),
+  pickupDate: z.string().optional(),
+  createdDate: z.string().optional(),
   clientName: z.union([z.string(), z.null()]).optional(),
   clientPhone: z.union([z.string(), z.null()]).optional(),
   clientId: z.union([z.string(), z.null()]).optional(),
-  isPaid: z.union([z.boolean(), z.null()]).optional(),
-  advancePaiment: z.union([z.number(), z.null()]).optional(),
+  isPaid: z.boolean().optional(),
+  advancePaiment: z.number().optional(),
   status: Status.optional(),
   orderItems: z.union([z.array(OrderItemDTO), z.null()]).optional(),
 });
@@ -383,50 +383,23 @@ export const delete_ApiMaterialsDeleteMaterialId = {
   response: z.unknown(),
 };
 
-export type get_ApiOrdersId = typeof get_ApiOrdersId;
-export const get_ApiOrdersId = {
+export type get_ApiOrdersGetOrderId = typeof get_ApiOrdersGetOrderId;
+export const get_ApiOrdersGetOrderId = {
   method: z.literal("GET"),
-  path: z.literal("/api/Orders/{id}"),
+  path: z.literal("/api/Orders/GetOrder/{id}"),
   requestFormat: z.literal("json"),
   parameters: z.object({
     path: z.object({
-      id: z.number(),
+      id: z.string(),
     }),
   }),
   response: z.unknown(),
 };
 
-export type put_ApiOrdersId = typeof put_ApiOrdersId;
-export const put_ApiOrdersId = {
-  method: z.literal("PUT"),
-  path: z.literal("/api/Orders/{id}"),
-  requestFormat: z.literal("json"),
-  parameters: z.object({
-    path: z.object({
-      id: z.number(),
-    }),
-    body: OrderDTO,
-  }),
-  response: z.unknown(),
-};
-
-export type delete_ApiOrdersId = typeof delete_ApiOrdersId;
-export const delete_ApiOrdersId = {
-  method: z.literal("DELETE"),
-  path: z.literal("/api/Orders/{id}"),
-  requestFormat: z.literal("json"),
-  parameters: z.object({
-    path: z.object({
-      id: z.number(),
-    }),
-  }),
-  response: z.unknown(),
-};
-
-export type get_ApiOrders = typeof get_ApiOrders;
-export const get_ApiOrders = {
+export type get_ApiOrdersGetOrdersBetween = typeof get_ApiOrdersGetOrdersBetween;
+export const get_ApiOrdersGetOrdersBetween = {
   method: z.literal("GET"),
-  path: z.literal("/api/Orders"),
+  path: z.literal("/api/Orders/GetOrdersBetween"),
   requestFormat: z.literal("json"),
   parameters: z.object({
     query: z.object({
@@ -437,13 +410,49 @@ export const get_ApiOrders = {
   response: z.unknown(),
 };
 
-export type post_ApiOrders = typeof post_ApiOrders;
-export const post_ApiOrders = {
+export type get_ApiOrdersGetOrders = typeof get_ApiOrdersGetOrders;
+export const get_ApiOrdersGetOrders = {
+  method: z.literal("GET"),
+  path: z.literal("/api/Orders/GetOrders"),
+  requestFormat: z.literal("json"),
+  parameters: z.never(),
+  response: z.unknown(),
+};
+
+export type post_ApiOrdersCreateOrder = typeof post_ApiOrdersCreateOrder;
+export const post_ApiOrdersCreateOrder = {
   method: z.literal("POST"),
-  path: z.literal("/api/Orders"),
+  path: z.literal("/api/Orders/CreateOrder"),
   requestFormat: z.literal("json"),
   parameters: z.object({
     body: OrderDTO,
+  }),
+  response: z.unknown(),
+};
+
+export type put_ApiOrdersUpdateOrderId = typeof put_ApiOrdersUpdateOrderId;
+export const put_ApiOrdersUpdateOrderId = {
+  method: z.literal("PUT"),
+  path: z.literal("/api/Orders/UpdateOrder/{id}"),
+  requestFormat: z.literal("json"),
+  parameters: z.object({
+    path: z.object({
+      id: z.number(),
+    }),
+    body: OrderDTO,
+  }),
+  response: z.unknown(),
+};
+
+export type delete_ApiOrdersDeleteOrderId = typeof delete_ApiOrdersDeleteOrderId;
+export const delete_ApiOrdersDeleteOrderId = {
+  method: z.literal("DELETE"),
+  path: z.literal("/api/Orders/DeleteOrder/{id}"),
+  requestFormat: z.literal("json"),
+  parameters: z.object({
+    path: z.object({
+      id: z.string(),
+    }),
   }),
   response: z.unknown(),
 };
@@ -751,8 +760,9 @@ export const EndpointByMethod = {
     "/api/Deliveries/GetAll": get_ApiDeliveriesGetAll,
     "/api/Materials/GetMaterials": get_ApiMaterialsGetMaterials,
     "/api/Materials/GetMaterial/{id}": get_ApiMaterialsGetMaterialId,
-    "/api/Orders/{id}": get_ApiOrdersId,
-    "/api/Orders": get_ApiOrders,
+    "/api/Orders/GetOrder/{id}": get_ApiOrdersGetOrderId,
+    "/api/Orders/GetOrdersBetween": get_ApiOrdersGetOrdersBetween,
+    "/api/Orders/GetOrders": get_ApiOrdersGetOrders,
     "/api/Products/GetAllProducts": get_ApiProductsGetAllProducts,
     "/api/Products/GetProduct/{id}": get_ApiProductsGetProductId,
     "/api/Products/SyncDatabase/syncDatabase": get_ApiProductsSyncDatabasesyncDatabase,
@@ -771,7 +781,7 @@ export const EndpointByMethod = {
     "/api/Clients": post_ApiClients,
     "/api/Deliveries/Create": post_ApiDeliveriesCreate,
     "/api/Materials/AddMaterial": post_ApiMaterialsAddMaterial,
-    "/api/Orders": post_ApiOrders,
+    "/api/Orders/CreateOrder": post_ApiOrdersCreateOrder,
     "/api/Products/AddProduct": post_ApiProductsAddProduct,
     "/api/Recipes/AddRecipe": post_ApiRecipesAddRecipe,
     "/api/Security/GetToken": post_ApiSecurityGetToken,
@@ -784,7 +794,7 @@ export const EndpointByMethod = {
     "/api/Clients": put_ApiClients,
     "/api/Deliveries/Update": put_ApiDeliveriesUpdate,
     "/api/Materials/UpdateMaterial": put_ApiMaterialsUpdateMaterial,
-    "/api/Orders/{id}": put_ApiOrdersId,
+    "/api/Orders/UpdateOrder/{id}": put_ApiOrdersUpdateOrderId,
     "/api/Products/UpdateProduct/{id}": put_ApiProductsUpdateProductId,
     "/api/Recipes/UpdateRecipe": put_ApiRecipesUpdateRecipe,
     "/api/Users/UpdateUser": put_ApiUsersUpdateUser,
@@ -795,7 +805,7 @@ export const EndpointByMethod = {
     "/api/Clients/{id}": delete_ApiClientsId,
     "/api/Deliveries/Delete/{id}": delete_ApiDeliveriesDeleteId,
     "/api/Materials/DeleteMaterial/{id}": delete_ApiMaterialsDeleteMaterialId,
-    "/api/Orders/{id}": delete_ApiOrdersId,
+    "/api/Orders/DeleteOrder/{id}": delete_ApiOrdersDeleteOrderId,
     "/api/Products/DeleteProduct/{id}": delete_ApiProductsDeleteProductId,
     "/api/Recipes/DeleteRecipe/{id}": delete_ApiRecipesDeleteRecipeId,
     "/api/Users/DeleteUser/{id}": delete_ApiUsersDeleteUserId,

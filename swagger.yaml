@@ -284,7 +284,7 @@ paths:
       responses:
         '200':
           description: OK
-  '/api/Orders/{id}':
+  '/api/Orders/GetOrder/{id}':
     get:
       tags:
         - Orders
@@ -293,11 +293,56 @@ paths:
           in: path
           required: true
           schema:
-            type: integer
-            format: int32
+            type: string
+            format: uuid
       responses:
         '200':
           description: OK
+  /api/Orders/GetOrdersBetween:
+    get:
+      tags:
+        - Orders
+      parameters:
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: OK
+  /api/Orders/GetOrders:
+    get:
+      tags:
+        - Orders
+      responses:
+        '200':
+          description: OK
+  /api/Orders/CreateOrder:
+    post:
+      tags:
+        - Orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderDTO'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/OrderDTO'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/OrderDTO'
+      responses:
+        '200':
+          description: OK
+  '/api/Orders/UpdateOrder/{id}':
     put:
       tags:
         - Orders
@@ -322,6 +367,7 @@ paths:
       responses:
         '200':
           description: OK
+  '/api/Orders/DeleteOrder/{id}':
     delete:
       tags:
         - Orders
@@ -330,44 +376,8 @@ paths:
           in: path
           required: true
           schema:
-            type: integer
-            format: int32
-      responses:
-        '200':
-          description: OK
-  /api/Orders:
-    get:
-      tags:
-        - Orders
-      parameters:
-        - name: startDate
-          in: query
-          required: true
-          schema:
             type: string
-            format: date-time
-        - name: endDate
-          in: query
-          schema:
-            type: string
-            format: date-time
-      responses:
-        '200':
-          description: OK
-    post:
-      tags:
-        - Orders
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/OrderDTO'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/OrderDTO'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/OrderDTO'
+            format: uuid
       responses:
         '200':
           description: OK
@@ -937,11 +947,9 @@ components:
         pickupDate:
           type: string
           format: date-time
-          nullable: true
         createdDate:
           type: string
           format: date-time
-          nullable: true
         clientName:
           type: string
           nullable: true
@@ -954,11 +962,9 @@ components:
           nullable: true
         isPaid:
           type: boolean
-          nullable: true
         advancePaiment:
           type: number
           format: double
-          nullable: true
         status:
           $ref: '#/components/schemas/Status'
         orderItems:
@@ -1083,6 +1089,7 @@ components:
       enum:
         - 0
         - 1
+        - 2
       type: integer
       format: int32
     SubRecipeDto:

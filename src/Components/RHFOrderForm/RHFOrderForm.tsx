@@ -96,9 +96,9 @@ export default function RHFOrderForm({
       orderItems: data.orderItems?.map((item: OrderItemDTO) => ({
         productId: item.productId,
         productAmount: item.productAmount,
-        description: item.description,
-        cakeFoto: item.cakeFoto,
-        cakeTitle: item.cakeTitle,
+        description: item.description ||null,
+        cakeFoto: item.cakeFoto || null,
+        cakeTitle: item.cakeTitle || null,
         isInProgress: false,
         isComplete: false,
         itemUnitPrice: getSpecialPrice(

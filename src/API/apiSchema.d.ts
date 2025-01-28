@@ -354,6 +354,41 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/Deliveries/GetById": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    id?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/Deliveries/Create": {
         parameters: {
             query?: never;
@@ -791,7 +826,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Orders/UpdateOrder/{id}": {
+    "/api/Orders/UpdateOrder": {
         parameters: {
             query?: never;
             header?: never;
@@ -803,9 +838,7 @@ export interface paths {
             parameters: {
                 query?: never;
                 header?: never;
-                path: {
-                    id: number;
-                };
+                path?: never;
                 cookie?: never;
             };
             requestBody?: {
@@ -1665,7 +1698,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Vendors/GetVendor": {
+    "/api/Vendors/GetVendor/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -1674,11 +1707,11 @@ export interface paths {
         };
         get: {
             parameters: {
-                query?: {
-                    id?: string;
-                };
+                query?: never;
                 header?: never;
-                path?: never;
+                path: {
+                    id: string;
+                };
                 cookie?: never;
             };
             requestBody?: never;

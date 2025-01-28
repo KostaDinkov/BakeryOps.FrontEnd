@@ -163,6 +163,19 @@ paths:
       responses:
         '200':
           description: OK
+  /api/Deliveries/GetById:
+    get:
+      tags:
+        - Deliveries
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
   /api/Deliveries/Create:
     post:
       tags:
@@ -342,17 +355,10 @@ paths:
       responses:
         '200':
           description: OK
-  '/api/Orders/UpdateOrder/{id}':
+  /api/Orders/UpdateOrder:
     put:
       tags:
         - Orders
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int32
       requestBody:
         content:
           application/json:
@@ -698,13 +704,14 @@ paths:
       responses:
         '200':
           description: OK
-  /api/Vendors/GetVendor:
+  '/api/Vendors/GetVendor/{id}':
     get:
       tags:
         - Vendors
       parameters:
         - name: id
-          in: query
+          in: path
+          required: true
           schema:
             type: string
             format: uuid

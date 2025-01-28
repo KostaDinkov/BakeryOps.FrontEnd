@@ -291,6 +291,19 @@ export const get_ApiDeliveriesGetAll = {
   response: z.unknown(),
 };
 
+export type get_ApiDeliveriesGetById = typeof get_ApiDeliveriesGetById;
+export const get_ApiDeliveriesGetById = {
+  method: z.literal("GET"),
+  path: z.literal("/api/Deliveries/GetById"),
+  requestFormat: z.literal("json"),
+  parameters: z.object({
+    query: z.object({
+      id: z.string().optional(),
+    }),
+  }),
+  response: z.unknown(),
+};
+
 export type post_ApiDeliveriesCreate = typeof post_ApiDeliveriesCreate;
 export const post_ApiDeliveriesCreate = {
   method: z.literal("POST"),
@@ -430,15 +443,12 @@ export const post_ApiOrdersCreateOrder = {
   response: z.unknown(),
 };
 
-export type put_ApiOrdersUpdateOrderId = typeof put_ApiOrdersUpdateOrderId;
-export const put_ApiOrdersUpdateOrderId = {
+export type put_ApiOrdersUpdateOrder = typeof put_ApiOrdersUpdateOrder;
+export const put_ApiOrdersUpdateOrder = {
   method: z.literal("PUT"),
-  path: z.literal("/api/Orders/UpdateOrder/{id}"),
+  path: z.literal("/api/Orders/UpdateOrder"),
   requestFormat: z.literal("json"),
   parameters: z.object({
-    path: z.object({
-      id: z.number(),
-    }),
     body: OrderDTO,
   }),
   response: z.unknown(),
@@ -702,14 +712,14 @@ export const get_ApiVendorsGetVendors = {
   response: z.unknown(),
 };
 
-export type get_ApiVendorsGetVendor = typeof get_ApiVendorsGetVendor;
-export const get_ApiVendorsGetVendor = {
+export type get_ApiVendorsGetVendorId = typeof get_ApiVendorsGetVendorId;
+export const get_ApiVendorsGetVendorId = {
   method: z.literal("GET"),
-  path: z.literal("/api/Vendors/GetVendor"),
+  path: z.literal("/api/Vendors/GetVendor/{id}"),
   requestFormat: z.literal("json"),
   parameters: z.object({
-    query: z.object({
-      id: z.string().optional(),
+    path: z.object({
+      id: z.string(),
     }),
   }),
   response: z.unknown(),
@@ -758,6 +768,7 @@ export const EndpointByMethod = {
     "/api/Clients": get_ApiClients,
     "/api/Clients/{id}": get_ApiClientsId,
     "/api/Deliveries/GetAll": get_ApiDeliveriesGetAll,
+    "/api/Deliveries/GetById": get_ApiDeliveriesGetById,
     "/api/Materials/GetMaterials": get_ApiMaterialsGetMaterials,
     "/api/Materials/GetMaterial/{id}": get_ApiMaterialsGetMaterialId,
     "/api/Orders/GetOrder/{id}": get_ApiOrdersGetOrderId,
@@ -774,7 +785,7 @@ export const EndpointByMethod = {
     "/api/Users/GetUserByUsername/{userName}": get_ApiUsersGetUserByUsernameUserName,
     "/api/Users/GetUserById/{userId}": get_ApiUsersGetUserByIdUserId,
     "/api/Vendors/GetVendors": get_ApiVendorsGetVendors,
-    "/api/Vendors/GetVendor": get_ApiVendorsGetVendor,
+    "/api/Vendors/GetVendor/{id}": get_ApiVendorsGetVendorId,
   },
   post: {
     "/api/Categories/AddCategory": post_ApiCategoriesAddCategory,
@@ -794,7 +805,7 @@ export const EndpointByMethod = {
     "/api/Clients": put_ApiClients,
     "/api/Deliveries/Update": put_ApiDeliveriesUpdate,
     "/api/Materials/UpdateMaterial": put_ApiMaterialsUpdateMaterial,
-    "/api/Orders/UpdateOrder/{id}": put_ApiOrdersUpdateOrderId,
+    "/api/Orders/UpdateOrder": put_ApiOrdersUpdateOrder,
     "/api/Products/UpdateProduct/{id}": put_ApiProductsUpdateProductId,
     "/api/Recipes/UpdateRecipe": put_ApiRecipesUpdateRecipe,
     "/api/Users/UpdateUser": put_ApiUsersUpdateUser,

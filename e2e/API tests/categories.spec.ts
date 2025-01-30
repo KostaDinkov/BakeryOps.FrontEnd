@@ -3,6 +3,7 @@ import { endpoint, testCrudOperations } from './utils/crudTestUtil';
 import { createTestCategory, testCategory } from './utils/testData';
 
 test.describe('Categories Api Tests', () => {
+  
   test('GET categories should return status 200(Ok)', async ({request}) => {
     const response = await request.get(endpoint('/api/Categories/GetCategories'));
     expect(response.status()).toBe(200);

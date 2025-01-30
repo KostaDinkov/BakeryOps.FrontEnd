@@ -89,7 +89,6 @@ export const OrderDTO = z.object({
   id: z.string().optional(),
   operatorId: z.union([z.number(), z.null()]).optional(),
   pickupDate: z.string().optional(),
-  createdDate: z.string().optional(),
   clientName: z.union([z.string(), z.null()]).optional(),
   clientPhone: z.union([z.string(), z.null()]).optional(),
   clientId: z.union([z.string(), z.null()]).optional(),
@@ -291,14 +290,14 @@ export const get_ApiDeliveriesGetAll = {
   response: z.unknown(),
 };
 
-export type get_ApiDeliveriesGetById = typeof get_ApiDeliveriesGetById;
-export const get_ApiDeliveriesGetById = {
+export type get_ApiDeliveriesGetByIdId = typeof get_ApiDeliveriesGetByIdId;
+export const get_ApiDeliveriesGetByIdId = {
   method: z.literal("GET"),
-  path: z.literal("/api/Deliveries/GetById"),
+  path: z.literal("/api/Deliveries/GetById/{id}"),
   requestFormat: z.literal("json"),
   parameters: z.object({
-    query: z.object({
-      id: z.string().optional(),
+    path: z.object({
+      id: z.string(),
     }),
   }),
   response: z.unknown(),
@@ -768,7 +767,7 @@ export const EndpointByMethod = {
     "/api/Clients": get_ApiClients,
     "/api/Clients/{id}": get_ApiClientsId,
     "/api/Deliveries/GetAll": get_ApiDeliveriesGetAll,
-    "/api/Deliveries/GetById": get_ApiDeliveriesGetById,
+    "/api/Deliveries/GetById/{id}": get_ApiDeliveriesGetByIdId,
     "/api/Materials/GetMaterials": get_ApiMaterialsGetMaterials,
     "/api/Materials/GetMaterial/{id}": get_ApiMaterialsGetMaterialId,
     "/api/Orders/GetOrder/{id}": get_ApiOrdersGetOrderId,

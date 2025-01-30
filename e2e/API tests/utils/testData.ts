@@ -42,10 +42,10 @@ export async function createTestCategory(
   request: APIRequestContext,
   cleanUpQueue: string[]
 ): Promise<CategoryDTO> {
-  const response = await request.post(endpoint("/api/Categories/AddCategory"), {
+  
+    const createdCategory:CategoryDTO = await (await request.post(endpoint("/api/Categories/AddCategory"), {
     data: testCategory,
-  });
-  const createdCategory = (await response.json()) as CategoryDTO;
+  })).json();
 
   cleanUpQueue.push(
       endpoint(`/api/Categories/DeleteCategory/{id}`).replace(
@@ -147,7 +147,7 @@ export async function createTestOrder(
 
 export async function createTestDelivery(
   request: APIRequestContext,
-  cleanUpQueue: string[]
+  cleanUpStack: string[]
 ): Promise<DeliveryDTO> {
   const testDelivery: DeliveryDTO = {
     deliveryDate: "2025-01-01T20:00:00.571Z",
@@ -165,6 +165,7 @@ export async function createTestDelivery(
         vat: 20,
         expirationDate: "2025-12-31",
         lotNumber: "LOT001",
+        notes: "Test delivery item",
       },
     ],
     total: 50,
@@ -172,11 +173,12 @@ export async function createTestDelivery(
     totalWithTax: 60,
   };
 
-  const createdVendor = await createTestVendor(request, cleanUpQueue);
+  const createdVendor = await createTestVendor(request, cleanUpStack);
   testDelivery.vendorId = createdVendor.id;
   testDelivery.vendorName = createdVendor.name;
 
-  const createdMaterial = await createTestMaterial(request, cleanUpQueue);
+  const createdMaterial = await createTestMaterial(request, cleanUpStack);
+  
   testDelivery.items[0].materialId = createdMaterial.id;
   testDelivery.items[0].materialName = createdMaterial.name;
   testDelivery.items[0].materialUnit = createdMaterial.unitId;
@@ -186,6 +188,6 @@ export async function createTestDelivery(
   });
   const createdDelivery = (await response.json()) as DeliveryDTO;
 
-  cleanUpQueue.push(endpoint(`/api/Deliveries/Delete/{id}`).replace("{id}", createdDelivery.id));
+  cleanUpStack.push(endpoint(`/api/Deliveries/Delete/{id}`).replace("{id}", createdDelivery.id));
   return createdDelivery;
 }

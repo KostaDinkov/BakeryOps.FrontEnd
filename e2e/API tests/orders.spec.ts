@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { paths } from "../../src/API/apiSchema";
 import { OrderDTO } from "../../src/Types/types";
 import { endpoint, testCrudOperations } from "./utils/crudTestUtil";
-import { createTestOrder, testOrder } from "./utils/testData";
+import { createTestOrder } from "./utils/testData";
 
 test.describe("Orders Api Tests", () => {
   test("GET orders should return status 200(Ok)", async ({ request }) => {
@@ -11,8 +11,9 @@ test.describe("Orders Api Tests", () => {
   });
 
   test("should perform CRUD operations on orders", async ({ request }) => {
-    const cleanUpQueue = [];
-    const testOrder = await createTestOrder(request, cleanUpQueue);
+    const cleanUpStack = [];
+    const testOrder = await createTestOrder(request, cleanUpStack);
+    
     await testCrudOperations(request, {
       endpoints: {
         getAll: "/api/Orders/GetOrders",
@@ -26,8 +27,8 @@ test.describe("Orders Api Tests", () => {
         clientName: "Updated Test Client",
       },
     });
-    await Promise.all(
-      cleanUpQueue.map(endpoint => request.delete(endpoint))
-    );
+    for (const endpoint of [...cleanUpStack].reverse()) {
+      await request.delete(endpoint);
+    }
   });
 });

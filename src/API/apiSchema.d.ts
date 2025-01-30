@@ -354,7 +354,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Deliveries/GetById": {
+    "/api/Deliveries/GetById/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -363,11 +363,11 @@ export interface paths {
         };
         get: {
             parameters: {
-                query?: {
-                    id?: string;
-                };
+                query?: never;
                 header?: never;
-                path?: never;
+                path: {
+                    id: string;
+                };
                 cookie?: never;
             };
             requestBody?: never;
@@ -1933,8 +1933,6 @@ export interface components {
             operatorId?: number | null;
             /** Format: date-time */
             pickupDate?: string;
-            /** Format: date-time */
-            createdDate?: string;
             clientName?: string | null;
             clientPhone?: string | null;
             /** Format: uuid */

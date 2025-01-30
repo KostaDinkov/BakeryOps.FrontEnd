@@ -163,13 +163,14 @@ paths:
       responses:
         '200':
           description: OK
-  /api/Deliveries/GetById:
+  '/api/Deliveries/GetById/{id}':
     get:
       tags:
         - Deliveries
       parameters:
         - name: id
-          in: query
+          in: path
+          required: true
           schema:
             type: string
             format: uuid
@@ -952,9 +953,6 @@ components:
           format: int32
           nullable: true
         pickupDate:
-          type: string
-          format: date-time
-        createdDate:
           type: string
           format: date-time
         clientName:

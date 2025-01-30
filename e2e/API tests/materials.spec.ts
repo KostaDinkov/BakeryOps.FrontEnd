@@ -1,6 +1,4 @@
 import { test, expect } from "@playwright/test";
-import { paths } from "../../src/API/apiSchema";
-import { MaterialDTO } from "../../src/Types/types";
 import { endpoint, testCrudOperations } from "./utils/crudTestUtil";
 import { createTestMaterial } from "./utils/testData";
 
@@ -12,8 +10,8 @@ test.describe("Materials Api Tests", () => {
 
   test("should perform CRUD operations on materials", async ({ request }) => {
     // Create test category first
-    let cleanUpQueue = [];
-    const testMaterial = await createTestMaterial(request, cleanUpQueue);
+    let cleanUpStack = [];
+    const testMaterial = await createTestMaterial(request, cleanUpStack);
 
     expect(testMaterial).toBeDefined();
 
@@ -32,8 +30,8 @@ test.describe("Materials Api Tests", () => {
     });
 
     // Clean up - using Promise.all to properly handle async operations
-    await Promise.all(
-      cleanUpQueue.map(endpoint => request.delete(endpoint))
-    );
+    for (const endpoint of [...cleanUpStack].reverse()) {
+      await request.delete(endpoint);
+    }
   });
 });

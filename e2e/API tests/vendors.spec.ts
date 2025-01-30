@@ -10,8 +10,8 @@ test.describe('Vendors Api Tests', () => {
 
   test('should perform CRUD operations on vendors', async ({request}) => {
 
-    const cleanUpQueue = [];
-    const testVendor = await createTestVendor(request, cleanUpQueue);
+    const cleanUpStack = [];
+    const testVendor = await createTestVendor(request, cleanUpStack);
     expect(testVendor).toBeDefined();
 
     await testCrudOperations(request, {
@@ -29,8 +29,8 @@ test.describe('Vendors Api Tests', () => {
       },
       deleteStatus: 204
     });
-    await Promise.all(
-        cleanUpQueue.map(endpoint => request.delete(endpoint))
-      );
+    for (const endpoint of [...cleanUpStack].reverse()) {
+        await request.delete(endpoint);
+      }
   });
 });

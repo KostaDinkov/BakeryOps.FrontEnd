@@ -1,12 +1,13 @@
-import * as React from 'react';
+
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import DatePicker, { registerLocale } from "react-datepicker";
 import { bg } from "date-fns/locale";
 import  "./CalendarModal.css";
 import {formatISO} from 'date-fns';
 import {useNavigate} from "react-router-dom";
+import { DateCalendar, DatePicker } from '@mui/x-date-pickers';
+import { background } from 'storybook/internal/theming';
+
 
 const style = {
   position: 'absolute',
@@ -16,12 +17,14 @@ const style = {
   width: 400,
   p: 4,
   textAlign:"center",
+  background: "white",
+  borderRadius: "10px",
 };
 
 export default function CalendarModal({open, setOpen}) {
   
   const handleClose = () => setOpen(false);
-  registerLocale("bg", bg);
+  //registerLocale("bg", bg);
   const navigate = useNavigate();
 
   const handleOnCalendarChange = (date)=>{
@@ -31,8 +34,7 @@ export default function CalendarModal({open, setOpen}) {
   }
 
   return (
-    <div>
-      
+
       <Modal
         open={open}
         onClose={handleClose}
@@ -40,10 +42,9 @@ export default function CalendarModal({open, setOpen}) {
         aria-describedby="modal-modal-description"
       >
         <Box id="calendarBox" sx={style}>
-          
-          <DatePicker inline locale={bg} onChange={handleOnCalendarChange}/>
+          <DateCalendar    onChange={handleOnCalendarChange}/>
         </Box>
       </Modal>
-    </div>
+    
   );
 }

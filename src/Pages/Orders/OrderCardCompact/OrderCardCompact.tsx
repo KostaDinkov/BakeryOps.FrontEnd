@@ -2,7 +2,7 @@ import styles from "./OrderCardCompact.module.scss";
 import OrderItem from "./OrderItemCompact";
 import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
-import OrderDTO from "../../../Types/OrderDTO";
+import {OrderDTO} from "../../../Types/types";
 import { format } from "date-fns";
 import PrintIcon from "@mui/icons-material/Print";
 

@@ -1,4 +1,4 @@
-import OrderDTO from "../../../Types/OrderDTO";
+import {OrderDTO} from "../../../Types/types";
 import styles from "./OrderStripe.module.scss";
 import format from "date-fns/format";
 import OrderStripeItem from "./OrderStripeItem";

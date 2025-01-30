@@ -984,6 +984,9 @@ components:
         productId:
           type: string
           format: uuid
+        productName:
+          type: string
+          nullable: true
         productAmount:
           type: number
           format: double

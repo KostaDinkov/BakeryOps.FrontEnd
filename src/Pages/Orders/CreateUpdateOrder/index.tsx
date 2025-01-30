@@ -11,7 +11,7 @@ export default function CreateUpdateOrder () {
     
     const productsQuery = useProductsQuery();
     const clientsQuery = useClientsQuery();
-    const newOrderMutation = useMutation({mutationFn:(data:OrderDTO) => apiClient.POST("/api/Orders",{body:data})});
+    const newOrderMutation = useMutation({mutationFn:(data:OrderDTO) => apiClient.POST("/api/Orders/CreateOrder",{body:data})});
     let orderQuery= null;
     if(id){
         orderQuery = useOrderQuery({id});

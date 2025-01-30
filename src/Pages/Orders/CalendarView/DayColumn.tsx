@@ -1,14 +1,20 @@
-import React from "react";
+
 import styles from "./DayColumn.module.css";
 
 import {format} from 'date-fns';
 import { Link } from "react-router-dom";
-import OrderDTO from "../../../Types/OrderDTO";
+import {OrderDTO} from "../../../Types/types";
 import { bg } from "date-fns/locale";
 import OrderCardCompact from "../OrderCardCompact/OrderCardCompact";
 
 
 const DayColumn = ({ data }:{data:OrderDTO[]}) => {
+  if(data.length===0){
+    return (
+      <div>No orders for the day{}</div>
+    )
+  }
+  
   const date = new Date(data[0].pickupDate);
   return (
     <section>

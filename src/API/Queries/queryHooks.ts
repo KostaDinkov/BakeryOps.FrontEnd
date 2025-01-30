@@ -3,7 +3,7 @@ import { apiClient } from "../apiClient";
 import { handleApiResponse } from "../apiUtils";
 import { addDays, format, getDate } from "date-fns";
 
-export  function useProductsQuery() {
+export function useProductsQuery() {
   return useQuery({
     queryKey: ["products"],
     queryFn: async () =>
@@ -12,45 +12,51 @@ export  function useProductsQuery() {
       ),
   });
 }
-export  function useProductQuery({id}:{id:number}) {
+export function useProductQuery({ id }: { id: number }) {
   return useQuery({
-    queryKey: ["product",id],
+    queryKey: ["product", id],
     queryFn: async () =>
       await handleApiResponse(async () =>
-        apiClient.GET("/api/Products/GetProduct/{id}",{params:{path:{id}}})
+        apiClient.GET("/api/Products/GetProduct/{id}", {
+          params: { path: { id } },
+        })
       ),
   });
 }
-export  function useClientsQuery() {
-    return useQuery({
-      queryKey: ["clients"],
-      queryFn: async () =>
-        await handleApiResponse(async () =>
-          apiClient.GET("/api/Clients")
-      ),
-      staleTime: 1000 * 60 * 60 * 24,
-
-    });
- }
-export function useOrdersQuery(){
-  const today = new Date();
-  const startDate = format(today, "dd-MM-yyyy");
-  const endDate = format(addDays(today,3), "dd-MM-yyyy");
+export function useClientsQuery() {
+  return useQuery({
+    queryKey: ["clients"],
+    queryFn: async () =>
+      await handleApiResponse(async () => apiClient.GET("/api/Clients")),
+    staleTime: 1000 * 60 * 60 * 24,
+  });
+}
+export function useOrdersQuery() {
   return useQuery({
     queryKey: ["orders"],
     queryFn: async () =>
       await handleApiResponse(async () =>
-        apiClient.GET("/api/Orders", {params:{query:{startDate,endDate}}})
+        apiClient.GET("/api/Orders/GetOrders")
       ),
   });
 }
-export function useOrderQuery({id}:{id:string}){
-
+export function useOrdersByDateQuery({ date }: { date: Date }) {
   return useQuery({
-    queryKey: ["order",id],
+    queryKey: ["orders", date],
     queryFn: async () =>
       await handleApiResponse(async () =>
-        apiClient.GET("/api/Orders/{id}", {params:{path:{id}}})
+        apiClient.GET("/api/Orders/GetOrdersBetween", {
+          params: { query: { startDate: format(date, "yyyy-MM-dd") } },
+        })
+      ),
+  });
+}
+export function useOrderQuery({ id }: { id: string }) {
+  return useQuery({
+    queryKey: ["order", id],
+    queryFn: async () =>
+      await handleApiResponse(async () =>
+        apiClient.GET("/api/Orders/GetOrder/{id}", { params: { path: { id } } })
       ),
   });
 }

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { OrdersService } from "../../../API/ordersApi";
-import OrderDTO from "../../../Types/OrderDTO";
-import OrderItemDTO from "../../../Types/OrderItemDTO";
+import {OrderDTO, OrderItemDTO}from "../../../Types/types";
 import styles from "./OrderStripeItem.module.scss";
 
 export default function OrderStripe({ order,item }: {order:OrderDTO, item: OrderItemDTO }) {
@@ -40,7 +39,7 @@ export default function OrderStripe({ order,item }: {order:OrderDTO, item: Order
     async function updateOrder() {
         item.isComplete = isComplete;
         item.isInProgress = isInProgress;
-        await OrdersService.PutOrderAsync(order.id as number, order);
+        await OrdersService.PutOrderAsync(order.id , order);
         PubSub.publish("SendUpdateOrders");
         setShouldUpdate(false);
     }
@@ -58,9 +57,9 @@ export default function OrderStripe({ order,item }: {order:OrderDTO, item: Order
     return (
     <div className={getItemStyles()} onClick={handleClick}>
       <div>
-        <span className={styles.productName}>{item.product.name}</span>
+        <span className={styles.productName}>{item.productName}</span>
         <span className="textChip--primary-light">
-          <strong>{item.productAmount}</strong> {item.product.unit}
+          <strong>{item.productAmount}</strong> {"fix unit"}
         </span>
       </div>
       <div>

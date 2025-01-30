@@ -11,11 +11,7 @@ import UsersHomePage, {
   usersLoader,
 } from "../Pages/Administration/Users/UsersHomePage";
 import Home from "../Pages/Home/Home";
-import ColumnView, {
-  loader as ordersLoader,
-} from "../Pages/Orders/ColumnView/ColumnView";
 import DayView, { DayViewLoader } from "../Pages/Orders/DayView/DayView";
-import OrderForm from "../Pages/Orders/OrderForm/OrderFormController";
 import OrdersHome from "../Pages/Orders";
 import PrintOrderView, {
   loader as PrintOrderViewLoader,
@@ -30,6 +26,7 @@ import ProductsPage from "../Pages/Nomenclature/Products/ProductsPage";
 import RecipesHomePage from "../Pages/Recipes/RecipesHomePage";
 import DeliveriesHome from "../Pages/Deliveries/DeliveriesHome";
 import CreateUpdateOrder from "../Pages/Orders/CreateUpdateOrder";
+import CalendarView from "../Pages/Orders/CalendarView/CalendarView";
 
 
 export const browserRouter = createBrowserRouter([
@@ -53,8 +50,8 @@ export const browserRouter = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <ColumnView />,
-            loader: ordersLoader,
+            element: <CalendarView />,
+            
             errorElement: <Error />,
           },
           {
@@ -82,7 +79,6 @@ export const browserRouter = createBrowserRouter([
           {
             path: "forDay/:date",
             element: <DayView />,
-            loader: DayViewLoader,
             errorElement: <Error />,
           },
         ],

@@ -1,5 +1,5 @@
 import styles from "./OrderItemCompact.module.scss";
-import OrderItemDTO from "../../../Types/OrderItemDTO";
+import {OrderItemDTO} from "../../../Types/types";
 
 const OrderItem = ({item}: { item: OrderItemDTO}) => {
   return (
@@ -9,7 +9,7 @@ const OrderItem = ({item}: { item: OrderItemDTO}) => {
       }
     >
       <div className={styles.itemRow}>
-        <span className={styles.itemName}>{item.product.name} </span>
+        <span className={styles.itemName}>{item.productName} </span>
         <span className={styles.icons}>
           {item.cakeFoto && <span className={styles.iconFoto}>Ф</span>}
           {item.cakeTitle && <span className={styles.iconCakeTitle}>Н</span>}

@@ -30,6 +30,7 @@ export default function RHFDatePicker<T extends FieldValues>({
       render={({ field }) => {
         const [error, setError] = useState<string | null>(null);
         const handleDateChange = (newValue: Date | null) => {
+          
           if (!newValue) {
             field.onChange(null);
             return;
@@ -46,7 +47,7 @@ export default function RHFDatePicker<T extends FieldValues>({
             setError("Outside business hours (9 AM - 5 PM)");
           } else {
             setError(null);
-            field.onChange(formatISO(newValue));
+            field.onChange(newValue);
           }
         };
 

@@ -74,6 +74,7 @@ export const Status = z.union([z.literal(0), z.literal(1), z.literal(2)]);
 
 export type OrderItemDTO = z.infer<typeof OrderItemDTO>;
 export const OrderItemDTO = z.object({
+  id: z.string().optional(),
   productId: z.string().optional(),
   productName: z.union([z.string(), z.null()]).optional(),
   productAmount: z.number().optional(),

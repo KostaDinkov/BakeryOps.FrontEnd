@@ -981,6 +981,9 @@ components:
     OrderItemDTO:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
         productId:
           type: string
           format: uuid

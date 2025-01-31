@@ -23,7 +23,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import styles from "./OrderItem.module.css";
 // #endregion
 
-export default function OrderItems({
+export default function OrderItem({
   remove,
   useFormMethods,
   products,

@@ -54,7 +54,7 @@ const OrderCard = ({ order }: { order: OrderDTO }) => {
               sx={{ color: "white" }}
             />
           </Link>
-          <Link data-test="OrderCard-EditLink" to={`/orders/put/${order.id}`}>
+          <Link data-test="OrderCard-EditLink" to={`/orders/update/${order.id}`}>
             <EditIcon
               fontSize="small"
               cursor="pointer"
@@ -63,8 +63,8 @@ const OrderCard = ({ order }: { order: OrderDTO }) => {
           </Link>
         </div>
       </div>
-      {order.orderItems.map((item) => (
-        <OrderItem key={item.id as number} item={item} />
+      {order.orderItems?.map((item) => (
+        <OrderItem key={item.id } item={item} />
       ))}
     </div>
   );

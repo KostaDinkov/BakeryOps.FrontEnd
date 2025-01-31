@@ -42,9 +42,15 @@ export default function RHFAutocomplete<T extends { id: string }, TForm extends 
         useEffect(() => {
           if (typeof value === 'string') {
             const option = options.find(o => o.id === value);
-            setInputValue(option ? getOptionLabel(option) : value);
+            if(option){
+              setInputValue(getOptionLabel(option));
+            }
+            else{
+              setInputValue(value);
+            }
+            
           } else {
-            setInputValue('');
+            setInputValue("");
           }
         }, [value, options, getOptionLabel]);
 

@@ -1,17 +1,15 @@
 import { z } from "zod";
 
 export const orderFormSchema = z.object({
-    id: z.string().uuid().default("00000000-0000-0000-0000-000000000000"),
-    deliveryDate: z.string().datetime().optional(),
-    clientId: z.string({}).optional(),
+    id: z.string().uuid().optional().nullable(),
+    clientId: z.string({}).optional().nullable(),
     clientPhone: z.string().optional().nullable(),
-    clientName: z.string().optional().nullable(),
     isPaid: z.boolean().default(false),
-    advancePayment: z.number().positive().optional(),
-    pickupDate: z.string().datetime({offset:true}),
+    advancePayment: z.number().nonnegative().default(0),
+    pickupDate: z.date(),
     orderItems: z.array(
         z.object({
-            id: z.string().uuid().default("00000000-0000-0000-0000-000000000000"),
+            id: z.number().optional(),
             productId: z.string({
                 required_error: "Изберете материал от падащото меню",
             }).uuid(),
@@ -19,9 +17,9 @@ export const orderFormSchema = z.object({
                 required_error: "Полето Количество е задължително",
                 invalid_type_error: "Количество трябва да е положително число",
             }).positive(),
-            description: z.string().optional(),
-            cakeFoto: z.string().optional(),
-            cakeTitle: z.string().optional(),
+            description: z.string().optional().nullable(),
+            cakeFoto: z.string().optional().nullable(),
+            cakeTitle: z.string().optional().nullable(),
             itemUnitPrice: z.number().positive().optional(),
             isInProgress: z.boolean().default(false),
             isComplete: z.boolean().default(false),

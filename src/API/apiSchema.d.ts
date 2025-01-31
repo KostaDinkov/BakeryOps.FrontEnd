@@ -1945,6 +1945,8 @@ export interface components {
         };
         OrderItemDTO: {
             /** Format: uuid */
+            id?: string;
+            /** Format: uuid */
             productId?: string;
             productName?: string | null;
             /** Format: double */

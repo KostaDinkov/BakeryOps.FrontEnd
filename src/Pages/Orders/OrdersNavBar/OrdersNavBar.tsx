@@ -17,10 +17,15 @@ const NavBar = () => {
   return (
     <div className={styles.navBarContainer}>
        <div className="self-start flex flex-row items-center justify-between gap-2 py-4">
-        <Button variant="outlined" startIcon={<ArrowBackIcon />} onClick={()=>{navigate(-1)}}/>
+        <Button variant="outlined" startIcon={<ArrowBackIcon />} onClick={()=>{navigate('/')}}/>
         <Typography variant="h5">Поръчки</Typography>
       </div>
       <div className="flex flex-1 gap-2 align-center justify-center">
+       <Link to={`/orders/`}>
+          <Button className={styles.buttonMain} variant="outlined">
+            Календар
+          </Button>
+        </Link>
         <Link to={`/orders/forDay/${todayStr}`}>
           <Button className={styles.buttonMain} variant="outlined">
             Днес

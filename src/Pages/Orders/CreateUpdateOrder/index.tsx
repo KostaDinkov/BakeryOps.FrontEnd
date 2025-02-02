@@ -30,16 +30,7 @@ export default function CreateUpdateOrder() {
       PubSub.publish("SendUpdateOrders");
     },
   });
-  const deleteOrderMutation = useMutation({
-    mutationFn: (data: OrderDTO) =>
-      apiClient.DELETE("/api/Orders/DeleteOrder/{id}", {
-        params: { path: { id: data.id || "" } },
-      }),
-    onSuccess: (data) => {
-      navigate("/orders");
-      PubSub.publish("SendUpdateOrders");
-    },
-  });
+
 
   let isEdit = false;
   let orderQuery = null;
@@ -64,9 +55,6 @@ export default function CreateUpdateOrder() {
     await newOrderMutation.mutateAsync(data);
   };
 
-  const deleteOrder = async (data: OrderDTO) => {
-    await deleteOrderMutation.mutateAsync(data);
-  };
 
   return (
     <RHFOrderForm
@@ -74,7 +62,7 @@ export default function CreateUpdateOrder() {
       clients={clientsQuery.data}
       submitOrder={submitOrder}
       order={orderQuery?.data}
-      deleteOrder={deleteOrder}
+      
     />
   );
 }

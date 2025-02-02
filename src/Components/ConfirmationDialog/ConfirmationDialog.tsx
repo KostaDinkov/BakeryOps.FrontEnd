@@ -21,7 +21,7 @@ export default function ConfirmationDialog({
   promptText: string;
   agreeBtnText: string;
   disagreeBtnText: string;
-  handleAgree: () => void;
+  handleAgree: (args:any) => void;
 }) {
 
   const handleClose = () => {

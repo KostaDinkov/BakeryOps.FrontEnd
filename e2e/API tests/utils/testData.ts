@@ -110,7 +110,6 @@ export async function createTestOrder(
 ): Promise<OrderDTO> {
   const testOrder: OrderDTO = {
     pickupDate: "2025-01-01T20:00:00.571Z",
-    createdDate: "2025-01-01T20:00:00.571Z",
     clientName: null,
     clientPhone: "0889123456",
     clientId: null,

@@ -36,13 +36,13 @@ export default function RHFOrderForm({
   clients,
   order,
   submitOrder,
-  deleteOrder,
+
 }: {
   products: ProductDTO[];
   clients: ClientDTO[];
   order?: OrderDTO;
   submitOrder: (data: OrderDTO) => void;
-  deleteOrder:(data:OrderDTO) => void;
+
 }) {
   const navigate = useNavigate();
   const isEdit = !!order;
@@ -206,13 +206,7 @@ export default function RHFOrderForm({
           }}>
             Откажи
           </Button>
-          {isEdit && (
-            <Button type="button" variant="outlined" color={'error'} onClick={() => {
-              deleteOrder(order);
-            }}>
-              Изтрий
-            </Button>
-          )}
+         
           <Button type="submit" variant="contained">
             Запази Поръчката
           </Button>

@@ -48,7 +48,6 @@ export default function RHFAutocomplete<T extends { id: string }, TForm extends 
             else{
               setInputValue(value);
             }
-            
           } else {
             setInputValue("");
           }

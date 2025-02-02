@@ -6,7 +6,8 @@ import { Link } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 
 import PrintIcon from "@mui/icons-material/Print";
-export default function OrderStripe({ order }: { order: OrderDTO }) {
+import { Button } from "@mui/material";
+export default function OrderStripe({ order, handleDelete }: { order: OrderDTO, handleDelete: () => void }) {
   const getTimeStyle = () => {
     let stylesArr = [styles.itemTime];
     if (order.isPaid) {
@@ -53,7 +54,9 @@ export default function OrderStripe({ order }: { order: OrderDTO }) {
             <OrderStripeItem order={order} item={item} key={item.productId} />
           );
         })}
+        
       </div>
+      <Button color="error" variant="contained"sx={{height:"min-content"}} onClick={handleDelete}>Изтрий</Button>
     </div>
   );
 }

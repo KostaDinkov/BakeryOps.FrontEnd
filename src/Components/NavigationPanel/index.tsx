@@ -22,7 +22,7 @@ export default function index({
         {hasBackButton && (
           <Button
             variant="outlined"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate("..")}
             startIcon={<ArrowBackIcon />}
           />
         )}

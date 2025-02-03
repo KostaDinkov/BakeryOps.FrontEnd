@@ -1,35 +1,26 @@
 .reportsPageContainer {
-    display: flex;
-    flex-direction: row;
-    height: 100%;
-    width: 100%;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
 }
 
-.sideBar{
-    width:250px;
-    border-right:1px solid var(--color-primary-light);
-    padding: 20px;
-    li{
-        
-        color: var(--color-primary-main);
-        font-size: larger;
-        padding: 10px 10px;
-        border-bottom: 1px solid var(--color-primary-lighter);
-        transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-        
-        &:hover{
-            background-color: white;
-            cursor: pointer;
-            box-shadow: var(--box-shadow);
-            border-bottom: none;
-        }
-        
-        
-    }
-}
+.sideBar {
+  width: 250px;
+  border-right: 1px solid var(--color-primary-light);
+  padding: 20px;
+  li {
+    color: var(--color-primary-main);
+    font-size: larger;
+    padding: 10px 10px;
+    border-bottom: 1px solid var(--color-primary-lighter);
+    transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 
-@media print{
-    .sideBar{
-        display:none!important
+    &:hover {
+      background-color: white;
+      cursor: pointer;
+      box-shadow: var(--box-shadow);
+      border-bottom: none;
     }
+  }
 }

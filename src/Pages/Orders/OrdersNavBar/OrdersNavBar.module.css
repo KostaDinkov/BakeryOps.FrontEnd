@@ -11,11 +11,6 @@
   justify-content: start;
   width: 100%;
 }
-@media print{
-  .navBarContainer{
-    display:none
-  }
-}
 
 .navBarContainer .button:hover {
   background-color: #fd826c;

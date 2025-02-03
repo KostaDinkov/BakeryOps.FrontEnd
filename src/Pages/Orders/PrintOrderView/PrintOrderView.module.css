@@ -5,13 +5,32 @@
 @media print{
   body{
     background-color: white;
-    
+    *{
+      visibility:hidden;
+    }
+  }
+ 
+  .printContainer{
+    width:100%;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    visibility: visible;
+    position:absolute;
+    top:0;
+    left:0;
+    *{
+      visibility:visible;
+    }
   }
   .pageView{
+    
     justify-content: space-between !important;
     height: 100vh;
     gap:0;
-    padding-top:0px !important;
+    padding-top:0.5cm !important;
+    padding-bottom:0.5cm;
+    
   }
   .orderDivider{
     display:block !important;
@@ -20,7 +39,6 @@
   .printBtnContainer{
     display:none !important;
   }
- 
 }
 
 .pageView{

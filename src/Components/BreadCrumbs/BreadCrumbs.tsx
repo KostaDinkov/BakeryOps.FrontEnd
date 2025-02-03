@@ -1,5 +1,5 @@
 import { Link, useMatches } from "react-router-dom";
-import styles from './BreadCrumns.module.scss'
+import styles from './BreadCrumns.module.css'
 
 export default function Breadcrumbs() {
     let matches = useMatches();

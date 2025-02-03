@@ -20,7 +20,7 @@ export default function PrintOrderView({order}: {order: OrderDTO}) {
     return <div>Няма поръчка</div>
   }
   return (
-    <div>
+    <div className={styles.printContainer}>
       <div className={styles.pageView} data-test="PrintOrderView-container">
         <OrderForPrint order={order} />
         <div className={styles.orderDivider}></div>

@@ -1931,15 +1931,17 @@ export interface components {
             /** Format: int32 */
             operatorId?: number | null;
             /** Format: date-time */
-            pickupDate?: string;
-            clientName?: string | null;
+            pickupDate: string;
+            clientName: string;
             clientPhone?: string | null;
             /** Format: uuid */
             clientId?: string | null;
-            isPaid?: boolean;
+            isPaid: boolean;
             /** Format: double */
-            advancePaiment?: number;
-            status?: components["schemas"]["Status"];
+            advancePaiment: number;
+            /** Format: double */
+            totalPrice: number;
+            status: components["schemas"]["Status"];
             orderItems?: components["schemas"]["OrderItemDTO"][] | null;
         };
         OrderItemDTO: {

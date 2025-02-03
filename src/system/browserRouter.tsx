@@ -13,7 +13,7 @@ import UsersHomePage, {
 import Home from "../Pages/Home/Home";
 import DayView from "../Pages/Orders/DayView/DayView";
 import OrdersHome from "../Pages/Orders";
-import PrintOrderView from "../Pages/Orders/PrintOrderView/PrintOrderView";
+import PrintOrder from "../Pages/Orders/PrintOrderView";
 import Error from "../Components/Error";
 import NomenclatureHomePage from "../Pages/Nomenclature/NomenclatureHomePage";
 import MaterialsPage from "../Pages/Nomenclature/Materials/MaterialsPage";
@@ -64,13 +64,16 @@ export const browserRouter = createBrowserRouter([
             element: <CreateUpdateOrder />,
             errorElement: <Error />,
             handle: {
-              crumb: () => <Link to="/orders/update/:id">Редактиране на Поръчка</Link>,
+              crumb: () => <span>Редактиране на Поръчка</span>,
             },
           },
           {
             path: "print/:id",
-            element: <PrintOrderView />,
+            element: <PrintOrder/>,
             errorElement: <Error />,
+            handle: {
+              crumb: () => <span>Принтиране на Поръчка</span>,
+            },
           },
           {
             path: "forDay/:date",

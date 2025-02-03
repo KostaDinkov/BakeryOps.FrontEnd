@@ -944,6 +944,13 @@ components:
           nullable: true
       additionalProperties: false
     OrderDTO:
+      required:
+        - advancePaiment
+        - clientName
+        - isPaid
+        - pickupDate
+        - status
+        - totalPrice
       type: object
       properties:
         id:
@@ -957,8 +964,8 @@ components:
           type: string
           format: date-time
         clientName:
+          minLength: 1
           type: string
-          nullable: true
         clientPhone:
           type: string
           nullable: true
@@ -969,6 +976,9 @@ components:
         isPaid:
           type: boolean
         advancePaiment:
+          type: number
+          format: double
+        totalPrice:
           type: number
           format: double
         status:

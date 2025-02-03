@@ -1,0 +1,50 @@
+:root {
+  /* Define reusable chip styles as custom properties */
+  --chip-padding: 0 5px;
+  --chip-border-radius: 999em;
+}
+
+/* Base chip styles using CSS classes */
+[class^="textChip--"] {
+  border-radius: var(--chip-border-radius);
+  padding: var(--chip-padding);
+}
+
+.textChip--yellow {
+  color: black;
+  background-color: var(--color-secondary-main);
+}
+
+.textChip--green {
+  color: black;
+  background-color: var(--color-green);
+}
+
+.textChip--red {
+  color: white;
+  background-color: var(--color-error-main);
+}
+
+.textChip--pink {
+  color: black;
+  background-color: var(--color-pink);
+}
+
+.textChip--primary-light {
+  color: white;
+  background-color: var(--color-primary-light);
+}
+
+.textChip--primary-lighter {
+  color: black;
+  background-color: var(--color-primary-lighter);
+}
+
+.fullWidthColumnLayout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0 1rem;
+}

@@ -1,7 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { apiClient } from "../apiClient";
 import { handleApiResponse } from "../apiUtils";
 import { addDays, format, getDate } from "date-fns";
+import { OrderDTO } from "../../Types/types";
 
 export function useProductsQuery() {
   return useQuery({
@@ -51,8 +52,8 @@ export function useOrdersByDateQuery({ date }: { date: Date }) {
       ),
   });
 }
-export function useOrderQuery({ id }: { id: string }) {
-  return useQuery({
+export function useOrderQuery({ id }: { id: string }):UseQueryResult<OrderDTO,Error> {
+  return useQuery<OrderDTO,Error>({
     queryKey: ["order", id],
     queryFn: async () =>
       await handleApiResponse(async () =>

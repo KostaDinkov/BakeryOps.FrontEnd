@@ -84,7 +84,7 @@ function OrderForPrint({ order }: { order: OrderDTO }) {
           </div>
         </div>
 
-        {order.orderItems.map((i, index) => (
+        {order.orderItems?.map((i, index) => (
           <div className={styles.productRow} key={index + "" + i.productId}>
             <div className={styles.productContainer}>
               <div className={styles.productName}>
@@ -114,16 +114,16 @@ function OrderForPrint({ order }: { order: OrderDTO }) {
             </div>
             <div className={styles.productUnitPrice}>
               <span>
-                {i.itemUnitPrice} 
+                {i.itemUnitPrice}
               </span>
             </div>
             <div className={styles.productCount}>
               <span>
-                {i.productAmount} {i.productUnit}
+                {i.itemTotalPrice}
               </span>
             </div>
             <div className={styles.productPrice}>
-              <span>{toBGN(i.productAmount * i.itemUnitPrice)}</span>
+              <span>{toBGN(i.itemTotalPrice||0)}</span>
             </div>
           </div>
         ))}
@@ -141,18 +141,19 @@ function Footer({ order }: { order: OrderDTO }) {
     return (
       <div className={styles.footerRow}>
         <span className={styles.footerTotal}>
-          ПЛАТЕНА: {toBGN(getOrderPrice(order))}
+          ПЛАТЕНА: {toBGN((order.totalPrice))}
         </span>
       </div>
     );
   } else if (order.advancePaiment > 0) {
     return (
       <div className={styles.footerRow}>
+        <span> Стойност: {order.totalPrice}</span>
         <span className={styles.footerInfo}>
           Капаро: {toBGN(order.advancePaiment)}
         </span>
         <span className={styles.footerTotal}>
-          За доплащане: {toBGN(getOrderPrice(order))}
+          За доплащане: {toBGN((order.totalPrice-order.advancePaiment))}
         </span>
       </div>
     );
@@ -161,32 +162,14 @@ function Footer({ order }: { order: OrderDTO }) {
       <div className={styles.footerRow}>
         <span></span>
         <span className={styles.footerTotal}>
-          За плащане: {toBGN(getOrderPrice(order))}
+          За плащане: {toBGN(order.totalPrice)}
         </span>
       </div>
     );
   }
 }
 
-function getOrderPrice(order: OrderDTO): number {
-  let totalPrice = 0;
-
-  for (let item of order.orderItems) {
-    totalPrice += getProductPrice(item) * item.productAmount;
-  }
-  if (order.advancePaiment > 0) {
-    totalPrice = totalPrice - order.advancePaiment;
-  }
-  return totalPrice;
-}
-
 function toBGN(amount: number): string {
   return amount.toLocaleString("bg-BG", { style: "currency", currency: "BGN" });
 }
 
-function getProductPrice(orderItem: OrderItemDTO) {
-  let price = 0;
-  
-  price += orderItem.itemUnitPrice;
-  return price;
-}

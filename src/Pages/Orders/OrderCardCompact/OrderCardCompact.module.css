@@ -1,0 +1,77 @@
+:root {
+  --font-size-small: 0.8rem;
+  --card-padding: 0 10px;
+  --header-gap: 5px;
+  --details-gap: 10px;
+  --border-radius: 5px;
+  --box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+/* Card containers */
+.orderCardContainer {
+  max-width: 350px;
+  border-radius: var(--border-radius);
+  display: inline-block;
+  box-shadow: var(--box-shadow);
+}
+
+.orderCardContainerNotComplete {
+  background-color: white;
+}
+
+.orderCardContainerComplete {
+  background-color: var(--color-green);
+}
+
+/* Header styles */
+.cardHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: var(--card-padding);
+  gap: var(--header-gap);
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.editIcon {
+  display: flex;
+  justify-content: flex-end;
+  flex-grow: 1;
+}
+
+.headerDetails {
+  display: flex;
+  align-items: center;
+  gap: var(--details-gap);
+  padding: 0 10px 5px 10px;
+  border-bottom: 1px solid grey;
+}
+
+.cardHeader,
+.headerDetails {
+  background-color: var(--color-primary-light);
+  color: white;
+}
+
+.pickupTime {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Text badges */
+.textBadgeRed,
+.textBadgeYellow {
+  border-radius: 999em;
+  padding: 0 5px;
+  font-size: var(--font-size-small);
+}
+
+.textBadgeRed {
+  color: white;
+  background-color: var(--color-error-main);
+}
+
+.textBadgeYellow {
+  color: black;
+  background-color: var(--color-secondary-main);
+}

@@ -11,11 +11,26 @@ const meta: Meta<typeof PrintOrderView> = {
 export default meta;
 type Story = StoryObj<typeof PrintOrderView>;
 
-
-
-
 export const Default: Story = {
     args: {
         order: sampleOrder,
     },
 };
+
+export const AdvancedPayment: Story = {
+    args: {
+        order: {
+            ...sampleOrder,
+            advancePaiment: 10,
+        },
+    },
+}
+
+export const PaidOrder: Story = {
+    args: {
+        order: {
+            ...sampleOrder,
+            isPaid: true,
+        },
+    },
+}

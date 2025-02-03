@@ -17,7 +17,7 @@ const NavBar = () => {
   return (
     <div className={styles.navBarContainer}>
        <div className="self-start flex flex-row items-center justify-between gap-2 py-4">
-        <Button variant="outlined" startIcon={<ArrowBackIcon />} onClick={()=>{navigate('/')}}/>
+        <Button variant="outlined" startIcon={<ArrowBackIcon />} onClick={()=>{navigate('..',{relative:"path"})}}/>
         <Typography variant="h5">Поръчки</Typography>
       </div>
       <div className="flex flex-1 gap-2 align-center justify-center">

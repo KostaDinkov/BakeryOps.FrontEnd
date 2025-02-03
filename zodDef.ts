@@ -89,16 +89,17 @@ export const OrderItemDTO = z.object({
 
 export type OrderDTO = z.infer<typeof OrderDTO>;
 export const OrderDTO = z.object({
-  id: z.string().optional(),
-  operatorId: z.union([z.number(), z.null()]).optional(),
-  pickupDate: z.string().optional(),
-  clientName: z.union([z.string(), z.null()]).optional(),
-  clientPhone: z.union([z.string(), z.null()]).optional(),
-  clientId: z.union([z.string(), z.null()]).optional(),
-  isPaid: z.boolean().optional(),
-  advancePaiment: z.number().optional(),
-  status: Status.optional(),
-  orderItems: z.union([z.array(OrderItemDTO), z.null()]).optional(),
+  id: z.union([z.string(), z.undefined()]).optional(),
+  operatorId: z.union([z.number(), z.null(), z.undefined()]).optional(),
+  pickupDate: z.string(),
+  clientName: z.string(),
+  clientPhone: z.union([z.string(), z.null(), z.undefined()]).optional(),
+  clientId: z.union([z.string(), z.null(), z.undefined()]).optional(),
+  isPaid: z.boolean(),
+  advancePaiment: z.number(),
+  totalPrice: z.number(),
+  status: Status,
+  orderItems: z.union([z.array(OrderItemDTO), z.null(), z.undefined()]).optional(),
 });
 
 export type Product = z.infer<typeof Product>;

@@ -1,4 +1,4 @@
-import styles from "./OrderCardCompact.module.scss";
+import styles from "./OrderCardCompact.module.css";
 import OrderItem from "./OrderItemCompact";
 import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";

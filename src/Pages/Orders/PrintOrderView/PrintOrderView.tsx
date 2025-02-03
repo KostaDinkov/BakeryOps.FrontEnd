@@ -50,7 +50,7 @@ function OrderForPrint({ order }: { order: OrderDTO }) {
         <div>
           <div className={styles.orderNumber}>
             ПОРЪЧКА  от{" "}
-            {format(new Date(order.createdDate), "dd-MM-yyyy")} за:
+            {format(new Date(order.createdDate!), "dd-MM-yyyy")} за:
           </div>
           <div className={styles.orderDate}>
             {format(new Date(order.pickupDate), "EEEE dd-MM-yyyy HH:mm", {

@@ -8,13 +8,13 @@ export const CategoryDTO = z.object({
 
 export type ClientDTO = z.infer<typeof ClientDTO>;
 export const ClientDTO = z.object({
-  id: z.string().optional(),
-  name: z.union([z.string(), z.null()]).optional(),
-  phone: z.union([z.string(), z.null()]).optional(),
-  email: z.union([z.string(), z.null()]).optional(),
-  discountPercent: z.number().optional(),
-  isCompany: z.boolean().optional(),
-  isSpecialPrice: z.boolean().optional(),
+  id: z.union([z.string(), z.undefined()]).optional(),
+  name: z.union([z.string(), z.null()]),
+  phone: z.union([z.string(), z.null(), z.undefined()]).optional(),
+  email: z.union([z.string(), z.null(), z.undefined()]).optional(),
+  hasDiscount: z.union([z.boolean(), z.undefined()]).optional(),
+  isCompany: z.union([z.boolean(), z.undefined()]).optional(),
+  isSpecialPrice: z.union([z.boolean(), z.undefined()]).optional(),
 });
 
 export type DeliveryItemDto = z.infer<typeof DeliveryItemDto>;
@@ -74,7 +74,7 @@ export const Status = z.union([z.literal(0), z.literal(1), z.literal(2)]);
 
 export type OrderItemDTO = z.infer<typeof OrderItemDTO>;
 export const OrderItemDTO = z.object({
-  id: z.string().optional(),
+  id: z.number().optional(),
   productId: z.string().optional(),
   productName: z.union([z.string(), z.null()]).optional(),
   productAmount: z.number().optional(),
@@ -82,6 +82,7 @@ export const OrderItemDTO = z.object({
   cakeFoto: z.union([z.string(), z.null()]).optional(),
   cakeTitle: z.union([z.string(), z.null()]).optional(),
   itemUnitPrice: z.number().optional(),
+  itemTotalPrice: z.number().optional(),
   isInProgress: z.boolean().optional(),
   isComplete: z.boolean().optional(),
 });

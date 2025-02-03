@@ -1,42 +1,24 @@
-import React, { useContext } from "react";
 import styles from "./PrintOrderView.module.css";
-import OrderDTO from "../../../Types/OrderDTO";
+import {OrderDTO} from "../../../Types/types";
 import { format } from "date-fns";
 import { bg } from "date-fns/locale";
-import { OrdersService } from "../../../API/ordersApi";
-import { useLoaderData } from "react-router-dom";
-import AppContext from "../../../appContext";
-
-import OrderItemDTO from "../../../Types/OrderItemDTO";
+import {OrderItemDTO} from "../../../Types/types";
 import PrintIcon from "@mui/icons-material/Print";
 import Button from "@mui/material/Button";
 
-let PhotoPrice: number;
 
-export async function loader({ params }: { params: { id: number } }) {
-  let id = params.id;
-  let order = await OrdersService.GetOrderAsync(id);
-
-  return order;
-}
-
-export default function PrintOrderView() {
-  const { products } = useContext(AppContext);
-  //TODO change to barcode query
-  //TODO remove foto dependency from PrintOrderView
-  const foto = products.find((p) => p.code === "foto");
-  if (foto) {
-    PhotoPrice = foto.priceDrebno;
-  } else {
-    throw new Error(`Не може да бъде намерен продукт Фотокартина ${350}`);
-  }
-  const order = useLoaderData() as OrderDTO;
+export default function PrintOrderView({order}: {order: OrderDTO}) {
+  
   const handlePrint = () => {
     var styleElement = document.getElementById("pageStyle");
     if (styleElement) {
       styleElement.innerHTML = `@page{size:A4 landscape; margin: 0.75cm;}`;
     }
     window.print();
+  }
+
+  if(!order){
+    return <div>Няма поръчка</div>
   }
   return (
     <div>
@@ -68,7 +50,7 @@ function OrderForPrint({ order }: { order: OrderDTO }) {
       <div className={styles.details}>
         <div>
           <div className={styles.orderNumber}>
-            ПОРЪЧКА №{order.id} от{" "}
+            ПОРЪЧКА  от{" "}
             {format(new Date(order.createdDate), "dd-MM-yyyy")} за:
           </div>
           <div className={styles.orderDate}>
@@ -106,7 +88,7 @@ function OrderForPrint({ order }: { order: OrderDTO }) {
           <div className={styles.productRow} key={index + "" + i.productId}>
             <div className={styles.productContainer}>
               <div className={styles.productName}>
-                {index + 1}. {i.product?.name}
+                {index + 1}. {i.productName}
               </div>
               <div className={styles.productDescription}>{i.description}</div>
               <div className={styles.productDescription}>
@@ -137,7 +119,7 @@ function OrderForPrint({ order }: { order: OrderDTO }) {
             </div>
             <div className={styles.productCount}>
               <span>
-                {i.productAmount} {i.product?.unit}
+                {i.productAmount} {i.productUnit}
               </span>
             </div>
             <div className={styles.productPrice}>

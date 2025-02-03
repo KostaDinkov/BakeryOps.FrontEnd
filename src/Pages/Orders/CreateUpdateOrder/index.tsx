@@ -62,7 +62,6 @@ export default function CreateUpdateOrder() {
       clients={clientsQuery.data}
       submitOrder={submitOrder}
       order={orderQuery?.data}
-      
     />
   );
 }

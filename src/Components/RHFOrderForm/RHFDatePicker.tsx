@@ -1,4 +1,4 @@
-import { DatePicker, DateTimePicker } from "@mui/x-date-pickers";
+import { DateTimePicker } from "@mui/x-date-pickers";
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
 import {
   addDays,
@@ -8,7 +8,7 @@ import {
   setHours,
   startOfDay,
 } from "date-fns";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   renderTimeViewClock,
   renderDigitalClockTimeView,
@@ -27,24 +27,32 @@ export default function RHFDatePicker<T extends FieldValues>({
     <Controller
       name={name}
       control={control}
-      render={({ field }) => {
-        const [error, setError] = useState<string | null>(null);
+      render={({ field, fieldState }) => {
+        const [error, setError] = useState<string | null>(
+          fieldState.error?.message || null
+        );
+
+        // Watch for fieldState changes
+        useEffect(() => {
+          setError(fieldState.error?.message || null);
+        }, [fieldState.error]);
+
         const handleDateChange = (newValue: Date | null) => {
-          
           if (!newValue) {
             field.onChange(null);
+            setError(null);
             return;
           }
 
-          // Custom validation example
           const isWeekend = newValue.getDay() === 0;
-          const isValidTime =
-            getHours(newValue) >= 9 && getHours(newValue) < 19;
+          const isValidTime = getHours(newValue) >= 9 && getHours(newValue) < 19;
 
           if (isWeekend) {
-            setError("Weekend dates are not allowed");
+            setError("Поръчки за неделя не се приемат");
+            field.onChange(null);
           } else if (!isValidTime) {
-            setError("Outside business hours (9 AM - 5 PM)");
+            setError("Извън работно време (9:00 - 19:00)");
+            field.onChange(null);
           } else {
             setError(null);
             field.onChange(newValue);
@@ -53,7 +61,9 @@ export default function RHFDatePicker<T extends FieldValues>({
 
         return (
           <DateTimePicker
-          label="За дата и час"
+            label="За дата и час"
+            value={field.value}
+            onChange={handleDateChange}
             viewRenderers={{
               hours: renderDigitalClockTimeView,
               minutes: null,
@@ -62,7 +72,7 @@ export default function RHFDatePicker<T extends FieldValues>({
             openTo="day"
             slotProps={{
               textField: {
-                error: !!error,
+                error: Boolean(error),
                 helperText: error,
               },
             }}
@@ -75,8 +85,6 @@ export default function RHFDatePicker<T extends FieldValues>({
               return false;
             }}
             timeSteps={{ minutes: 30 }}
-            value={field.value || null}
-            onChange={(newValue) => handleDateChange(newValue)}
             format="dd/MM/yyyy HH:mm"
             disablePast // formatISO is used to convert the date to a string
           />

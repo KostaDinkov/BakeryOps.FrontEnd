@@ -1858,11 +1858,10 @@ export interface components {
         ClientDTO: {
             /** Format: uuid */
             id?: string;
-            name?: string | null;
+            name: string | null;
             phone?: string | null;
             email?: string | null;
-            /** Format: int32 */
-            discountPercent?: number;
+            hasDiscount?: boolean;
             isCompany?: boolean;
             isSpecialPrice?: boolean;
         };
@@ -1944,8 +1943,8 @@ export interface components {
             orderItems?: components["schemas"]["OrderItemDTO"][] | null;
         };
         OrderItemDTO: {
-            /** Format: uuid */
-            id?: string;
+            /** Format: int32 */
+            id?: number;
             /** Format: uuid */
             productId?: string;
             productName?: string | null;
@@ -1956,6 +1955,8 @@ export interface components {
             cakeTitle?: string | null;
             /** Format: double */
             itemUnitPrice?: number;
+            /** Format: double */
+            readonly itemTotalPrice?: number;
             isInProgress?: boolean;
             isComplete?: boolean;
         };

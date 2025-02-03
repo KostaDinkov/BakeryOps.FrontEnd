@@ -43,7 +43,7 @@ export default function OrderItem({
   const [showCakeFields, setShowCakeFields] = useState<boolean>(
     isCakeCategory(products.find((p) => p.id === field.productId))
   );
-  const [showNote, setShowNote] = useState<boolean>(field.description?.length>0?true:false);
+  const [showNote, setShowNote] = useState<boolean>(!!field.description);
 
   function isCakeCategory(product: ProductDTO | null | undefined) {
     if (!product) return false;
@@ -58,7 +58,7 @@ export default function OrderItem({
     <div className={styles.orderItemContainer}>
       <div className={styles.product}>
         {/* //--Product Select  */}
-        <RHFAutocomplete
+        <RHFAutocomplete<ProductDTO, OrderFormSchemaType>
           sx={{ flexGrow: "1" }}
           size="small"
           control={useFormMethods.control}
@@ -82,6 +82,7 @@ export default function OrderItem({
           error={
             !!useFormMethods.formState.errors.orderItems?.[index]?.productAmount
           }
+          helperText={useFormMethods.formState.errors.orderItems?.[index]?.productAmount?.message}
         />
 
         {/* //--Product Cake Fields  */}

@@ -85,7 +85,7 @@ export default function RHFAutocomplete<T extends { id: string }, TForm extends 
                 } else if (newValue === null) {
                   // Handle clear action
                   onChange(null);
-                  setInputValue('');
+                  setInputValue("");
                 }
               }}
               renderInput={(params) => (
@@ -94,6 +94,7 @@ export default function RHFAutocomplete<T extends { id: string }, TForm extends 
                   label={label}
                   required={required}
                   error={!!error}
+                  helperText={error ? error.message : ''}
                 />
               )}
             />

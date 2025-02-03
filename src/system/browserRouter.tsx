@@ -11,11 +11,9 @@ import UsersHomePage, {
   usersLoader,
 } from "../Pages/Administration/Users/UsersHomePage";
 import Home from "../Pages/Home/Home";
-import DayView, { DayViewLoader } from "../Pages/Orders/DayView/DayView";
+import DayView from "../Pages/Orders/DayView/DayView";
 import OrdersHome from "../Pages/Orders";
-import PrintOrderView, {
-  loader as PrintOrderViewLoader,
-} from "../Pages/Orders/PrintOrderView/PrintOrderView";
+import PrintOrderView from "../Pages/Orders/PrintOrderView/PrintOrderView";
 import Error from "../Components/Error";
 import NomenclatureHomePage from "../Pages/Nomenclature/NomenclatureHomePage";
 import MaterialsPage from "../Pages/Nomenclature/Materials/MaterialsPage";
@@ -51,7 +49,6 @@ export const browserRouter = createBrowserRouter([
           {
             index: true,
             element: <CalendarView />,
-            
             errorElement: <Error />,
           },
           {
@@ -73,7 +70,6 @@ export const browserRouter = createBrowserRouter([
           {
             path: "print/:id",
             element: <PrintOrderView />,
-            loader: PrintOrderViewLoader,
             errorElement: <Error />,
           },
           {

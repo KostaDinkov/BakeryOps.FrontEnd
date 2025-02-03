@@ -8,6 +8,7 @@ import {
 import { orderFormSchema, type OrderFormSchemaType } from "./formSchema";
 import RHFAutocomplete from "./RHFAutocomplete";
 import {
+  Alert,
   Button,
   Checkbox,
   FormControlLabel,
@@ -21,14 +22,13 @@ import {
   ProductDTO,
 } from "../../Types/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import OrderItem from "./OrderItem";
 import styles from "./RHFOrderForm.module.css";
 import RFHDatePicker from "./RHFDatePicker";
-import { getSpecialPrice } from "../../Pages/Orders/OrderForm/OrderFormHelperFunctions";
-
 import { formatISO, parseISO } from "date-fns";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+
 // #endregion
 
 export default function RHFOrderForm({
@@ -36,16 +36,15 @@ export default function RHFOrderForm({
   clients,
   order,
   submitOrder,
-
 }: {
   products: ProductDTO[];
   clients: ClientDTO[];
   order?: OrderDTO;
   submitOrder: (data: OrderDTO) => void;
-
 }) {
   const navigate = useNavigate();
   const isEdit = !!order;
+  const [errors, setErrors] = useState<string[]>([]);
 
   function getDefaultValues(order: OrderDTO): OrderFormSchemaType {
     if (order) {
@@ -89,11 +88,12 @@ export default function RHFOrderForm({
   });
 
   const onSubmit: SubmitHandler<OrderFormSchemaType> = (data) => {
-    //check if clientId is valid else set it to null
+    //if clientId is not a valid clientId, it must be a free text
+    //so we set the clientName to the clientId and set the clientId to null
     if (data.clientId) {
       if (!clients.find((c) => c.id === data.clientId)) {
         data.clientName = data.clientId;
-        data.clientId = undefined;
+        data.clientId = null;
       }
     }
 
@@ -115,13 +115,13 @@ export default function RHFOrderForm({
         cakeTitle: item.cakeTitle || null,
         isInProgress: false,
         isComplete: false,
-        itemUnitPrice: getSpecialPrice(
-          products.find((p) => p.id === item.productId),
-          clients.find((c) => c.id === data.clientId)?.discountPercent
-        ),
+        // itemUnitPrice: getSpecialPrice(
+        //   products.find((p) => p.id === item.productId),
+        //   clients.find((c) => c.id === data.clientId)?.discountPercent
+        // ),
       })),
     };
-    console.log("OrderDTO", orderDTO);
+
     submitOrder(orderDTO);
   };
 
@@ -131,6 +131,7 @@ export default function RHFOrderForm({
       onSubmit={handleSubmit(onSubmit, (errors) => {
         console.log("Form data", getValues());
         console.log("Errors", errors);
+        setErrors(Object.keys(errors));
       })}
     >
       {/* //--Form meta data */}
@@ -201,12 +202,16 @@ export default function RHFOrderForm({
           Добави Продукт
         </Button>
         <div className={styles.saveCancel}>
-          <Button type="button" variant="outlined" onClick={() => {
-            navigate('/orders');
-          }}>
+          <Button
+            type="button"
+            variant="outlined"
+            onClick={() => {
+              navigate("/orders");
+            }}
+          >
             Откажи
           </Button>
-         
+
           <Button type="submit" variant="contained">
             Запази Поръчката
           </Button>

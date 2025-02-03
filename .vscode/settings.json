@@ -27,7 +27,6 @@
         "tailwind.config.js": true,
         "zodDef.ts": true,
         "README.md": true,
-        "src/tests": true,
         "src/routes": true
     },
     "hide-files.files": [
@@ -51,7 +50,6 @@
         "tailwind.config.js",
         "zodDef.ts",
         "README.md",
-        "src/tests",
         "src/routes"
     ],
     "peacock.favoriteColors": [

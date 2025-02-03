@@ -25,10 +25,8 @@ export default function OrderStripe({ order,item }: {order:OrderDTO, item: Order
     useEffect(()=>{
         if(shouldUpdate){
         (async ()=>{
-            
             await updateOrder();
         })();}
-        
     },[shouldUpdate])
 
     useEffect(()=>{

@@ -2,25 +2,23 @@ import { z } from "zod";
 
 export const orderFormSchema = z.object({
     id: z.string().uuid().optional().nullable(),
-    clientId: z.string({}).optional().nullable(),
+    clientId: z.string({message:"Въведете име на клиента"}).min(3,{message: "Името на клиента трябва да бъде минимум 3 символа"}),
     clientPhone: z.string().optional().nullable(),
+    clientName: z.string().optional().nullable(),
     isPaid: z.boolean().default(false),
-    advancePayment: z.number().nonnegative().default(0),
-    pickupDate: z.date(),
+    advancePaiment: z.number().nonnegative().default(0),
+    pickupDate: z.date({message: "Изберете дата за поръчката"}),
     orderItems: z.array(
         z.object({
-            id: z.number().optional(),
             productId: z.string({
                 required_error: "Изберете материал от падащото меню",
-            }).uuid(),
+            }).uuid({message: "Изберете материал от падащото меню"}),
             productAmount: z.number({
-                required_error: "Полето Количество е задължително",
-                invalid_type_error: "Количество трябва да е положително число",
-            }).positive(),
+                required_error: "Полето е задължително",
+            }).positive({message: "Трябва да е положително число"}),
             description: z.string().optional().nullable(),
             cakeFoto: z.string().optional().nullable(),
             cakeTitle: z.string().optional().nullable(),
-            itemUnitPrice: z.number().positive().optional(),
             isInProgress: z.boolean().default(false),
             isComplete: z.boolean().default(false),
 

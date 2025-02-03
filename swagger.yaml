@@ -784,6 +784,8 @@ components:
           nullable: true
       additionalProperties: false
     ClientDTO:
+      required:
+        - name
       type: object
       properties:
         id:
@@ -798,9 +800,8 @@ components:
         email:
           type: string
           nullable: true
-        discountPercent:
-          type: integer
-          format: int32
+        hasDiscount:
+          type: boolean
         isCompany:
           type: boolean
         isSpecialPrice:
@@ -982,8 +983,8 @@ components:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
+          type: integer
+          format: int32
         productId:
           type: string
           format: uuid
@@ -1005,6 +1006,10 @@ components:
         itemUnitPrice:
           type: number
           format: double
+        itemTotalPrice:
+          type: number
+          format: double
+          readOnly: true
         isInProgress:
           type: boolean
         isComplete:

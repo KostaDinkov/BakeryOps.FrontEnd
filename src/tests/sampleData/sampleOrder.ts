@@ -2,7 +2,7 @@ import { OrderDTO } from "../../Types/types";
 
 export const sampleOrder: OrderDTO = {
   
-    id: "f576cae8-73c4-4bac-8f79-08dd435b4b2f",
+  id: "f576cae8-73c4-4bac-8f79-08dd435b4b2f",
   operatorId: null,
   pickupDate: "2025-02-03T09:29:00",
   createdDate: "2025-02-02T09:29:00",

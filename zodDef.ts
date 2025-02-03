@@ -91,6 +91,7 @@ export type OrderDTO = z.infer<typeof OrderDTO>;
 export const OrderDTO = z.object({
   id: z.union([z.string(), z.undefined()]).optional(),
   operatorId: z.union([z.number(), z.null(), z.undefined()]).optional(),
+  createdDate: z.union([z.string(), z.undefined()]).optional(),
   pickupDate: z.string(),
   clientName: z.string(),
   clientPhone: z.union([z.string(), z.null(), z.undefined()]).optional(),

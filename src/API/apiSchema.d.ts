@@ -1931,6 +1931,8 @@ export interface components {
             /** Format: int32 */
             operatorId?: number | null;
             /** Format: date-time */
+            createdDate?: string;
+            /** Format: date-time */
             pickupDate: string;
             clientName: string;
             clientPhone?: string | null;

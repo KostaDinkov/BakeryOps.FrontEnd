@@ -2,7 +2,6 @@ import styles from "./PrintOrderView.module.css";
 import {OrderDTO} from "../../../Types/types";
 import { format } from "date-fns";
 import { bg } from "date-fns/locale";
-import {OrderItemDTO} from "../../../Types/types";
 import PrintIcon from "@mui/icons-material/Print";
 import Button from "@mui/material/Button";
 

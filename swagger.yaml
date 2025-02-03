@@ -960,6 +960,9 @@ components:
           type: integer
           format: int32
           nullable: true
+        createdDate:
+          type: string
+          format: date-time
         pickupDate:
           type: string
           format: date-time

@@ -1,5 +1,5 @@
 import { ProductsByCategory } from "../Types/helpers";
-import ProductDTO from "../Types/ProductDTO";
+import {ProductDTO} from "../Types/types";
 import { format } from "date-fns";
 
 export async function sleep(msec: number) {
@@ -47,4 +47,28 @@ export function dateToString(date: Date | string): string | undefined {
 export function getCssVariable(variableName: string): string | null {
   const root = document.documentElement;
   return getComputedStyle(root).getPropertyValue(variableName).trim() || null;
+}
+
+/** 
+ * Get the 'special' price of the product with discount applied
+// @param cenaDrebno - price of the product as used in store with included Vat
+// @param discountPercent - discount in percent, like 20 for 20%
+**/
+export function getSpecialPrice(
+  product:ProductDTO,
+  discountPercent: number,
+): number {
+  // If the product has to keep its priceDrebno, we return priceDrebno
+  // First we take price without Vat
+  // Next we apply discount, if product hasDiscount
+  // Next we add half of Vat to the result
+  // Last we round to 2 decimal places
+  if(product.keepPriceDrebno) return product.priceDrebno!;
+  let vat = 0.2;
+  let halfVat = vat / 2;
+  let discount = discountPercent / 100;
+  if(!product.hasDiscount) discount = 0;
+  let final = ((product.priceDrebno! / (1 + vat)) * (1 - discount)) * (1 + halfVat);
+
+  return Math.round((final + Number.EPSILON) * 100) / 100;
 }

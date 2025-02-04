@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useOrderQuery } from "../../../API/Queries/queryHooks";
-import PrintOrderView from "./PrintOrderView";
+import PrintOrderView from "../../../Components/PrintOrder/PrintOrderView";
 import { Alert } from "@mui/material";
 
 export default function index() {

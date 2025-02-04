@@ -1,4 +1,4 @@
-import { ProductsByCategory } from "../Types/helpers";
+import { ProductsByCategory } from "../Types/types";
 import {ProductDTO} from "../Types/types";
 import { format } from "date-fns";
 

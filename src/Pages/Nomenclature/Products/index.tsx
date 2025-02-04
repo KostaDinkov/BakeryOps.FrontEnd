@@ -1,15 +1,17 @@
-import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { useProductsQuery } from "../../../API/Queries/queryHooks";
-import ProductsPage from "./ProductsPage"
-
+import ProductPage from "./ProductsPage"
 
 
 export default function ProductsHome() {
-  const productsQuery = useProductsQuery();
-  return productsQuery.isLoading ? (
-    <div>Loading...</div>
-  ) : (
-   <ProductsPage />
-  );
+ const productsQuery = useProductsQuery();
+ 
+   if (productsQuery.isLoading) {
+     return <div>Loading...</div>;
+   } else if (productsQuery.isError) {
+     return <div>Error: {productsQuery.error.message}</div>;
+   }
+   return(
+   <ProductPage products={productsQuery.data}/>
+)
+  
 }

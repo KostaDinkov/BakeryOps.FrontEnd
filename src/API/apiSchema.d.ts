@@ -1967,17 +1967,18 @@ export interface components {
         Product: {
             /** Format: uuid */
             id?: string;
-            name?: string | null;
-            category?: string | null;
+            name: string;
+            category: string;
             /** Format: double */
-            priceDrebno?: number;
+            priceDrebno: number;
             /** Format: double */
-            priceEdro?: number;
+            priceEdro: number;
             hasDiscount?: boolean;
             keepPriceDrebno?: boolean;
             inPriceList?: boolean;
-            unit?: string | null;
+            unit: string | null;
             code?: string | null;
+            isActive?: boolean;
             /** Format: date-time */
             dateCreated?: string;
         };

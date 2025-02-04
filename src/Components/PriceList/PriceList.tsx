@@ -1,6 +1,6 @@
 import { useState } from "react";
 import ProductsService from "../../API/productsService";
-import ProductDTO from "../../Types/ProductDTO";
+import {ProductDTO} from "../../Types/types";
 import { useLoaderData } from "react-router-dom";
 import { getProductsByCategory } from "../../system/utils";
 import Category from "./Category";
@@ -8,7 +8,7 @@ import styles from "./PriceList.module.scss";
 import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { ProductsByCategory } from "../../Types/helpers";
+
 
 export const loader = async () => {
   var products = await ProductsService.getProducts();
@@ -92,7 +92,7 @@ export default function PriceList({ isPrint }: { isPrint: boolean }) {
           <Category
             key={cat}
             name={cat}
-            products={products}
+            products={products as ProductDTO[]}
             showPriceDrebno={showPriceDrebno}
             showPriceEdro={showPriceEdro}
             showPriceSpecial={showPriceSpecial}

@@ -1,5 +1,5 @@
 import styles from "./PrintOrderView.module.css";
-import {OrderDTO} from "../../../Types/types";
+import {OrderDTO} from "../../Types/types";
 import { format } from "date-fns";
 import { bg } from "date-fns/locale";
 import PrintIcon from "@mui/icons-material/Print";

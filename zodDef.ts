@@ -105,17 +105,18 @@ export const OrderDTO = z.object({
 
 export type Product = z.infer<typeof Product>;
 export const Product = z.object({
-  id: z.string().optional(),
-  name: z.union([z.string(), z.null()]).optional(),
-  category: z.union([z.string(), z.null()]).optional(),
-  priceDrebno: z.number().optional(),
-  priceEdro: z.number().optional(),
-  hasDiscount: z.boolean().optional(),
-  keepPriceDrebno: z.boolean().optional(),
-  inPriceList: z.boolean().optional(),
-  unit: z.union([z.string(), z.null()]).optional(),
-  code: z.union([z.string(), z.null()]).optional(),
-  dateCreated: z.string().optional(),
+  id: z.union([z.string(), z.undefined()]).optional(),
+  name: z.string(),
+  category: z.string(),
+  priceDrebno: z.number(),
+  priceEdro: z.number(),
+  hasDiscount: z.union([z.boolean(), z.undefined()]).optional(),
+  keepPriceDrebno: z.union([z.boolean(), z.undefined()]).optional(),
+  inPriceList: z.union([z.boolean(), z.undefined()]).optional(),
+  unit: z.union([z.string(), z.null()]),
+  code: z.union([z.string(), z.null(), z.undefined()]).optional(),
+  isActive: z.union([z.boolean(), z.undefined()]).optional(),
+  dateCreated: z.union([z.string(), z.undefined()]).optional(),
 });
 
 export type RecipeMaterialDto = z.infer<typeof RecipeMaterialDto>;

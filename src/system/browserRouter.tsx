@@ -1,9 +1,7 @@
 import { Link, createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import LoginForm from "../Components/LoginForm/LoginForm";
-import PriceList, {
-  loader as PriceListLoader,
-} from "../Components/PriceList/PriceList";
+import PriceList from "../Pages/Administration/Reports/PriceList";
 import ReportsPage from "../Components/ReportsPage/ReportsPage";
 import AdminHomePage from "../Pages/Administration/AdminHomePage";
 import UserForm from "../Pages/Administration/Users/UserForm";
@@ -20,7 +18,7 @@ import MaterialsPage from "../Pages/Nomenclature/Materials/MaterialsPage";
 import VendorsPage from "../Pages/Nomenclature/Vendors/VendorsPage";
 import ClientsPage from "../Pages/Nomenclature/Clients/ClientsPage";
 import CategoriesPage from "../Pages/Nomenclature/Categories/CategoriesPage";
-import ProductsPage from "../Pages/Nomenclature/Products/ProductsPage";
+import ProductsPage from "../Pages/Nomenclature/Products";
 import RecipesHomePage from "../Pages/Recipes/RecipesHomePage";
 import DeliveriesHome from "../Pages/Deliveries/DeliveriesHome";
 import CreateUpdateOrder from "../Pages/Orders/CreateUpdateOrder";
@@ -103,7 +101,10 @@ export const browserRouter = createBrowserRouter([
               {
                 path: "priceList/",
                 element: <PriceList />,
-                loader: PriceListLoader,
+                errorElement: <Error />,
+                handle: {
+                  crumb: () => <Link to="/admin/reports/priceList">Ценова Листа</Link>,
+                },
               },
             ],
           },
@@ -184,7 +185,7 @@ export const browserRouter = createBrowserRouter([
             errorElement: <Error />,
             handle: {
               crumb: () => (
-                <Link to="/nomenclature/products">Категории Стоки</Link>
+                <Link to="/nomenclature/products">Продукти</Link>
               ),
             },
           },

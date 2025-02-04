@@ -1029,17 +1029,23 @@ components:
           type: boolean
       additionalProperties: false
     Product:
+      required:
+        - category
+        - name
+        - priceDrebno
+        - priceEdro
+        - unit
       type: object
       properties:
         id:
           type: string
           format: uuid
         name:
+          minLength: 1
           type: string
-          nullable: true
         category:
+          minLength: 1
           type: string
-          nullable: true
         priceDrebno:
           type: number
           format: double
@@ -1058,6 +1064,8 @@ components:
         code:
           type: string
           nullable: true
+        isActive:
+          type: boolean
         dateCreated:
           type: string
           format: date-time

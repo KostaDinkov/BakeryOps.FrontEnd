@@ -17,7 +17,7 @@ const NavBar = () => {
     navigate("/");
   }
   return (
-    <>
+    <section className={styles.appBar}>
       <div className={styles.navBarContainer}>
         <Link to="/">
           <img src="/images/logo.svg" alt="logo" />
@@ -50,8 +50,9 @@ const NavBar = () => {
           )}
         </div>
       </div>
+
       <BreadCrumbs />
-    </>
+    </section>
   );
 };
 

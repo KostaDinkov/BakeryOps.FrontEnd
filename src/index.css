@@ -24,3 +24,25 @@ code {
 a{
   text-decoration: none;
 }
+
+/* width */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  /* box-shadow: inset 0 0 5px ;  */
+  border-radius: 9999px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary-lighter); 
+  border-radius: 9999px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #8f8f8f; 
+}

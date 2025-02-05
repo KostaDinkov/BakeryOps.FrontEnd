@@ -18,11 +18,12 @@ import MaterialsPage from "../Pages/Nomenclature/Materials/MaterialsPage";
 import VendorsPage from "../Pages/Nomenclature/Vendors/VendorsPage";
 import ClientsPage from "../Pages/Nomenclature/Clients/ClientsPage";
 import CategoriesPage from "../Pages/Nomenclature/Categories/CategoriesPage";
-import ProductsPage from "../Pages/Nomenclature/Products";
+import Products from "../Pages/Nomenclature/Products";
 import RecipesHomePage from "../Pages/Recipes/RecipesHomePage";
 import DeliveriesHome from "../Pages/Deliveries/DeliveriesHome";
 import CreateUpdateOrder from "../Pages/Orders/CreateUpdateOrder";
 import CalendarView from "../Pages/Orders/CalendarView/CalendarView";
+import ProductsPage from "../Pages/Nomenclature/Products/ProductsPage";
 
 
 export const browserRouter = createBrowserRouter([
@@ -181,13 +182,36 @@ export const browserRouter = createBrowserRouter([
           },
           {
             path: "products",
-            element: <ProductsPage />,
+            element:<Products/>,
             errorElement: <Error />,
-            handle: {
-              crumb: () => (
-                <Link to="/nomenclature/products">Продукти</Link>
-              ),
-            },
+                handle: {
+                  crumb: () => (<Link to="/nomenclature/products">Продукти</Link>),
+                },
+            children:[
+              {
+                index:true,
+                element: <ProductsPage />,
+                errorElement: <Error />,
+                handle: {
+                  crumb: () => (<Link to="/nomenclature/products">Всички</Link>),
+                },
+              },
+              {
+                path:"table",
+                element:<ProductsPage/>,
+                errorElement: <Error />,
+                handle: {
+                  crumb: () => (<Link to="/nomenclature/products/table">Таблица</Link>),
+                },
+              },
+              {
+                path:"priceList",
+                element:<PriceList/>,
+                handle: {
+                  crumb: () => (<Link to="/nomenclature/products/priceList">Ценова Листа</Link>),
+                },
+              }
+            ]
           },
         ],
       },

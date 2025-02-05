@@ -1,9 +1,10 @@
-
-
 export default function index() {
+
   return (
     <div>
-        PriceList
+      <div>
+          PriceList
+      </div>
     </div>
   )
 }

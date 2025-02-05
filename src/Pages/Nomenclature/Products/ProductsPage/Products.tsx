@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ProductDTO } from "../../../Types/types";
+import { ProductDTO } from "../../../../Types/types";
 import {
   Box,
   Paper,
@@ -8,12 +8,11 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import ProductDetails from "../../../Components/ProductDetails";
+import ProductDetails from "../../../../Components/ProductDetails";
 import styles from "./ProductsPage.module.css";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiClient } from "../../../API/apiClient";
 
-export default function ProductsPage({ products }: { products: ProductDTO[] }) {
+
+export default function Products({ products, onSubmit }: { products: ProductDTO[], onSubmit: (data: ProductDTO) => void }) {
   // Extract unique categories from the products list
   const categories = Array.from(
     new Set(products.map((p) => p.category))
@@ -28,27 +27,6 @@ export default function ProductsPage({ products }: { products: ProductDTO[] }) {
   const filteredProducts = selectedCategory
     ? products.filter((p) => p.category === selectedCategory)
     : [];
-
-  const queryClient = useQueryClient();
-  const productMutation = useMutation({
-    mutationFn: (product: ProductDTO) => {
-      console.log(product);
-      return apiClient.PUT("/api/Products/UpdateProduct/{id}", {
-        params: { path: { id: product.id } },
-        body: product,
-      });
-    },
-    onSuccess: (data) => {
-      //console.log(data);
-      queryClient.invalidateQueries({ queryKey: ["products"] });
-      if (data.data && (data.data as ProductDTO).id)
-        setSelectedProduct(data.data);
-    },
-  });
-  const onSubmit = (data: ProductDTO) => {
-    console.log(data);
-    productMutation.mutate(data);
-  };
 
   // When editing, disable selection of other category/product
   const handleCategoryClick = (category: string) => {

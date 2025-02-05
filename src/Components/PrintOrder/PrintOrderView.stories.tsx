@@ -1,7 +1,8 @@
 import type {Meta, StoryObj} from '@storybook/react';
 import PrintOrderView from './PrintOrderView';
 import { Story } from '@storybook/blocks';
-import {sampleOrder} from '../../../tests/sampleData/sampleOrder';
+import {sampleOrder} from '../../tests/sampleData/sampleOrder';
+import { sampleMaterials } from '../../tests/sampleData/sampleMaterials';
 
 
 const meta: Meta<typeof PrintOrderView> = {

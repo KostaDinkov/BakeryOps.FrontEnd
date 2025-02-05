@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import ProductDetails from "../../../../Components/ProductDetails";
-import styles from "./ProductsPage.module.css";
+import styles from "./Products.module.css";
 
 
 export default function Products({ products, onSubmit }: { products: ProductDTO[], onSubmit: (data: ProductDTO) => void }) {

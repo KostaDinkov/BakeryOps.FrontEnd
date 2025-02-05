@@ -1,3 +1,4 @@
+// #region Imports
 import GenericCRUDView, {
   IItemOperations,
   ItemFormType,
@@ -24,6 +25,7 @@ import { handleApiResponse } from "../../../API/apiUtils";
 import { useState } from "react";
 import { customInvalidProps } from "../../../system/utils";
 import globalStyles from "../../../styles/globalStyles.module.css";
+// #endregion
 
 // Define the schema for client formData parsing and validation
 //@ts-ignore

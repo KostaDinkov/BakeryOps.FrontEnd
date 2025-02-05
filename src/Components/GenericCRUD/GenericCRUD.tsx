@@ -186,7 +186,13 @@ export default function GenericCRUDView<TItem>({
   return (
     <div className="fullWidthColumnLayout">
       <div className="self-start flex flex-row items-center justify-between gap-2 py-4">
-        <Button variant="outlined" startIcon={<ArrowBackIcon />} onClick={()=>{navigate(-1)}}/>
+        <Button
+          variant="outlined"
+          startIcon={<ArrowBackIcon />}
+          onClick={() => {
+            navigate(-1);
+          }}
+        />
         <Typography variant="h5">{title}</Typography>
       </div>
 

@@ -9,53 +9,74 @@ import {
   Typography,
 } from "@mui/material";
 import ProductDetails from "../../../Components/ProductDetails";
+import styles from "./ProductsPage.module.css";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiClient } from "../../../API/apiClient";
 
 export default function ProductsPage({ products }: { products: ProductDTO[] }) {
   // Extract unique categories from the products list
   const categories = Array.from(
     new Set(products.map((p) => p.category))
   ) as string[];
-
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<ProductDTO | null>(
     null
   );
+  const [detailsEditing, setDetailsEditing] = useState(false);
 
   // Filter products based on selected category
   const filteredProducts = selectedCategory
     ? products.filter((p) => p.category === selectedCategory)
     : [];
 
+  const queryClient = useQueryClient();
+  const productMutation = useMutation({
+    mutationFn: (product: ProductDTO) => {
+      console.log(product);
+      return apiClient.PUT("/api/Products/UpdateProduct/{id}", {
+        params: { path: { id: product.id } },
+        body: product,
+      });
+    },
+    onSuccess: (data) => {
+      //console.log(data);
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+      if (data.data && (data.data as ProductDTO).id)
+        setSelectedProduct(data.data);
+    },
+  });
+  const onSubmit = (data: ProductDTO) => {
+    console.log(data);
+    productMutation.mutate(data);
+  };
+
+  // When editing, disable selection of other category/product
+  const handleCategoryClick = (category: string) => {
+    if (!detailsEditing) {
+      setSelectedCategory(category);
+      setSelectedProduct(null);
+    }
+  };
+
+  const handleProductClick = (product: ProductDTO) => {
+    if (!detailsEditing) setSelectedProduct(product);
+  };
+
   return (
-    <Box display="flex" minHeight="100vh">
+    <Box className={styles.container}>
       {/* Category Panel */}
-      <Paper sx={{ width: 250, m: 1, p: 1 }}>
+      <Paper className={styles.categoryPanel}>
         <Typography variant="h6" gutterBottom>
-          Categories
+          Категории
         </Typography>
         <List>
           {categories.map((category) => (
             <ListItemButton
               key={category}
               selected={selectedCategory === category}
-              onClick={() => {
-                setSelectedCategory(category);
-                setSelectedProduct(null);
-              }}
-              sx={{
-                "&.Mui-selected": {
-                  backgroundColor: "primary.main",
-                  color: "white",
-                  "&:hover": {
-                    backgroundColor: "primary.dark",
-                  },
-                },
-                "&:hover": {
-                  backgroundColor: "primary.light",
-                },
-
-                mb: 0.5,
-              }}
+              disabled={detailsEditing}
+              onClick={() => handleCategoryClick(category)}
+              className={styles.categoryItem}
             >
               <ListItemText primary={category} />
             </ListItemButton>
@@ -65,30 +86,18 @@ export default function ProductsPage({ products }: { products: ProductDTO[] }) {
 
       {/* Product List Panel */}
       {selectedCategory && (
-        <Paper sx={{ width: 300, m: 1 }}>
+        <Paper className={styles.productListPanel}>
           <Typography variant="h6" gutterBottom>
-            Products in {selectedCategory}
+            Продукти в {selectedCategory}
           </Typography>
           <List>
             {filteredProducts.map((product) => (
               <ListItemButton
                 key={product.id}
                 selected={selectedProduct?.id === product.id}
-                onClick={() => setSelectedProduct(product)}
-                sx={{
-                  "&.Mui-selected": {
-                    backgroundColor: "secondary.main",
-                    color: "white",
-                    "&:hover": {
-                      backgroundColor: "secondary.dark",
-                    },
-                  },
-                  "&:hover": {
-                    backgroundColor: "secondary.light",
-                  },
-
-                  mb: 0.5,
-                }}
+                disabled={detailsEditing}
+                onClick={() => handleProductClick(product)}
+                className={styles.productItem}
               >
                 <ListItemText primary={product.name || "Unnamed Product"} />
               </ListItemButton>
@@ -99,13 +108,11 @@ export default function ProductsPage({ products }: { products: ProductDTO[] }) {
 
       {/* Product Details Panel */}
       {selectedProduct && (
-        <Box sx={{ flex: 1, m: 1 }}>
+        <Box className={styles.productDetailsPanel}>
           <ProductDetails
             product={selectedProduct}
-            onSubmit={(data) => {
-              // handle updated data; e.g., send to API or update state
-              console.log("Updated product:", data);
-            }}
+            onSubmit={onSubmit}
+            onEditChange={(editing) => setDetailsEditing(editing)}
           />
         </Box>
       )}

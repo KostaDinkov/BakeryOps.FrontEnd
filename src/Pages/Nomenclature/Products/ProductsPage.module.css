@@ -1,0 +1,55 @@
+.container {
+  padding: 1rem;
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+
+  .categoryPanel {
+    background-color: var(--color-blueGrey-dark);
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    .categoryItem,
+    .productItem {
+      transition: background-color 0.3s;
+    }
+    .categoryItem:hover {
+      background-color: var(--color-primary-light);
+    }
+
+    /* Use chaining with :global selector to override Mui-selected styles */
+    .categoryItem:global(.Mui-selected) {
+      background-color: var(--color-primary-main);
+      color: white;
+    }
+    .categoryItem:global(.Mui-selected:hover) {
+      background-color: var(--color-primary-dark);
+    }
+  }
+  .productListPanel {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    width: max-content;
+    padding: 0px;
+    .productItem:global(.Mui-selected) {
+      background-color: var(--color-secondary-main);
+      color: black;
+    }
+    .productItem:global(.Mui-selected:hover) {
+      background-color: var(--color-secondary-dark);
+    }
+  }
+}
+
+.categoryPanel h6,
+.productListPanel h6 {
+  padding: 1rem;
+  margin: 0;
+}
+
+.productDetailsPanel {
+  flex: 1;
+  margin-left:1rem;
+  .productItem:hover {
+    background-color: var(--color-secondary-light);
+  }
+}

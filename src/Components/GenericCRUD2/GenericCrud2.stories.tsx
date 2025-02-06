@@ -52,6 +52,7 @@ export const Materials: Story = {
         { unitName: { label: "Мярка" } },
         { latestPrice: { label: "Цена" } },
       ]}
+      displayKeys={["name"]}
     />
   ),
 };

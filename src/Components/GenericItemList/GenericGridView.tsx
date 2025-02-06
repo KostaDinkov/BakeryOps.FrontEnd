@@ -1,5 +1,6 @@
 import { dateToString } from "../../system/utils";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import styles from "./GenericGridView.module.css";
 
 export type GenericGridViewProps<T> = {
     items:T[];
@@ -18,6 +19,7 @@ export default function GenericGridView<T>({
     items && (
 
         <DataGrid
+          className={styles.container}
           sx={{ backgroundColor: "white", margin: "1rem 1rem 1rem 0", display:"grid" }}
           rows={items}
           columns={columnsDef}

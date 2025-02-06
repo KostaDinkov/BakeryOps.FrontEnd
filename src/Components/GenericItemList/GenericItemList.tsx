@@ -22,12 +22,15 @@ interface GenericItemsListProps<TItem extends IId> {
   items: TItem[];
   groupBy?: keyof TItem;
   displayKeys: (keyof TItem)[];
-}
+  selectedItem: TItem | null;
+  setSelectedItem:React.Dispatch<React.SetStateAction<TItem | null>>;}
 
 export default function GenericItemsList<TItem extends IId>({
   displayKeys = ["id"], // set default value
   items,
   groupBy,
+  selectedItem,
+  setSelectedItem
 }: GenericItemsListProps<TItem>) {
   // New filter state
   const [filterText, setFilterText] = useState("");
@@ -55,7 +58,6 @@ export default function GenericItemsList<TItem extends IId>({
       ? textFilteredItems.filter((item) => (item[groupBy] as string) === selectedGroup)
       : textFilteredItems;
 
-  const [selectedItem, setSelectedItem] = useState<TItem | null>(null);
 
   const handleCategoryClick = (group: string) => {
     setSelectedGroup(group);
@@ -71,14 +73,16 @@ export default function GenericItemsList<TItem extends IId>({
       {/* Filter Input */}
       <Box mb={2}>
         <TextField
-          label="Filter"
+          label="Филтър"
           value={filterText}
           onChange={(e) => setFilterText(e.target.value)}
           fullWidth
+          size="small"
         />
       </Box>
 
       {/* Group Panel */}
+      <div className={styles.listContainers}>
       {groupBy && (
         <Paper className={styles.categoryPanel}>
           <Typography variant="h6" gutterBottom>
@@ -128,6 +132,7 @@ export default function GenericItemsList<TItem extends IId>({
           ))}
         </List>
       </Paper>
+      </div>
     </Box>
   );
 }

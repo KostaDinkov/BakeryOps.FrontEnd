@@ -1,34 +1,84 @@
-import type {Meta, StoryObj} from '@storybook/react';
-import GenericCrud2 from './GenericCrud2';
-import ItemForm from './ItemForm';
-import {sampleProducts} from '../../tests/sampleData/sampleProducts';
-import { sampleClients } from '../../tests/sampleData/sampleClients';
-import { sampleMaterials } from '../../tests/sampleData/sampleMaterials';
-import { sampleDeliveries } from '../../tests/sampleData/sampleDeliveries';
+import type { Meta, StoryObj } from "@storybook/react";
+import GenericCrud2 from "./GenericCrud2";
+import { sampleProducts } from "../../tests/sampleData/sampleProducts";
+import { sampleClients } from "../../tests/sampleData/sampleClients";
+import { sampleMaterials } from "../../tests/sampleData/sampleMaterials";
+import { sampleDeliveries } from "../../tests/sampleData/sampleDeliveries";
+import { ClientDTO, DeliveryDTO, MaterialDTO, ProductDTO } from "../../Types/types";
+import { dateToString } from "../../system/utils";
 
 const meta: Meta<typeof GenericCrud2> = {
-    component: GenericCrud2,
-}
+  component: GenericCrud2,
+};
 export default meta;
 type Story = StoryObj<typeof GenericCrud2>;
 
 export const Products: Story = {
-    args: {
-        groupBy:"category",
-        items: sampleProducts,
-        children: <ItemForm />, // Added ItemForm as child
-    },
+  render: (args) => (
+    <GenericCrud2<ProductDTO>
+      items={sampleProducts}
+      groupBy="category"
+      viewConfig={[
+        { name: { label: "Име" } },
+        { category: { label: "Категория" } },
+        { priceDrebno: { label: "Цена на дребно" } },
+        { priceEdro: { label: "Цена на едро" } },
+        { isActive: { label: "Активен" } },
+      ]}
+      displayKeys={["name"]}
+    />
+  ),
 };
 export const Clients: Story = {
-    args: {
-        items: sampleClients,
-        children: <ItemForm />, // Added ItemForm as child
-    },
+  render: (args) => (
+    <GenericCrud2<ClientDTO>
+      items={sampleClients}
+      viewConfig={[
+        { name: { label: "Име" }}, 
+        {isCompany: { label: "Компания" } },
+      ]}
+      displayKeys={["name"]}
+    />
+  ),
 };
 export const Materials: Story = {
-    args: {
-        groupBy:"categoryName",
-        items: sampleMaterials,
-        children: <ItemForm />, // Added ItemForm as child
-    },
+  render: (args) => (
+    <GenericCrud2<MaterialDTO>
+      items={sampleMaterials}
+      groupBy={"categoryName"}
+      viewConfig={[
+        { name: { label: "Име" } },
+        { categoryName: { label: "Категория" } },
+        { unitName: { label: "Мярка" } },
+        { latestPrice: { label: "Цена" } },
+      ]}
+    />
+  ),
+};
+
+export const Deliveries: Story = {
+  render: (args) => (
+    <GenericCrud2<DeliveryDTO>
+      items={sampleDeliveries}
+      viewConfig={[
+        { vendorName: { label: "Доставчик" } },
+        { deliveryDate: { label: "От дата", valueFormatter:(value)=>value } },
+        { totalWithTax: { label: "Стойност" } },
+        { invoiceNumber: { label: "Фактура №" } },
+        { items:{ label: "Стоки", columnDef:[
+          { field: "materialName", headerName: "Стока", headerClassName: "bg-white", description: "Име на стоката" },
+          { field: "quantity", headerName: "Кол.", description: "Количество на стоката", headerClassName: "bg-white" },
+          { field: "materialUnit", headerName: "Мярка", description: "Мярка на стоката", headerClassName: "bg-white" },
+          { field: "unitPrice", headerName: "Ед.цена", description: "Цена на стоката", headerClassName: "bg-white" },
+          { field: "totalPrice", headerName: "Цена", description: "Обща цена за стоката", headerClassName: "bg-white", valueGetter: (value, row) => row.quantity * row.unitPrice },
+          { field: "lotNumber", headerName: "Партида", description: "Партиден номер", headerClassName: "bg-white" },
+          { field: "expirationDate", headerName: "Годност", description: "Срок на годност", headerClassName: "bg-white", valueFormatter: (value) => dateToString(value) },
+          { field: "notes", headerName: "Бележка", description: "Бележка", headerClassName: "bg-white" },
+        ]}},
+
+      ]}
+
+      displayKeys={["vendorName", "totalWithTax"]}
+    />
+  ),
 };

@@ -26,6 +26,7 @@ export const Products: Story = {
         { isActive: { label: "Активен" } },
       ]}
       displayKeys={["name"]}
+      actions={{add:null, edit:(item)=>console.log(item), delete:null}}
     />
   ),
 };

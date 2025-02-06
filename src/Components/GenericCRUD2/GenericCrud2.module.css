@@ -4,3 +4,20 @@
   justify-content: start;
   gap:1rem;
 }
+
+/* New styles replacing tailwind classes */
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* tailwind gap-5 ~ 20px */
+}
+
+.topButtonContainer {
+  display: flex;
+  gap: 8px; /* tailwind gap-2 ~ 8px */
+}
+
+.bottomButtonContainer {
+  display: flex;
+  gap: 8px; /* tailwind gap-2 ~ 8px */
+}

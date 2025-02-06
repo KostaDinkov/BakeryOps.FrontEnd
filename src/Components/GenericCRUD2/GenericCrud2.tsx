@@ -41,15 +41,15 @@ export default function GenericCrud2<T extends { id: string }>({
         selectedItem={selectedItem}
         displayKeys={displayKeys || ["id"]}
       />
-      <div className="flex flex-col gap-5">
-        <div className="flex gap-2">
+      <div className={styles.contentContainer}>
+        <div className={styles.topButtonContainer}>
           {actions.add && (
             <Button color="secondary" variant="contained" onClick={() => actions.add?.(selectedItem!)}> 
               Добави
             </Button>
           )}
           {selectedItem && (
-            <div className="flex gap-2">
+            <div className={styles.bottomButtonContainer}>
               {actions.edit && (
                 <Button color="primary" variant="outlined" onClick={() => actions.edit?.(selectedItem!)}>
                   Редактирай

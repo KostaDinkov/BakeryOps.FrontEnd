@@ -2,7 +2,7 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { apiClient } from "../apiClient";
 import { handleApiResponse } from "../apiUtils";
 import { addDays, format, getDate } from "date-fns";
-import { OrderDTO } from "../../Types/types";
+import { CategoryDTO, OrderDTO } from "../../Types/types";
 
 export function useProductsQuery() {
   return useQuery({
@@ -58,6 +58,16 @@ export function useOrderQuery({ id }: { id: string }):UseQueryResult<OrderDTO,Er
     queryFn: async () =>
       await handleApiResponse(async () =>
         apiClient.GET("/api/Orders/GetOrder/{id}", { params: { path: { id } } })
+      ),
+  });
+}
+
+export function useCategoriesQuery():UseQueryResult<CategoryDTO[],Error> {
+  return useQuery({
+    queryKey: ["categories"],
+    queryFn: async () =>
+      await handleApiResponse(async () =>
+        apiClient.GET("/api/Categories/GetCategories")
       ),
   });
 }

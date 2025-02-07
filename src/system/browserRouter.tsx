@@ -26,6 +26,9 @@ import ProductsPage from "../Pages/Nomenclature/Products/ProductsPage";
 import CategoriesForm from "../Pages/Nomenclature/Categories/CategoriesForm";
 import CategoriesViewer from "../Pages/Nomenclature/Categories/CategoriesViewer";
 import CategoriesIndex from "../Pages/Nomenclature/Categories";
+import ClientsIndex from "../Pages/Nomenclature/Clients";
+import ClientsViewer from "../Pages/Nomenclature/Clients/ClientsViewer";
+import ClientsForm from "../Pages/Nomenclature/Clients/ClientsForm";
 
 export const browserRouter = createBrowserRouter(
   [
@@ -177,11 +180,35 @@ export const browserRouter = createBrowserRouter(
             // -- Clients
             {
               path: "clients",
-              element: <ClientsPage />,
-              errorElement: <Error />,
-              handle: {
-                crumb: () => <Link to="/nomenclature/clients">Клиенти</Link>,
-              },
+              element: <ClientsIndex />,
+              
+              
+              children:[
+                {
+                  index:true,
+                  element: <ClientsViewer />,
+                  errorElement: <Error />,
+                  handle: {
+                    crumb: () => <Link to="/nomenclature/clients">Клиенти</Link>,
+                  },
+                },
+                {
+                  path: "create",
+                  element: <ClientsForm />,
+                  errorElement: <Error />,
+                  handle: {
+                    crumb: () => <Link to="/nomenclature/clients/create">Добавяне на клиент</Link>,
+                  },
+                },
+                {
+                  path: "update",
+                  element: <ClientsForm />,
+                  errorElement: <Error />,
+                  handle: {
+                    crumb: () => <Link to="/nomenclature/clients/update">Редактиране на клиент</Link>,
+                  },
+                }
+              ]
             },
             // -- Categories
             {

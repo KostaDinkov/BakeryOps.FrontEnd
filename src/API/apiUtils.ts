@@ -19,22 +19,32 @@ export async function handleApiResponse(fetchCall: FetchCall) {
 export function useHandleApiResponse() {
   const notifications = useNotifications();
 
-  return async function (fetchCall: FetchCall) {
+  return async function (fetchCall: FetchCall, successMessage?: string, errorMessage?: string) {
     try {
-      return await handleApiResponse(fetchCall);
+      const data = await handleApiResponse(fetchCall);
+      const message = successMessage || "Успешна сървърна операция";
+      notifications.show(message, { severity: "success", autoHideDuration: 5000 });
+      return data;
     } catch (error) {
-      notifications.show(`Грешка при запис: Статус ${error.status}`, { severity: "error" });
-      throw new Error(`Грешка при запис \n${formatResponseErrors(error as Error)}`);
+      const message = errorMessage || "Грешка на сървъра";
+      notifications.show(
+        `${message}: Статус ${(error as Error).status}`,
+        { severity: "error", autoHideDuration: 5000 }
+      );
+      throw new Error(
+        `Грешка при запис \n${formatResponseErrors(error as Error)}`
+      );
     }
   };
 }
-
 
 function formatResponseErrors(error: Error) {
   const lines: string[] = [
     error.title,
     `Status: ${error.status}`,
-    ...Object.keys(error.errors).map(key => `${key}: ${error.errors[key]?.join(', ')}`),
+    ...Object.keys(error.errors).map(
+      (key) => `${key}: ${error.errors[key]?.join(", ")}`
+    ),
   ];
   return lines.join("\n");
 }

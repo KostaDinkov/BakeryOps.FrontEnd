@@ -7,7 +7,6 @@ import styles from "./GenericCrud2.module.css";
 import { Button } from "@mui/material";
 import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
 
-
 export type GenericCrud2Props<T> = {
   items: T[];
   viewConfig: ViewConfigItem<T>[];
@@ -25,7 +24,11 @@ export default function GenericCrud2<T extends { id: string }>({
   viewConfig,
   groupBy,
   displayKeys,
-  actions = { delete: (item)=>console.log(item), edit: (item)=>console.log(item), add: (item)=>console.log(item) },
+  actions = {
+    delete: (item) => console.log(item),
+    edit: (item) => console.log(item),
+    add: (item) => console.log(item),
+  },
 }: GenericCrud2Props<T>) {
   const [selectedItem, setSelectedItem] = useState<(T & { id: string }) | null>(
     null
@@ -44,19 +47,31 @@ export default function GenericCrud2<T extends { id: string }>({
       <div className={styles.contentContainer}>
         <div className={styles.topButtonContainer}>
           {actions.add && (
-            <Button color="secondary" variant="contained" onClick={() => actions.add?.(selectedItem!)}> 
+            <Button
+              color="secondary"
+              variant="contained"
+              onClick={() => actions.add?.(selectedItem!)}
+            >
               Добави
             </Button>
           )}
           {selectedItem && (
             <div className={styles.bottomButtonContainer}>
               {actions.edit && (
-                <Button color="primary" variant="outlined" onClick={() => actions.edit?.(selectedItem!)}>
+                <Button
+                  color="primary"
+                  variant="outlined"
+                  onClick={() => actions.edit?.(selectedItem!)}
+                >
                   Редактирай
                 </Button>
               )}
               {actions.delete && (
-                <Button color="error" variant="outlined" onClick={() => setIsConfirmDialogOpen(true)}>
+                <Button
+                  color="error"
+                  variant="outlined"
+                  onClick={() => setIsConfirmDialogOpen(true)}
+                >
                   Изтрий
                 </Button>
               )}
@@ -74,7 +89,9 @@ export default function GenericCrud2<T extends { id: string }>({
         promptText={"Сигурни ли сте, че искате да изтриете този елемент?"}
         agreeBtnText={"Да"}
         disagreeBtnText={"Не"}
-        handleAgree={() => actions.delete?.(selectedItem!)} 
+        handleAgree={() => {
+          actions.delete?.(selectedItem!); setSelectedItem(null);
+        }}
       />
     </div>
   );

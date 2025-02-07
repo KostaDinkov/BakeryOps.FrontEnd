@@ -2,7 +2,7 @@ import {OrderDTO} from "../../../Types/types";
 import styles from "./OrderStripe.module.scss";
 import format from "date-fns/format";
 import OrderStripeItem from "./OrderStripeItem";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import EditIcon from "@mui/icons-material/Edit";
 
 import PrintIcon from "@mui/icons-material/Print";

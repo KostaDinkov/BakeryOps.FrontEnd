@@ -2,10 +2,11 @@ import { CategoryDTO } from "../../../../Types/types";
 import GenericCrud2 from "../../../../Components/GenericCRUD2/GenericCrud2";
 import { useCategoriesQuery } from "../../../../API/Queries/queryHooks";
 import QueryViewWrapper from "../../../../Components/QueryWrapper/QueryViewWrapper";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import TitleBar from "../../../../Components/TitleBar/TitleBar";
 
 export default function CategoriesPage() {
+  
   const categoriesQuery = useCategoriesQuery();
   const navigate = useNavigate();
 

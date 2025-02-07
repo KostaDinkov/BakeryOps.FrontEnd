@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { format, set } from "date-fns";
 import { bg } from "date-fns/locale";
-import { useParams, useNavigation, useNavigate } from "react-router-dom";
+import { useParams, useNavigation, useNavigate } from "react-router";
 import OrderCard from "../OrderCard/OrderCard";
 import styles from "./DayView.module.css";
 import LinearProgress from "@mui/material/LinearProgress";

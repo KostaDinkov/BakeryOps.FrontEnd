@@ -2,7 +2,7 @@ import { Button } from "@mui/material";
 import { useProductsQuery } from "../../../API/Queries/queryHooks";
 import TitleBar from "../../../Components/TitleBar/TitleBar";
 import ProductPage from "./ProductsPage";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router";
 
 export default function ProductsHome() {
   const productsQuery = useProductsQuery();

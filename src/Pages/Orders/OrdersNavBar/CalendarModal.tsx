@@ -2,7 +2,7 @@
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import {formatISO} from 'date-fns';
-import {useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router";
 import { DateCalendar } from '@mui/x-date-pickers';
 import styles from './CalendarModal.module.css';
 

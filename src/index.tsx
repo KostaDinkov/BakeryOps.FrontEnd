@@ -6,7 +6,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import "./styles/globals.scss";
-import { RouterProvider } from "react-router-dom";
+import { RouterProvider } from "react-router/dom";
 import EventHub from "./EventHub";
 import PubSub from "pubsub-js";
 import { browserRouter } from "./system/browserRouter";

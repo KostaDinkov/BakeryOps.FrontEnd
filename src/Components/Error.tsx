@@ -1,5 +1,5 @@
 
-import { useRouteError } from "react-router-dom";
+import { useRouteError } from "react-router";
 import Typography from "@mui/material/Typography";
 
 import styles from "./Error.module.css";

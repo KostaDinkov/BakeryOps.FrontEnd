@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useLoaderData, useParams } from "react-router-dom";
+import { Link, useLoaderData, useParams } from "react-router";
 import { getUsers } from "../../../API/usersService";
 import UserDTO from "../../../Types/UserDTO";
 import { Button } from "@mui/material";

@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router";
 import Container from "../../../Components/Containers/Container";
 
 export default function Index() {

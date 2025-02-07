@@ -25,8 +25,7 @@
         "tsconfig.json": true,
         "updateApi.ps1": true,
         "tailwind.config.js": true,
-        "zodDef.ts": true,
-        "src/routes": true
+        "zodDef.ts": true
     },
     "hide-files.files": [
         ".mightymeld",
@@ -47,8 +46,7 @@
         "tsconfig.json",
         "updateApi.ps1",
         "tailwind.config.js",
-        "zodDef.ts",
-        "src/routes"
+        "zodDef.ts"
     ],
     "peacock.favoriteColors": [
         {

@@ -2,7 +2,7 @@
 import styles from "./DayColumn.module.css";
 
 import {format} from 'date-fns';
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import {OrderDTO} from "../../../Types/types";
 import { bg } from "date-fns/locale";
 import OrderCardCompact from "../OrderCardCompact/OrderCardCompact";

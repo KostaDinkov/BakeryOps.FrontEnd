@@ -1,5 +1,5 @@
 import { Button, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import styles from './TitleBar.module.css';
 

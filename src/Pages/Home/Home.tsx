@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router";
 import CakeIcon from "@mui/icons-material/Cake";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";

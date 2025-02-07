@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ProductsService from "../../API/productsService";
 import {ProductDTO} from "../../Types/types";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router";
 import { getProductsByCategory } from "../../system/utils";
 import Category from "./Category";
 import styles from "./PriceList.module.scss";

@@ -50,7 +50,6 @@ export default function CategoriesForm({
       onCancel={onCancel}
       defaultValues={selectedItem}
       zodSchema={categoryFormSchema}
-
     >
       <FormFields />
     </GenericForm>

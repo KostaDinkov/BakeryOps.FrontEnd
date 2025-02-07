@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import styles from "./NavBar.module.css";
 import Button from "@mui/material/Button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router";
 import AppContext from "../../appContext";
 import BreadCrumbs from "../BreadCrumbs/BreadCrumbs";
 import { Typography } from "@mui/material";

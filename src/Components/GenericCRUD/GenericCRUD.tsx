@@ -13,7 +13,7 @@ import { getErrorInfo } from "./crudHelperFunctions";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowforwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 export interface IItemOperations<TItem> {
   queryKey: string[];

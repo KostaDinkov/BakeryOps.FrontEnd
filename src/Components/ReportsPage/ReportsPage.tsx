@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './Reports.module.scss';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet } from 'react-router';
 
 export default function ReportsPage(){
     return(

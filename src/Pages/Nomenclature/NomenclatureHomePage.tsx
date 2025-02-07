@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router";
 import NavigationPanel from "../../Components/NavigationPanel";
 
 import WarehouseIcon from "@mui/icons-material/Warehouse";

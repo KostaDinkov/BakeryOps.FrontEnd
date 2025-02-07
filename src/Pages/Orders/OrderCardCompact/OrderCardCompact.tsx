@@ -1,7 +1,7 @@
 import styles from "./OrderCardCompact.module.css";
 import OrderItem from "./OrderItemCompact";
 import EditIcon from "@mui/icons-material/Edit";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import {OrderDTO} from "../../../Types/types";
 import { format } from "date-fns";
 import PrintIcon from "@mui/icons-material/Print";

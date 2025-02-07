@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { NewUserDTO } from "../../../Types/UserDTO";
 import { addUser, updateUser } from "../../../API/usersService";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router";
 import { getPermissions } from "../../../API/authenticationService";
 import { Button, Checkbox } from "@mui/material";
 import styles from "./UserForm.module.scss";

@@ -1,4 +1,3 @@
-//TODO update details view
 import { apiClient } from "../../../API/apiClient";
 import GenericCRUDView, {
   IItemOperations,

@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Alert, Button } from "@mui/material";
+import { Button } from "@mui/material";
+
 import React from "react";
 import {
   useForm,
@@ -10,11 +11,9 @@ import {
   DefaultValues,
 } from "react-hook-form";
 
-
 interface GenericFormProps<FormValues, Tdto> {
   onSubmit: (data: Tdto) => void;
   onCancel: () => void;
-
   defaultValues?: Tdto;
   dtoMapper?: (data: FormValues) => Tdto;
   zodSchema?: Zod.Schema<FormValues>;
@@ -24,20 +23,28 @@ interface GenericFormProps<FormValues, Tdto> {
 function GenericForm<FormValues extends FieldValues, Tdto>({
   onSubmit,
   onCancel,
-
   defaultValues,
   dtoMapper,
   zodSchema,
-  FormFields
-}: GenericFormProps<FormValues,Tdto>) {
+  FormFields,
+}: GenericFormProps<FormValues, Tdto>) {
   const methods = useForm<FormValues>({
     defaultValues: defaultValues as unknown as DefaultValues<FormValues>,
     resolver: zodSchema ? zodResolver(zodSchema) : undefined,
   });
 
   const onValidSubmit: SubmitHandler<FormValues> = (data) => {
-    const mappedData = dtoMapper ? dtoMapper(data) : (data as unknown) as Tdto;
-    onSubmit(mappedData);
+    if (dtoMapper) {
+      onSubmit(dtoMapper(data));
+    }
+    //if defaultValues are provided, we are in edit mode
+    else if (defaultValues) {
+      let result: Tdto = { ...defaultValues, ...data };
+      onSubmit(result);
+    } else {
+      onSubmit(data as unknown as Tdto);
+    }
+
   };
   const { formState } = methods;
   const onInvalidSubmit: SubmitErrorHandler<FormValues> = () => {
@@ -47,7 +54,7 @@ function GenericForm<FormValues extends FieldValues, Tdto>({
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onValidSubmit, onInvalidSubmit)}>
-        <FormFields/>
+        <FormFields />
         {/* <div className="error-messages">
           {Object.keys(methods.formState.errors).length > 0 && (
             <Alert severity="error">

@@ -1,11 +1,11 @@
 import { useLocation, useNavigate } from "react-router";
 import TitleBar from "../../../../Components/TitleBar/TitleBar";
 import { CategoryDTO } from "../../../../Types/types";
-import CategoriesForm from "../../../../Components/Forms/CategoriesForm/CategoriesForm";
+import CategoryFormFields,{type CategoryFormType, categoryFormSchema} from "../../../../Components/Forms/CategoriesForm/CategoriesForm";
 import { useMutation } from "@tanstack/react-query";
 import { apiClient } from "../../../../API/apiClient";
-
 import { useHandleApiResponse } from "../../../../API/apiUtils";
+import GenericForm from "../../../../Components/GenericForm/GenericForm";
 
 export default function Index() {
   const location = useLocation();
@@ -43,10 +43,12 @@ export default function Index() {
   return (
     <>
       <TitleBar title="Категории - Редакция" />
-      <CategoriesForm
-        selectedItem={selectedItem}
-        persistData={categoryMutation.mutateAsync}
+      <GenericForm<CategoryFormType, CategoryDTO>
+        onSubmit={categoryMutation.mutate}
         onCancel={() => navigate("..")}
+        defaultValues={selectedItem}
+        zodSchema={categoryFormSchema}
+        FormFields = {CategoryFormFields}
       />
     </>
   );

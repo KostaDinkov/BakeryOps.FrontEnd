@@ -1,24 +1,13 @@
-import { CategoryDTO } from "../../../Types/types";
-import { FieldValues, useFormContext } from "react-hook-form";
-import { z } from "zod";
 import { TextField } from "@mui/material";
-import GenericForm from "../../GenericForm/GenericForm";
+import { useFormContext } from "react-hook-form";
+import { z } from "zod";
 
-const categoryFormSchema = z.object({
+export const categoryFormSchema = z.object({
   name: z.string().nonempty("Името на категорията е задължително"),
 });
-type CategoryFormType = z.infer<typeof categoryFormSchema>;
+export type CategoryFormType = z.infer<typeof categoryFormSchema>;
 
-export default function CategoriesForm({
-  selectedItem,
-  persistData,
-  onCancel,
-}: {
-  selectedItem: CategoryDTO;
-  persistData: (data: CategoryDTO) => void;
-  onCancel: () => void;
-}) {
-  function FormFields() {
+export default function FormFields() {
     const { register, formState, control } = useFormContext<CategoryFormType>();
 
     return (
@@ -30,28 +19,8 @@ export default function CategoriesForm({
           error={!!formState.errors.name}
           helperText={!!formState.errors.name && formState.errors.name.message}
         />
-
       </div>
     );
   }
 
-  const mapFieldsToDTO = (data: FieldValues): CategoryDTO => {
-    return {
-      id: selectedItem.id,
-      name: data.name,
-    };
-  }
 
-  return (
-    <GenericForm<CategoryFormType>
-      onSubmit={function (data: FieldValues): void {
-        persistData(mapFieldsToDTO(data));
-      }}
-      onCancel={onCancel}
-      defaultValues={selectedItem}
-      zodSchema={categoryFormSchema}
-    >
-      <FormFields />
-    </GenericForm>
-  );
-}

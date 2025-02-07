@@ -16,7 +16,6 @@ import Error from "../Components/Error";
 import NomenclatureHomePage from "../Pages/Nomenclature/NomenclatureHomePage";
 import MaterialsPage from "../Pages/Nomenclature/Materials/MaterialsPage";
 import VendorsPage from "../Pages/Nomenclature/Vendors/VendorsPage";
-import ClientsPage from "../Pages/Nomenclature/Clients/ClientsPage";
 import Products from "../Pages/Nomenclature/Products";
 import RecipesHomePage from "../Pages/Recipes/RecipesHomePage";
 import DeliveriesHome from "../Pages/Deliveries/DeliveriesHome";
@@ -181,8 +180,6 @@ export const browserRouter = createBrowserRouter(
             {
               path: "clients",
               element: <ClientsIndex />,
-              
-              
               children:[
                 {
                   index:true,

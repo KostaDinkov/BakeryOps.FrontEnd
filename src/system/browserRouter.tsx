@@ -17,27 +17,30 @@ import NomenclatureHomePage from "../Pages/Nomenclature/NomenclatureHomePage";
 import MaterialsPage from "../Pages/Nomenclature/Materials/MaterialsPage";
 import VendorsPage from "../Pages/Nomenclature/Vendors/VendorsPage";
 import ClientsPage from "../Pages/Nomenclature/Clients/ClientsPage";
-import CategoriesPage from "../Pages/Nomenclature/Categories";
 import Products from "../Pages/Nomenclature/Products";
 import RecipesHomePage from "../Pages/Recipes/RecipesHomePage";
 import DeliveriesHome from "../Pages/Deliveries/DeliveriesHome";
 import CreateUpdateOrder from "../Pages/Orders/CreateUpdateOrder";
 import CalendarView from "../Pages/Orders/CalendarView/CalendarView";
 import ProductsPage from "../Pages/Nomenclature/Products/ProductsPage";
-
+import CategoriesForm from "../Pages/Nomenclature/Categories/CategoriesForm";
+import CategoriesViewer from "../Pages/Nomenclature/Categories/CategoriesViewer";
+import CategoriesIndex from "../Pages/Nomenclature/Categories";
 
 export const browserRouter = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
-      //-----------------Home-----------------
+      // #region Home
       {
         path: "/",
         element: <Home />,
         errorElement: <Error />,
       },
-      //-----------------Orders-----------------
+      // #endregion
+
+      // #region Orders
       {
         element: <OrdersHome />,
         path: "/orders/",
@@ -59,7 +62,7 @@ export const browserRouter = createBrowserRouter([
             },
           },
           {
-            path:"update/:id",
+            path: "update/:id",
             element: <CreateUpdateOrder />,
             errorElement: <Error />,
             handle: {
@@ -68,7 +71,7 @@ export const browserRouter = createBrowserRouter([
           },
           {
             path: "print/:id",
-            element: <PrintOrder/>,
+            element: <PrintOrder />,
             errorElement: <Error />,
             handle: {
               crumb: () => <span>Принтиране на Поръчка</span>,
@@ -81,7 +84,9 @@ export const browserRouter = createBrowserRouter([
           },
         ],
       },
-      //-----------------Admin-----------------
+      // #endregion
+      
+      // #region Admin
       {
         path: "admin/",
         handle: {
@@ -104,7 +109,9 @@ export const browserRouter = createBrowserRouter([
                 element: <PriceList />,
                 errorElement: <Error />,
                 handle: {
-                  crumb: () => <Link to="/admin/reports/priceList">Ценова Листа</Link>,
+                  crumb: () => (
+                    <Link to="/admin/reports/priceList">Ценова Листа</Link>
+                  ),
                 },
               },
             ],
@@ -133,7 +140,10 @@ export const browserRouter = createBrowserRouter([
           },
         ],
       },
-      //-----------------Nomenclature-----------------
+      // #endregion
+
+      // #region Nomenclature
+      // -- Nomenclature Home
       {
         path: "/nomenclature/",
         handle: {
@@ -145,7 +155,7 @@ export const browserRouter = createBrowserRouter([
             element: <NomenclatureHomePage />,
             errorElement: <Error />,
           },
-
+          // -- Materials
           {
             path: "materials",
             element: <MaterialsPage />,
@@ -154,6 +164,7 @@ export const browserRouter = createBrowserRouter([
               crumb: () => <Link to="/nomenclature/materials">Стоки</Link>,
             },
           },
+          // -- Vendors
           {
             path: "vendors",
             element: <VendorsPage />,
@@ -162,6 +173,7 @@ export const browserRouter = createBrowserRouter([
               crumb: () => <Link to="/nomenclature/vendors">Доставчици</Link>,
             },
           },
+          // -- Clients
           {
             path: "clients",
             element: <ClientsPage />,
@@ -170,52 +182,88 @@ export const browserRouter = createBrowserRouter([
               crumb: () => <Link to="/nomenclature/clients">Клиенти</Link>,
             },
           },
+          // -- Categories
           {
             path: "categories",
-            element: <CategoriesPage />,
-            errorElement: <Error />,
-            handle: {
-              crumb: () => (
-                <Link to="/nomenclature/categories">Категории Стоки</Link>
-              ),
-            },
+            element:<CategoriesIndex/>,
+            children: [
+              {
+                index: true,
+                element: <CategoriesViewer />,
+                errorElement: <Error />,
+                handle: {
+                  crumb: () => (
+                    <Link to="/nomenclature/categories">Категории Стоки</Link>
+                  ),
+                },
+              },
+              {
+                path:"create",
+                element: <CategoriesForm />,
+                errorElement: <Error />,
+                handle: {
+                  crumb: () => (
+                    <Link to="/nomenclature/categories/create">Добавяне на категория</Link>
+                  ),
+                },
+              },
+              {
+                path:"update",
+                element: <CategoriesForm />,
+                errorElement: <Error />,
+                handle: {
+                  crumb: () => (
+                    <Link to="/nomenclature/categories/update">Редактиране на  Категория</Link>
+                  ),
+                },
+              }
+            ],
           },
+          // -- Products
           {
             path: "products",
-            element:<Products/>,
+            element: <Products />,
             errorElement: <Error />,
-                handle: {
-                  crumb: () => (<Link to="/nomenclature/products">Продукти</Link>),
-                },
-            children:[
+            handle: {
+              crumb: () => <Link to="/nomenclature/products">Продукти</Link>,
+            },
+            children: [
               {
-                index:true,
+                index: true,
                 element: <ProductsPage />,
                 errorElement: <Error />,
                 handle: {
-                  crumb: () => (<Link to="/nomenclature/products">Всички</Link>),
+                  crumb: () => <Link to="/nomenclature/products">Всички</Link>,
                 },
               },
               {
-                path:"table",
-                element:<ProductsPage/>,
+                path: "table",
+                element: <ProductsPage />,
                 errorElement: <Error />,
                 handle: {
-                  crumb: () => (<Link to="/nomenclature/products/table">Таблица</Link>),
+                  crumb: () => (
+                    <Link to="/nomenclature/products/table">Таблица</Link>
+                  ),
                 },
               },
               {
-                path:"priceList",
-                element:<PriceList/>,
+                path: "priceList",
+                element: <PriceList />,
                 handle: {
-                  crumb: () => (<Link to="/nomenclature/products/priceList">Ценова Листа</Link>),
+                  crumb: () => (
+                    <Link to="/nomenclature/products/priceList">
+                      Ценова Листа
+                    </Link>
+                  ),
                 },
-              }
-            ]
+              },
+            ],
           },
         ],
       },
-      //-----------------Recipes-----------------
+      // #endregion
+
+      // #region Recipes
       {
         path: "recipes",
         element: <RecipesHomePage />,
@@ -223,7 +271,9 @@ export const browserRouter = createBrowserRouter([
           crumb: () => <Link to="/recipes">Рецепти</Link>,
         },
       },
-      //-----------------Deliveries-----------------
+      // #endregion
+
+      // #region Deliveries
       {
         path: "deliveries",
         element: <DeliveriesHome />,
@@ -231,11 +281,14 @@ export const browserRouter = createBrowserRouter([
           crumb: () => <Link to="/deliveries">Доставки</Link>,
         },
       },
-      //-----------------Login-----------------
+      //#endregion
+
+      // #region Login
       {
         path: "/login/",
         element: <LoginForm />,
       },
+      // #endregion
       // {
       //   path:'/test',
       //   element: <OrderFormProvider/>

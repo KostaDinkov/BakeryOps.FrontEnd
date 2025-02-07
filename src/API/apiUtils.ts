@@ -8,4 +8,4 @@ export async function handleApiResponse(fetchCall: FetchCall) {
       throw fetchResponse.error;
     }
     return fetchResponse.data;
-  }
+}

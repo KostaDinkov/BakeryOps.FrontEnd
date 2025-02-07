@@ -33,13 +33,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CategoryDTO'
+              allOf:
+                - $ref: '#/components/schemas/CategoryDTO'
           text/json:
             schema:
-              $ref: '#/components/schemas/CategoryDTO'
+              allOf:
+                - $ref: '#/components/schemas/CategoryDTO'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/CategoryDTO'
+              allOf:
+                - $ref: '#/components/schemas/CategoryDTO'
       responses:
         '200':
           description: OK
@@ -51,13 +54,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CategoryDTO'
+              allOf:
+                - $ref: '#/components/schemas/CategoryDTO'
           text/json:
             schema:
-              $ref: '#/components/schemas/CategoryDTO'
+              allOf:
+                - $ref: '#/components/schemas/CategoryDTO'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/CategoryDTO'
+              allOf:
+                - $ref: '#/components/schemas/CategoryDTO'
       responses:
         '200':
           description: OK
@@ -89,13 +95,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ClientDTO'
+              allOf:
+                - $ref: '#/components/schemas/ClientDTO'
           text/json:
             schema:
-              $ref: '#/components/schemas/ClientDTO'
+              allOf:
+                - $ref: '#/components/schemas/ClientDTO'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/ClientDTO'
+              allOf:
+                - $ref: '#/components/schemas/ClientDTO'
       responses:
         '200':
           description: OK
@@ -106,13 +115,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ClientDTO'
+              allOf:
+                - $ref: '#/components/schemas/ClientDTO'
           text/json:
             schema:
-              $ref: '#/components/schemas/ClientDTO'
+              allOf:
+                - $ref: '#/components/schemas/ClientDTO'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/ClientDTO'
+              allOf:
+                - $ref: '#/components/schemas/ClientDTO'
       responses:
         '200':
           description: OK
@@ -185,13 +197,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DeliveryDto'
+              allOf:
+                - $ref: '#/components/schemas/DeliveryDto'
           text/json:
             schema:
-              $ref: '#/components/schemas/DeliveryDto'
+              allOf:
+                - $ref: '#/components/schemas/DeliveryDto'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/DeliveryDto'
+              allOf:
+                - $ref: '#/components/schemas/DeliveryDto'
       responses:
         '200':
           description: OK
@@ -203,13 +218,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DeliveryDto'
+              allOf:
+                - $ref: '#/components/schemas/DeliveryDto'
           text/json:
             schema:
-              $ref: '#/components/schemas/DeliveryDto'
+              allOf:
+                - $ref: '#/components/schemas/DeliveryDto'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/DeliveryDto'
+              allOf:
+                - $ref: '#/components/schemas/DeliveryDto'
       responses:
         '200':
           description: OK
@@ -256,13 +274,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/MaterialDto'
+              allOf:
+                - $ref: '#/components/schemas/MaterialDto'
           text/json:
             schema:
-              $ref: '#/components/schemas/MaterialDto'
+              allOf:
+                - $ref: '#/components/schemas/MaterialDto'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/MaterialDto'
+              allOf:
+                - $ref: '#/components/schemas/MaterialDto'
       responses:
         '200':
           description: OK
@@ -274,13 +295,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/MaterialDto'
+              allOf:
+                - $ref: '#/components/schemas/MaterialDto'
           text/json:
             schema:
-              $ref: '#/components/schemas/MaterialDto'
+              allOf:
+                - $ref: '#/components/schemas/MaterialDto'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/MaterialDto'
+              allOf:
+                - $ref: '#/components/schemas/MaterialDto'
       responses:
         '200':
           description: OK
@@ -346,13 +370,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/OrderDTO'
+              allOf:
+                - $ref: '#/components/schemas/OrderDTO'
           text/json:
             schema:
-              $ref: '#/components/schemas/OrderDTO'
+              allOf:
+                - $ref: '#/components/schemas/OrderDTO'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/OrderDTO'
+              allOf:
+                - $ref: '#/components/schemas/OrderDTO'
       responses:
         '200':
           description: OK
@@ -364,13 +391,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/OrderDTO'
+              allOf:
+                - $ref: '#/components/schemas/OrderDTO'
           text/json:
             schema:
-              $ref: '#/components/schemas/OrderDTO'
+              allOf:
+                - $ref: '#/components/schemas/OrderDTO'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/OrderDTO'
+              allOf:
+                - $ref: '#/components/schemas/OrderDTO'
       responses:
         '200':
           description: OK
@@ -404,36 +434,8 @@ paths:
           in: path
           required: true
           schema:
-            type: integer
-            format: int32
-      responses:
-        '200':
-          description: OK
-          content:
-            text/plain:
-              schema:
-                $ref: '#/components/schemas/Product'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Product'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/Product'
-  /api/Products/AddProduct:
-    post:
-      tags:
-        - Products
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Product'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/Product'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/Product'
+            type: string
+            format: uuid
       responses:
         '200':
           description: OK
@@ -456,33 +458,22 @@ paths:
           in: path
           required: true
           schema:
-            type: integer
-            format: int32
+            type: string
+            format: uuid
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Product'
+              allOf:
+                - $ref: '#/components/schemas/Product'
           text/json:
             schema:
-              $ref: '#/components/schemas/Product'
+              allOf:
+                - $ref: '#/components/schemas/Product'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/Product'
-      responses:
-        '200':
-          description: OK
-  '/api/Products/DeleteProduct/{id}':
-    delete:
-      tags:
-        - Products
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int32
+              allOf:
+                - $ref: '#/components/schemas/Product'
       responses:
         '200':
           description: OK
@@ -522,13 +513,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RecipeDTO'
+              allOf:
+                - $ref: '#/components/schemas/RecipeDTO'
           text/json:
             schema:
-              $ref: '#/components/schemas/RecipeDTO'
+              allOf:
+                - $ref: '#/components/schemas/RecipeDTO'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/RecipeDTO'
+              allOf:
+                - $ref: '#/components/schemas/RecipeDTO'
       responses:
         '200':
           description: OK
@@ -540,13 +534,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RecipeDTO'
+              allOf:
+                - $ref: '#/components/schemas/RecipeDTO'
           text/json:
             schema:
-              $ref: '#/components/schemas/RecipeDTO'
+              allOf:
+                - $ref: '#/components/schemas/RecipeDTO'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/RecipeDTO'
+              allOf:
+                - $ref: '#/components/schemas/RecipeDTO'
       responses:
         '200':
           description: OK
@@ -572,13 +569,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserCredentialsDTO'
+              allOf:
+                - $ref: '#/components/schemas/UserCredentialsDTO'
           text/json:
             schema:
-              $ref: '#/components/schemas/UserCredentialsDTO'
+              allOf:
+                - $ref: '#/components/schemas/UserCredentialsDTO'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/UserCredentialsDTO'
+              allOf:
+                - $ref: '#/components/schemas/UserCredentialsDTO'
       responses:
         '200':
           description: OK
@@ -604,13 +604,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Unit'
+              allOf:
+                - $ref: '#/components/schemas/Unit'
           text/json:
             schema:
-              $ref: '#/components/schemas/Unit'
+              allOf:
+                - $ref: '#/components/schemas/Unit'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/Unit'
+              allOf:
+                - $ref: '#/components/schemas/Unit'
       responses:
         '200':
           description: OK
@@ -656,13 +659,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NewUserDTO'
+              allOf:
+                - $ref: '#/components/schemas/NewUserDTO'
           text/json:
             schema:
-              $ref: '#/components/schemas/NewUserDTO'
+              allOf:
+                - $ref: '#/components/schemas/NewUserDTO'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/NewUserDTO'
+              allOf:
+                - $ref: '#/components/schemas/NewUserDTO'
       responses:
         '200':
           description: OK
@@ -674,13 +680,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NewUserDTO'
+              allOf:
+                - $ref: '#/components/schemas/NewUserDTO'
           text/json:
             schema:
-              $ref: '#/components/schemas/NewUserDTO'
+              allOf:
+                - $ref: '#/components/schemas/NewUserDTO'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/NewUserDTO'
+              allOf:
+                - $ref: '#/components/schemas/NewUserDTO'
       responses:
         '200':
           description: OK
@@ -727,13 +736,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/VendorDTO'
+              allOf:
+                - $ref: '#/components/schemas/VendorDTO'
           text/json:
             schema:
-              $ref: '#/components/schemas/VendorDTO'
+              allOf:
+                - $ref: '#/components/schemas/VendorDTO'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/VendorDTO'
+              allOf:
+                - $ref: '#/components/schemas/VendorDTO'
       responses:
         '200':
           description: OK
@@ -745,13 +757,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/VendorDTO'
+              allOf:
+                - $ref: '#/components/schemas/VendorDTO'
           text/json:
             schema:
-              $ref: '#/components/schemas/VendorDTO'
+              allOf:
+                - $ref: '#/components/schemas/VendorDTO'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/VendorDTO'
+              allOf:
+                - $ref: '#/components/schemas/VendorDTO'
       responses:
         '200':
           description: OK
@@ -773,6 +788,7 @@ components:
   schemas:
     CategoryDTO:
       required:
+        - id
         - name
       type: object
       properties:
@@ -780,8 +796,8 @@ components:
           type: string
           format: uuid
         name:
+          minLength: 1
           type: string
-          nullable: true
       additionalProperties: false
     ClientDTO:
       required:
@@ -793,7 +809,6 @@ components:
           format: uuid
         name:
           type: string
-          nullable: true
         phone:
           type: string
           nullable: true
@@ -815,7 +830,6 @@ components:
           format: uuid
         deliveryDate:
           type: string
-          nullable: true
         vendorId:
           type: string
           format: uuid
@@ -890,7 +904,6 @@ components:
           format: uuid
         name:
           type: string
-          nullable: true
         description:
           type: string
           nullable: true
@@ -927,21 +940,16 @@ components:
           nullable: true
         firstName:
           type: string
-          nullable: true
         lastName:
           type: string
-          nullable: true
         userName:
           type: string
-          nullable: true
         permissions:
           type: array
           items:
             type: string
-          nullable: true
         password:
           type: string
-          nullable: true
       additionalProperties: false
     OrderDTO:
       required:
@@ -985,12 +993,13 @@ components:
           type: number
           format: double
         status:
-          $ref: '#/components/schemas/Status'
+          allOf:
+            - $ref: '#/components/schemas/Status'
+          default: 2
         orderItems:
           type: array
           items:
             $ref: '#/components/schemas/OrderItemDTO'
-          nullable: true
       additionalProperties: false
     OrderItemDTO:
       type: object
@@ -1060,7 +1069,6 @@ components:
           type: boolean
         unit:
           type: string
-          nullable: true
         code:
           type: string
           nullable: true
@@ -1078,7 +1086,6 @@ components:
           format: uuid
         name:
           type: string
-          nullable: true
         lastUpdated:
           type: string
           format: date
@@ -1093,12 +1100,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RecipeMaterialDto'
-          nullable: true
         subRecipes:
           type: array
           items:
             $ref: '#/components/schemas/SubRecipeDto'
-          nullable: true
         workHours:
           type: number
           format: double
@@ -1147,17 +1152,14 @@ components:
           format: uuid
         name:
           type: string
-          nullable: true
       additionalProperties: false
     UserCredentialsDTO:
       type: object
       properties:
         userName:
           type: string
-          nullable: true
         password:
           type: string
-          nullable: true
       additionalProperties: false
     VendorDTO:
       required:
@@ -1169,7 +1171,6 @@ components:
           format: uuid
         name:
           type: string
-          nullable: true
         address:
           type: string
           nullable: true

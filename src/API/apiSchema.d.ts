@@ -945,7 +945,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    id: number;
+                    id: string;
                 };
                 cookie?: never;
             };
@@ -966,49 +966,6 @@ export interface paths {
         };
         put?: never;
         post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Products/AddProduct": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["Product"];
-                    "text/json": components["schemas"]["Product"];
-                    "application/*+json": components["schemas"]["Product"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["Product"];
-                        "application/json": components["schemas"]["Product"];
-                        "text/json": components["schemas"]["Product"];
-                    };
-                };
-            };
-        };
         delete?: never;
         options?: never;
         head?: never;
@@ -1028,7 +985,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    id: number;
+                    id: string;
                 };
                 cookie?: never;
             };
@@ -1051,41 +1008,6 @@ export interface paths {
         };
         post?: never;
         delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Products/DeleteProduct/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
         options?: never;
         head?: never;
         patch?: never;
@@ -1852,13 +1774,13 @@ export interface components {
     schemas: {
         CategoryDTO: {
             /** Format: uuid */
-            id?: string;
-            name: string | null;
+            id: string;
+            name: string;
         };
         ClientDTO: {
             /** Format: uuid */
             id?: string;
-            name: string | null;
+            name: string;
             phone?: string | null;
             email?: string | null;
             hasDiscount?: boolean;
@@ -1868,7 +1790,7 @@ export interface components {
         DeliveryDto: {
             /** Format: uuid */
             id?: string;
-            deliveryDate?: string | null;
+            deliveryDate?: string;
             /** Format: uuid */
             vendorId?: string;
             vendorName?: string | null;
@@ -1903,7 +1825,7 @@ export interface components {
         MaterialDto: {
             /** Format: uuid */
             id?: string;
-            name: string | null;
+            name: string;
             description?: string | null;
             /** Format: uuid */
             unitId: string;
@@ -1919,11 +1841,11 @@ export interface components {
         };
         NewUserDTO: {
             id?: string | null;
-            firstName?: string | null;
-            lastName?: string | null;
-            userName?: string | null;
-            permissions?: string[] | null;
-            password: string | null;
+            firstName?: string;
+            lastName?: string;
+            userName?: string;
+            permissions?: string[];
+            password: string;
         };
         OrderDTO: {
             /** Format: uuid */
@@ -1943,8 +1865,9 @@ export interface components {
             advancePaiment: number;
             /** Format: double */
             totalPrice: number;
+            /** @default 2 */
             status: components["schemas"]["Status"];
-            orderItems?: components["schemas"]["OrderItemDTO"][] | null;
+            orderItems?: components["schemas"]["OrderItemDTO"][];
         };
         OrderItemDTO: {
             /** Format: int32 */
@@ -1976,7 +1899,7 @@ export interface components {
             hasDiscount?: boolean;
             keepPriceDrebno?: boolean;
             inPriceList?: boolean;
-            unit: string | null;
+            unit: string;
             code?: string | null;
             isActive?: boolean;
             /** Format: date-time */
@@ -1985,14 +1908,14 @@ export interface components {
         RecipeDTO: {
             /** Format: uuid */
             id?: string;
-            name?: string | null;
+            name?: string;
             /** Format: date */
             lastUpdated?: string;
             /** Format: uuid */
             productId?: string | null;
             description?: string | null;
-            ingredients?: components["schemas"]["RecipeMaterialDto"][] | null;
-            subRecipes?: components["schemas"]["SubRecipeDto"][] | null;
+            ingredients?: components["schemas"]["RecipeMaterialDto"][];
+            subRecipes?: components["schemas"]["SubRecipeDto"][];
             /** Format: double */
             workHours?: number;
             /** Format: double */
@@ -2022,16 +1945,16 @@ export interface components {
         Unit: {
             /** Format: uuid */
             id?: string;
-            name?: string | null;
+            name?: string;
         };
         UserCredentialsDTO: {
-            userName?: string | null;
-            password?: string | null;
+            userName?: string;
+            password?: string;
         };
         VendorDTO: {
             /** Format: uuid */
             id?: string;
-            name: string | null;
+            name: string;
             address?: string | null;
             phoneNumber?: string | null;
             email?: string | null;

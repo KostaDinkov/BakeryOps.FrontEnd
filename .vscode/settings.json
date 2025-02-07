@@ -26,7 +26,6 @@
         "updateApi.ps1": true,
         "tailwind.config.js": true,
         "zodDef.ts": true,
-        "README.md": true,
         "src/routes": true
     },
     "hide-files.files": [
@@ -49,7 +48,6 @@
         "updateApi.ps1",
         "tailwind.config.js",
         "zodDef.ts",
-        "README.md",
         "src/routes"
     ],
     "peacock.favoriteColors": [

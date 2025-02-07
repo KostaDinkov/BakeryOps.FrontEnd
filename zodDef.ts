@@ -2,14 +2,14 @@ import { z } from "zod";
 
 export type CategoryDTO = z.infer<typeof CategoryDTO>;
 export const CategoryDTO = z.object({
-  id: z.union([z.string(), z.undefined()]).optional(),
-  name: z.union([z.string(), z.null()]),
+  id: z.string(),
+  name: z.string(),
 });
 
 export type ClientDTO = z.infer<typeof ClientDTO>;
 export const ClientDTO = z.object({
   id: z.union([z.string(), z.undefined()]).optional(),
-  name: z.union([z.string(), z.null()]),
+  name: z.string(),
   phone: z.union([z.string(), z.null(), z.undefined()]).optional(),
   email: z.union([z.string(), z.null(), z.undefined()]).optional(),
   hasDiscount: z.union([z.boolean(), z.undefined()]).optional(),
@@ -34,7 +34,7 @@ export const DeliveryItemDto = z.object({
 export type DeliveryDto = z.infer<typeof DeliveryDto>;
 export const DeliveryDto = z.object({
   id: z.string().optional(),
-  deliveryDate: z.union([z.string(), z.null()]).optional(),
+  deliveryDate: z.string().optional(),
   vendorId: z.string().optional(),
   vendorName: z.union([z.string(), z.null()]).optional(),
   items: z.array(DeliveryItemDto).optional(),
@@ -48,7 +48,7 @@ export const DeliveryDto = z.object({
 export type MaterialDto = z.infer<typeof MaterialDto>;
 export const MaterialDto = z.object({
   id: z.union([z.string(), z.undefined()]).optional(),
-  name: z.union([z.string(), z.null()]),
+  name: z.string(),
   description: z.union([z.string(), z.null(), z.undefined()]).optional(),
   unitId: z.string(),
   unitName: z.union([z.string(), z.null(), z.undefined()]).optional(),
@@ -62,11 +62,11 @@ export const MaterialDto = z.object({
 export type NewUserDTO = z.infer<typeof NewUserDTO>;
 export const NewUserDTO = z.object({
   id: z.union([z.string(), z.null(), z.undefined()]).optional(),
-  firstName: z.union([z.string(), z.null(), z.undefined()]).optional(),
-  lastName: z.union([z.string(), z.null(), z.undefined()]).optional(),
-  userName: z.union([z.string(), z.null(), z.undefined()]).optional(),
-  permissions: z.union([z.array(z.string()), z.null(), z.undefined()]).optional(),
-  password: z.union([z.string(), z.null()]),
+  firstName: z.union([z.string(), z.undefined()]).optional(),
+  lastName: z.union([z.string(), z.undefined()]).optional(),
+  userName: z.union([z.string(), z.undefined()]).optional(),
+  permissions: z.union([z.array(z.string()), z.undefined()]).optional(),
+  password: z.string(),
 });
 
 export type Status = z.infer<typeof Status>;
@@ -100,7 +100,7 @@ export const OrderDTO = z.object({
   advancePaiment: z.number(),
   totalPrice: z.number(),
   status: Status,
-  orderItems: z.union([z.array(OrderItemDTO), z.null(), z.undefined()]).optional(),
+  orderItems: z.union([z.array(OrderItemDTO), z.undefined()]).optional(),
 });
 
 export type Product = z.infer<typeof Product>;
@@ -113,7 +113,7 @@ export const Product = z.object({
   hasDiscount: z.union([z.boolean(), z.undefined()]).optional(),
   keepPriceDrebno: z.union([z.boolean(), z.undefined()]).optional(),
   inPriceList: z.union([z.boolean(), z.undefined()]).optional(),
-  unit: z.union([z.string(), z.null()]),
+  unit: z.string(),
   code: z.union([z.string(), z.null(), z.undefined()]).optional(),
   isActive: z.union([z.boolean(), z.undefined()]).optional(),
   dateCreated: z.union([z.string(), z.undefined()]).optional(),
@@ -134,12 +134,12 @@ export const SubRecipeDto = z.object({
 export type RecipeDTO = z.infer<typeof RecipeDTO>;
 export const RecipeDTO = z.object({
   id: z.string().optional(),
-  name: z.union([z.string(), z.null()]).optional(),
+  name: z.string().optional(),
   lastUpdated: z.string().optional(),
   productId: z.union([z.string(), z.null()]).optional(),
   description: z.union([z.string(), z.null()]).optional(),
-  ingredients: z.union([z.array(RecipeMaterialDto), z.null()]).optional(),
-  subRecipes: z.union([z.array(SubRecipeDto), z.null()]).optional(),
+  ingredients: z.array(RecipeMaterialDto).optional(),
+  subRecipes: z.array(SubRecipeDto).optional(),
   workHours: z.number().optional(),
   yield: z.number().optional(),
   unitId: z.string().optional(),
@@ -149,19 +149,19 @@ export const RecipeDTO = z.object({
 export type Unit = z.infer<typeof Unit>;
 export const Unit = z.object({
   id: z.string().optional(),
-  name: z.union([z.string(), z.null()]).optional(),
+  name: z.string().optional(),
 });
 
 export type UserCredentialsDTO = z.infer<typeof UserCredentialsDTO>;
 export const UserCredentialsDTO = z.object({
-  userName: z.union([z.string(), z.null()]).optional(),
-  password: z.union([z.string(), z.null()]).optional(),
+  userName: z.string().optional(),
+  password: z.string().optional(),
 });
 
 export type VendorDTO = z.infer<typeof VendorDTO>;
 export const VendorDTO = z.object({
   id: z.union([z.string(), z.undefined()]).optional(),
-  name: z.union([z.string(), z.null()]),
+  name: z.string(),
   address: z.union([z.string(), z.null(), z.undefined()]).optional(),
   phoneNumber: z.union([z.string(), z.null(), z.undefined()]).optional(),
   email: z.union([z.string(), z.null(), z.undefined()]).optional(),
@@ -488,19 +488,8 @@ export const get_ApiProductsGetProductId = {
   requestFormat: z.literal("json"),
   parameters: z.object({
     path: z.object({
-      id: z.number(),
+      id: z.string(),
     }),
-  }),
-  response: Product,
-};
-
-export type post_ApiProductsAddProduct = typeof post_ApiProductsAddProduct;
-export const post_ApiProductsAddProduct = {
-  method: z.literal("POST"),
-  path: z.literal("/api/Products/AddProduct"),
-  requestFormat: z.literal("json"),
-  parameters: z.object({
-    body: Product,
   }),
   response: Product,
 };
@@ -512,22 +501,9 @@ export const put_ApiProductsUpdateProductId = {
   requestFormat: z.literal("json"),
   parameters: z.object({
     path: z.object({
-      id: z.number(),
+      id: z.string(),
     }),
     body: Product,
-  }),
-  response: z.unknown(),
-};
-
-export type delete_ApiProductsDeleteProductId = typeof delete_ApiProductsDeleteProductId;
-export const delete_ApiProductsDeleteProductId = {
-  method: z.literal("DELETE"),
-  path: z.literal("/api/Products/DeleteProduct/{id}"),
-  requestFormat: z.literal("json"),
-  parameters: z.object({
-    path: z.object({
-      id: z.number(),
-    }),
   }),
   response: z.unknown(),
 };
@@ -798,7 +774,6 @@ export const EndpointByMethod = {
     "/api/Deliveries/Create": post_ApiDeliveriesCreate,
     "/api/Materials/AddMaterial": post_ApiMaterialsAddMaterial,
     "/api/Orders/CreateOrder": post_ApiOrdersCreateOrder,
-    "/api/Products/AddProduct": post_ApiProductsAddProduct,
     "/api/Recipes/AddRecipe": post_ApiRecipesAddRecipe,
     "/api/Security/GetToken": post_ApiSecurityGetToken,
     "/api/Units/AddUnit": post_ApiUnitsAddUnit,
@@ -822,7 +797,6 @@ export const EndpointByMethod = {
     "/api/Deliveries/Delete/{id}": delete_ApiDeliveriesDeleteId,
     "/api/Materials/DeleteMaterial/{id}": delete_ApiMaterialsDeleteMaterialId,
     "/api/Orders/DeleteOrder/{id}": delete_ApiOrdersDeleteOrderId,
-    "/api/Products/DeleteProduct/{id}": delete_ApiProductsDeleteProductId,
     "/api/Recipes/DeleteRecipe/{id}": delete_ApiRecipesDeleteRecipeId,
     "/api/Users/DeleteUser/{id}": delete_ApiUsersDeleteUserId,
     "/api/Vendors/DeleteVendor/{id}": delete_ApiVendorsDeleteVendorId,

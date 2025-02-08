@@ -9,6 +9,7 @@ type Error = {
   title: string;
 };
 export async function handleApiResponse(fetchCall: FetchCall) {
+  
   const fetchResponse = await fetchCall();
   if (fetchResponse.error) {
     throw fetchResponse.error as ErrorResponse<ResponseObjectMap<any>, any>;

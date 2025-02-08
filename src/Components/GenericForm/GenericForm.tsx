@@ -38,7 +38,8 @@ function GenericForm<FormValues extends FieldValues, Tdto>({
       onSubmit(dtoMapper(data));
     }
     //if defaultValues are provided, we are in edit mode
-    else if (defaultValues) {
+    
+    else if (defaultValues && Object.keys(defaultValues).length > 0) {
       let result: Tdto = { ...defaultValues, ...data };
       onSubmit(result);
     } else {

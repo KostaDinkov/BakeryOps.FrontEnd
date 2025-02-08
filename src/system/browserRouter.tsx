@@ -15,16 +15,22 @@ import PrintOrder from "../Pages/Orders/PrintOrderView";
 import Error from "../Components/Error";
 import NomenclatureHomePage from "../Pages/Nomenclature/NomenclatureHomePage";
 import MaterialsPage from "../Pages/Nomenclature/Materials/MaterialsPage";
-import VendorsPage from "../Pages/Nomenclature/Vendors/VendorsPage";
+
+import VendorsIndex from "../Pages/Nomenclature/Vendors";
+import VendorsViewer from "../Pages/Nomenclature/Vendors/VendorsViewer";
+import VendorsForm from "../Pages/Nomenclature/Vendors/VendorForm";
+
 import Products from "../Pages/Nomenclature/Products";
 import RecipesHomePage from "../Pages/Recipes/RecipesHomePage";
 import DeliveriesHome from "../Pages/Deliveries/DeliveriesHome";
 import CreateUpdateOrder from "../Pages/Orders/CreateUpdateOrder";
 import CalendarView from "../Pages/Orders/CalendarView/CalendarView";
 import ProductsPage from "../Pages/Nomenclature/Products/ProductsPage";
+
 import CategoriesForm from "../Pages/Nomenclature/Categories/CategoriesForm";
 import CategoriesViewer from "../Pages/Nomenclature/Categories/CategoriesViewer";
 import CategoriesIndex from "../Pages/Nomenclature/Categories";
+
 import ClientsIndex from "../Pages/Nomenclature/Clients";
 import ClientsViewer from "../Pages/Nomenclature/Clients/ClientsViewer";
 import ClientsForm from "../Pages/Nomenclature/Clients/ClientsForm";
@@ -170,11 +176,33 @@ export const browserRouter = createBrowserRouter(
             // -- Vendors
             {
               path: "vendors",
-              element: <VendorsPage />,
-              errorElement: <Error />,
-              handle: {
-                crumb: () => <Link to="/nomenclature/vendors">Доставчици</Link>,
-              },
+              element: <VendorsIndex />,
+              children:[
+                {
+                  index:true,
+                  element: <VendorsViewer />,
+                  errorElement: <Error />,
+                  handle: {
+                    crumb: () => <Link to="/nomenclature/vendors">Доставчици</Link>,
+                  },
+                },
+                {
+                  path: "create",
+                  element: <VendorsForm />,
+                  errorElement: <Error />,
+                  handle: {
+                    crumb: () => <Link to="/nomenclature/vendors/create">Добавяне на доставчик</Link>,
+                  },
+                },
+                {
+                  path: "update",
+                  element: <VendorsForm />,
+                  errorElement: <Error />,
+                  handle: {
+                    crumb: () => <Link to="/nomenclature/vendors/update">Редактиране на доставчик</Link>,
+                  },
+                }
+              ]
             },
             // -- Clients
             {

@@ -1,5 +1,24 @@
 import { Controller, useFormContext } from "react-hook-form";
 import { Checkbox, FormControlLabel, TextField } from "@mui/material";
+import { z } from "zod";
+
+export const clientSchema = z.object({
+  name: z
+    .string({ required_error: "Името на клиента е задължително", invalid_type_error: "Името на клиента е задължително" })
+    .min(3,{message:"Името на клиента трябва да е минимум 3 символа"})
+    .max(50,{message:"Името на клиента трябва да е максимум 50 символа"}),
+  phone: z.string().min(5,{message:"Телефонният номер трябва да е минимум 5 символа"}).max(20).optional(),
+  email: z
+    .string()
+    .email({ message: "Невалиден формат на мейла." })
+    .optional()
+    .nullable(),
+  isCompany: z.coerce.boolean(),
+  isSpecialPrice: z.coerce.boolean(),
+  hasDiscount:z.coerce.boolean(),
+});
+
+export type ClientFormType = z.infer<typeof clientSchema>;
 
  export default function ClientFormFields() {
     const { register, formState, control } = useFormContext<ClientFormType>();

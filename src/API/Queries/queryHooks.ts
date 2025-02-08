@@ -72,3 +72,12 @@ export function useCategoriesQuery():UseQueryResult<CategoryDTO[],Error> {
   });
 }
 
+export function useVendorsQuery() {
+  return useQuery({
+    queryKey: ["vendors"],
+    queryFn: async () =>
+      await handleApiResponse(async () =>
+        apiClient.GET("/api/Vendors/GetVendors")
+      ),
+  });
+}

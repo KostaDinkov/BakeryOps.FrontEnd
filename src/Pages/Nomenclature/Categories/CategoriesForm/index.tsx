@@ -1,12 +1,12 @@
 import TitleBar from "../../../../Components/TitleBar/TitleBar";
 import { CategoryDTO } from "../../../../Types/types";
 import CategoryFormFields, { type CategoryFormType, categoryFormSchema } from "../../../../Components/Forms/CategoriesForm/CategoriesForm";
-import { FormPersistenceProvider } from "../../../../Providers/FormNavigationProvider";
-import PersistedForm from "../../../../Components/GenericForm/NavigatedForm";
+import { FormDataProvider } from "../../../../Providers/FormDataProvider";
+import FormWithData from "../../../../Components/GenericForm/NavigatedForm";
 
 export default function Index() {
   return (
-    <FormPersistenceProvider<CategoryDTO>
+    <FormDataProvider<CategoryDTO>
       endpoints={{
         create: "/api/Categories/AddCategory",
         update: "/api/Categories/UpdateCategory"
@@ -20,10 +20,10 @@ export default function Index() {
       queryKey="categories"
     >
       <TitleBar title="Категории - Редакция" />
-      <PersistedForm<CategoryFormType, CategoryDTO>
+      <FormWithData<CategoryFormType, CategoryDTO>
         zodSchema={categoryFormSchema}
         FormFields={CategoryFormFields}
       />
-    </FormPersistenceProvider>
+    </FormDataProvider>
   );
 }

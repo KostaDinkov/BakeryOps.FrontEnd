@@ -23,7 +23,7 @@ This project is based on react router v.6 and tanstack/react-query for data fetc
 
 ### Forms
 - we use generic forms based on react-hook-form
-- there are two main generic forms: `GenericForm` and `PersistedForm`
-- do not use `GenericForm` directly, instead use `PersistedForm`, which uses `GenericForm` internally
-- `PersistedForm` should be used as a child of `FormPersistenceProvider`
-- `FormPersistenceProvider` is used to provide endpoints for create / update operations and handles navigation on success and cancel
+- there are two main generic forms: `GenericForm` and `FormWithData`
+- do not use `GenericForm` directly, instead use `FormWithData`, which uses `GenericForm` internally
+- `FormWithData` should be used as a child of `FormDataProvider`
+- `FormDataProvider` is used to provide endpoints for create / update operations and handles navigation on success and cancel, as well as additional data that a form might need (like a list of options for a select input)

@@ -1,21 +1,21 @@
 import { ZodSchema } from "zod";
-import { useFormPersistence } from "../../Providers/FormNavigationProvider";
+import { useFormData } from "../../Providers/FormDataProvider";
 import GenericForm from "./GenericForm";
 import { FieldValues } from "react-hook-form";
 
-interface PersistedFormProps<TForm, TDTO> {
+interface FormWithDataProps<TForm, TDTO> {
   zodSchema: ZodSchema<TForm>;
   FormFields: React.FC;
   dtoMapper?: (data: TForm) => TDTO;
 }
 
-export default function PersistedForm<TForm extends FieldValues, TDTO>({
+export default function FormWithData<TForm extends FieldValues, TDTO>({
   zodSchema,
   FormFields,
   dtoMapper,
-}: PersistedFormProps<TForm, TDTO>) {
+}: FormWithDataProps<TForm, TDTO>) {
   const { selectedItem, handleSubmit, handleCancel } =
-    useFormPersistence<TDTO>();
+    useFormData<TDTO>();
 
   return (
     <GenericForm<TForm, TDTO>

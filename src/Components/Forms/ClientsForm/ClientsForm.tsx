@@ -1,6 +1,7 @@
 import { Controller, useFormContext } from "react-hook-form";
 import { Checkbox, FormControlLabel, TextField } from "@mui/material";
 import { z } from "zod";
+import {useFormData} from "../../../Providers/FormDataProvider";
 
 export const clientSchema = z.object({
   name: z
@@ -22,6 +23,7 @@ export type ClientFormType = z.infer<typeof clientSchema>;
 
  export default function ClientFormFields() {
     const { register, formState, control } = useFormContext<ClientFormType>();
+    const { data} = useFormData<ClientFormType>();
     return (
       <div className="flex flex-col gap-4">
         <Controller

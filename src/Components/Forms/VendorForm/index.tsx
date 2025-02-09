@@ -32,7 +32,7 @@ export default function VendorFormFields() {
       
       <Controller
         control={control}
-        name="phone"
+        name="phoneNumber"
         render={({ field, fieldState: { error } }) => (
           <TextField
             {...field}

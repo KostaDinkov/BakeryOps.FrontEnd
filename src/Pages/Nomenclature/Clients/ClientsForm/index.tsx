@@ -4,8 +4,8 @@ import ClientFormFields, {
   clientSchema,
 } from "../../../../Components/Forms/ClientsForm/ClientsForm";
 import { ClientDTO } from "../../../../Types/types";
-import { FormPersistenceProvider } from "../../../../Providers/FormNavigationProvider";
-import PersistedForm from "../../../../Components/GenericForm/NavigatedForm";
+import { FormDataProvider } from "../../../../Providers/FormDataProvider";
+import FormWithData from "../../../../Components/GenericForm/NavigatedForm";
 
 export default function Index() {
   const mapFieldsToDTO = (
@@ -22,7 +22,7 @@ export default function Index() {
   };
 
   return (
-    <FormPersistenceProvider<ClientDTO>
+    <FormDataProvider<ClientDTO>
       endpoints={{
         create: "/api/Clients",
         update: "/api/Clients",
@@ -34,13 +34,14 @@ export default function Index() {
         updateError: "Клиента не беше обновен!",
       }}
       queryKey="clients"
+      
     >
       <TitleBar title="Клиенти - Редакция" />
-      <PersistedForm<ClientFormType, ClientDTO>
+      <FormWithData<ClientFormType, ClientDTO>
         zodSchema={clientSchema}
         FormFields={ClientFormFields}
         dtoMapper={undefined}
       />
-    </FormPersistenceProvider>
+    </FormDataProvider>
   );
 }

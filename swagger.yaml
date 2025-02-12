@@ -894,9 +894,8 @@ components:
       additionalProperties: false
     MaterialDto:
       required:
-        - categoryId
+        - id
         - name
-        - unitId
       type: object
       properties:
         id:
@@ -910,15 +909,18 @@ components:
         unitId:
           type: string
           format: uuid
+          nullable: true
         unitName:
           type: string
           nullable: true
         latestPrice:
           type: number
           format: double
+          nullable: true
         categoryId:
           type: string
           format: uuid
+          nullable: true
         categoryName:
           type: string
           nullable: true

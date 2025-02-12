@@ -7,6 +7,7 @@ import {
   FormProvider,
   SubmitHandler,
   FieldValues,
+  FieldErrors,
   SubmitErrorHandler,
   DefaultValues,
 } from "react-hook-form";
@@ -15,7 +16,7 @@ interface GenericFormProps<FormValues, Tdto> {
   onSubmit: (data: Tdto) => void;
   onCancel: () => void;
   defaultValues?: Tdto;
-  dtoMapper?: (data: FormValues) => Tdto;
+  dtoMapper?: (data: FormValues, selectedItem?:Tdto) => Tdto;
   zodSchema?: Zod.Schema<FormValues>;
   FormFields: React.FC;
 }
@@ -35,7 +36,7 @@ function GenericForm<FormValues extends FieldValues, Tdto>({
 
   const onValidSubmit: SubmitHandler<FormValues> = (data) => {
     if (dtoMapper) {
-      onSubmit(dtoMapper(data));
+      onSubmit(dtoMapper(data, defaultValues));
     }
     //if defaultValues are provided, we are in edit mode
     
@@ -82,14 +83,14 @@ function GenericForm<FormValues extends FieldValues, Tdto>({
       </form>
     </FormProvider>
   );
-}
 function printErrors(
-  errors: { [key: string]: { message: string } } | undefined
+  errors: FieldErrors<any> | undefined
 ) {
   if (!errors)
     throw new Error("No errors to print, but printErrors was called");
   for (const key in errors) {
     console.log(`Поле: ${key} -- ${errors[key]?.message}`);
   }
+}
 }
 export default GenericForm;

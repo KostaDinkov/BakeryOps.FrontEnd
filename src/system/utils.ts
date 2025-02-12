@@ -80,3 +80,14 @@ export function getSpecialPrice(
 
   return Math.round((final + Number.EPSILON) * 100) / 100;
 }
+
+export function isV4uuid(uuidString:string | undefined | null) {
+  if (typeof uuidString !== 'string') {
+    return false; // Not a string, so cannot be a UUID
+  }
+
+  // Regular expression for UUID v4 format (case-insensitive)
+  const uuidv4Regex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+  return uuidv4Regex.test(uuidString);
+}

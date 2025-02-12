@@ -4,6 +4,8 @@ import { handleApiResponse } from "../apiUtils";
 import { addDays, format, getDate } from "date-fns";
 import { CategoryDTO, OrderDTO } from "../../Types/types";
 
+
+
 export function useProductsQuery() {
   return useQuery({
     queryKey: ["products"],
@@ -78,6 +80,26 @@ export function useVendorsQuery() {
     queryFn: async () =>
       await handleApiResponse(async () =>
         apiClient.GET("/api/Vendors/GetVendors")
+      ),
+  });
+}
+
+export function useMaterialsQuery() {
+  return useQuery({
+    queryKey: ["materials"],
+    queryFn: async () =>
+      await handleApiResponse(async () =>
+        apiClient.GET("/api/Materials/GetMaterials")
+      ),
+  });
+}
+
+export function useUnitsQuery() {
+  return useQuery({
+    queryKey: ["units"],
+    queryFn: async () =>
+      await handleApiResponse(async () =>
+        apiClient.GET("/api/Units/GetUnits")
       ),
   });
 }

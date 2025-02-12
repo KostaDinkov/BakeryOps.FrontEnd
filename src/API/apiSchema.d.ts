@@ -1824,16 +1824,16 @@ export interface components {
         };
         MaterialDto: {
             /** Format: uuid */
-            id?: string;
+            id: string;
             name: string;
             description?: string | null;
             /** Format: uuid */
-            unitId: string;
+            unitId?: string | null;
             unitName?: string | null;
             /** Format: double */
-            latestPrice?: number;
+            latestPrice?: number | null;
             /** Format: uuid */
-            categoryId: string;
+            categoryId?: string | null;
             categoryName?: string | null;
             /** Format: uuid */
             vendorId?: string | null;

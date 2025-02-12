@@ -2,7 +2,7 @@ import TitleBar from "../../../../Components/TitleBar/TitleBar";
 import { CategoryDTO } from "../../../../Types/types";
 import CategoryFormFields, { type CategoryFormType, categoryFormSchema } from "../../../../Components/Forms/CategoriesForm/CategoriesForm";
 import { FormDataProvider } from "../../../../Providers/FormDataProvider";
-import FormWithData from "../../../../Components/GenericForm/NavigatedForm";
+import FormWithData from "../../../../Components/GenericForm/FormWithData";
 
 export default function Index() {
   return (

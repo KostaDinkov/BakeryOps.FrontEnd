@@ -8,7 +8,7 @@ import { Button } from "@mui/material";
 import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
 
 export type GenericCrud2Props<T> = {
-  items: T[];
+  items: T[] ;
   viewConfig: ViewConfigItem<T>[];
   groupBy?: keyof T;
   displayKeys?: (keyof T)[];

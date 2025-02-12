@@ -22,8 +22,8 @@ const FormPersistenceContext = createContext<FormDataProviderProps<any> | undefi
 interface ProviderProps{
   children: ReactNode;
   endpoints: {
-    create: PathsWithMethod<paths, 'post'>;
-    update: PathsWithMethod<paths, 'put'>;
+    create: PathsWithMethod<paths, 'post'> | null;
+    update: PathsWithMethod<paths, 'put'> | null;
   };
   messages: {
     createSuccess: string;
@@ -55,6 +55,7 @@ interface ProviderProps{
  * the form mode (create or edit) based on the presence of a selected item in the location state.
  *
  * @remarks
+ * Since this component gets a value from the location state, it should be used as a route component.
  * To consume the form data context, use the useFormData hook within the child components.
  * This component utilizes React Context to share form data management logic within its children.
  * It leverages React Query's useMutation hook for handling API calls and invalidating queries
@@ -75,18 +76,25 @@ export function FormDataProvider<T extends {id?:string}>({
 
   const { selectedItem = {} as T } = location.state || {};
   const isEdit = Object.keys(selectedItem).length > 0;
-
   const create = async (data: T) => {
+    if (endpoints.create === null) {
+      console.log('No create endpoint provided');
+      return;
+    }
     await handleApiResponse(
-      async () => await apiClient.POST(endpoints.create, { body: data }),
+      async () => await apiClient.POST(endpoints.create!, { body: data }),
       messages.createSuccess,
       messages.createError
     );
   };
 
   const update = async (data: T) => {
+    if (endpoints.update === null) {
+      console.log('No update endpoint provided');
+      return;
+    }
     await handleApiResponse(
-      () => apiClient.PUT(endpoints.update, { body: data }),
+      () => apiClient.PUT(endpoints.update!, {params:{path:{id:selectedItem?.id}}, body: data }),
       messages.updateSuccess,
       messages.updateError
     );

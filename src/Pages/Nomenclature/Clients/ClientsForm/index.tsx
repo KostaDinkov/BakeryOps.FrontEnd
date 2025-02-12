@@ -5,7 +5,7 @@ import ClientFormFields, {
 } from "../../../../Components/Forms/ClientsForm/ClientsForm";
 import { ClientDTO } from "../../../../Types/types";
 import { FormDataProvider } from "../../../../Providers/FormDataProvider";
-import FormWithData from "../../../../Components/GenericForm/NavigatedForm";
+import FormWithData from "../../../../Components/GenericForm/FormWithData";
 
 export default function Index() {
   const mapFieldsToDTO = (

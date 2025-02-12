@@ -1,7 +1,6 @@
 import { Controller, Control, FieldValues, Path } from 'react-hook-form';
 import Autocomplete, { AutocompleteProps } from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import FormHelperText from '@mui/material/FormHelperText';
 import { useEffect, useState } from 'react';
 
 interface RHFAutocompleteProps<T extends { id: string }, TForm extends FieldValues>
@@ -31,7 +30,7 @@ export default function RHFAutocomplete<T extends { id: string }, TForm extends 
   ...autocompleteProps
 
 }: RHFAutocompleteProps<T, TForm>) {
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState<string>('');
 
   return (
     <Controller
@@ -41,7 +40,15 @@ export default function RHFAutocomplete<T extends { id: string }, TForm extends 
         // Sync input value with form value changes
         useEffect(() => {
           if (typeof value === 'string') {
-            const option = options.find(o => o.id === value);
+            
+            let option = options.find(o => (o.id === value));
+            if(!option){
+              //FIXME if the option has a name prop, try to find by name
+              if(Object.hasOwn(options[0]??{}, "name")){
+                 option = options.find(o => (o.name === value));
+              }
+             }
+
             if(option){
               setInputValue(getOptionLabel(option));
             }
@@ -62,7 +69,7 @@ export default function RHFAutocomplete<T extends { id: string }, TForm extends 
               defaultValue={null}
               options={options}
               inputValue={inputValue}
-              value={options.find(o => o.id === value) || null}
+              value={options.find(o => o.id === value) || options.find(o => o.name === value) || null}
               onInputChange={(_, newValue) => {
                 setInputValue(newValue);
                 // Only update form value if it's not a valid option ID

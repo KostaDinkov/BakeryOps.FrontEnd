@@ -6,7 +6,7 @@ import { FieldValues } from "react-hook-form";
 interface FormWithDataProps<TForm, TDTO> {
   zodSchema: ZodSchema<TForm>;
   FormFields: React.FC;
-  dtoMapper?: (data: TForm) => TDTO;
+  dtoMapper?: (data: TForm, selectedItem?:TDTO) => TDTO;
 }
 
 export default function FormWithData<TForm extends FieldValues, TDTO>({

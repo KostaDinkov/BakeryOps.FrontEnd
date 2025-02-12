@@ -14,18 +14,19 @@ import OrdersHome from "../Pages/Orders";
 import PrintOrder from "../Pages/Orders/PrintOrderView";
 import Error from "../Components/Error";
 import NomenclatureHomePage from "../Pages/Nomenclature/NomenclatureHomePage";
-import MaterialsPage from "../Pages/Nomenclature/Materials/MaterialsPage";
 
 import VendorsIndex from "../Pages/Nomenclature/Vendors";
 import VendorsViewer from "../Pages/Nomenclature/Vendors/VendorsViewer";
 import VendorsForm from "../Pages/Nomenclature/Vendors/VendorForm";
 
-import Products from "../Pages/Nomenclature/Products";
+import ProductsIndex from "../Pages/Nomenclature/Products";
+import ProductsViewer from "../Pages/Nomenclature/Products/ProductsViewer";
+import ProductsForm from "../Pages/Nomenclature/Products/ProductsForm";
+
 import RecipesHomePage from "../Pages/Recipes/RecipesHomePage";
 import DeliveriesHome from "../Pages/Deliveries/DeliveriesHome";
 import CreateUpdateOrder from "../Pages/Orders/CreateUpdateOrder";
 import CalendarView from "../Pages/Orders/CalendarView/CalendarView";
-import ProductsPage from "../Pages/Nomenclature/Products/ProductsPage";
 
 import CategoriesForm from "../Pages/Nomenclature/Categories/CategoriesForm";
 import CategoriesViewer from "../Pages/Nomenclature/Categories/CategoriesViewer";
@@ -34,6 +35,10 @@ import CategoriesIndex from "../Pages/Nomenclature/Categories";
 import ClientsIndex from "../Pages/Nomenclature/Clients";
 import ClientsViewer from "../Pages/Nomenclature/Clients/ClientsViewer";
 import ClientsForm from "../Pages/Nomenclature/Clients/ClientsForm";
+
+import MaterialsIndex from "../Pages/Nomenclature/Materials/MaterialsIndex";
+import MaterialsViewer from "../Pages/Nomenclature/Materials/MaterialsViewer/MaterialsViewerIndex";
+import MaterialsForm from "../Pages/Nomenclature/Materials/MaterialsForm/MaterialsFormIndex";
 
 export const browserRouter = createBrowserRouter(
   [
@@ -167,23 +172,59 @@ export const browserRouter = createBrowserRouter(
             // -- Materials
             {
               path: "materials",
-              element: <MaterialsPage />,
+              element: <MaterialsIndex />,
               errorElement: <Error />,
-              handle: {
-                crumb: () => <Link to="/nomenclature/materials">Стоки</Link>,
-              },
+             
+              children: [
+                {
+                  index: true,
+                  element: <MaterialsViewer />,
+                  errorElement: <Error />,
+                  handle: {
+                    crumb: () => (
+                      <Link to="/nomenclature/materials">Стоки</Link>
+                    ),
+                  },
+                },
+                {
+                  path: "create",
+                  element: <MaterialsForm />,
+                  errorElement: <Error />,
+                  handle: {
+                    crumb: () => (
+                      <Link to="/nomenclature/materials/create">
+                        Добавяне на стока
+                      </Link>
+                    ),
+                  },
+                },
+                {
+                  path: "update",
+                  element: <MaterialsForm />,
+                  errorElement: <Error />,
+                  handle: {
+                    crumb: () => (
+                      <Link to="/nomenclature/materials/update">
+                        Редактиране на стока
+                      </Link>
+                    ),
+                  },
+                },
+              ],
             },
             // -- Vendors
             {
               path: "vendors",
               element: <VendorsIndex />,
-              children:[
+              children: [
                 {
-                  index:true,
+                  index: true,
                   element: <VendorsViewer />,
                   errorElement: <Error />,
                   handle: {
-                    crumb: () => <Link to="/nomenclature/vendors">Доставчици</Link>,
+                    crumb: () => (
+                      <Link to="/nomenclature/vendors">Доставчици</Link>
+                    ),
                   },
                 },
                 {
@@ -191,7 +232,11 @@ export const browserRouter = createBrowserRouter(
                   element: <VendorsForm />,
                   errorElement: <Error />,
                   handle: {
-                    crumb: () => <Link to="/nomenclature/vendors/create">Добавяне на доставчик</Link>,
+                    crumb: () => (
+                      <Link to="/nomenclature/vendors/create">
+                        Добавяне на доставчик
+                      </Link>
+                    ),
                   },
                 },
                 {
@@ -199,22 +244,28 @@ export const browserRouter = createBrowserRouter(
                   element: <VendorsForm />,
                   errorElement: <Error />,
                   handle: {
-                    crumb: () => <Link to="/nomenclature/vendors/update">Редактиране на доставчик</Link>,
+                    crumb: () => (
+                      <Link to="/nomenclature/vendors/update">
+                        Редактиране на доставчик
+                      </Link>
+                    ),
                   },
-                }
-              ]
+                },
+              ],
             },
             // -- Clients
             {
               path: "clients",
               element: <ClientsIndex />,
-              children:[
+              children: [
                 {
-                  index:true,
+                  index: true,
                   element: <ClientsViewer />,
                   errorElement: <Error />,
                   handle: {
-                    crumb: () => <Link to="/nomenclature/clients">Клиенти</Link>,
+                    crumb: () => (
+                      <Link to="/nomenclature/clients">Клиенти</Link>
+                    ),
                   },
                 },
                 {
@@ -222,7 +273,11 @@ export const browserRouter = createBrowserRouter(
                   element: <ClientsForm />,
                   errorElement: <Error />,
                   handle: {
-                    crumb: () => <Link to="/nomenclature/clients/create">Добавяне на клиент</Link>,
+                    crumb: () => (
+                      <Link to="/nomenclature/clients/create">
+                        Добавяне на клиент
+                      </Link>
+                    ),
                   },
                 },
                 {
@@ -230,10 +285,14 @@ export const browserRouter = createBrowserRouter(
                   element: <ClientsForm />,
                   errorElement: <Error />,
                   handle: {
-                    crumb: () => <Link to="/nomenclature/clients/update">Редактиране на клиент</Link>,
+                    crumb: () => (
+                      <Link to="/nomenclature/clients/update">
+                        Редактиране на клиент
+                      </Link>
+                    ),
                   },
-                }
-              ]
+                },
+              ],
             },
             // -- Categories
             {
@@ -279,29 +338,29 @@ export const browserRouter = createBrowserRouter(
             // -- Products
             {
               path: "products",
-              element: <Products />,
+              element: <ProductsIndex />,
               errorElement: <Error />,
-              handle: {
-                crumb: () => <Link to="/nomenclature/products">Продукти</Link>,
-              },
+
               children: [
                 {
                   index: true,
-                  element: <ProductsPage />,
+                  element: <ProductsViewer />,
                   errorElement: <Error />,
                   handle: {
                     crumb: () => (
-                      <Link to="/nomenclature/products">Всички</Link>
+                      <Link to="/nomenclature/products">Продукти</Link>
                     ),
                   },
                 },
                 {
-                  path: "table",
-                  element: <ProductsPage />,
+                  path: "update",
+                  element: <ProductsForm />,
                   errorElement: <Error />,
                   handle: {
                     crumb: () => (
-                      <Link to="/nomenclature/products/table">Таблица</Link>
+                      <Link to="/nomenclature/products/update">
+                        Редактиране
+                      </Link>
                     ),
                   },
                 },

@@ -22,7 +22,6 @@
         "mightymeld.json": true,
         "mightymeld.secrets": true,
         "postcss.config.js": true,
-        "tsconfig.json": true,
         "updateApi.ps1": true,
         "tailwind.config.js": true,
         "zodDef.ts": true
@@ -43,7 +42,6 @@
         "mightymeld.json",
         "mightymeld.secrets",
         "postcss.config.js",
-        "tsconfig.json",
         "updateApi.ps1",
         "tailwind.config.js",
         "zodDef.ts"

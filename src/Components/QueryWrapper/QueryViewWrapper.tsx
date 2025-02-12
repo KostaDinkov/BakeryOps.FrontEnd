@@ -6,8 +6,8 @@ export default function QueryViewWrapper<T>({
   query,
   children,
 }: {
-  query: UseQueryResult<T[] | T, Error>;
-  children: (data: T[] | T) => React.ReactNode;
+  query: UseQueryResult<T[] , Error>;
+  children: (data: T[] ) => React.ReactNode;
 }) {
   if (query.isLoading) {
     return <div>Loading...</div>;
@@ -18,6 +18,6 @@ export default function QueryViewWrapper<T>({
 
   return <article className={styles.container}>
 
-    {children(query.data as T[] | T)}
+    {children(query.data as T[] )}
     </article>;
 }

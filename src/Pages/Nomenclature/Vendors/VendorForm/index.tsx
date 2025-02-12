@@ -2,7 +2,7 @@ import TitleBar from "../../../../Components/TitleBar/TitleBar";
 import { VendorDTO } from "../../../../Types/types";
 import VendorFormFields, { type VendorFormType, vendorFormSchema } from "../../../../Components/Forms/VendorForm";
 import { FormDataProvider } from "../../../../Providers/FormDataProvider";
-import FormWithData from "../../../../Components/GenericForm/NavigatedForm";
+import FormWithData from "../../../../Components/GenericForm/FormWithData";
 
 export default function Index() {
   return (

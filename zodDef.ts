@@ -47,13 +47,13 @@ export const DeliveryDto = z.object({
 
 export type MaterialDto = z.infer<typeof MaterialDto>;
 export const MaterialDto = z.object({
-  id: z.union([z.string(), z.undefined()]).optional(),
+  id: z.string(),
   name: z.string(),
   description: z.union([z.string(), z.null(), z.undefined()]).optional(),
-  unitId: z.string(),
+  unitId: z.union([z.string(), z.null(), z.undefined()]).optional(),
   unitName: z.union([z.string(), z.null(), z.undefined()]).optional(),
-  latestPrice: z.union([z.number(), z.undefined()]).optional(),
-  categoryId: z.string(),
+  latestPrice: z.union([z.number(), z.null(), z.undefined()]).optional(),
+  categoryId: z.union([z.string(), z.null(), z.undefined()]).optional(),
   categoryName: z.union([z.string(), z.null(), z.undefined()]).optional(),
   vendorId: z.union([z.string(), z.null(), z.undefined()]).optional(),
   vendorName: z.union([z.string(), z.null(), z.undefined()]).optional(),

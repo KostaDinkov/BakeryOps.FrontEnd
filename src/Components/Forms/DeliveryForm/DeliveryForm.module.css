@@ -1,4 +1,4 @@
-@import "../../styles/vars.css";
+
 .deliveryForm{
     display:flex;
     flex-direction: column;
@@ -10,6 +10,7 @@
     grid-template-columns: 2fr auto auto;
     grid-template-rows: auto auto;
     gap: var(--gap-small);
+    
 }
 
 .fullGridRow{

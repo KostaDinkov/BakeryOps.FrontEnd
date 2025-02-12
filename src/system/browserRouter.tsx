@@ -24,7 +24,6 @@ import ProductsViewer from "../Pages/Nomenclature/Products/ProductsViewer";
 import ProductsForm from "../Pages/Nomenclature/Products/ProductsForm";
 
 import RecipesHomePage from "../Pages/Recipes/RecipesHomePage";
-import DeliveriesHome from "../Pages/Deliveries/DeliveriesHome";
 import CreateUpdateOrder from "../Pages/Orders/CreateUpdateOrder";
 import CalendarView from "../Pages/Orders/CalendarView/CalendarView";
 
@@ -39,6 +38,10 @@ import ClientsForm from "../Pages/Nomenclature/Clients/ClientsForm";
 import MaterialsIndex from "../Pages/Nomenclature/Materials/MaterialsIndex";
 import MaterialsViewer from "../Pages/Nomenclature/Materials/MaterialsViewer/MaterialsViewerIndex";
 import MaterialsForm from "../Pages/Nomenclature/Materials/MaterialsForm/MaterialsFormIndex";
+
+import DeliveriesIndex from "../Pages/Deliveries/";
+import DeliveriesForm from "../Pages/Deliveries/DeliveriesForm/DeliveriesFormIndex";
+import DeliveriesViewer from "../Pages/Deliveries/DeliveriesViewer/DeliveriesViewerIndex";
 
 export const browserRouter = createBrowserRouter(
   [
@@ -394,10 +397,36 @@ export const browserRouter = createBrowserRouter(
         // #region Deliveries
         {
           path: "deliveries",
-          element: <DeliveriesHome />,
+          element: <DeliveriesIndex />,
           handle: {
             crumb: () => <Link to="/deliveries">Доставки</Link>,
           },
+          children:[
+            {
+              index:true,
+              element:<DeliveriesViewer/>,
+              errorElement:<Error/>,
+              handle:{
+                crumb:()=><Link to="/deliveries">Преглед</Link>
+              }
+            },
+            {
+              path:"create",
+              element:<DeliveriesForm/>,
+              errorElement:<Error/>,
+              handle:{
+                crumb:()=><Link to="/deliveries/create">Добавяне</Link>
+              }
+            },
+            {
+              path:"update",
+              element:<DeliveriesForm/>,
+              errorElement:<Error/>,
+              handle:{
+                crumb:()=><Link to="/deliveries/update">Редактиране</Link>
+              }
+            }
+          ]
         },
         //#endregion
 

@@ -58,7 +58,9 @@
     "updateApi": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./updateApi.ps1 && npx openapi-typescript swagger.yaml -o ./src/API/apiSchema.d.ts && npx typed-openapi swagger.yaml -o zodDef.ts -r zod",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "test": "npx playwright test --ui"
+    "test": "npx playwright test --ui",
+    "vitest": "vitest"
+
   },
   "eslintConfig": {
     "extends": [

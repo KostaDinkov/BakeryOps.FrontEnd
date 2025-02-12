@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { DeliveryDTO } from "../../Types/types";
+import { DeliveryDTO } from "../../../Types/types";
 
 export const deliverySchema: z.ZodSchema<DeliveryDTO> = z.object({
   id: z.string().uuid().default("00000000-0000-0000-0000-000000000000"),
@@ -39,3 +39,5 @@ export const deliverySchema: z.ZodSchema<DeliveryDTO> = z.object({
     message: "Добавете поне един артикул към доставката",
   }),
 });
+
+export type DeliveryFormType = z.infer<typeof deliverySchema>;

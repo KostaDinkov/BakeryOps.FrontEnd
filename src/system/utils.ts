@@ -1,6 +1,6 @@
 import { ProductsByCategory } from "../Types/types";
 import {ProductDTO} from "../Types/types";
-import { format } from "date-fns";
+import { format,parseISO } from "date-fns";
 
 export async function sleep(msec: number) {
   return new Promise((resolve) => setTimeout(resolve, msec));
@@ -90,4 +90,12 @@ export function isV4uuid(uuidString:string | undefined | null) {
   const uuidv4Regex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
   return uuidv4Regex.test(uuidString);
+}
+
+export function isoDateToString(date: string | undefined): string {
+  if(date === undefined || date === null) return "undefined date";
+  const result = parseISO(date)
+  if(!(result instanceof Date) || isNaN(result.getTime())) return "Invalid Date";
+  
+  return format(result, "dd.MM.yyyy");
 }

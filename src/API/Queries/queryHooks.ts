@@ -103,3 +103,13 @@ export function useUnitsQuery() {
       ),
   });
 }
+
+export function useDeliveriesQuery() {
+  return useQuery({
+    queryKey: ["deliveries"],
+    queryFn: async () =>
+      await handleApiResponse(async () =>
+        apiClient.GET("/api/Deliveries/GetAll")
+      ),
+  });
+}

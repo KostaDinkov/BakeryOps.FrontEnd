@@ -72,7 +72,7 @@ function GenericForm<FormValues extends FieldValues, Tdto>({
             </Alert>
           )}
         </div> */}
-        <div className="form-actions">
+        <div className="mt-4 flex justify-end gap-4">
           <Button type="button" variant="outlined" onClick={onCancel}>
             Cancel
           </Button>

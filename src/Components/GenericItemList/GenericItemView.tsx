@@ -8,21 +8,21 @@ import {
   Typography,
   Box,
 } from "@mui/material";
-import { GridColDef } from "@mui/x-data-grid";
+import { GridColDef, GridValidRowModel } from "@mui/x-data-grid";
 import GenericGridView from "./GenericGridView";
 
 export type ViewConfigItem<T> = {
     [K in keyof T]?: 
-      | { label: string; valueFormatter?: (value: T[K]) => any; columnDef?: undefined }
-      | { label: string; columnDef: GridColDef[]; valueFormatter?: undefined };
-}
+      | { label: string; valueFormatter?: (value: T[K]) => any; columnDef?: never }
+      | { label: string; columnDef: GridColDef[]; valueFormatter?: never };
+} 
 
 interface ItemDetailsProps<T> {
   item: T;
   viewConfig: ViewConfigItem<T>[];
 }
 
-export default function ItemDetails<T extends Record<string, any>>({
+export default function ItemDetails<T>({
   item,
   viewConfig,
 }: ItemDetailsProps<T>) {

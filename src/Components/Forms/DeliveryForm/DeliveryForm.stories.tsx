@@ -1,8 +1,8 @@
 import type {Meta, StoryObj} from '@storybook/react';
 import DeliveryForm from './DeliveryForm';
-import { sampleMaterials } from '../../tests/sampleData/sampleMaterials';
-import { sampleVendors } from '../../tests/sampleData/sampleVendors';
-import { sampleDeliveries } from '../../tests/sampleData/sampleDeliveries';
+import { sampleMaterials } from '../../../tests/sampleData/sampleMaterials';
+import { sampleVendors } from '../../../tests/sampleData/sampleVendors';
+import { sampleDeliveries } from '../../../tests/sampleData/sampleDeliveries';
 import { Button } from '@mui/material';
 import { Story } from '@storybook/blocks';
 

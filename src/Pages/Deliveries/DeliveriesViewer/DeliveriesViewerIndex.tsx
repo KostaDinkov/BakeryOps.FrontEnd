@@ -17,7 +17,7 @@ export default function DeliveriesViewerIndex() {
     mutationFn: async (selectedItem: DeliveryDTO) =>
       await handleApiResponse(async () =>
         apiClient.DELETE("/api/Deliveries/Delete/{id}", {
-          params: { path: { id: selectedItem.id } },
+          params: { path: { id: selectedItem.id! } },
         })
       ),
     onSuccess: () => {
@@ -32,7 +32,7 @@ export default function DeliveriesViewerIndex() {
         {(data) => {
           return (
             <GenericCrud2<DeliveryDTO & { id: string }>
-              items={data}
+              items={data as DeliveryDTO[]& { id: string }[]}
               viewConfig={[
                 { vendorName: { label: "Доставчик" }, },
                 {

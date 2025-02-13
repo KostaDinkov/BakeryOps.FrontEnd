@@ -12,6 +12,17 @@ export default function DeliveriesFormIndex() {
   const vendorsQuery = useVendorsQuery();
   const materialsQuery = useMaterialsQuery();
 
+  const dtoMapper=(data:DeliveryFormType, selectedItem?:DeliveryDTO)=>{
+
+    const mappedData:DeliveryDTO={
+      ...selectedItem,
+      ...data,
+      items:data.items.map(item=>({...item, materialId:item.materialId}))
+    }
+    return mappedData;
+
+  }
+
   if(vendorsQuery.isLoading || materialsQuery.isLoading) return <div>Loading vendors and materials</div>
   if(vendorsQuery.isError || vendorsQuery.isError) return <div>Error loading vendors or materials</div>
   return (
@@ -19,8 +30,8 @@ export default function DeliveriesFormIndex() {
       <TitleBar title="Доставки - редактиране" />
       <FormDataProvider
         endpoints={{
-          create: "/api/Vendors/AddVendor",
-          update: "/api/Vendors/UpdateVendor",
+          create: "/api/Deliveries/Create",
+          update: "/api/Deliveries/Update",
         }}
         messages={{
           createSuccess: "",
@@ -30,10 +41,12 @@ export default function DeliveriesFormIndex() {
         }}
         queryKey={""}
         data={{vendors:vendorsQuery.data, materials:materialsQuery.data}}
+        
       >
         <FormWithData<DeliveryFormType, DeliveryDTO>
           zodSchema={deliverySchema}
           FormFields={DeliveryFormFields}
+          dtoMapper={dtoMapper}
         />
       </FormDataProvider>
     </>

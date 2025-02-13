@@ -27,9 +27,6 @@ import { DeliveryFormType } from "./deliverySchema";
 import { useFormData } from "../../../Providers/FormDataProvider";
 import RHFAutocomplete from "../../RHFOrderForm/RHFAutocomplete";
 
-type DeliveryItems = {
-  [key: string]: DeliveryItemDTO;
-};
 
 export default function DeliveryForm() {
   const { register, formState, control } = useFormContext<DeliveryFormType>();

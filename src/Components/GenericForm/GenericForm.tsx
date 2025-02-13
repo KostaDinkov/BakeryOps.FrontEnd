@@ -50,7 +50,10 @@ function GenericForm<FormValues extends FieldValues, Tdto>({
   };
   const { formState } = methods;
   const onInvalidSubmit: SubmitErrorHandler<FormValues> = () => {
+    const formValues = methods.getValues();
+
     printErrors(formState.errors);
+    console.log(formValues);
   };
 
   return (

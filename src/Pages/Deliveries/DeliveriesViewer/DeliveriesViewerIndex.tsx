@@ -22,7 +22,7 @@ export default function DeliveriesViewerIndex() {
       ),
     onSuccess: () => {
       deliveriesQuery.refetch();
-    }
+    },
   });
 
   return (
@@ -35,7 +35,24 @@ export default function DeliveriesViewerIndex() {
               items={data}
               viewConfig={[
                 { vendorName: { label: "Доставчик" } },
-                { totalWithTax: { label: "Обща сума с ДДС" } },
+                {
+                  total: {
+                    label: "Обща сума",
+                    valueFormatter: (value) => `${value} лв.`,
+                  },
+                },
+                {
+                  tax: {
+                    label: "ДДС",
+                    valueFormatter: (value) => `${value} лв.`,
+                  },
+                },
+                {
+                  totalWithTax: {
+                    label: "Обща сума с ДДС",
+                    valueFormatter: (value) => `${value} лв.`,
+                  },
+                },
                 {
                   deliveryDate: {
                     label: "Дата на доставка",
@@ -71,10 +88,12 @@ export default function DeliveriesViewerIndex() {
               ]}
               actions={{
                 delete: (item) => deleteMutation.mutate(item),
-                edit: (selectedItem) => navigate("./update", { state:{selectedItem} }),
+                edit: (selectedItem) =>
+                  navigate("./update", { state: { selectedItem } }),
                 add: () => navigate("./create"),
               }}
               displayKeys={["vendorName", "deliveryDate", "totalWithTax"]}
+              groupBy="deliveryDate"
             ></GenericCrud2>
           );
         }}

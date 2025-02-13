@@ -15,7 +15,7 @@ export function useProductsQuery() {
       ),
   });
 }
-export function useProductQuery({ id }: { id: number }) {
+export function useProductQuery({ id }: { id: string }) {
   return useQuery({
     queryKey: ["product", id],
     queryFn: async () =>
@@ -110,6 +110,16 @@ export function useDeliveriesQuery() {
     queryFn: async () =>
       await handleApiResponse(async () =>
         apiClient.GET("/api/Deliveries/GetAll")
+      ),
+  });
+}
+
+export function useRecipesQuery() {
+  return useQuery({
+    queryKey: ["recipes"],
+    queryFn: async () =>
+      await handleApiResponse(async () =>
+        apiClient.GET("/api/Recipes/GetRecipes")
       ),
   });
 }

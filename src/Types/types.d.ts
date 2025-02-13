@@ -7,11 +7,11 @@ export type MaterialDTO = components["schemas"]["MaterialDto"];
 export type CategoryDTO = components["schemas"]["CategoryDTO"];
 export type ClientDTO = components["schemas"]["ClientDTO"];
 export type Unit = components["schemas"]["Unit"];
-export type RecipeDTO = components["schemas"]["RecipeDTO"];
+export type RecipeDTO = components["schemas"]["RecipeDto"];
 export type OrderDTO = components["schemas"]["OrderDTO"];
 export type OrderItemDTO = components["schemas"]["OrderItemDTO"];
 export type ProductDTO = components["schemas"]["Product"];
-export type UserDTO = components["schemas"]["UserDTO"];
+export type UserDTO = components["schemas"]["NewUserDTO"];
 
 export interface ProductsByCategory {
     [category: string]: ProductDTO[];

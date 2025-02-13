@@ -1132,9 +1132,9 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    "application/json": components["schemas"]["RecipeDTO"];
-                    "text/json": components["schemas"]["RecipeDTO"];
-                    "application/*+json": components["schemas"]["RecipeDTO"];
+                    "application/json": components["schemas"]["RecipeDto"];
+                    "text/json": components["schemas"]["RecipeDto"];
+                    "application/*+json": components["schemas"]["RecipeDto"];
                 };
             };
             responses: {
@@ -1170,9 +1170,9 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    "application/json": components["schemas"]["RecipeDTO"];
-                    "text/json": components["schemas"]["RecipeDTO"];
-                    "application/*+json": components["schemas"]["RecipeDTO"];
+                    "application/json": components["schemas"]["RecipeDto"];
+                    "text/json": components["schemas"]["RecipeDto"];
+                    "application/*+json": components["schemas"]["RecipeDto"];
                 };
             };
             responses: {
@@ -1905,12 +1905,16 @@ export interface components {
             /** Format: date-time */
             dateCreated?: string;
         };
-        RecipeDTO: {
+        RecipeDto: {
+            /** Format: date-time */
+            createdOn?: string;
+            /** Format: date-time */
+            updatedOn?: string | null;
+            createdBy?: string | null;
+            updatedBy?: string | null;
             /** Format: uuid */
-            id?: string;
-            name?: string;
-            /** Format: date */
-            lastUpdated?: string;
+            id: string;
+            name: string;
             /** Format: uuid */
             productId?: string | null;
             description?: string | null;
@@ -1927,7 +1931,10 @@ export interface components {
         };
         RecipeMaterialDto: {
             /** Format: uuid */
+            id?: string;
+            /** Format: uuid */
             materialId?: string;
+            materialName?: string | null;
             /** Format: double */
             quantity?: number;
         };
@@ -1938,7 +1945,10 @@ export interface components {
         Status: 0 | 1 | 2;
         SubRecipeDto: {
             /** Format: uuid */
+            id?: string;
+            /** Format: uuid */
             subRecipeId?: string;
+            subRecipeName?: string | null;
             /** Format: double */
             quantity?: number;
         };

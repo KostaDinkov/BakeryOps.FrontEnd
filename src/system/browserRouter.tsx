@@ -23,7 +23,6 @@ import ProductsIndex from "../Pages/Nomenclature/Products";
 import ProductsViewer from "../Pages/Nomenclature/Products/ProductsViewer";
 import ProductsForm from "../Pages/Nomenclature/Products/ProductsForm";
 
-import RecipesHomePage from "../Pages/Recipes/RecipesHomePage";
 import CreateUpdateOrder from "../Pages/Orders/CreateUpdateOrder";
 import CalendarView from "../Pages/Orders/CalendarView/CalendarView";
 
@@ -42,6 +41,10 @@ import MaterialsForm from "../Pages/Nomenclature/Materials/MaterialsForm/Materia
 import DeliveriesIndex from "../Pages/Deliveries/";
 import DeliveriesForm from "../Pages/Deliveries/DeliveriesForm/DeliveriesFormIndex";
 import DeliveriesViewer from "../Pages/Deliveries/DeliveriesViewer/DeliveriesViewerIndex";
+
+import RecipesIndex from "../Pages/Recipes/RecipesIndex"
+import RecipeViewerIndex from "../Pages/Recipes/RecipeViewer/RecipeViewerIndex";
+import RecipeFormIndex from "../Pages/Recipes/RecipeForm/RecipeFormIndex";
 
 export const browserRouter = createBrowserRouter(
   [
@@ -387,10 +390,35 @@ export const browserRouter = createBrowserRouter(
         // #region Recipes
         {
           path: "recipes",
-          element: <RecipesHomePage />,
-          handle: {
-            crumb: () => <Link to="/recipes">Рецепти</Link>,
-          },
+          element: <RecipesIndex/>,
+          
+          children:[
+            {
+              index:true,
+              element:<RecipeViewerIndex/>,
+              errorElement:<Error/>,
+              handle:{
+                crumb:()=><Link to="/recipes">Преглед</Link>
+              }
+            },
+            {
+              path:"create",
+              element:<RecipeFormIndex/>,
+              errorElement:<Error/>,
+              handle:{
+                crumb:()=><Link to="/recipes/create">Добавяне</Link>
+              }
+            },
+            {
+              path:"update",
+              element:<RecipeFormIndex/>,
+              errorElement:<Error/>,
+              handle:{
+                crumb:()=><Link to="/recipes/update">Редактиране</Link>
+              }
+            }
+
+          ]
         },
         // #endregion
 

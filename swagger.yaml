@@ -514,15 +514,15 @@ paths:
           application/json:
             schema:
               allOf:
-                - $ref: '#/components/schemas/RecipeDTO'
+                - $ref: '#/components/schemas/RecipeDto'
           text/json:
             schema:
               allOf:
-                - $ref: '#/components/schemas/RecipeDTO'
+                - $ref: '#/components/schemas/RecipeDto'
           application/*+json:
             schema:
               allOf:
-                - $ref: '#/components/schemas/RecipeDTO'
+                - $ref: '#/components/schemas/RecipeDto'
       responses:
         '200':
           description: OK
@@ -535,15 +535,15 @@ paths:
           application/json:
             schema:
               allOf:
-                - $ref: '#/components/schemas/RecipeDTO'
+                - $ref: '#/components/schemas/RecipeDto'
           text/json:
             schema:
               allOf:
-                - $ref: '#/components/schemas/RecipeDTO'
+                - $ref: '#/components/schemas/RecipeDto'
           application/*+json:
             schema:
               allOf:
-                - $ref: '#/components/schemas/RecipeDTO'
+                - $ref: '#/components/schemas/RecipeDto'
       responses:
         '200':
           description: OK
@@ -1080,17 +1080,31 @@ components:
           type: string
           format: date-time
       additionalProperties: false
-    RecipeDTO:
+    RecipeDto:
+      required:
+        - id
+        - name
       type: object
       properties:
+        createdOn:
+          type: string
+          format: date-time
+        updatedOn:
+          type: string
+          format: date-time
+          nullable: true
+        createdBy:
+          type: string
+          nullable: true
+        updatedBy:
+          type: string
+          nullable: true
         id:
           type: string
           format: uuid
         name:
+          minLength: 1
           type: string
-        lastUpdated:
-          type: string
-          format: date
         productId:
           type: string
           format: uuid
@@ -1122,9 +1136,15 @@ components:
     RecipeMaterialDto:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
         materialId:
           type: string
           format: uuid
+        materialName:
+          type: string
+          nullable: true
         quantity:
           type: number
           format: double
@@ -1139,9 +1159,15 @@ components:
     SubRecipeDto:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
         subRecipeId:
           type: string
           format: uuid
+        subRecipeName:
+          type: string
+          nullable: true
         quantity:
           type: number
           format: double

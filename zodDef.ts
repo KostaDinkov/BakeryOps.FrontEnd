@@ -121,29 +121,36 @@ export const Product = z.object({
 
 export type RecipeMaterialDto = z.infer<typeof RecipeMaterialDto>;
 export const RecipeMaterialDto = z.object({
+  id: z.string().optional(),
   materialId: z.string().optional(),
+  materialName: z.union([z.string(), z.null()]).optional(),
   quantity: z.number().optional(),
 });
 
 export type SubRecipeDto = z.infer<typeof SubRecipeDto>;
 export const SubRecipeDto = z.object({
+  id: z.string().optional(),
   subRecipeId: z.string().optional(),
+  subRecipeName: z.union([z.string(), z.null()]).optional(),
   quantity: z.number().optional(),
 });
 
-export type RecipeDTO = z.infer<typeof RecipeDTO>;
-export const RecipeDTO = z.object({
-  id: z.string().optional(),
-  name: z.string().optional(),
-  lastUpdated: z.string().optional(),
-  productId: z.union([z.string(), z.null()]).optional(),
-  description: z.union([z.string(), z.null()]).optional(),
-  ingredients: z.array(RecipeMaterialDto).optional(),
-  subRecipes: z.array(SubRecipeDto).optional(),
-  workHours: z.number().optional(),
-  yield: z.number().optional(),
-  unitId: z.string().optional(),
-  cost: z.number().optional(),
+export type RecipeDto = z.infer<typeof RecipeDto>;
+export const RecipeDto = z.object({
+  createdOn: z.union([z.string(), z.undefined()]).optional(),
+  updatedOn: z.union([z.string(), z.null(), z.undefined()]).optional(),
+  createdBy: z.union([z.string(), z.null(), z.undefined()]).optional(),
+  updatedBy: z.union([z.string(), z.null(), z.undefined()]).optional(),
+  id: z.string(),
+  name: z.string(),
+  productId: z.union([z.string(), z.null(), z.undefined()]).optional(),
+  description: z.union([z.string(), z.null(), z.undefined()]).optional(),
+  ingredients: z.union([z.array(RecipeMaterialDto), z.undefined()]).optional(),
+  subRecipes: z.union([z.array(SubRecipeDto), z.undefined()]).optional(),
+  workHours: z.union([z.number(), z.undefined()]).optional(),
+  yield: z.union([z.number(), z.undefined()]).optional(),
+  unitId: z.union([z.string(), z.undefined()]).optional(),
+  cost: z.union([z.number(), z.undefined()]).optional(),
 });
 
 export type Unit = z.infer<typeof Unit>;
@@ -545,7 +552,7 @@ export const post_ApiRecipesAddRecipe = {
   path: z.literal("/api/Recipes/AddRecipe"),
   requestFormat: z.literal("json"),
   parameters: z.object({
-    body: RecipeDTO,
+    body: RecipeDto,
   }),
   response: z.unknown(),
 };
@@ -556,7 +563,7 @@ export const put_ApiRecipesUpdateRecipe = {
   path: z.literal("/api/Recipes/UpdateRecipe"),
   requestFormat: z.literal("json"),
   parameters: z.object({
-    body: RecipeDTO,
+    body: RecipeDto,
   }),
   response: z.unknown(),
 };

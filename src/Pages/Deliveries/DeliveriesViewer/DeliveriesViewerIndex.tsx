@@ -34,7 +34,7 @@ export default function DeliveriesViewerIndex() {
             <GenericCrud2<DeliveryDTO & { id: string }>
               items={data}
               viewConfig={[
-                { vendorName: { label: "Доставчик" } },
+                { vendorName: { label: "Доставчик" }, },
                 {
                   total: {
                     label: "Обща сума",

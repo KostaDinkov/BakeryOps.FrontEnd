@@ -11,6 +11,7 @@ import {
   TextField, // added TextField import
 } from "@mui/material";
 import styles from "./GenericItemLIst.module.css";
+import { ViewConfigItem } from "./GenericItemView";
 // #endregion
 
 interface IId {
@@ -20,6 +21,7 @@ interface IId {
 // Updated prop name to displayKeys as an array of keys
 interface GenericItemsListProps<TItem extends IId> {
   items: TItem[];
+  
   groupBy?: keyof TItem;
   displayKeys: (keyof TItem)[];
   selectedItem: TItem | null;
@@ -28,6 +30,7 @@ interface GenericItemsListProps<TItem extends IId> {
 export default function GenericItemsList<TItem extends IId>({
   displayKeys = ["id"], // set default value
   items,
+  
   groupBy,
   selectedItem,
   setSelectedItem
@@ -86,7 +89,8 @@ export default function GenericItemsList<TItem extends IId>({
       {groupBy && (
         <Paper className={styles.categoryPanel}>
           <Typography variant="h6" gutterBottom>
-            Категории
+
+            Група
           </Typography>
           <List>
             {groups.map((group) => (

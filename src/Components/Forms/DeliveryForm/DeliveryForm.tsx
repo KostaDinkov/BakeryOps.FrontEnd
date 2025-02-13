@@ -30,9 +30,9 @@ import RHFAutocomplete from "../../RHFOrderForm/RHFAutocomplete";
 
 export default function DeliveryForm() {
   const { register, formState, control } = useFormContext<DeliveryFormType>();
-  const {
-    data: { vendors, materials },
-  } = useFormData<DeliveryFormType>();
+  const formData = useFormData<DeliveryFormType>();
+  const vendors = formData?.data?.vendors || [];
+  const materials = formData?.data?.materials || [];
   const { append, remove, fields } = useFieldArray({ control, name: "items" });
 
   return (
@@ -90,7 +90,7 @@ export default function DeliveryForm() {
       <Button
         size="medium"
         variant="outlined"
-        onClick={() => append({})}
+        onClick={() => append({ materialId: "", quantity: 0, unitPrice: 0 })}
         >Добави</Button>
     </div>
   );
@@ -114,7 +114,7 @@ function MaterialFields({
       <div className={styles.deliveryRowWithDelete}>
         <div key={field.id} className={styles.deliveryRow}>
           {/* //--PRODUCT NAME */}
-          <RHFAutocomplete<MaterialDTO & { id: string }, DeliveryItemDTO>
+          <RHFAutocomplete<MaterialDTO & { id: string }, DeliveryFormType>
             className={styles.item}
             size="small"
             options={materials}

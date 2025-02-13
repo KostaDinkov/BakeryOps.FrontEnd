@@ -19,7 +19,7 @@ export type ViewConfigItem<T> = {
 
 interface ItemDetailsProps<T> {
   item: T;
-  viewConfig: ViewConfigItem<T>;
+  viewConfig: ViewConfigItem<T>[];
 }
 
 export default function ItemDetails<T>({

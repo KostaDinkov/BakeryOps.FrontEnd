@@ -21,7 +21,6 @@ interface IId {
 // Updated prop name to displayKeys as an array of keys
 interface GenericItemsListProps<TItem extends IId> {
   items: TItem[];
-  
   groupBy?: keyof TItem;
   displayKeys: (keyof TItem)[];
   selectedItem: TItem | null;

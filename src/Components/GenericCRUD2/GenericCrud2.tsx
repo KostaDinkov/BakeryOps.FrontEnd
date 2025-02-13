@@ -43,7 +43,7 @@ export default function GenericCrud2<T extends { id: string }>({
         setSelectedItem={setSelectedItem}
         selectedItem={selectedItem}
         displayKeys={displayKeys || ["id"]}
-        viewConfig={viewConfig}
+        
       />
       <div className={styles.contentContainer}>
         <div className={styles.topButtonContainer}>

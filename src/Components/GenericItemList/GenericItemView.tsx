@@ -104,7 +104,7 @@ export default function ItemDetails<T>({
           }
         ];
         const gridItems = (item[key as keyof T] as any[]) || [];
-        return (
+        return gridItems.length > 0 ? (
           <Box key={index} mt={2}>
             <Typography variant="h6" mb={1}>
               {config?.label ?? "Без Име"}
@@ -112,11 +112,11 @@ export default function ItemDetails<T>({
             <GenericGridView
               items={gridItems}
               columnsDef={
-                (config as { label: string; columnDef: GridColDef[] }).columnDef
+          (config as { label: string; columnDef: GridColDef[] }).columnDef
               }
             />
           </Box>
-        );
+        ) : null;
       })}
     </Paper>
   );

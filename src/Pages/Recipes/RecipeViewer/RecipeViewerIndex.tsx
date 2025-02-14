@@ -34,6 +34,7 @@ export default function RecipeViewerIndex() {
                 edit: null,
                 add: null,
               }}
+              displayKeys={["name"]}
             />
           );
         }}

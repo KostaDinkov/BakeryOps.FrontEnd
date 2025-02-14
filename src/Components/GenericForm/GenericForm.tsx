@@ -19,7 +19,7 @@ interface GenericFormProps<FormValues, Tdto> {
   dtoMapper?: (data: FormValues, selectedItem?:Tdto) => Tdto;
   zodSchema?: Zod.Schema<FormValues>;
   FormFields: React.FC<{data:Record<string,any>|undefined}>;
-  data:Record<string,any>
+  data:Record<string,any>|undefined;
 }
 
 function GenericForm<FormValues extends FieldValues, Tdto>({

@@ -8,7 +8,10 @@ import { bgBG } from "@mui/x-date-pickers/locales";
 import { bg } from "date-fns/locale";
 import { ThemeProvider } from "@mui/material";
 import {withConsole} from '@storybook/addon-console';
+import {NotificationsProvider} from "@toolpad/core/useNotifications"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+const queryClient = new QueryClient();
 const preview: Preview = {
   parameters: {
     controls: {
@@ -22,11 +25,21 @@ const preview: Preview = {
     (Story,context)=> withConsole()(Story)(context),
 
   (Story) => (
-    <ThemeProvider theme={muiTheme}>
-        <LocalizationProvider dateAdapter={AdapterDateFns} localeText={bgBG.components.MuiLocalizationProvider.defaultProps.localeText} adapterLocale={bg}>
-        <Story />
-        </LocalizationProvider>
-    </ThemeProvider>
+    <NotificationsProvider>
+            <ThemeProvider theme={muiTheme}>
+              <LocalizationProvider
+                dateAdapter={AdapterDateFns}
+                localeText={
+                  bgBG.components.MuiLocalizationProvider.defaultProps.localeText
+                }
+                adapterLocale={bg}
+              >
+                <QueryClientProvider client={queryClient}>
+                  <Story/>
+                </QueryClientProvider>
+              </LocalizationProvider>
+            </ThemeProvider>
+          </NotificationsProvider>
 )]
 };
 

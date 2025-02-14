@@ -1,46 +1,63 @@
-import type {Meta, StoryObj} from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import DeliveryForm from './DeliveryForm';
-import { sampleMaterials } from '../../../tests/sampleData/sampleMaterials';
-import { sampleVendors } from '../../../tests/sampleData/sampleVendors';
 import { sampleDeliveries } from '../../../tests/sampleData/sampleDeliveries';
-import { Button } from '@mui/material';
-import { Story } from '@storybook/blocks';
-
+import { DeliveryDTO } from '../../../Types/types';
+import { deliverySchema, DeliveryFormType } from './deliverySchema';
+import GenericForm from '../../GenericForm/GenericForm';
 
 const meta: Meta<typeof DeliveryForm> = {
-    component: DeliveryForm,
-    
-}
+  title: 'Forms/DeliveryForm',
+  component: DeliveryForm,
+};
+
 export default meta;
 type Story = StoryObj<typeof DeliveryForm>;
 
-
-const sampleHandleSave = (data: any) => {
-    console.log('Save data:', data);
-};
-
-const sampleButtons = ()=>{
-    return (
-        <div>
-            <Button onClick={()=>console.log('Save clicked')}>Save</Button>
-            <Button onClick={()=>console.log('Cancel clicked')}>Cancel</Button>
-        </div>
-    )
-    
-};
-
-export const Default: Story = {
-    args: {
-        selectedItem: sampleDeliveries[0],
-        queryData: {materials:sampleMaterials, vendors:sampleVendors},
-        handleSave: sampleHandleSave,
-        Buttons: sampleButtons,
-    },
+const emptyDelivery: DeliveryFormType = {
+  vendorId: '',
+  deliveryDate: new Date().toISOString(),
+  invoiceNumber: '1234567890',
+  items: [{
+    materialId: '',
+    quantity: 1,
+    unitPrice: 0,
+  }]
 };
 
 export const Empty: Story = {
-    args: {
-        ...Default.args,
-        selectedItem: null,
-    },
+  render: () => (
+    <GenericForm<DeliveryFormType, DeliveryDTO>
+      onSubmit={() => {}}
+      onCancel={() => {}}
+      defaultValues={emptyDelivery}
+      zodSchema={deliverySchema}
+      FormFields={DeliveryForm}
+    />
+  )
 };
+
+export const WithData: Story = {
+  render: () => (
+    <GenericForm<DeliveryFormType, DeliveryDTO>
+      onSubmit={() => {}}
+      onCancel={() => {}}
+      defaultValues={sampleDeliveries[0]}
+      zodSchema={deliverySchema}
+      FormFields={DeliveryForm}
+    />
+  )
+};
+
+export const WithError: Story = {
+  render: () => (
+    <GenericForm<DeliveryFormType, DeliveryDTO>
+      onSubmit={() => { throw new Error('Sample error'); }}
+      onCancel={() => {}}
+      defaultValues={emptyDelivery}
+      zodSchema={deliverySchema}
+      FormFields={DeliveryForm}
+    />
+  )
+};
+
+

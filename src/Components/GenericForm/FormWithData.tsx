@@ -14,7 +14,7 @@ export default function FormWithData<TForm extends FieldValues, TDTO>({
   FormFields,
   dtoMapper,
 }: FormWithDataProps<TForm, TDTO>) {
-  const { selectedItem, handleSubmit, handleCancel } =
+  const { selectedItem, handleSubmit, handleCancel, data } =
     useFormData<TDTO>();
 
   return (
@@ -25,7 +25,7 @@ export default function FormWithData<TForm extends FieldValues, TDTO>({
       zodSchema={zodSchema}
       dtoMapper={dtoMapper}
       FormFields={FormFields}
-      
+      data={data}
     />
   );
 }

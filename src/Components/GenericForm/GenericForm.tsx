@@ -18,7 +18,8 @@ interface GenericFormProps<FormValues, Tdto> {
   defaultValues?: Tdto;
   dtoMapper?: (data: FormValues, selectedItem?:Tdto) => Tdto;
   zodSchema?: Zod.Schema<FormValues>;
-  FormFields: React.FC;
+  FormFields: React.FC<{data:Record<string,any>|undefined}>;
+  data:Record<string,any>
 }
 
 function GenericForm<FormValues extends FieldValues, Tdto>({
@@ -28,6 +29,7 @@ function GenericForm<FormValues extends FieldValues, Tdto>({
   dtoMapper,
   zodSchema,
   FormFields,
+  data
 }: GenericFormProps<FormValues, Tdto>) {
   const methods = useForm<FormValues>({
     defaultValues: defaultValues as unknown as DefaultValues<FormValues>,
@@ -59,7 +61,7 @@ function GenericForm<FormValues extends FieldValues, Tdto>({
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onValidSubmit, onInvalidSubmit)}>
-        <FormFields />
+        <FormFields data={data}/>
         {/* <div className="error-messages">
           {Object.keys(methods.formState.errors).length > 0 && (
             <Alert severity="error">

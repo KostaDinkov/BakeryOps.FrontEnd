@@ -28,11 +28,11 @@ import { useFormData } from "../../../Providers/FormDataProvider";
 import RHFAutocomplete from "../../RHFOrderForm/RHFAutocomplete";
 
 
-export default function DeliveryForm() {
+export default function DeliveryForm({data}:Record<string,any>) {
   const { register, formState, control } = useFormContext<DeliveryFormType>();
-  const formData = useFormData<DeliveryFormType>();
-  const vendors = formData?.data?.vendors || [];
-  const materials = formData?.data?.materials || [];
+  
+  const vendors = data?.data?.vendors || [];
+  const materials = data?.data?.materials || [];
   const { append, remove, fields } = useFieldArray({ control, name: "items" });
 
   return (

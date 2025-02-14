@@ -1,6 +1,7 @@
 import { ProductsByCategory } from "../Types/types";
 import {ProductDTO} from "../Types/types";
 import { format,parseISO } from "date-fns";
+import { VAT } from "./constants";
 
 export async function sleep(msec: number) {
   return new Promise((resolve) => setTimeout(resolve, msec));
@@ -72,7 +73,7 @@ export function getSpecialPrice(
   // Next we add half of Vat to the result
   // Last we round to 2 decimal places
   if(product.keepPriceDrebno) return product.priceDrebno!;
-  let vat = 0.2;
+  let vat = VAT;
   let halfVat = vat / 2;
   let discount = discountPercent / 100;
   if(!product.hasDiscount) discount = 0;

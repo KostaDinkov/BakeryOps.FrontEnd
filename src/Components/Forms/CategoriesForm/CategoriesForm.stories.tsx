@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import CategoriesForm from './CategoriesForm';
 import { CategoryDTO } from '../../../Types/types';
-import { FormDataProvider } from '../../../Providers/FormDataProvider';
+import { FormDataProvider } from '../../GenericForm/FormDataProvider';
 import FormWithData from '../../GenericForm/FormWithData';
 import {categoryFormSchema, CategoryFormType} from './CategoriesForm'
 import GenericForm from '../../GenericForm/GenericForm';

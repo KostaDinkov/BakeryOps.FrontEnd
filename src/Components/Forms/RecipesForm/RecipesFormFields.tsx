@@ -2,17 +2,14 @@ import React from "react";
 import { Controller, useFormContext, useFieldArray } from "react-hook-form";
 import { TextField, Button } from "@mui/material";
 import { RecipeFormType } from "./RecipesFormSchema";
-import { useFormData } from "../../../Providers/FormDataProvider";
+//import { useFormData } from "../../../Providers/FormDataProvider";
 import RHFAutocomplete from "../../RHFOrderForm/RHFAutocomplete";
 import { MaterialDTO, RecipeDTO } from "../../../Types/types";
 
-export default function RecipesFormFields() {
+export default function RecipesFormFields({ data }: { data: Record<string, any> }) {
   const { control } = useFormContext<RecipeFormType>();
-  const { data } = useFormData();
-  const materials = data?.materials || [];
-  const subRecipes = data?.subRecipes || [];
-  const units = data?.units || [];
-  const products = data?.products || [];
+  // Removed useFormData hook
+  const { materials = [], subRecipes = [], units = [], products = [] } = data;
 
   // Field array for ingredients (materials)
   const {

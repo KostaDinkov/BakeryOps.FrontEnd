@@ -1,9 +1,7 @@
-
 import TitleBar from "../../../../Components/TitleBar/TitleBar";
 import { MaterialDTO } from "../../../../Types/types";
-import { FormDataProvider } from "../../../../Providers/FormDataProvider";
+import { FormDataProvider } from "../../../../Components/GenericForm/FormDataProvider";
 import { useCategoriesQuery, useUnitsQuery, useVendorsQuery } from "../../../../API/Queries/queryHooks";
-import FormWithData from "../../../../Components/GenericForm/FormWithData";
 import MaterialFormFields, { materialFormSchema, MaterialFormType } from "../../../../Components/Forms/MaterialsForm/MaterialsFormFields";
 import {isV4uuid} from "../../../../system/utils";
 export default function MaterialsFormIndex() {
@@ -57,7 +55,7 @@ export default function MaterialsFormIndex() {
   return (
     <>
       <TitleBar title={"Стоки - редактиране"} />
-      <FormDataProvider<MaterialDTO>
+      <FormDataProvider<MaterialDTO, MaterialFormType>
         endpoints={{
           create: "/api/Materials/AddMaterial",
           update: "/api/Materials/UpdateMaterial",
@@ -68,17 +66,14 @@ export default function MaterialsFormIndex() {
           updateSuccess: "Стоката е обновен успешно",
           updateError: "Стоката не беше обновен!",
         }}
-        queryKey={"materials"}
-        data={{categories:categoriesQuery.data, units:unitsQuery.data, vendors:vendorsQuery.data}}
-      >
-        <FormWithData<MaterialFormType, MaterialDTO>
-          zodSchema={materialFormSchema}
-          FormFields={MaterialFormFields}
-          dtoMapper={dtoMapper}
-        />
-      </FormDataProvider>
+        queryKey="materials"
+        data={{ categories: categoriesQuery.data, units: unitsQuery.data, vendors: vendorsQuery.data }}
+        zodSchema={materialFormSchema}
+        FormFields={MaterialFormFields}
+        dtoMapper={dtoMapper}
+      />
     </>
   );
 }
- 
+
 

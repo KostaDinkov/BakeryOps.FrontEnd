@@ -1,6 +1,5 @@
 import { ProductDTO } from "../../../../Types/types";
-import { FormDataProvider } from "../../../../Providers/FormDataProvider";
-import FormWithData from "../../../../Components/GenericForm/FormWithData";
+import { FormDataProvider } from "../../../../Components/GenericForm/FormDataProvider";
 import ProductFormFields, {
   productFormSchema,
 } from "../../../../Components/Forms/ProductsForm";
@@ -20,7 +19,7 @@ export default function Index() {
   };
 
   return (
-    <FormDataProvider<ProductDTO>
+    <FormDataProvider<ProductDTO, ProductFormType>
       endpoints={{
         create: null,
         update: "/api/Products/UpdateProduct/{id}",
@@ -32,12 +31,9 @@ export default function Index() {
         updateError: "Грешка при обновяване на продукта",
       }}
       queryKey="products"
-    >
-      <FormWithData<ProductFormType, ProductDTO>
-        zodSchema={productFormSchema}
-        FormFields={ProductFormFields}
-        dtoMapper={dtoMapper}
-      />
-    </FormDataProvider>
+      zodSchema={productFormSchema}
+      FormFields={ProductFormFields}
+      dtoMapper={dtoMapper}
+    />
   );
 }

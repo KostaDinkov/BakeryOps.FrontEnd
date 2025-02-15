@@ -1,7 +1,7 @@
 import { RecipeFormType } from "../../../Components/Forms/RecipesForm/RecipesFormSchema";
 import FormWithData from "../../../Components/GenericForm/FormWithData";
 import TitleBar from "../../../Components/TitleBar/TitleBar";
-import { FormDataProvider } from "../../../Providers/FormDataProvider";
+import { FormDataProvider } from "../../../Components/GenericForm/FormDataProvider";
 import { RecipeDTO } from "../../../Types/types";
 import { recipeSchema } from "../../../Components/Forms/RecipesForm/RecipesFormSchema";
 import RecipesFormFields from "../../../Components/Forms/RecipesForm/RecipesFormFields";
@@ -36,7 +36,7 @@ export default function RecipeFormIndex() {
   return (
     <div>
       <TitleBar title="Рецепти - редактиране" />
-      <FormDataProvider<RecipeDTO>
+      <FormDataProvider<RecipeDTO, RecipeFormType>
         endpoints={{
           create: "/api/Recipes/AddRecipe",
           update: "/api/Recipes/UpdateRecipe",
@@ -47,19 +47,16 @@ export default function RecipeFormIndex() {
           updateSuccess: "",
           updateError: "",
         }}
-        queryKey={"recipes"}
+        queryKey="recipes"
         data={{
           materials: materialsQuery.data,
           subRecipes: recipesQuery.data,
           units: unitsQuery.data,
           products: productsQuery.data,
         }}
-      >
-        <FormWithData<RecipeFormType, RecipeDTO>
-          zodSchema={recipeSchema}
-          FormFields={RecipesFormFields}
-        />
-      </FormDataProvider>
+        zodSchema={recipeSchema}
+        FormFields={RecipesFormFields}
+      />
     </div>
   );
 }

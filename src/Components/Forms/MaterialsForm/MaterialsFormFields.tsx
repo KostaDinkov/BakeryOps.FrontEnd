@@ -7,7 +7,6 @@ import {
   TextField,
 } from "@mui/material";
 import { z, ZodTypeAny } from "zod";
-import { useFormData } from "../../../Providers/FormDataProvider";
 import { CategoryDTO, MaterialDTO } from "../../../Types/types";
 import RHFAutocomplete from "../../RHFOrderForm/RHFAutocomplete";
 
@@ -30,11 +29,9 @@ export const materialFormDefinition = {
 export const materialFormSchema = z.object(materialFormDefinition).strict();
 export type MaterialFormType = z.infer<typeof materialFormSchema>;
 
-export default function MaterialFormFields() {
+export default function MaterialFormFields({ data }: { data: Record<string, any> }) {
   const { control } = useFormContext<MaterialFormType>();
-  const {
-    data: { categories, vendors, units },
-  } = useFormData();
+  const { categories, vendors, units } = data || {};
 
   return (
     <div className="flex flex-col gap-4">

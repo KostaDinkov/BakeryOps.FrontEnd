@@ -4,7 +4,7 @@ import ClientFormFields, {
   clientSchema,
 } from "../../../../Components/Forms/ClientsForm/ClientsForm";
 import { ClientDTO } from "../../../../Types/types";
-import { FormDataProvider } from "../../../../Providers/FormDataProvider";
+import { FormDataProvider } from "../../../../Components/GenericForm/FormDataProvider";
 import FormWithData from "../../../../Components/GenericForm/FormWithData";
 
 export default function Index() {
@@ -22,26 +22,24 @@ export default function Index() {
   };
 
   return (
-    <FormDataProvider<ClientDTO>
-      endpoints={{
-        create: "/api/Clients",
-        update: "/api/Clients",
-      }}
-      messages={{
-        createSuccess: "Клиента е добавен успешно",
-        createError: "Клиента не беше добавен!",
-        updateSuccess: "Клиента е обновен успешно",
-        updateError: "Клиента не беше обновен!",
-      }}
-      queryKey="clients"
-      
-    >
+    <>
       <TitleBar title="Клиенти - Редакция" />
-      <FormWithData<ClientFormType, ClientDTO>
+      <FormDataProvider<ClientDTO, ClientFormType>
+        endpoints={{
+          create: "/api/Clients",
+          update: "/api/Clients",
+        }}
+        messages={{
+          createSuccess: "Клиента е добавен успешно",
+          createError: "Клиента не беше добавен!",
+          updateSuccess: "Клиента е обновен успешно",
+          updateError: "Клиента не беше обновен!",
+        }}
+        queryKey="clients"
         zodSchema={clientSchema}
         FormFields={ClientFormFields}
         dtoMapper={undefined}
       />
-    </FormDataProvider>
+    </>
   );
 }

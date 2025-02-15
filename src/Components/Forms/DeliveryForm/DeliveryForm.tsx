@@ -24,15 +24,14 @@ import {
   useFormContext,
 } from "react-hook-form";
 import { DeliveryFormType } from "./deliverySchema";
-import { useFormData } from "../../../Providers/FormDataProvider";
 import RHFAutocomplete from "../../RHFOrderForm/RHFAutocomplete";
 
 
 export default function DeliveryForm({data}:Record<string,any>) {
   const { register, formState, control } = useFormContext<DeliveryFormType>();
   
-  const vendors = data?.data?.vendors || [];
-  const materials = data?.data?.materials || [];
+  const vendors = data?.vendors || [];
+  const materials = data?.materials || [];
   const { append, remove, fields } = useFieldArray({ control, name: "items" });
 
   return (

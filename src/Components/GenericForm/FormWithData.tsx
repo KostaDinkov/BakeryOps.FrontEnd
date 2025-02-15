@@ -1,5 +1,5 @@
 import { ZodSchema } from "zod";
-import { useFormData } from "../../Providers/FormDataProvider";
+//import { useFormData } from "../../Providers/FormDataProvider";
 import GenericForm from "./GenericForm";
 import { FieldValues } from "react-hook-form";
 
@@ -14,18 +14,10 @@ export default function FormWithData<TForm extends FieldValues, TDTO>({
   FormFields,
   dtoMapper,
 }: FormWithDataProps<TForm, TDTO>) {
-  const { selectedItem, handleSubmit, handleCancel, data } =
-    useFormData<TDTO>();
+  // const { selectedItem, handleSubmit, handleCancel, data } =
+  //   useFormData<TDTO>();
 
   return (
-    <GenericForm<TForm, TDTO>
-      onSubmit={handleSubmit}
-      onCancel={handleCancel}
-      defaultValues={selectedItem}
-      zodSchema={zodSchema}
-      dtoMapper={dtoMapper}
-      FormFields={FormFields}
-      data={data}
-    />
+   <></>
   );
 }

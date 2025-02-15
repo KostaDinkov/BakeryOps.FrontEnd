@@ -1,3 +1,5 @@
+//TODO fix mui errors
+
 import React from "react";
 import {
   TextField,
@@ -66,7 +68,12 @@ export default function DeliveryForm({data}:Record<string,any>) {
           control={control}
           name="invoiceNumber"
           render={({ field }) => (
-            <TextField {...field} size="small" label="Номер на документ" />
+            <TextField 
+              {...field} 
+              size="small" 
+              label="Номер на документ" 
+              value={field.value || ""} // ensure controlled input
+            />
           )}
         />
 
@@ -76,7 +83,12 @@ export default function DeliveryForm({data}:Record<string,any>) {
             control={control}
             name="notes"
             render={({ field }) => (
-              <TextField {...field} label="Бележки" size="small" fullWidth />
+              <TextField {...field} 
+                label="Бележки" 
+                size="small" 
+                fullWidth 
+                value={field.value || ""} // ensure controlled input
+                />
             )}
           />
         </div>
@@ -110,8 +122,8 @@ function MaterialFields({
   <div className={styles.deliveryList}>
   {fields.map((field, index) => (
     
-      <div className={styles.deliveryRowWithDelete}>
-        <div key={field.id} className={styles.deliveryRow}>
+      <div key={field.id} className={styles.deliveryRowWithDelete}>
+        <div className={styles.deliveryRow}>
           {/* //--PRODUCT NAME */}
           <RHFAutocomplete<MaterialDTO & { id: string }, DeliveryFormType>
             className={styles.item}
@@ -158,6 +170,7 @@ function MaterialFields({
             render={({ field }) => (
               <TextField
                 {...field}
+                value={field.value || ""}
                 className={styles.lot}
                 size="small"
                 label="Партиден номер"
@@ -186,6 +199,8 @@ function MaterialFields({
             name={`items.${index}.notes`}
             render={({ field }) => (
               <TextField
+                {...field}
+                value={field.value || ""}
                 className={styles.notes}
                 size="small"
                 label="Бележка"

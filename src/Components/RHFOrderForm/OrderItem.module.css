@@ -27,13 +27,7 @@
     justify-self: end;
     margin-bottom:var(--gap-small)
   }
-  .delete {
-    align-self:center;
-    grid-area: delete;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-  }
+ 
   span.checkBox {
     &:global(.Mui-checked) {
       background-color: var(--mui-palette-primary-main);
@@ -41,18 +35,7 @@
       transition: 0.3s;
     }
   }
-  .iconBtnStyle {
-    &:hover {
-      background-color: var(--mui-palette-error-main);
-      svg {
-        color: var(--mui-palette-background-default);
-      }
-    }
-    svg {
-      color: var(--color-primary-dark);
-      transition: 0.3s;
-    }
-  }
+  
 }
 .checkBox {
   height: 2rem;

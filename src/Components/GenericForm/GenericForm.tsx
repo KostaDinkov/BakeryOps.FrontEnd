@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@mui/material";
-
 import React from "react";
 import {
   useForm,
@@ -11,6 +10,7 @@ import {
   SubmitErrorHandler,
   DefaultValues,
 } from "react-hook-form";
+import styles from "./GenericForm.module.css";
 
 interface GenericFormProps<FormValues, Tdto> {
   onSubmit: (data: Tdto) => void;
@@ -60,7 +60,7 @@ function GenericForm<FormValues extends FieldValues, Tdto>({
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onValidSubmit, onInvalidSubmit)}>
+      <form onSubmit={methods.handleSubmit(onValidSubmit, onInvalidSubmit)} className={styles.formContainer}>
         <FormFields data={data}/>
         {/* <div className="error-messages">
           {Object.keys(methods.formState.errors).length > 0 && (
@@ -77,12 +77,12 @@ function GenericForm<FormValues extends FieldValues, Tdto>({
             </Alert>
           )}
         </div> */}
-        <div className="mt-4 flex justify-end gap-4">
+        <div className={styles.formButtons}>
           <Button type="button" variant="outlined" onClick={onCancel}>
-            Cancel
+            Откажи
           </Button>
           <Button type="submit" variant="contained">
-            Save
+            Запази
           </Button>
         </div>
       </form>

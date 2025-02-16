@@ -10,6 +10,7 @@ import { ThemeProvider } from "@mui/material";
 import {withConsole} from '@storybook/addon-console';
 import {NotificationsProvider} from "@toolpad/core/useNotifications"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import "../src/styles/vars.css"
 
 const queryClient = new QueryClient();
 const preview: Preview = {
@@ -19,6 +20,14 @@ const preview: Preview = {
         color: /(background|color)$/i,
         date: /Date$/i,
       },
+    },
+    backgrounds: {
+      default: 'light', // this sets the default background
+      values: [
+        { name: 'light', value: '#ffffff' },
+        { name: 'dark', value: '#333333' },
+        { name: 'app', value: '#e1e2e1' },
+      ],
     },
   },
   decorators: [

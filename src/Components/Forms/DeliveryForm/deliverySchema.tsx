@@ -18,8 +18,8 @@ import { DeliveryDTO } from "../../../Types/types";
     z.object({
       id: z.string().uuid().optional(),
       materialId: z.string({
-        required_error: "Изберете материал от падащото меню",
-      }).uuid(),
+        required_error: "Изберете стока от падащото меню",
+      }).uuid("Изберете стока от падащото меню"),
       quantity: z.coerce.number({
         required_error: "Полето Количество е задължително",
         invalid_type_error: "Количество трябва да е положително число",

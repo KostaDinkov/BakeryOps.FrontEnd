@@ -7,6 +7,8 @@ interface ContainerProps {
   flexColumn?: boolean;
   noPadding?: boolean;
   style?: React.CSSProperties;
+  alignCenter?: boolean;
+  justifyCenter?:boolean;
 }
 
 export default function Container({
@@ -16,6 +18,8 @@ export default function Container({
   fullHeight,
   flexColumn,
   noPadding,
+  alignCenter,
+  justifyCenter,
   style,
 }: ContainerProps) {
   const defaultStyle: React.CSSProperties = {
@@ -25,6 +29,8 @@ export default function Container({
     flexDirection: flexColumn ? "column" : "row",
     gap: flex ? "1rem" : "unset",
     padding: noPadding ? "0" : "1rem",
+    alignItems: alignCenter ? "center" : "unset",
+    justifyContent:justifyCenter? "center":"unset",
     ...style,
   };
   return <div style={defaultStyle}>{children}</div>;

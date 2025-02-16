@@ -21,6 +21,7 @@ import { type OrderFormSchemaType } from "./formSchema";
 import { useState } from "react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import styles from "./OrderItem.module.css";
+import DeleteButton from "../Buttons/DeleteButton/DeleteButton";
 // #endregion
 
 export default function OrderItem({
@@ -133,16 +134,7 @@ export default function OrderItem({
       )}
 
       {/* //--Delete Order Item Btn */}
-      <div className={styles.delete}>
-        <IconButton
-          size="large"
-          className={styles.iconBtnStyle}
-          type="button"
-          onClick={() => remove(index)}
-        >
-          <DeleteForeverIcon />
-        </IconButton>
-      </div>
+      <DeleteButton onClick={() => remove(index)} />
     </div>
   );
 }

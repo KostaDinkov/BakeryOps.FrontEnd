@@ -1,21 +1,16 @@
 //TODO fix mui errors
 
-import React from "react";
 import {
   TextField,
-  Autocomplete,
-  AutocompleteRenderInputParams,
   Button,
 } from "@mui/material";
 import {
-  DeliveryDTO,
   DeliveryItemDTO,
   MaterialDTO,
   VendorDTO,
 } from "../../../Types/types";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { parseISO } from "date-fns";
-import { customInvalidProps } from "../../../system/utils";
 import styles from "./DeliveryForm.module.css";
 import {
   Control,
@@ -27,6 +22,7 @@ import {
 } from "react-hook-form";
 import { DeliveryFormType } from "./deliverySchema";
 import RHFAutocomplete from "../../RHFOrderForm/RHFAutocomplete";
+import DeleteButton from "../../Buttons/DeleteButton/DeleteButton";
 
 
 export default function DeliveryForm({data}:Record<string,any>) {
@@ -46,6 +42,7 @@ export default function DeliveryForm({data}:Record<string,any>) {
           options={vendors}
           getOptionLabel={(option) => option.name}
           size="small"
+          label="Доставчик"
         />
         {/* //-- DOCUMENT DATE */}
         <Controller
@@ -132,6 +129,7 @@ function MaterialFields({
             getOptionLabel={(option) => option.name || ""}
             name={`items.${index}.materialId`}
             control={control}
+            label="Стока"
           />
           {/* //--PRODUCT QUANTITY */}
           <Controller
@@ -208,14 +206,8 @@ function MaterialFields({
               />
             )}
           />
-      
         </div>
-         <Button
-         size="small"
-         variant="contained"
-         color="error"
-         onClick={() => remove(index)}
-         >Премахни</Button>
+         <DeleteButton onClick={() => remove(index)} />
       </div>
   ))}
   </div>

@@ -4,6 +4,8 @@ import { sampleDeliveries } from '../../../tests/sampleData/sampleDeliveries';
 import { DeliveryDTO } from '../../../Types/types';
 import { deliverySchema, DeliveryFormType } from './deliverySchema';
 import GenericForm from '../../GenericForm/GenericForm';
+import { sampleVendors } from '../../../tests/sampleData/sampleVendors';
+import { sampleMaterials } from '../../../tests/sampleData/sampleMaterials';
 
 const meta: Meta<typeof DeliveryForm> = {
   title: 'Forms/DeliveryForm',
@@ -13,10 +15,10 @@ const meta: Meta<typeof DeliveryForm> = {
 export default meta;
 type Story = StoryObj<typeof DeliveryForm>;
 
-const emptyDelivery: DeliveryFormType = {
+const emptyDelivery: DeliveryDTO = {
   vendorId: '',
   deliveryDate: new Date().toISOString(),
-  invoiceNumber: '1234567890',
+  invoiceNumber: null,
   items: [{
     materialId: '',
     quantity: 1,
@@ -27,12 +29,12 @@ const emptyDelivery: DeliveryFormType = {
 export const Empty: Story = {
   render: () => (
     <GenericForm<DeliveryFormType, DeliveryDTO>
-      onSubmit={() => {}}
-      onCancel={() => {}}
-      defaultValues={emptyDelivery}
+      onSubmit={() => { } }
+      onCancel={() => { } }
+      defaultValues={undefined}
       zodSchema={deliverySchema}
-      FormFields={DeliveryForm}
-    />
+      FormFields={DeliveryForm} 
+      data={{materials:sampleMaterials, vendors:sampleVendors}}    />
   )
 };
 
@@ -44,6 +46,7 @@ export const WithData: Story = {
       defaultValues={sampleDeliveries[0]}
       zodSchema={deliverySchema}
       FormFields={DeliveryForm}
+      data={{materials:sampleMaterials, vendors:sampleVendors}}
     />
   )
 };
@@ -56,6 +59,7 @@ export const WithError: Story = {
       defaultValues={emptyDelivery}
       zodSchema={deliverySchema}
       FormFields={DeliveryForm}
+      data={{materials:sampleMaterials, vendors:sampleVendors}}
     />
   )
 };

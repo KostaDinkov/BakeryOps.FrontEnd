@@ -92,8 +92,8 @@ export default function DeliveriesViewerIndex() {
                   navigate("./update", { state: { selectedItem } }),
                 add: () => navigate("./create"),
               }}
-              displayKeys={["vendorName", "deliveryDate", "totalWithTax"]}
-              groupBy="deliveryDate"
+              displayKeys={["deliveryDate", "vendorName","invoiceNumber", "totalWithTax"]}
+             
             ></GenericCrud2>
           );
         }}

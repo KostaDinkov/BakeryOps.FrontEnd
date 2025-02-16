@@ -45,6 +45,7 @@ export default function Index() {
               add: ()=> navigate('./create'),
             }}
             displayKeys={["name"]}
+            title="Доставчици"
           />
         )}
       </QueryViewWrapper>

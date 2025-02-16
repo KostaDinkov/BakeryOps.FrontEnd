@@ -42,6 +42,7 @@ export default function CategoriesPage() {
               delete: (selectedItem) => deleteCategoryMutation.mutate(selectedItem.id),
               add: () => navigate("./create"),
             }}
+            title="Категории"
           />
         )}
       </QueryViewWrapper>

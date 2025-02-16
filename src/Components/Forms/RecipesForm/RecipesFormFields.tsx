@@ -1,12 +1,16 @@
-import React from "react";
 import { Controller, useFormContext, useFieldArray } from "react-hook-form";
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, Typography } from "@mui/material";
 import { RecipeFormType } from "./RecipesFormSchema";
 //import { useFormData } from "../../../Providers/FormDataProvider";
 import RHFAutocomplete from "../../RHFOrderForm/RHFAutocomplete";
 import { MaterialDTO, RecipeDTO } from "../../../Types/types";
+import styles from "./RecipesFormFields.module.css";
 
-export default function RecipesFormFields({ data }: { data: Record<string, any> }) {
+export default function RecipesFormFields({
+  data,
+}: {
+  data: Record<string, any>;
+}) {
   const { control } = useFormContext<RecipeFormType>();
   // Removed useFormData hook
   const { materials = [], subRecipes = [], units = [], products = [] } = data;
@@ -21,7 +25,7 @@ export default function RecipesFormFields({ data }: { data: Record<string, any> 
     name: "ingredients",
   });
 
-  // Field array for subrecipes
+  // Field array for sub recipes
   const {
     fields: subRecipeFields,
     append: appendSubRecipe,
@@ -32,68 +36,75 @@ export default function RecipesFormFields({ data }: { data: Record<string, any> 
   });
 
   return (
-    <div className="flex flex-col gap-4">
-      {/* Name */}
-      <Controller
-        control={control}
-        name="name"
-        render={({ field, fieldState: { error } }) => (
-          <TextField
-            {...field}
-            label="Име"
-            size="small"
-            error={!!error}
-            helperText={error ? error.message : ""}
-          />
-        )}
-      />
-      {/* Product*/}
+    <div className={styles.formFieldsContainer}>
+      <div className={styles.multiInputRow}>
+        {/* //--Product */}
         <RHFAutocomplete<RecipeDTO, RecipeFormType>
-            control={control}
-            name="productId"
-            options={products}
-            getOptionLabel={(option) => option.name}
-            label="Продукт"
+          control={control}
+          name="productId"
+          options={products}
+          getOptionLabel={(option) => option.name}
+          label="Продукт"
+          size="small"
         />
-      {/* Yield */}
-      <Controller
-        control={control}
-        name="yield"
-        render={({ field, fieldState: { error } }) => (
-          <TextField
-            {...field}
-            label="Изходно количество"
-            size="small"
-            type="number"
-            error={!!error}
-            helperText={error ? error.message : ""}
-          />
-        )}
-      />
-      {/* Unit */}
+        {/* //--Name */}
+        <Controller
+          control={control}
+          name="name"
+          render={({ field, fieldState: { error } }) => (
+            <TextField
+              {...field}
+              label="Име"
+              size="small"
+              error={!!error}
+              helperText={error ? error.message : ""}
+            />
+          )}
+        />
+      </div>
+
+      <div className={styles.multiInputRow}>
+        {/* //-- Yield */}
+        <Controller
+          control={control}
+          name="yield"
+          render={({ field, fieldState: { error } }) => (
+            <TextField
+              {...field}
+              label="Изходно количество"
+              size="small"
+              type="number"
+              error={!!error}
+              helperText={error ? error.message : ""}
+            />
+          )}
+        />
+        {/* //-- Unit */}
         <RHFAutocomplete<RecipeDTO, RecipeFormType>
-            control={control}
-            name="unitId"
-            options={units}
-            getOptionLabel={(option) => option.name}
-            label="Мерна единица"
+          control={control}
+          name="unitId"
+          options={units}
+          getOptionLabel={(option) => option.name}
+          label="Мерна единица"
+          size="small"
         />
-      {/* Човеко-часове */}
-      <Controller
-        control={control}
-        name="workHours"
-        render={({ field, fieldState: { error } }) => (
-          <TextField
-            {...field}
-            label="Човеко-часове"
-            size="small"
-            type="number"
-            error={!!error}
-            helperText={error ? error.message : ""}
-          />
-        )}
-      />
-      {/* Описание */}
+        {/* //--Human hours */}
+        <Controller
+          control={control}
+          name="workHours"
+          render={({ field, fieldState: { error } }) => (
+            <TextField
+              {...field}
+              label="Човеко-часове"
+              size="small"
+              type="number"
+              error={!!error}
+              helperText={error ? error.message : ""}
+            />
+          )}
+        />
+      </div>
+      {/* //--Description */}
       <Controller
         control={control}
         name="description"
@@ -103,22 +114,23 @@ export default function RecipesFormFields({ data }: { data: Record<string, any> 
             label="Описание"
             size="small"
             multiline
-            rows={4}
             error={!!error}
             helperText={error ? error.message : ""}
           />
         )}
       />
-      {/* Материали */}
+      {/* //-- Materials */}
       <div>
-        <h3>Материали</h3>
+        <Typography variant="h6" sx={{margin:"1rem 0"}}>Материали</Typography>
         {ingredientFields.map((field, index) => (
-          <div key={field.id} className="flex gap-2">
+          <div key={field.id} className={styles.itemInputRow}>
             <RHFAutocomplete<MaterialDTO & { id: string }, RecipeFormType>
               control={control}
               name={`ingredients.${index}.materialId`}
               options={materials}
               getOptionLabel={(option) => option.name}
+              size="small"
+              label="Материал"
             />
             <Controller
               control={control}
@@ -150,17 +162,18 @@ export default function RecipesFormFields({ data }: { data: Record<string, any> 
           Добави материал
         </Button>
       </div>
-      {/* Подрецепти */}
+      {/* //-- Sub recipes */}
       <div>
-        <h3>Подрецепти</h3>
+      <Typography variant="h6" sx={{margin:"1rem 0"}} >Под-рецепти</Typography>
         {subRecipeFields.map((field, index) => (
-          <div key={field.id} className="flex gap-2">
+          <div key={field.id} className={styles.itemInputRow}>
             <RHFAutocomplete<RecipeDTO, RecipeFormType>
               control={control}
               name={`subRecipes.${index}.subRecipeId`}
               options={subRecipes}
               getOptionLabel={(option: any) => option.name}
-              
+              size="small"
+              label="Под-рецепта"
             />
             <Controller
               control={control}
@@ -189,10 +202,9 @@ export default function RecipesFormFields({ data }: { data: Record<string, any> 
           variant="outlined"
           onClick={() => appendSubRecipe({ subRecipeId: "", quantity: 0 })}
         >
-          Добави подрецепт
+          Добави под-рецепта
         </Button>
       </div>
-      {/* ...existing code for additional nested fields if needed... */}
     </div>
   );
 }

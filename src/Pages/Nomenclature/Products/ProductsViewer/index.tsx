@@ -33,6 +33,7 @@ export default function Index() {
           }}
           groupBy="category"
           displayKeys={["name"]}
+          title="Продукти"
         />
       )}
     </QueryViewWrapper>

@@ -40,7 +40,6 @@ export default function RHFAutocomplete<T extends { id: string }, TForm extends 
         // Sync input value with form value changes
         useEffect(() => {
           if (typeof value === 'string') {
-            
             let option = options.find(o => (o.id === value));
             if(!option){
               //FIXME if the option has a name prop, try to find by name
@@ -61,7 +60,7 @@ export default function RHFAutocomplete<T extends { id: string }, TForm extends 
         }, [value, options, getOptionLabel]);
 
         return (
-          <div>
+          <>
             <Autocomplete
               {...autocompleteProps}
               {...rest}
@@ -105,7 +104,7 @@ export default function RHFAutocomplete<T extends { id: string }, TForm extends 
                 />
               )}
             />
-          </div>
+          </>
         );
       }}
     />

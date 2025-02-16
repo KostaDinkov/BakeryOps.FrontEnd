@@ -1,13 +1,9 @@
 import { Controller, useFormContext } from "react-hook-form";
 import {
-  Autocomplete,
-  Checkbox,
-  FormControlLabel,
-  MenuItem,
   TextField,
 } from "@mui/material";
 import { z, ZodTypeAny } from "zod";
-import { CategoryDTO, MaterialDTO } from "../../../Types/types";
+import {  MaterialDTO } from "../../../Types/types";
 import RHFAutocomplete from "../../RHFOrderForm/RHFAutocomplete";
 
 export const materialFormDefinition = {

@@ -62,6 +62,7 @@ export default function RecipeViewerIndex() {
                 add:()=> navigate(`/recipes/create/`),
               }}
               displayKeys={["name"]}
+              title="Рецепти"
             />
           );
         }}

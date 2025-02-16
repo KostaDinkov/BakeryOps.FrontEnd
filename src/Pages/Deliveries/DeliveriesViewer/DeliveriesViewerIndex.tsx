@@ -93,6 +93,7 @@ export default function DeliveriesViewerIndex() {
                 add: () => navigate("./create"),
               }}
               displayKeys={["deliveryDate", "vendorName","invoiceNumber", "totalWithTax"]}
+              title="Доставки"
              
             ></GenericCrud2>
           );

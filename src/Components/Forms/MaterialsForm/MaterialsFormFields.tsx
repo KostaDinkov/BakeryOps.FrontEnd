@@ -29,7 +29,7 @@ export const materialFormDefinition = {
 export const materialFormSchema = z.object(materialFormDefinition).strict();
 export type MaterialFormType = z.infer<typeof materialFormSchema>;
 
-export default function MaterialFormFields({ data }: { data: Record<string, any> }) {
+export default function MaterialFormFields({ data }: { data: Record<string, any> | undefined }) {
   const { control } = useFormContext<MaterialFormType>();
   const { categories, vendors, units } = data || {};
 
@@ -54,6 +54,8 @@ export default function MaterialFormFields({ data }: { data: Record<string, any>
         name={"categoryName"}
         options={categories}
         getOptionLabel={(option) => option.name}
+        size="small"
+        label="Категория"
         freeText
       />
       <RHFAutocomplete<MaterialDTO & { id: string }, MaterialFormType>
@@ -62,6 +64,8 @@ export default function MaterialFormFields({ data }: { data: Record<string, any>
         options={vendors}
         getOptionLabel={(option) => option.name}
         freeText
+        size="small"
+        label="Доставчик"
       />
       <RHFAutocomplete<MaterialDTO & { id: string }, MaterialFormType>
         control={control}
@@ -69,6 +73,8 @@ export default function MaterialFormFields({ data }: { data: Record<string, any>
         options={units}
         getOptionLabel={(option) => option.name}
         freeText
+        size="small"
+        label="Мярка"
       />
     <Controller
       control={control}

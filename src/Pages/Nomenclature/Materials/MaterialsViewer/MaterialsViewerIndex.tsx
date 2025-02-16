@@ -45,7 +45,8 @@ export default function MaterialsViewerIndex() {
               }}
               groupBy="categoryName"
               displayKeys={["name"]}
-            ></GenericCrud2>
+              title="Стоки"
+            />
           )}
         </QueryViewWrapper>
     </>

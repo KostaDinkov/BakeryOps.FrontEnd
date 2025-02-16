@@ -1,13 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import CategoriesForm from './CategoriesForm';
 import { CategoryDTO } from '../../../Types/types';
-import { FormDataProvider } from '../../GenericForm/FormDataProvider';
-import FormWithData from '../../GenericForm/FormWithData';
 import {categoryFormSchema, CategoryFormType} from './CategoriesForm'
 import GenericForm from '../../GenericForm/GenericForm';
 
 const meta: Meta<typeof CategoriesForm> = {
-  title: 'Nomenclature/CategoriesForm',
+  title: 'Forms/CategoriesForm',
   component: CategoriesForm,
 };
 
@@ -18,11 +16,12 @@ export const Empty: Story = {
     render: (args) => (
       <>
       <GenericForm<CategoryFormType, CategoryDTO>
-            onSubmit={()=>{}}
-            onCancel={()=>{}}
-            defaultValues={{id:"123",name:"Test Category"}}
-            zodSchema={categoryFormSchema}
-            FormFields={CategoriesForm}
+        onSubmit={() => { } }
+        onCancel={() => { } }
+        defaultValues={{ id: "123", name: "Test Category" }}
+        zodSchema={categoryFormSchema}
+        FormFields={CategoriesForm} 
+        data={undefined}            
           />
       </>
     ),

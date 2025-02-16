@@ -24,12 +24,14 @@ interface GenericItemsListProps<TItem extends IId> {
   groupBy?: keyof TItem;
   displayKeys: (keyof TItem)[];
   selectedItem: TItem | null;
-  setSelectedItem:React.Dispatch<React.SetStateAction<TItem | null>>;}
+  setSelectedItem:React.Dispatch<React.SetStateAction<TItem | null>>;
+  title:string;
+}
 
 export default function GenericItemsList<TItem extends IId>({
   displayKeys = ["id"], // set default value
   items,
-  
+  title,
   groupBy,
   selectedItem,
   setSelectedItem
@@ -109,7 +111,7 @@ export default function GenericItemsList<TItem extends IId>({
       {/* Item List Panel */}
       <Paper className={styles.productListPanel}>
         <Typography variant="h6" gutterBottom>
-          {groupBy && selectedGroup ? `Продукти в ${selectedGroup}` : "Продукти"}
+          {groupBy && selectedGroup ? `${title} в ${selectedGroup}` : `${title}`}
         </Typography>
         <List>
           {filteredItems.map((item) => (

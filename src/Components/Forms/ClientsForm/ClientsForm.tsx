@@ -1,6 +1,7 @@
 import { Controller, useFormContext } from "react-hook-form";
 import { Checkbox, FormControlLabel, TextField } from "@mui/material";
 import { z } from "zod";
+import globalStyles from "../../../styles/globalStyles.module.css";
 //import {useFormData} from "../../../Providers/FormDataProvider";
 
 export const clientSchema = z.object({
@@ -53,49 +54,55 @@ export type ClientFormType = z.infer<typeof clientSchema>;
           )}
         />
         <Controller
+        
           control={control}
           name="email"
           render={({ field, fieldState: { error } }) => (
             <TextField
               {...field}
+              size="small"
               label="Мейл"
               error={!!error}
               helperText={error ? error.message : ""}
             />
           )}
         />
-        <Controller
-          control={control}
-          name="isCompany"
-          render={({ field }) => (
-            <FormControlLabel
-              label="Компания?"
-              labelPlacement="start"
-              control={
-                <Checkbox
-                  {...field}
-                  checked={field.value}
-                />
-              }
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="isSpecialPrice"
-          render={({ field }) => (
-            <FormControlLabel
-              label="Ползва специални цени?"
-              labelPlacement="start"
-              control={
-                <Checkbox
-                  {...field}
-                  checked={field.value}
-                />
-              }
-            />
-          )}
-        />
+        <div className="flex gap-4">
+          <Controller
+            control={control}
+            name="isCompany"
+            render={({ field }) => (
+              <FormControlLabel
+              className={globalStyles.checkboxWithLabel}
+                label="Фирма?"
+                labelPlacement="start"
+                control={
+                  <Checkbox
+                    {...field}
+                    checked={field.value}
+                  />
+                }
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="isSpecialPrice"
+            render={({ field }) => (
+              <FormControlLabel
+              className={globalStyles.checkboxWithLabel}
+                label="Ползва специални цени?"
+                labelPlacement="start"
+                control={
+                  <Checkbox
+                    {...field}
+                    checked={field.value}
+                  />
+                }
+              />
+            )}
+          />
+        </div>
       </div>
     );
   }

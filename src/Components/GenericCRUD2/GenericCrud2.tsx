@@ -17,6 +17,7 @@ export type GenericCrud2Props<T> = {
     edit: ((selectedItem: T) => void) | null;
     add: ((selectedItem: T) => void) | null;
   };
+  title:string;
 };
 
 export default function GenericCrud2<T extends { id: string }>({
@@ -29,6 +30,7 @@ export default function GenericCrud2<T extends { id: string }>({
     edit: (item) => console.log(item),
     add: (item) => console.log(item),
   },
+  title
 }: GenericCrud2Props<T>) {
   const [selectedItem, setSelectedItem] = useState<(T & { id: string }) | null>(
     null
@@ -43,6 +45,7 @@ export default function GenericCrud2<T extends { id: string }>({
         setSelectedItem={setSelectedItem}
         selectedItem={selectedItem}
         displayKeys={displayKeys || ["id"]}
+        title={title}
         
       />
       <div className={styles.contentContainer}>

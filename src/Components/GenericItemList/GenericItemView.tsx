@@ -83,7 +83,7 @@ export default function ItemDetails<T>({
                   : value || "—";
               return (
                 <TableRow key={index}>
-                  <TableCell sx={{ fontWeight: "bold", width: "30%" }}>
+                  <TableCell sx={{ fontWeight: "bold", width: "30%", whiteSpace: "nowrap" }}>
                     {config?.label ?? key}
                   </TableCell>
                   <TableCell>{renderedValue}</TableCell>

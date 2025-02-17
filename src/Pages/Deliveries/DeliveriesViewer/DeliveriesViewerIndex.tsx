@@ -93,9 +93,10 @@ export default function DeliveriesViewerIndex() {
                 add: () => navigate("./create"),
               }}
               displayKeys={["deliveryDate", "vendorName","invoiceNumber", "totalWithTax"]}
+              sortFirstDisplayKey="desc"
               title="Доставки"
              
-            ></GenericDataViewer>
+            />
           );
         }}
       </QueryViewWrapper>

@@ -30,6 +30,10 @@ interface GenericItemsListProps<TItem extends IId> {
   title: string;
   // New optional prop for configuration
   viewConfig?: ViewConfigItem<TItem>[];
+  // New optional prop to configure default group sort order
+  groupSortOrder?: 'asc' | 'desc';
+  // New optional prop to configure the initial sort order for the first displayKey
+  defaultDisplayKeySortOrder?: 'asc' | 'desc';
 }
 
 export default function GenericItemsList<TItem extends IId>({
@@ -40,14 +44,16 @@ export default function GenericItemsList<TItem extends IId>({
   selectedItem,
   setSelectedItem,
   viewConfig,
+  groupSortOrder, // new destructured prop
+  defaultDisplayKeySortOrder, // new prop
 }: GenericItemsListProps<TItem>) {
   // New filter state
   const [filterText, setFilterText] = useState("");
 
   // New sorting states
-  const [groupSortAsc, setGroupSortAsc] = useState(true);
+  const [groupSortAsc, setGroupSortAsc] = useState(groupSortOrder === 'desc' ? false : true);
   const [sortKey, setSortKey] = useState<keyof TItem>(displayKeys[0]!);
-  const [sortAsc, setSortAsc] = useState(true);
+  const [sortAsc, setSortAsc] = useState(defaultDisplayKeySortOrder === 'desc' ? false : true);
 
   // Filter items based on filterText using displayKeys values
   const textFilteredItems = items.filter((item) => {

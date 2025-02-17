@@ -16,6 +16,9 @@ export type GenericDataViewerProps<T> = {
     add: ((selectedItem: T) => void) | null;
   };
   title: string;
+  groupSortOrder?: 'asc' | 'desc';
+  // New optional prop to configure the initial sort order for the first displayKey
+  sortFirstDisplayKey?: 'asc' | 'desc';
 };
 
 export default function GenericDataViewer<T extends { id: string }>({
@@ -28,7 +31,9 @@ export default function GenericDataViewer<T extends { id: string }>({
     edit: (item) => console.log(item),
     add: (item) => console.log(item),
   },
-  title
+  title,
+  groupSortOrder,
+  sortFirstDisplayKey,
 }: GenericDataViewerProps<T>) {
   const [selectedItem, setSelectedItem] = useState<(T & { id: string }) | null>(null);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
@@ -44,6 +49,8 @@ export default function GenericDataViewer<T extends { id: string }>({
         displayKeys={displayKeys || ["id"]}
         title={title}
         viewConfig={viewConfig}  // Pass the configuration
+        groupSortOrder={groupSortOrder} // Pass the groupSortOrder
+        defaultDisplayKeySortOrder={sortFirstDisplayKey} // Pass the sortFirstDisplayKey
       />
       <div className={styles.contentContainer}>
         {/* --Buttons */}

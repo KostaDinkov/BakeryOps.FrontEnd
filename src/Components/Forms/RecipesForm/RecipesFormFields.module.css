@@ -1,0 +1,23 @@
+.formFieldsContainer{
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-small);
+}
+
+
+.multiInputRow, .itemInputRow{
+    display: flex;
+    justify-content: stretch;
+    margin-bottom: 10px;
+    gap:var(--gap-small);
+    
+}
+
+.multiInputRow > *{
+    flex-grow: 1;
+}
+
+.itemInputRow > :first-child{
+    flex-grow: 1;
+}
+

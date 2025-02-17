@@ -1,0 +1,23 @@
+.delete {
+    align-self:center;
+    grid-area: delete;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    
+  }
+
+  .iconBtnStyle {
+    border:1px solid var(--color-primary-dark)!important;
+    &:hover {
+      background-color: var(--mui-palette-error-main) !important;
+      border:1px solid var(--mui-palette-error-dark)!important;
+      svg {
+        color: var(--mui-palette-background-default) !important;
+      }
+    }
+    svg {
+      color: var(--color-primary-dark);
+      transition: 0.3s;
+    }
+  }

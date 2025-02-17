@@ -1,0 +1,25 @@
+.formContainer{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.userForm{
+   display: grid;
+   grid-template-columns: auto 1fr;
+   gap:1rem;
+}
+
+.label{
+ grid-column: 1;
+}
+
+.input{
+ grid-column: 2;
+}
+
+.wide{
+    grid-column:1/3;
+}

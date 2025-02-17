@@ -1,0 +1,68 @@
+
+.deliveryForm{
+    display:flex;
+    flex-direction: column;
+    gap: var(--gap-small);
+    
+}
+.deliveryInfo{
+    display: grid;
+    grid-template-columns: 2fr auto auto;
+    grid-template-rows: auto auto;
+    gap: var(--gap-small);
+
+}
+
+.fullGridRow{
+    grid-column: 1 / span 3;
+}
+
+.deliveryRow{
+    
+    display: grid;
+    grid-template-columns: 4fr 1fr 1fr 2fr 2fr;
+    grid-template-areas: "item quantity price lot expDate"
+                         "item notes notes notes notes";
+    gap: var(--gap-small);
+    .item{
+        grid-area: item;
+    }
+    .quantity{
+        grid-area: quantity;
+    }
+    .price{
+        grid-area: price;
+    }
+    .lot{
+        grid-area: lot;
+    }
+    .expDate{
+        grid-area: expDate;
+    }
+    .notes{
+        grid-area: notes;
+    }
+    
+}
+
+.deliveryList{
+    display: flex;
+    flex-direction: column;
+    gap:var(--gap-small);
+}
+
+.deliveryRowWithDelete{
+    display: flex;
+    flex-direction: row;
+    gap:var(--gap-small);
+    align-items: center;
+    padding:0.5rem;
+    border-radius: 5px;    
+}
+
+.deliveryRowWithDelete:nth-child(odd) {
+    background-color: white;
+}
+.deliveryRowWithDelete:nth-child(even) {
+    background-color: var(--color-background-lightYellow);
+}

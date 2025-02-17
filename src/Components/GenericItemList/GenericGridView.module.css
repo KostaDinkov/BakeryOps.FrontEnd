@@ -1,0 +1,8 @@
+.container{
+    background-color: var(--color-blueGrey-dark);
+}
+
+.container :global(.MuiDataGrid-virtualScroller.MuiDataGrid-virtualScroller--hasScrollX) :global(.MuiDataGrid-filler) {
+    height: 8px  !important;
+    /* background-color: red; */
+}

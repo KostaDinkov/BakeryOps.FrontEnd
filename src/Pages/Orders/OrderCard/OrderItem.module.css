@@ -1,0 +1,51 @@
+@import "../../../styles/vars.css";
+
+.itemHeader {
+  display: flex;
+  align-items: flex-start;
+  padding-top:10px;  
+}
+
+dl {
+  margin: 0px;
+  padding: 0 10px 10px 10px;
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--color-primary-main)
+}
+dl:last-of-type{
+  border-bottom:none;
+}
+
+.itemName {
+  font-size: 1.1rem;
+  flex-grow: 1;
+}
+
+dl.completed {
+  background-color: var(--color-green);
+}
+
+dl.inProgress {
+  background-color: var(--color-yellow);
+}
+
+dl.completed,
+dl.inProgress {
+  
+}
+
+.itemDetailsBadge{
+  background-color: var(--color-primary-lighter);
+  color:white;
+  margin-right:4px;
+  border-radius: 4px;
+  padding:0 4px;
+}
+
+.itemDetails{
+  margin:4px 0;
+}
+
+dd{
+  margin-inline-start: 20px;
+}

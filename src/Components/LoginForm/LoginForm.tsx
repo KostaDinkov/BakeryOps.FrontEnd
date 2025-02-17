@@ -1,12 +1,13 @@
 import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import styles from "./LoginForm.module.css";
-import { auth } from "../../API/ordersApi";
+import { auth, parseJwt } from "../../API/authenticationService.ts";
 import AppContext from "../../appContext";
+
 
 
 export default function LoginForm() {
@@ -20,13 +21,14 @@ export default function LoginForm() {
 
   const handleSubmit = async (evt:React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    
     let response = await auth.login({userName, password});
-    
     if(response.status === 200){
       setIsLogged?.(true);
-      localStorage.setItem("token", await response.text());
+      const token = await response.text();
+      const claimsObj = parseJwt(token);
+      localStorage.setItem("token", token);
       localStorage.setItem("isLogged", "true");
+      localStorage.setItem("user",`${claimsObj.FirstName} ${claimsObj.LastName}`);
       navigate("/");
     }
     else{

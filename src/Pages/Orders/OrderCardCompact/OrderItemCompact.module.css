@@ -1,0 +1,71 @@
+:root {
+  --font-size-small: 0.8rem;
+  --font-size-normal: 0.9rem;
+  --item-padding: 0px 10px;
+  --badge-padding: 0 4px;
+  --badge-margin: 0 4px;
+  --details-margin: 4px 0;
+}
+
+.itemRow {
+  margin: 0;
+  padding: var(--item-padding);
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--color-primary-lighter);
+  display: flex;
+  justify-content: space-between;
+}
+
+.itemName {
+  font-size: var(--font-size-normal);
+  align-self: flex-start;
+}
+
+/* Common icon styles using shared chip properties */
+.iconFoto,
+.iconCakeTitle,
+.iconDescription {
+  border-radius: 999em;
+  padding: 0 5px;
+  font-size: var(--font-size-small);
+}
+
+.iconFoto {
+  color: black;
+  background-color: var(--color-pink);
+}
+
+.iconCakeTitle {
+  color: black;
+  background-color: var(--color-primary-lighter);
+}
+
+.iconDescription {
+  color: white;
+  background-color: var(--color-error-main);
+}
+
+.itemAmount {
+  font-size: var(--font-size-normal);
+  justify-self: flex-end;
+}
+
+.completed {
+  background-color: var(--color-green);
+}
+
+.inProgress {
+  background-color: var(--color-yellow);
+}
+
+.itemDetailsBadge {
+  background-color: var(--color-primary-lighter);
+  color: white;
+  margin-right: 4px;
+  border-radius: 4px;
+  padding: var(--badge-padding);
+}
+
+.itemDetails {
+  margin: var(--details-margin);
+}

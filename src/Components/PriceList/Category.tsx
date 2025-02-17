@@ -1,6 +1,6 @@
 import React from "react";
-import ProductDTO from "../../Types/ProductDTO";
-import { getSpecialPrice } from "../OrderForm/OrderFormHelperFunctions";
+import {ProductDTO} from "../../Types/types";
+import { getSpecialPrice } from "../../system/utils";
 import styles from "./Category.module.scss";
 import useClientDiscount from "./useClientDiscount";
 

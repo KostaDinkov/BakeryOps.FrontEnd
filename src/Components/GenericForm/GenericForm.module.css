@@ -1,0 +1,14 @@
+.formContainer{
+    max-width: 1200px;
+    width:-webkit-fill-available;
+    width:-moz-available;
+    justify-self: center;
+
+}
+
+.formButtons{
+    display: flex;
+    justify-content: flex-end;
+    gap:var(--gap-medium) ;
+    padding:1rem 0
+}

@@ -1,0 +1,15 @@
+.titleBar{
+    display: flex;
+    width:100%;
+    gap:1rem;
+    padding:1rem 0;
+    h5{
+        margin-right:5rem;
+    }
+    .children{
+        display: flex;
+        flex:1;
+        gap:1rem;
+        align-items: center;
+    }
+}

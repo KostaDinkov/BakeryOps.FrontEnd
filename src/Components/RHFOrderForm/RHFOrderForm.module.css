@@ -1,0 +1,28 @@
+.formContainer{
+    display:flex;
+    flex-direction:column;
+    gap:var(--gap-large);
+}
+.formMetaData {
+    display:grid;
+    grid-template-columns: 4fr 3fr 2fr auto 1fr;
+    gap:var(--gap-small)
+}
+
+.footerRow{
+
+    display:flex;
+    gap:var(--gap-small);
+    
+    button{
+        width:max-content;
+    }
+    
+}
+.saveCancel{
+    margin-left:auto;
+    display:flex;
+    gap:var(--gap-small);
+    justify-content:flex-end;
+    
+}

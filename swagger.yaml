@@ -1,0 +1,1221 @@
+﻿openapi: 3.0.1
+info:
+  title: BakeryOps
+  description: Application for bakery management
+  version: v1
+paths:
+  /api/Categories/GetCategories:
+    get:
+      tags:
+        - Categories
+      responses:
+        '200':
+          description: OK
+  '/api/Categories/GetCategory/{id}':
+    get:
+      tags:
+        - Categories
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+  /api/Categories/AddCategory:
+    post:
+      tags:
+        - Categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/CategoryDTO'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/CategoryDTO'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/CategoryDTO'
+      responses:
+        '200':
+          description: OK
+  /api/Categories/UpdateCategory:
+    put:
+      tags:
+        - Categories
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/CategoryDTO'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/CategoryDTO'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/CategoryDTO'
+      responses:
+        '200':
+          description: OK
+  '/api/Categories/DeleteCategory/{id}':
+    delete:
+      tags:
+        - Categories
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+  /api/Clients:
+    get:
+      tags:
+        - Clients
+      responses:
+        '200':
+          description: OK
+    post:
+      tags:
+        - Clients
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/ClientDTO'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/ClientDTO'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/ClientDTO'
+      responses:
+        '200':
+          description: OK
+    put:
+      tags:
+        - Clients
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/ClientDTO'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/ClientDTO'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/ClientDTO'
+      responses:
+        '200':
+          description: OK
+  '/api/Clients/{id}':
+    get:
+      tags:
+        - Clients
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+    delete:
+      tags:
+        - Clients
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+  /api/Deliveries/GetAll:
+    get:
+      tags:
+        - Deliveries
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            default: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            format: int32
+            default: 10
+      responses:
+        '200':
+          description: OK
+  '/api/Deliveries/GetById/{id}':
+    get:
+      tags:
+        - Deliveries
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+  /api/Deliveries/Create:
+    post:
+      tags:
+        - Deliveries
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/DeliveryDto'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/DeliveryDto'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/DeliveryDto'
+      responses:
+        '200':
+          description: OK
+  /api/Deliveries/Update:
+    put:
+      tags:
+        - Deliveries
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/DeliveryDto'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/DeliveryDto'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/DeliveryDto'
+      responses:
+        '200':
+          description: OK
+  '/api/Deliveries/Delete/{id}':
+    delete:
+      tags:
+        - Deliveries
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+  /api/Materials/GetMaterials:
+    get:
+      tags:
+        - Materials
+      responses:
+        '200':
+          description: OK
+  '/api/Materials/GetMaterial/{id}':
+    get:
+      tags:
+        - Materials
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+  /api/Materials/AddMaterial:
+    post:
+      tags:
+        - Materials
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/MaterialDto'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/MaterialDto'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/MaterialDto'
+      responses:
+        '200':
+          description: OK
+  /api/Materials/UpdateMaterial:
+    put:
+      tags:
+        - Materials
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/MaterialDto'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/MaterialDto'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/MaterialDto'
+      responses:
+        '200':
+          description: OK
+  '/api/Materials/DeleteMaterial/{id}':
+    delete:
+      tags:
+        - Materials
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+  '/api/Orders/GetOrder/{id}':
+    get:
+      tags:
+        - Orders
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+  /api/Orders/GetOrdersBetween:
+    get:
+      tags:
+        - Orders
+      parameters:
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: OK
+  /api/Orders/GetOrders:
+    get:
+      tags:
+        - Orders
+      responses:
+        '200':
+          description: OK
+  /api/Orders/CreateOrder:
+    post:
+      tags:
+        - Orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/OrderDTO'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/OrderDTO'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/OrderDTO'
+      responses:
+        '200':
+          description: OK
+  /api/Orders/UpdateOrder:
+    put:
+      tags:
+        - Orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/OrderDTO'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/OrderDTO'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/OrderDTO'
+      responses:
+        '200':
+          description: OK
+  '/api/Orders/DeleteOrder/{id}':
+    delete:
+      tags:
+        - Orders
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+  /api/Products/GetAllProducts:
+    get:
+      tags:
+        - Products
+      responses:
+        '200':
+          description: OK
+  '/api/Products/GetProduct/{id}':
+    get:
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Product'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+  '/api/Products/UpdateProduct/{id}':
+    put:
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Product'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Product'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: OK
+  /api/Products/SyncDatabase/syncDatabase:
+    get:
+      tags:
+        - Products
+      responses:
+        '200':
+          description: OK
+  /api/Recipes/GetRecipes:
+    get:
+      tags:
+        - Recipes
+      responses:
+        '200':
+          description: OK
+  '/api/Recipes/GetRecipe/{id}':
+    get:
+      tags:
+        - Recipes
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+  /api/Recipes/AddRecipe:
+    post:
+      tags:
+        - Recipes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/RecipeDto'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/RecipeDto'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/RecipeDto'
+      responses:
+        '200':
+          description: OK
+  /api/Recipes/UpdateRecipe:
+    put:
+      tags:
+        - Recipes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/RecipeDto'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/RecipeDto'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/RecipeDto'
+      responses:
+        '200':
+          description: OK
+  '/api/Recipes/DeleteRecipe/{id}':
+    delete:
+      tags:
+        - Recipes
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+  /api/Security/GetToken:
+    post:
+      tags:
+        - Security
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/UserCredentialsDTO'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/UserCredentialsDTO'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/UserCredentialsDTO'
+      responses:
+        '200':
+          description: OK
+  /api/Security/GetPermissions:
+    get:
+      tags:
+        - Security
+      responses:
+        '200':
+          description: OK
+  /api/Units/GetUnits:
+    get:
+      tags:
+        - Units
+      responses:
+        '200':
+          description: OK
+  /api/Units/AddUnit:
+    post:
+      tags:
+        - Units
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Unit'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Unit'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Unit'
+      responses:
+        '200':
+          description: OK
+  /api/Users/GetUsers:
+    get:
+      tags:
+        - Users
+      responses:
+        '200':
+          description: OK
+  '/api/Users/GetUserByUsername/{userName}':
+    get:
+      tags:
+        - Users
+      parameters:
+        - name: userName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  '/api/Users/GetUserById/{userId}':
+    get:
+      tags:
+        - Users
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+  /api/Users/AddUser:
+    post:
+      tags:
+        - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/NewUserDTO'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/NewUserDTO'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/NewUserDTO'
+      responses:
+        '200':
+          description: OK
+  /api/Users/UpdateUser:
+    put:
+      tags:
+        - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/NewUserDTO'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/NewUserDTO'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/NewUserDTO'
+      responses:
+        '200':
+          description: OK
+  '/api/Users/DeleteUser/{id}':
+    delete:
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+  /api/Vendors/GetVendors:
+    get:
+      tags:
+        - Vendors
+      responses:
+        '200':
+          description: OK
+  '/api/Vendors/GetVendor/{id}':
+    get:
+      tags:
+        - Vendors
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+  /api/Vendors/AddVendor:
+    post:
+      tags:
+        - Vendors
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/VendorDTO'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/VendorDTO'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/VendorDTO'
+      responses:
+        '200':
+          description: OK
+  /api/Vendors/UpdateVendor:
+    put:
+      tags:
+        - Vendors
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/VendorDTO'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/VendorDTO'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/VendorDTO'
+      responses:
+        '200':
+          description: OK
+  '/api/Vendors/DeleteVendor/{id}':
+    delete:
+      tags:
+        - Vendors
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+components:
+  schemas:
+    CategoryDTO:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          minLength: 1
+          type: string
+      additionalProperties: false
+    ClientDTO:
+      required:
+        - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        phone:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        hasDiscount:
+          type: boolean
+        isCompany:
+          type: boolean
+        isSpecialPrice:
+          type: boolean
+      additionalProperties: false
+    DeliveryDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        deliveryDate:
+          type: string
+        vendorId:
+          type: string
+          format: uuid
+        vendorName:
+          type: string
+          nullable: true
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeliveryItemDto'
+          description: List of items in the delivery
+        invoiceNumber:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+        total:
+          type: number
+          format: double
+        tax:
+          type: number
+          format: double
+        totalWithTax:
+          type: number
+          format: double
+      additionalProperties: false
+    DeliveryItemDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        materialId:
+          type: string
+          format: uuid
+        materialName:
+          type: string
+          nullable: true
+        materialUnit:
+          type: string
+          nullable: true
+        quantity:
+          type: number
+          format: double
+        unitPrice:
+          type: number
+          format: double
+          nullable: true
+        vat:
+          type: number
+          format: double
+        expirationDate:
+          type: string
+          nullable: true
+        lotNumber:
+          type: string
+          nullable: true
+        notes:
+          type: string
+          nullable: true
+      additionalProperties: false
+    MaterialDto:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        unitId:
+          type: string
+          format: uuid
+          nullable: true
+        unitName:
+          type: string
+          nullable: true
+        latestPrice:
+          type: number
+          format: double
+          nullable: true
+        categoryId:
+          type: string
+          format: uuid
+          nullable: true
+        categoryName:
+          type: string
+          nullable: true
+        vendorId:
+          type: string
+          format: uuid
+          nullable: true
+        vendorName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    NewUserDTO:
+      required:
+        - password
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+        lastName:
+          type: string
+        userName:
+          type: string
+        permissions:
+          type: array
+          items:
+            type: string
+        password:
+          type: string
+      additionalProperties: false
+    OrderDTO:
+      required:
+        - advancePaiment
+        - clientName
+        - isPaid
+        - pickupDate
+        - status
+        - totalPrice
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        operatorId:
+          type: integer
+          format: int32
+          nullable: true
+        createdDate:
+          type: string
+          format: date-time
+        pickupDate:
+          type: string
+          format: date-time
+        clientName:
+          minLength: 1
+          type: string
+        clientPhone:
+          type: string
+          nullable: true
+        clientId:
+          type: string
+          format: uuid
+          nullable: true
+        isPaid:
+          type: boolean
+        advancePaiment:
+          type: number
+          format: double
+        totalPrice:
+          type: number
+          format: double
+        status:
+          allOf:
+            - $ref: '#/components/schemas/Status'
+          default: 2
+        orderItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemDTO'
+      additionalProperties: false
+    OrderItemDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        productId:
+          type: string
+          format: uuid
+        productName:
+          type: string
+          nullable: true
+        productAmount:
+          type: number
+          format: double
+        description:
+          type: string
+          nullable: true
+        cakeFoto:
+          type: string
+          nullable: true
+        cakeTitle:
+          type: string
+          nullable: true
+        itemUnitPrice:
+          type: number
+          format: double
+        itemTotalPrice:
+          type: number
+          format: double
+          readOnly: true
+        isInProgress:
+          type: boolean
+        isComplete:
+          type: boolean
+      additionalProperties: false
+    Product:
+      required:
+        - category
+        - name
+        - priceDrebno
+        - priceEdro
+        - unit
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          minLength: 1
+          type: string
+        category:
+          minLength: 1
+          type: string
+        priceDrebno:
+          type: number
+          format: double
+        priceEdro:
+          type: number
+          format: double
+        hasDiscount:
+          type: boolean
+        keepPriceDrebno:
+          type: boolean
+        inPriceList:
+          type: boolean
+        unit:
+          type: string
+        code:
+          type: string
+          nullable: true
+        isActive:
+          type: boolean
+        dateCreated:
+          type: string
+          format: date-time
+      additionalProperties: false
+    RecipeDto:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        createdOn:
+          type: string
+          format: date-time
+        updatedOn:
+          type: string
+          format: date-time
+          nullable: true
+        createdBy:
+          type: string
+          nullable: true
+        updatedBy:
+          type: string
+          nullable: true
+        id:
+          type: string
+          format: uuid
+        name:
+          minLength: 1
+          type: string
+        productId:
+          type: string
+          format: uuid
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipeMaterialDto'
+        subRecipes:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubRecipeDto'
+        workHours:
+          type: number
+          format: double
+        yield:
+          type: number
+          format: double
+        unitId:
+          type: string
+          format: uuid
+        cost:
+          type: number
+          format: double
+      additionalProperties: false
+    RecipeMaterialDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        materialId:
+          type: string
+          format: uuid
+        materialName:
+          type: string
+          nullable: true
+        quantity:
+          type: number
+          format: double
+      additionalProperties: false
+    Status:
+      enum:
+        - 0
+        - 1
+        - 2
+      type: integer
+      format: int32
+    SubRecipeDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        subRecipeId:
+          type: string
+          format: uuid
+        subRecipeName:
+          type: string
+          nullable: true
+        quantity:
+          type: number
+          format: double
+      additionalProperties: false
+    Unit:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+      additionalProperties: false
+    UserCredentialsDTO:
+      type: object
+      properties:
+        userName:
+          type: string
+        password:
+          type: string
+      additionalProperties: false
+    VendorDTO:
+      required:
+        - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        address:
+          type: string
+          nullable: true
+        phoneNumber:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: http
+      description: 'Enter the Bearer Authorization string as following: `Bearer Generated-JWT-Token`'
+      scheme: Bearer
+security:
+  - Bearer: [ ]

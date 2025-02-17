@@ -1,11 +1,14 @@
 
 import { NotFoundError, UnauthorizedError } from "../system/errors";
-import ClientDTO from "../Types/ClientDTO";
+import {components } from '../API/apiSchema';
 
-export const hostName = process.env.REACT_APP_API_SERVER_URL;
+type ClientDTO = components["schemas"]["ClientDTO"];
 
-export default class ClientsService {
-  static async GetClientsAsync(): Promise<ClientDTO[][]> {
+
+export const hostName = import.meta.env.VITE_API_SERVER_URL;
+
+
+  export const getAllItems= async (): Promise<ClientDTO[]> => {
     let response = await fetch(
       `${hostName}/api/clients`,
       {
@@ -17,12 +20,12 @@ export default class ClientsService {
       }
     );
     if (response.status === 401) {
-      throw new UnauthorizedError();
+      throw new UnauthorizedError("Unauthorized");
     }
     return response.json();
   }
 
-  static async GetClientAsync(id: number): Promise<ClientDTO> {
+  export const  getItemById = async (id: number | string): Promise<ClientDTO> =>{
     try {
       let response = await fetch(`${hostName}/api/clients/${id}`, {
         method: "GET",
@@ -33,7 +36,7 @@ export default class ClientsService {
       });
 
       if (response.status === 404) {
-        throw new NotFoundError();
+        throw new NotFoundError("Item Not found");
       }
       return await response.json();
     } catch (error) {
@@ -42,9 +45,9 @@ export default class ClientsService {
     }
   }
 
-  static async PostClientAsync(data: ClientDTO): Promise<ClientDTO> {
+  export const createItem = async (data: ClientDTO): Promise<ClientDTO> => {
     try {
-      const response = await fetch(`${hostName}/api/orders`, {
+      const response = await fetch(`${hostName}/api/clients`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -59,18 +62,15 @@ export default class ClientsService {
     }
   }
 
-  static async PutClientAsync(
-    orderId: number,
-    data: ClientDTO
-  ): Promise<ClientDTO> {
+  export const  updateItem = async(client:ClientDTO): Promise<ClientDTO> =>{
     try {
-      const response = await fetch(`${hostName}/api/clients/${orderId}`, {
+      const response = await fetch(`${hostName}/api/clients`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(client),
       });
 
       return response.json();
@@ -80,7 +80,7 @@ export default class ClientsService {
     }
   }
 
-  static async DeleteClientAsync(orderId: number): Promise<ClientDTO | null> {
+  export const deleteItem= async (orderId: number | string): Promise<ClientDTO | null> =>{
     try {
       let response = await fetch(`${hostName}/api/clients/${orderId}`, {
         method: "DELETE",
@@ -95,4 +95,4 @@ export default class ClientsService {
       return null;
     }
   }
-}
+

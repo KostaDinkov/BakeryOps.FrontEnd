@@ -1,0 +1,17 @@
+@import "../../styles/vars.css";
+.table{
+    border-radius: 5px;
+    background-color: var(--color-primary-lighter);
+    border-spacing: 0;
+    thead{
+        background-color: var(--color-primary-main);
+        border-radius: 5px;
+        
+        tr{
+            
+            th{
+                text-align: left;
+            }
+        }
+    }
+}

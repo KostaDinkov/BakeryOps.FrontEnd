@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import GenericCrud2 from "./GenericCrud2";
+import GenericDataViewer from "./GenericDataViewer";
 import { sampleProducts } from "../../tests/sampleData/sampleProducts";
 import { sampleClients } from "../../tests/sampleData/sampleClients";
 import { sampleMaterials } from "../../tests/sampleData/sampleMaterials";
@@ -7,15 +7,15 @@ import { sampleDeliveries } from "../../tests/sampleData/sampleDeliveries";
 import { ClientDTO, DeliveryDTO, MaterialDTO, ProductDTO } from "../../Types/types";
 import { dateToString } from "../../system/utils";
 
-const meta: Meta<typeof GenericCrud2> = {
-  component: GenericCrud2,
+const meta: Meta<typeof GenericDataViewer> = {
+  component: GenericDataViewer,
 };
 export default meta;
-type Story = StoryObj<typeof GenericCrud2>;
+type Story = StoryObj<typeof GenericDataViewer>;
 
 export const Products: Story = {
   render: (args) => (
-    <GenericCrud2<ProductDTO>
+    <GenericDataViewer<ProductDTO>
       items={sampleProducts}
       groupBy="category"
       viewConfig={[
@@ -32,7 +32,7 @@ export const Products: Story = {
 };
 export const Clients: Story = {
   render: (args) => (
-    <GenericCrud2<ClientDTO>
+    <GenericDataViewer<ClientDTO>
       items={sampleClients}
       viewConfig={[
         { name: { label: "Име" }}, 
@@ -44,7 +44,7 @@ export const Clients: Story = {
 };
 export const Materials: Story = {
   render: (args) => (
-    <GenericCrud2<MaterialDTO>
+    <GenericDataViewer<MaterialDTO>
       items={sampleMaterials}
       groupBy={"categoryName"}
       viewConfig={[
@@ -60,7 +60,7 @@ export const Materials: Story = {
 
 export const Deliveries: Story = {
   render: (args) => (
-    <GenericCrud2<DeliveryDTO>
+    <GenericDataViewer<DeliveryDTO>
       items={sampleDeliveries}
       viewConfig={[
         { vendorName: { label: "Доставчик" } },

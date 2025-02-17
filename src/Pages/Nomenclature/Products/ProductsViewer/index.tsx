@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import { useProductsQuery } from "../../../../API/Queries/queryHooks";
-import GenericCrud2 from "../../../../Components/GenericCRUD2/GenericCrud2";
+import GenericDataViewer from "../../../../Components/GenericDataViewer/GenericDataViewer";
 import QueryViewWrapper from "../../../../Components/QueryWrapper/QueryViewWrapper";
 import { ProductDTO } from "../../../../Types/types";
 
@@ -11,7 +11,7 @@ export default function Index() {
   return (
     <QueryViewWrapper<ProductDTO> query={productsQuery}>
       {(data) => (
-        <GenericCrud2<ProductDTO & { id: string }>
+        <GenericDataViewer<ProductDTO & { id: string }>
           items={data}
           viewConfig={[
             { name: { label: "Име" } },

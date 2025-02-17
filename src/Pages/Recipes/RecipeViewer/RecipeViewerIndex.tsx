@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { useRecipesQuery } from "../../../API/Queries/queryHooks";
-import GenericCrud2 from "../../../Components/GenericCRUD2/GenericCrud2";
+import GenericDataViewer from "../../../Components/GenericDataViewer/GenericDataViewer";
 import QueryViewWrapper from "../../../Components/QueryWrapper/QueryViewWrapper";
 import TitleBar from "../../../Components/TitleBar/TitleBar";
 import { RecipeDTO } from "../../../Types/types";
@@ -29,7 +29,7 @@ export default function RecipeViewerIndex() {
       <QueryViewWrapper<RecipeDTO> query={recipesQuery}>
         {(data) => {
           return (
-            <GenericCrud2<RecipeDTO>
+            <GenericDataViewer<RecipeDTO>
               items={data}
               viewConfig={[
                 { name: { label: "Име" } },

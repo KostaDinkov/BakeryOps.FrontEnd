@@ -2,7 +2,7 @@ import { useNavigate } from "react-router";
 import { apiClient } from "../../../../API/apiClient";
 import { useHandleApiResponse } from "../../../../API/apiUtils";
 import { useVendorsQuery } from "../../../../API/Queries/queryHooks";
-import GenericCrud2 from "../../../../Components/GenericCRUD2/GenericCrud2";
+import GenericDataViewer from "../../../../Components/GenericDataViewer/GenericDataViewer";
 import QueryViewWrapper from "../../../../Components/QueryWrapper/QueryViewWrapper";
 import TitleBar from "../../../../Components/TitleBar/TitleBar";
 import { VendorDTO } from "../../../../Types/types";
@@ -31,7 +31,7 @@ export default function Index() {
       <TitleBar title="Доставчици" />
       <QueryViewWrapper<VendorDTO> query={vendorsQuery}>
         {(data) => (
-          <GenericCrud2<VendorDTO & { id: string }>
+          <GenericDataViewer<VendorDTO & { id: string }>
             items={data}
             viewConfig={[
               { name: { label: "Име" } },

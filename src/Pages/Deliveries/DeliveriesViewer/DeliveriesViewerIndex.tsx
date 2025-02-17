@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { useDeliveriesQuery } from "../../../API/Queries/queryHooks";
-import GenericCrud2 from "../../../Components/GenericCRUD2/GenericCrud2";
+import GenericDataViewer from "../../../Components/GenericDataViewer/GenericDataViewer";
 import QueryViewWrapper from "../../../Components/QueryWrapper/QueryViewWrapper";
 import TitleBar from "../../../Components/TitleBar/TitleBar";
 import { isoDateToString } from "../../../system/utils";
@@ -31,7 +31,7 @@ export default function DeliveriesViewerIndex() {
       <QueryViewWrapper<DeliveryDTO> query={deliveriesQuery}>
         {(data) => {
           return (
-            <GenericCrud2<DeliveryDTO & { id: string }>
+            <GenericDataViewer<DeliveryDTO & { id: string }>
               items={data as DeliveryDTO[]& { id: string }[]}
               viewConfig={[
                 { vendorName: { label: "Доставчик" }, },
@@ -95,7 +95,7 @@ export default function DeliveriesViewerIndex() {
               displayKeys={["deliveryDate", "vendorName","invoiceNumber", "totalWithTax"]}
               title="Доставки"
              
-            ></GenericCrud2>
+            ></GenericDataViewer>
           );
         }}
       </QueryViewWrapper>

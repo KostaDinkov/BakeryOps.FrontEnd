@@ -1,5 +1,5 @@
 import QueryViewWrapper from "../../../../Components/QueryWrapper/QueryViewWrapper";
-import GenericCrud2 from "../../../../Components/GenericCRUD2/GenericCrud2";
+import GenericDataViewer from "../../../../Components/GenericDataViewer/GenericDataViewer";
 import { MaterialDTO } from "../../../../Types/types";
 import { useMaterialsQuery } from "../../../../API/Queries/queryHooks";
 import { useNavigate } from "react-router";
@@ -27,7 +27,7 @@ export default function MaterialsViewerIndex() {
         <TitleBar title={"Материали"} />
         <QueryViewWrapper<MaterialDTO> query={materialsQuery}>
           {(data) => (
-            <GenericCrud2<MaterialDTO & { id: string }>
+            <GenericDataViewer<MaterialDTO & { id: string }>
               items={data}
               viewConfig={[
                 { name: { label: "Име" } },

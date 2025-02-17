@@ -3,11 +3,11 @@ import GenericItemView, {
   ViewConfigItem,
 } from "../GenericItemList/GenericItemView";
 import { useState } from "react";
-import styles from "./GenericCrud2.module.css";
+import styles from "./GenericDataViewer.module.css";
 import { Button } from "@mui/material";
 import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
 
-export type GenericCrud2Props<T> = {
+export type GenericDataViewerProps<T> = {
   items: T[] ;
   viewConfig: ViewConfigItem<T>[];
   groupBy?: keyof T;
@@ -20,7 +20,7 @@ export type GenericCrud2Props<T> = {
   title:string;
 };
 
-export default function GenericCrud2<T extends { id: string }>({
+export default function GenericDataViewer<T extends { id: string }>({
   items,
   viewConfig,
   groupBy,
@@ -31,7 +31,7 @@ export default function GenericCrud2<T extends { id: string }>({
     add: (item) => console.log(item),
   },
   title
-}: GenericCrud2Props<T>) {
+}: GenericDataViewerProps<T>) {
   const [selectedItem, setSelectedItem] = useState<(T & { id: string }) | null>(
     null
   );

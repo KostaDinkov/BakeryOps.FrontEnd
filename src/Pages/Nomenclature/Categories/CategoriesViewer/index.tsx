@@ -1,5 +1,5 @@
 import { CategoryDTO } from "../../../../Types/types";
-import GenericCrud2 from "../../../../Components/GenericCRUD2/GenericCrud2";
+import GenericDataViewer from "../../../../Components/GenericDataViewer/GenericDataViewer";
 import { useCategoriesQuery } from "../../../../API/Queries/queryHooks";
 import QueryViewWrapper from "../../../../Components/QueryWrapper/QueryViewWrapper";
 import { useNavigate } from "react-router";
@@ -32,7 +32,7 @@ export default function CategoriesPage() {
       <TitleBar title="Категории" />
       <QueryViewWrapper<CategoryDTO> query={categoriesQuery}>
         {(data) => (
-          <GenericCrud2<CategoryDTO & { id: string }>
+          <GenericDataViewer<CategoryDTO & { id: string }>
             items={Array.isArray(data) ? data : [data]}
             viewConfig={[{ name: { label: "Име" } }]}
             displayKeys={["name"]}

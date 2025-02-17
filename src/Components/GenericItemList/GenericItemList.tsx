@@ -1,5 +1,5 @@
 // #region Imports
-import { useState, ReactElement, cloneElement } from "react";
+import { useState, ReactElement, cloneElement, useEffect } from "react";
 import {
   Box,
   Paper,
@@ -79,9 +79,17 @@ export default function GenericItemsList<TItem extends IId>({
     groups = Array.from(new Set(sortedItems.map((item) => item[groupBy] as string)));
     groups.sort((a, b) => groupSortAsc ? a.localeCompare(b) : b.localeCompare(a));
   }
+    // Group filter state remains the same
+    const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
 
-  // Group filter state remains the same
-  const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
+  // Set default selected group if groupBy is provided and no group is selected
+  useEffect(() => {
+    if (groupBy && groups.length > 0 && !selectedGroup) {
+      setSelectedGroup(groups[0]!);
+    }
+  }, [groupBy, groups, selectedGroup]);
+
+
 
   // Further filter items by selected group if applicable
   const filteredItems =

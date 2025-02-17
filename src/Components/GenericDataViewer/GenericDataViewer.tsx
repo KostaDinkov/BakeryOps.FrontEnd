@@ -1,7 +1,5 @@
 import GenericItemsList from "../GenericItemList/GenericItemList";
-import GenericItemView, {
-  ViewConfigItem,
-} from "../GenericItemList/GenericItemView";
+import GenericItemView, { ViewConfigItem } from "../GenericItemList/GenericItemView";
 import { useState } from "react";
 import styles from "./GenericDataViewer.module.css";
 import { Button } from "@mui/material";
@@ -17,7 +15,7 @@ export type GenericDataViewerProps<T> = {
     edit: ((selectedItem: T) => void) | null;
     add: ((selectedItem: T) => void) | null;
   };
-  title:string;
+  title: string;
 };
 
 export default function GenericDataViewer<T extends { id: string }>({
@@ -32,13 +30,12 @@ export default function GenericDataViewer<T extends { id: string }>({
   },
   title
 }: GenericDataViewerProps<T>) {
-  const [selectedItem, setSelectedItem] = useState<(T & { id: string }) | null>(
-    null
-  );
+  const [selectedItem, setSelectedItem] = useState<(T & { id: string }) | null>(null);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
 
   return (
     <div className={styles.genericCrudContainer}>
+      {/* --Items List */}
       <GenericItemsList<T & { id: string }>
         items={items}
         groupBy={groupBy}
@@ -46,9 +43,10 @@ export default function GenericDataViewer<T extends { id: string }>({
         selectedItem={selectedItem}
         displayKeys={displayKeys || ["id"]}
         title={title}
-        
+        viewConfig={viewConfig}  // Pass the configuration
       />
       <div className={styles.contentContainer}>
+        {/* --Buttons */}
         <div className={styles.topButtonContainer}>
           {actions.add && (
             <Button
@@ -82,6 +80,7 @@ export default function GenericDataViewer<T extends { id: string }>({
             </div>
           )}
         </div>
+        {/* -- Details View */}
         {selectedItem && (
           <GenericItemView<T> item={selectedItem} viewConfig={viewConfig} />
         )}
@@ -94,7 +93,8 @@ export default function GenericDataViewer<T extends { id: string }>({
         agreeBtnText={"Да"}
         disagreeBtnText={"Не"}
         handleAgree={() => {
-          actions.delete?.(selectedItem!); setSelectedItem(null);
+          actions.delete?.(selectedItem!);
+          setSelectedItem(null);
         }}
       />
     </div>

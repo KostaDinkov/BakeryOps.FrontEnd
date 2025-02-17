@@ -15,7 +15,7 @@ type Story = StoryObj<typeof GenericDataViewer>;
 
 export const Products: Story = {
   render: (args) => (
-    <GenericDataViewer<ProductDTO>
+    <GenericDataViewer<ProductDTO & { id: string }>
       items={sampleProducts}
       groupBy="category"
       viewConfig={[
@@ -27,18 +27,21 @@ export const Products: Story = {
       ]}
       displayKeys={["name"]}
       actions={{add:null, edit:(item)=>console.log(item), delete:null}}
+      title="Продукти"
     />
   ),
 };
 export const Clients: Story = {
   render: (args) => (
-    <GenericDataViewer<ClientDTO>
+    <GenericDataViewer<ClientDTO & { id: string }>
       items={sampleClients}
       viewConfig={[
         { name: { label: "Име" }}, 
         {isCompany: { label: "Компания" } },
       ]}
       displayKeys={["name"]}
+      actions={{add:null, edit:(item)=>console.log(item), delete:null}}
+      title="Клиенти"
     />
   ),
 };
@@ -53,8 +56,11 @@ export const Materials: Story = {
         { unitName: { label: "Мярка" } },
         { latestPrice: { label: "Цена" } },
       ]}
-      displayKeys={["name"]}
-    />
+      displayKeys={["name"]} actions={{
+        delete: null,
+        edit: null,
+        add: null
+      }} title={""}    />
   ),
 };
 
@@ -81,6 +87,12 @@ export const Deliveries: Story = {
       ]}
 
       displayKeys={["vendorName", "totalWithTax"]}
+      actions={{
+        delete: null,
+        edit: null,
+        add: null
+      }}
+      title={"Доставки"}
     />
   ),
 };

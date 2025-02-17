@@ -31,7 +31,7 @@
   .productListPanel {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
-    width: 300px; /* or any desired width */
+    width:auto; /* or any desired width */
     display: flex;
     flex-direction: column;
     height: 100%;

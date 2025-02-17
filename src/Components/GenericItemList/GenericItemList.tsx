@@ -7,9 +7,11 @@ import {
   ListItemButton,
   ListItemText,
   Typography,
-  Dialog,
-  TextField, // added TextField import
+  TextField,
+  IconButton
 } from "@mui/material";
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import styles from "./GenericItemLIst.module.css";
 import { ViewConfigItem } from "./GenericItemView";
 // #endregion
@@ -24,8 +26,10 @@ interface GenericItemsListProps<TItem extends IId> {
   groupBy?: keyof TItem;
   displayKeys: (keyof TItem)[];
   selectedItem: TItem | null;
-  setSelectedItem:React.Dispatch<React.SetStateAction<TItem | null>>;
-  title:string;
+  setSelectedItem: React.Dispatch<React.SetStateAction<TItem | null>>;
+  title: string;
+  // New optional prop for configuration
+  viewConfig?: ViewConfigItem<TItem>[];
 }
 
 export default function GenericItemsList<TItem extends IId>({
@@ -34,24 +38,47 @@ export default function GenericItemsList<TItem extends IId>({
   title,
   groupBy,
   selectedItem,
-  setSelectedItem
+  setSelectedItem,
+  viewConfig,
 }: GenericItemsListProps<TItem>) {
   // New filter state
   const [filterText, setFilterText] = useState("");
 
+  // New sorting states
+  const [groupSortAsc, setGroupSortAsc] = useState(true);
+  const [sortKey, setSortKey] = useState<keyof TItem>(displayKeys[0]!);
+  const [sortAsc, setSortAsc] = useState(true);
+
   // Filter items based on filterText using displayKeys values
   const textFilteredItems = items.filter((item) => {
     const itemText = displayKeys
-      .map((key) => (item[key] as string) || "")
+      .map((key) => {
+        // Check if viewConfig has a specific formatter for this key
+        const cfg = viewConfig?.find((cfg) => Object.keys(cfg)[0] === key);
+        const config = cfg ? (cfg as any)[key] : null;
+        const raw = item[key] as string;
+        return config && config.valueFormatter
+          ? String(config.valueFormatter(item[key]))
+          : raw || "";
+      })
       .join(" ");
     return itemText.toLowerCase().includes(filterText.toLowerCase());
   });
 
-  // Compute groups from filtered items if groupBy is provided
-  const groups =
-    groupBy && textFilteredItems.length > 0
-      ? Array.from(new Set(textFilteredItems.map((item) => item[groupBy] as string)))
-      : [];
+  // Sort items by composite displayKeys
+  const sortedItems = [...textFilteredItems].sort((a, b) => {
+    const valA = a[sortKey] ? String(a[sortKey]) : "";
+    const valB = b[sortKey] ? String(b[sortKey]) : "";
+    const comp = valA.localeCompare(valB);
+    return sortAsc ? comp : -comp;
+  });
+
+  // Compute sorted groups if groupBy provided
+  let groups: string[] = [];
+  if (groupBy && sortedItems.length > 0) {
+    groups = Array.from(new Set(sortedItems.map((item) => item[groupBy] as string)));
+    groups.sort((a, b) => groupSortAsc ? a.localeCompare(b) : b.localeCompare(a));
+  }
 
   // Group filter state remains the same
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
@@ -59,9 +86,8 @@ export default function GenericItemsList<TItem extends IId>({
   // Further filter items by selected group if applicable
   const filteredItems =
     groupBy && selectedGroup
-      ? textFilteredItems.filter((item) => (item[groupBy] as string) === selectedGroup)
-      : textFilteredItems;
-
+      ? sortedItems.filter((item) => (item[groupBy] as string) === selectedGroup)
+      : sortedItems;
 
   const handleCategoryClick = (group: string) => {
     setSelectedGroup(group);
@@ -70,6 +96,22 @@ export default function GenericItemsList<TItem extends IId>({
 
   const handleItemClick = (item: TItem) => {
     setSelectedItem(item);
+  };
+
+  const handleHeaderClick = (key: keyof TItem) => {
+    if (sortKey === key) {
+      setSortAsc(!sortAsc);
+    } else {
+      setSortKey(key);
+      setSortAsc(true);
+    }
+  };
+
+  // Helper to get label for a key from viewConfig if provided
+  const getLabel = (key: keyof TItem) => {
+    const cfg = viewConfig?.find((cfg) => Object.keys(cfg)[0] === key);
+    const config = cfg ? (cfg as any)[key] : null;
+    return config?.label || String(key);
   };
 
   return (
@@ -89,10 +131,12 @@ export default function GenericItemsList<TItem extends IId>({
       <div className={styles.listContainers}>
       {groupBy && (
         <Paper className={styles.categoryPanel}>
-          <Typography variant="h6" gutterBottom>
-
-            Група
-          </Typography>
+          <Box display="flex" alignItems="center" justifyContent="space-between" p={1}>
+            <Typography variant="h6">Група</Typography>
+            <IconButton size="small" onClick={() => setGroupSortAsc(!groupSortAsc)}>
+              {groupSortAsc ? <ArrowUpwardIcon fontSize="inherit"/> : <ArrowDownwardIcon fontSize="inherit"/>}
+            </IconButton>
+          </Box>
           <List>
             {groups.map((group) => (
               <ListItemButton
@@ -113,6 +157,21 @@ export default function GenericItemsList<TItem extends IId>({
         <Typography variant="h6" gutterBottom>
           {groupBy && selectedGroup ? `${title} в ${selectedGroup}` : `${title}`}
         </Typography>
+        {/* Item List Header with sorting controls */}
+        <Box display="flex" bgcolor="#f5f5f5" p={1}>
+          {displayKeys.map((key) => (
+            <Box
+              key={String(key)}
+              sx={{ flex: 1, display:"flex", alignItems:"center", cursor:"pointer" }}
+              onClick={() => handleHeaderClick(key)}
+            >
+              <Typography variant="subtitle2" sx={{ mr: 0.5 }}>
+                {getLabel(key)}
+              </Typography>
+              {sortKey === key && (sortAsc ? <ArrowUpwardIcon fontSize="small"/> : <ArrowDownwardIcon fontSize="small"/>)}
+            </Box>
+          ))}
+        </Box>
         <List>
           {filteredItems.map((item) => (
             <ListItemButton
@@ -123,13 +182,22 @@ export default function GenericItemsList<TItem extends IId>({
             >
               <ListItemText 
                 primary={
-                  // Render each display key's value in its own flex column
+                  // Render each display key's value using viewConfig if provided
                   <Box display="flex">
-                    {displayKeys.map((key) => (
-                      <Box key={String(key)} sx={{ flex: 1, textAlign: "start" }}>
-                        {(item[key] as string) || ""}
-                      </Box>
-                    ))}
+                    {displayKeys.map((key) => {
+                      const cfg = viewConfig?.find((cfg) => Object.keys(cfg)[0] === key);
+                      const config = cfg ? (cfg as any)[key] : null;
+                      const rawValue = item[key];
+                      const formattedValue =
+                        config && config.valueFormatter
+                          ? config.valueFormatter(rawValue)
+                          : rawValue;
+                      return (
+                        <Box key={String(key)} sx={{ flex: 1, textAlign: "start" }}>
+                          {formattedValue || ""}
+                        </Box>
+                      );
+                    })}
                   </Box>
                 } 
               />

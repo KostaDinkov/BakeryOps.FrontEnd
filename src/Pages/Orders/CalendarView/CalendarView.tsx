@@ -5,6 +5,8 @@ import PubSub from "pubsub-js";
 import { useOrdersQuery } from "../../../API/Queries/queryHooks";
 import { useQueryClient } from "@tanstack/react-query";
 import { OrderDTO } from "../../../Types/types";
+import TitleBar from "../../../Components/TitleBar/TitleBar";
+import OrdersNavBar from "../OrdersNavBar/OrdersNavBar";
 
 export default function CalendarView() {
   const queryClient = useQueryClient();
@@ -28,11 +30,14 @@ export default function CalendarView() {
     return <div>Nor orders for the next 3 days</div>
   }
   return (
+    <>
+     <OrdersNavBar/>
     <div className={styles.daysContainer}>
       {ordersQuery.data.map((group:OrderDTO[], index:number) => (
         <DayColumn key={index} data={group} />
       ))}
     </div>
+    </>
   );
 }
 

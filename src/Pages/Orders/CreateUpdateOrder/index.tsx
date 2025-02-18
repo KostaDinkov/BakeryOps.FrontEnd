@@ -5,12 +5,14 @@ import {
   useOrderQuery,
   useProductsQuery,
 } from "../../../API/Queries/queryHooks";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "../../../API/apiClient";
 import { OrderDTO } from "../../../Types/types";
+import OrdersNavBar from "../OrdersNavBar/OrdersNavBar";
 
 export default function CreateUpdateOrder() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const productsQuery = useProductsQuery();
   const clientsQuery = useClientsQuery();
 
@@ -20,6 +22,7 @@ export default function CreateUpdateOrder() {
     onSuccess: (data) => {
       navigate("/orders");
       PubSub.publish("SendUpdateOrders");
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
     },
   });
   const updateOrderMutation = useMutation({
@@ -28,6 +31,7 @@ export default function CreateUpdateOrder() {
     onSuccess: (data) => {
       navigate("/orders");
       PubSub.publish("SendUpdateOrders");
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
     },
   });
 
@@ -57,11 +61,15 @@ export default function CreateUpdateOrder() {
 
 
   return (
-    <RHFOrderForm
-      products={productsQuery.data}
-      clients={clientsQuery.data}
-      submitOrder={submitOrder}
-      order={orderQuery?.data}
-    />
+    
+    <>
+      <OrdersNavBar />
+      <RHFOrderForm
+        products={productsQuery.data}
+        clients={clientsQuery.data}
+        submitOrder={submitOrder}
+        order={orderQuery?.data}
+      />
+    </>
   );
 }

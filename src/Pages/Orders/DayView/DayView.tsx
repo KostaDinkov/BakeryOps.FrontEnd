@@ -11,6 +11,7 @@ import { useOrdersByDateQuery } from "../../../API/Queries/queryHooks";
 import ConfirmationDialog from "../../../Components/ConfirmationDialog/ConfirmationDialog";
 import { useMutation } from "@tanstack/react-query";
 import { apiClient } from "../../../API/apiClient";
+import OrdersNavBar from "../OrdersNavBar/OrdersNavBar";
 
 export default function DayView() {
   const { state } = useNavigation();
@@ -56,6 +57,7 @@ export default function DayView() {
 
   return (
     <>
+     <OrdersNavBar/>
       {isOrders() ? (
         <div className={styles.layoutContainer}>
           {state === "loading" && <LinearProgress />}

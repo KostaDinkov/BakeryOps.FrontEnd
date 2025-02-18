@@ -6,11 +6,13 @@ import { useNavigate } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "../../../../API/apiClient";
 import TitleBar from "../../../../Components/TitleBar/TitleBar";
+import MaterialPriceGraphDataProvider from "../../../../Components/MaterialPriceGraph";
 
 export default function MaterialsViewerIndex() {
   const materialsQuery = useMaterialsQuery();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  
 
   const deleteMaterialMutation = useMutation({
     mutationFn: async (id: string) =>
@@ -46,6 +48,8 @@ export default function MaterialsViewerIndex() {
               groupBy="categoryName"
               displayKeys={["name"]}
               title="Стоки"
+              ExtraDetails={MaterialPriceGraphDataProvider}
+              wideDetails
             />
           )}
         </QueryViewWrapper>

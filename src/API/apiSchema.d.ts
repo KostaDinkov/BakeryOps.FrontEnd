@@ -570,6 +570,45 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/Materials/GetMaterialPriceHistory/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["MaterialPriceHistoryDto"];
+                        "application/json": components["schemas"]["MaterialPriceHistoryDto"];
+                        "text/json": components["schemas"]["MaterialPriceHistoryDto"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/Materials/AddMaterial": {
         parameters: {
             query?: never;
@@ -1839,6 +1878,20 @@ export interface components {
             vendorId?: string | null;
             vendorName?: string | null;
         };
+        MaterialPriceDto: {
+            /** Format: uuid */
+            id?: string;
+            /** Format: double */
+            price?: number;
+            /** Format: date-time */
+            date?: string;
+        };
+        MaterialPriceHistoryDto: {
+            /** Format: uuid */
+            materialId?: string;
+            materialName?: string;
+            priceHistory?: components["schemas"]["MaterialPriceDto"][];
+        };
         NewUserDTO: {
             id?: string | null;
             firstName?: string;
@@ -1914,7 +1967,7 @@ export interface components {
             updatedBy?: string | null;
             /** Format: uuid */
             id: string;
-            name: string;
+            name?: string | null;
             /** Format: uuid */
             productId?: string | null;
             description?: string | null;

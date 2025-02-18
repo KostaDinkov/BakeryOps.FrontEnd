@@ -266,6 +266,30 @@ paths:
       responses:
         '200':
           description: OK
+  '/api/Materials/GetMaterialPriceHistory/{id}':
+    get:
+      tags:
+        - Materials
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/MaterialPriceHistoryDto'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaterialPriceHistoryDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/MaterialPriceHistoryDto'
   /api/Materials/AddMaterial:
     post:
       tags:
@@ -932,6 +956,32 @@ components:
           type: string
           nullable: true
       additionalProperties: false
+    MaterialPriceDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        price:
+          type: number
+          format: double
+        date:
+          type: string
+          format: date-time
+      additionalProperties: false
+    MaterialPriceHistoryDto:
+      type: object
+      properties:
+        materialId:
+          type: string
+          format: uuid
+        materialName:
+          type: string
+        priceHistory:
+          type: array
+          items:
+            $ref: '#/components/schemas/MaterialPriceDto'
+      additionalProperties: false
     NewUserDTO:
       required:
         - password
@@ -1083,7 +1133,6 @@ components:
     RecipeDto:
       required:
         - id
-        - name
       type: object
       properties:
         createdOn:
@@ -1103,8 +1152,8 @@ components:
           type: string
           format: uuid
         name:
-          minLength: 1
           type: string
+          nullable: true
         productId:
           type: string
           format: uuid

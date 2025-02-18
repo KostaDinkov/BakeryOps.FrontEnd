@@ -19,6 +19,8 @@ export type GenericDataViewerProps<T> = {
   groupSortOrder?: 'asc' | 'desc';
   // New optional prop to configure the initial sort order for the first displayKey
   sortFirstDisplayKey?: 'asc' | 'desc';
+  ExtraDetails?: React.FC<{selectedItem:T}>;
+  wideDetails?: boolean;
 };
 
 export default function GenericDataViewer<T extends { id: string }>({
@@ -34,6 +36,8 @@ export default function GenericDataViewer<T extends { id: string }>({
   title,
   groupSortOrder,
   sortFirstDisplayKey,
+  ExtraDetails,
+  wideDetails = false,
 }: GenericDataViewerProps<T>) {
   const [selectedItem, setSelectedItem] = useState<(T & { id: string }) | null>(null);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
@@ -50,9 +54,10 @@ export default function GenericDataViewer<T extends { id: string }>({
         title={title}
         viewConfig={viewConfig}  // Pass the configuration
         groupSortOrder={groupSortOrder} // Pass the groupSortOrder
-        defaultDisplayKeySortOrder={sortFirstDisplayKey} // Pass the sortFirstDisplayKey
+        defaultDisplayKeySortOrder={sortFirstDisplayKey}
+         // Pass the sortFirstDisplayKey
       />
-      <div className={styles.contentContainer}>
+      <div className={styles.contentContainer} style={wideDetails ? { flex: "1" } : {}}>
         {/* --Buttons */}
         <div className={styles.topButtonContainer}>
           {actions.add && (
@@ -89,7 +94,9 @@ export default function GenericDataViewer<T extends { id: string }>({
         </div>
         {/* -- Details View */}
         {selectedItem && (
-          <GenericItemView<T> item={selectedItem} viewConfig={viewConfig} />
+            <GenericItemView<T> key={selectedItem.id} item={selectedItem} viewConfig={viewConfig}>
+             {ExtraDetails && <ExtraDetails key={selectedItem.id} selectedItem={selectedItem}/>}
+            </GenericItemView>
         )}
       </div>
       <ConfirmationDialog

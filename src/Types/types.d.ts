@@ -12,6 +12,7 @@ export type OrderDTO = components["schemas"]["OrderDTO"];
 export type OrderItemDTO = components["schemas"]["OrderItemDTO"];
 export type ProductDTO = components["schemas"]["Product"];
 export type UserDTO = components["schemas"]["NewUserDTO"];
+export type MaterialPriceHistory = components["schemas"]["MaterialPriceHistoryDto"];
 
 export interface ProductsByCategory {
     [category: string]: ProductDTO[];

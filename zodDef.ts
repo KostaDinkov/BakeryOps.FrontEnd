@@ -59,6 +59,20 @@ export const MaterialDto = z.object({
   vendorName: z.union([z.string(), z.null(), z.undefined()]).optional(),
 });
 
+export type MaterialPriceDto = z.infer<typeof MaterialPriceDto>;
+export const MaterialPriceDto = z.object({
+  id: z.string().optional(),
+  price: z.number().optional(),
+  date: z.string().optional(),
+});
+
+export type MaterialPriceHistoryDto = z.infer<typeof MaterialPriceHistoryDto>;
+export const MaterialPriceHistoryDto = z.object({
+  materialId: z.string().optional(),
+  materialName: z.string().optional(),
+  priceHistory: z.array(MaterialPriceDto).optional(),
+});
+
 export type NewUserDTO = z.infer<typeof NewUserDTO>;
 export const NewUserDTO = z.object({
   id: z.union([z.string(), z.null(), z.undefined()]).optional(),
@@ -142,7 +156,7 @@ export const RecipeDto = z.object({
   createdBy: z.union([z.string(), z.null(), z.undefined()]).optional(),
   updatedBy: z.union([z.string(), z.null(), z.undefined()]).optional(),
   id: z.string(),
-  name: z.string(),
+  name: z.union([z.string(), z.null(), z.undefined()]).optional(),
   productId: z.union([z.string(), z.null(), z.undefined()]).optional(),
   description: z.union([z.string(), z.null(), z.undefined()]).optional(),
   ingredients: z.union([z.array(RecipeMaterialDto), z.undefined()]).optional(),
@@ -371,6 +385,19 @@ export const get_ApiMaterialsGetMaterialId = {
     }),
   }),
   response: z.unknown(),
+};
+
+export type get_ApiMaterialsGetMaterialPriceHistoryId = typeof get_ApiMaterialsGetMaterialPriceHistoryId;
+export const get_ApiMaterialsGetMaterialPriceHistoryId = {
+  method: z.literal("GET"),
+  path: z.literal("/api/Materials/GetMaterialPriceHistory/{id}"),
+  requestFormat: z.literal("json"),
+  parameters: z.object({
+    path: z.object({
+      id: z.string(),
+    }),
+  }),
+  response: MaterialPriceHistoryDto,
 };
 
 export type post_ApiMaterialsAddMaterial = typeof post_ApiMaterialsAddMaterial;
@@ -759,6 +786,7 @@ export const EndpointByMethod = {
     "/api/Deliveries/GetById/{id}": get_ApiDeliveriesGetByIdId,
     "/api/Materials/GetMaterials": get_ApiMaterialsGetMaterials,
     "/api/Materials/GetMaterial/{id}": get_ApiMaterialsGetMaterialId,
+    "/api/Materials/GetMaterialPriceHistory/{id}": get_ApiMaterialsGetMaterialPriceHistoryId,
     "/api/Orders/GetOrder/{id}": get_ApiOrdersGetOrderId,
     "/api/Orders/GetOrdersBetween": get_ApiOrdersGetOrdersBetween,
     "/api/Orders/GetOrders": get_ApiOrdersGetOrders,

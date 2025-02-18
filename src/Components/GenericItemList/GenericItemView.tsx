@@ -24,11 +24,13 @@ export type ViewConfigItem<T> = {
 interface ItemDetailsProps<T> {
   item: T;
   viewConfig: ViewConfigItem<T>[];
+  children?: React.ReactNode;
 }
 
 export default function ItemDetails<T>({
   item,
   viewConfig,
+  children
 }: ItemDetailsProps<T>) {
   // Split configs into normal ones and grid ones
   const normalConfigs = viewConfig.filter((cfg) => {
@@ -118,6 +120,7 @@ export default function ItemDetails<T>({
           </Box>
         ) : null;
       })}
+      {children}
     </Paper>
   );
 }

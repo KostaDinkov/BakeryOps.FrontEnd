@@ -123,3 +123,15 @@ export function useRecipesQuery() {
       ),
   });
 }
+
+
+export function useMaterialsPriceHistory(id:string){
+  
+  return useQuery({
+    queryKey: ["materialsPriceHistory"],
+    queryFn: async () =>
+      await handleApiResponse(async () =>
+        apiClient.GET("/api/Materials/GetMaterialPriceHistory/{id}", {params:{path:{id}}})
+      ),
+  });
+}

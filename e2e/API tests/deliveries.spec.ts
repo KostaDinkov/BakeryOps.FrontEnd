@@ -31,7 +31,7 @@ test.describe("Deliveries Api Tests", () => {
         notes: "Updated test delivery",
       },
     });
-    // Replace the Promise.all with sequential deletion
+    
     for (const endpoint of [...cleanUpStack].reverse()) {
       await request.delete(endpoint);
     }

@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { addDays, format } from "date-fns";
 
-const baseUrl = "http://localhost:5173";
+const baseUrl = "http://localhost:3002";
 test.describe("Orders UI Tests", () => {
   async function fillForm(page){
     // Fill form with actual client data

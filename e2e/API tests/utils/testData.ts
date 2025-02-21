@@ -7,32 +7,31 @@ import {
   ProductDTO,
   VendorDTO,
 } from "../../../src/Types/types";
-import { paths } from "../../../src/API/apiSchema";
 import { endpoint } from "./crudTestUtil";
-import { test, expect, APIRequestContext } from "@playwright/test";
+import {APIRequestContext } from "@playwright/test";
+import { generateRandomCompany, generateRandomFiveDigitNumber, generateRandomMaterial, generateRandomName } from "./randomGenerators";
 
 export const testCategory: CategoryDTO = {
-  name: "Test Category",
+  name: `Category ${generateRandomFiveDigitNumber()} -test`,
 };
 
 export const testClient: ClientDTO = {
-  name: "Test Client",
+  name: `${generateRandomName()} -test ${generateRandomFiveDigitNumber()}`,
   phone: "0889123456",
   email: "test@example.com",
-  discountPercent: 0,
   isCompany: false,
   isSpecialPrice: false,
 };
 
 const testVendor: VendorDTO = {
-  name: "Test Vendor",
+  name: `${generateRandomCompany()} -test ${generateRandomFiveDigitNumber()}`,
   address: "Test Address 123",
   phoneNumber: "0889123456",
   email: "vendor@example.com",
   description: "Test vendor description",
 };
 
-const unitId = "2BCB2274-F0DF-4327-A45D-8A8544309EC5"; //FIXME Hardcoded unitId - must exist in the database
+const unitId = "test-unit"; //FIXME Hardcoded unitId - must exist in the database
 
 export const getRandomInvoiceNumber = (): string => {
   return Math.floor(1000000000 + Math.random() * 9000000000).toString();
@@ -86,9 +85,9 @@ export async function createTestMaterial(
   cleanUpQueue: string[]
 ): Promise<MaterialDTO> {
   const testMaterial: MaterialDTO = {
-    name: "Test Material",
+    name: ` ${generateRandomMaterial()} -test ${generateRandomFiveDigitNumber()}`,
     description: "Test material description",
-    unitId: unitId,
+    unitName: unitId,
     categoryId: "",
   };
 
@@ -190,3 +189,5 @@ export async function createTestDelivery(
   cleanUpStack.push(endpoint(`/api/Deliveries/Delete/{id}`).replace("{id}", createdDelivery.id));
   return createdDelivery;
 }
+
+

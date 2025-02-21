@@ -42,6 +42,20 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
+      name:"api-local",
+      testMatch: '**/API tests/**/*.spec.ts',
+      use:{
+        baseURL: 'http://localhost:5000',
+      }
+    },
+    {
+      name:'api-staging',
+      testMatch: '**/API tests/**/*.spec.ts',
+      use:{
+        baseURL: 'http://localhost:8089',
+      }
+    },
+    {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
